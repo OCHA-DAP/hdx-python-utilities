@@ -5,7 +5,7 @@ from os.path import join
 import pytest
 from logging_tree import format
 
-from hdx.hdx_logging import setup_logging, LoggingError
+from hdx.utilities.easy_logging import setup_logging, LoggingError
 
 try:
     FILENOTFOUND_EXCTYPE = FileNotFoundError

@@ -17,15 +17,15 @@ class TestDownloader:
 
     @pytest.fixture(scope='class')
     def fixtureurl(self):
-        return 'https://raw.githubusercontent.com/OCHA-DAP/hdx-python-api/master/tests/fixtures/test_data.csv'
+        return 'https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/test_data.csv'
 
     @pytest.fixture(scope='class')
     def fixturenotexistsurl(self):
-        return 'https://raw.githubusercontent.com/OCHA-DAP/hdx-python-api/master/tests/fixtures/NOTEXIST.csv'
+        return 'https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/NOTEXIST.csv'
 
     @pytest.fixture(scope='class')
     def fixtureprocessurl(self):
-        return 'https://raw.githubusercontent.com/OCHA-DAP/hdx-python-api/master/tests/fixtures/downloader/test_csv_processing.csv?a=1'
+        return 'https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/downloader/test_csv_processing.csv?a=1'
 
     def test_get_path_for_url(self, fixtureurl, configfolder, downloaderfolder):
         path = Download.get_path_for_url(fixtureurl, configfolder)
