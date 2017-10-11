@@ -20,7 +20,7 @@ will need to call \ **setup_logging** with arguments.
 
 ::
 
-    from hdx.hdx_logging import setup_logging
+    from hdx.utilities.hdx_logging import setup_logging
     ...
     logger = logging.getLogger(__name__)
     setup_logging(KEYWORD ARGUMENTS)
