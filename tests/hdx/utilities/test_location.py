@@ -67,7 +67,6 @@ class TestLocation:
         with pytest.raises(ValueError):
             Location.get_iso3_country_code_partial('abc', exception=ValueError)
 
-
     def test_get_countries_in_region(self, location):
         assert len(Location.get_countries_in_region('SSF')) == 48
         assert Location.get_countries_in_region('South Asia') == ['AFG', 'BGD', 'BTN', 'IND', 'LKA',
