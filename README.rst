@@ -49,6 +49,15 @@ The usage of the country mappings functionality is best illustrated by some exam
     location.get_countries_in_region('South Asia')
     # ['AFG', 'BGD', 'BTN', 'IND', 'LKA', 'MDV', 'NPL', 'PAK']
 
+Valid regions are:
+
+::
+
+    {'EAS': 'East Asia & Pacific', 'SAS': 'South Asia',
+    'MEA': 'Middle East & North Africa', 'ECS': 'Europe & Central Asia',
+    'LCN': 'Latin America & Caribbean ', 'NAC': 'North America',
+    'SSF': 'Sub-Saharan Africa '}
+
 Configuring Logging
 ~~~~~~~~~~~~~~~~~~~
 

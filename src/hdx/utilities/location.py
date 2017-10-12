@@ -15,14 +15,23 @@ logger = logging.getLogger(__name__)
 
 class Location(object):
     """Location class with various methods to help with countries and regions. Uses World Bank API which supplies data
-    in form::
-            {'id': 'AFG', 'iso2Code': 'AF', 'name': 'Afghanistan',
-            'latitude': '34.5228', 'longitude': '69.1761',
-            'region': {'value': 'South Asia', 'id': 'SAS'},
-            'adminregion': {'value': 'South Asia', 'id': 'SAS'},
-            'capitalCity': 'Kabul',
-            'lendingType': {'value': 'IDA', 'id': 'IDX'},
-            'incomeLevel': {'value': 'Low income', 'id': 'LIC'}}
+    in form:
+    ::
+        {'id': 'AFG', 'iso2Code': 'AF', 'name': 'Afghanistan',
+        'latitude': '34.5228', 'longitude': '69.1761',
+        'region': {'value': 'South Asia', 'id': 'SAS'},
+        'adminregion': {'value': 'South Asia', 'id': 'SAS'},
+        'capitalCity': 'Kabul',
+        'lendingType': {'value': 'IDA', 'id': 'IDX'},
+        'incomeLevel': {'value': 'Low income', 'id': 'LIC'}}
+
+    Valid regions are:
+    ::
+        {'EAS': 'East Asia & Pacific', 'SAS': 'South Asia',
+        'MEA': 'Middle East & North Africa', 'ECS': 'Europe & Central Asia',
+        'LCN': 'Latin America & Caribbean ', 'NAC': 'North America',
+        'SSF': 'Sub-Saharan Africa '}
+
     """
 
     _countriesdata = None
