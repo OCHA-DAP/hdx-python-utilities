@@ -15,10 +15,14 @@ logger = logging.getLogger(__name__)
 
 class Location(object):
     """Location class with various methods to help with countries and regions. Uses World Bank API unless countries
-    argument supplied with list of dicts of form:
-    {'name': 'Afghanistan', 'region': {'value': 'South Asia', 'id': 'SAS'}, 'capitalCity': 'Kabul', 'id': 'AFG',
-    'lendingType': {'value': 'IDA', 'id': 'IDX'}, 'adminregion': {'value': 'South Asia', 'id': 'SAS'}, 'iso2Code': 'AF',
-    'longitude': '69.1761', 'incomeLevel': {'value': 'Low income', 'id': 'LIC'}, 'latitude': '34.5228'}
+    argument supplied with list of dicts of form::
+        {'id': 'AFG', 'iso2Code': 'AF', 'name': 'Afghanistan',
+        'latitude': '34.5228', 'longitude': '69.1761',
+        'region': {'value': 'South Asia', 'id': 'SAS'},
+        'adminregion': {'value': 'South Asia', 'id': 'SAS'},
+        'capitalCity': 'Kabul',
+        'lendingType': {'value': 'IDA', 'id': 'IDX'},
+        'incomeLevel': {'value': 'Low income', 'id': 'LIC'}}
 
     Args:
         countries (Optional[List]): List of countries in same format as World Bank API. Defaults to None.
