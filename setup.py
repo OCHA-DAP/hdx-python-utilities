@@ -54,7 +54,6 @@ def get_readme():
 requirements = ['basicauth',
                 'colorlog',
                 'email_validator',
-                'geonamescache',
                 'pyaml',
                 'six',
                 'tabulator',
