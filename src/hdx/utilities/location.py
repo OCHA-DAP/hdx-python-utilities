@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Location utilities"""
 import logging
-from typing import List, Callable, Tuple, Optional, TypeVar, Any
+from typing import List, Tuple, Optional, TypeVar, Dict
 
 from hdx.utilities.downloader import Download, DownloadError
 from hdx.utilities.loader import load_json
@@ -14,61 +14,102 @@ logger = logging.getLogger(__name__)
 
 
 class Location(object):
-    """Location class with various methods to help with countries and regions. Uses World Bank API unless countries
-    argument supplied with list of dicts of form::
-        {'id': 'AFG', 'iso2Code': 'AF', 'name': 'Afghanistan',
-        'latitude': '34.5228', 'longitude': '69.1761',
-        'region': {'value': 'South Asia', 'id': 'SAS'},
-        'adminregion': {'value': 'South Asia', 'id': 'SAS'},
-        'capitalCity': 'Kabul',
-        'lendingType': {'value': 'IDA', 'id': 'IDX'},
-        'incomeLevel': {'value': 'Low income', 'id': 'LIC'}}
-
-    Args:
-        countries (Optional[List]): List of countries in same format as World Bank API. Defaults to None.
-        url (Optional[str]): URL of World Bank API. Defaults to 'http://api.worldbank.org/countries?format=json&per_page=10000'.
+    """Location class with various methods to help with countries and regions. Uses World Bank API which supplies data
+    in form::
+            {'id': 'AFG', 'iso2Code': 'AF', 'name': 'Afghanistan',
+            'latitude': '34.5228', 'longitude': '69.1761',
+            'region': {'value': 'South Asia', 'id': 'SAS'},
+            'adminregion': {'value': 'South Asia', 'id': 'SAS'},
+            'capitalCity': 'Kabul',
+            'lendingType': {'value': 'IDA', 'id': 'IDX'},
+            'incomeLevel': {'value': 'Low income', 'id': 'LIC'}}
     """
 
-    def __init__(self, countries=None, url='http://api.worldbank.org/countries?format=json&per_page=10000'):
-        # type: (Optional[List]) -> None
-        if countries is None:
-            json = None
-            if url is not None:
-                try:
-                    response = Download().download(url)
-                    json = response.json()
-                except DownloadError:
-                    logger.exception('Download from API failed! Falling back to stored countries file.')
-            if json is None:
-                json = load_json(script_dir_plus_file('countries.json', Location))
-            countries = json[1]
-        self.countries = dict()
-        self.iso2iso3 = dict()
-        self.countrynames2iso3 = dict()
-        self.regions2countries = dict()
-        self.regionids2names = dict()
-        self.regionnames2ids = dict()
-        for country in countries:
+    _countriesdata = None
+    _wburl = 'http://api.worldbank.org/countries?format=json&per_page=10000'
+    _url = _wburl
+
+    @staticmethod
+    def set_countriesdata(data):
+        # type: (Optional[List[Dict]]) -> None
+        """
+        Set up countries data from data in form provided by World Bank
+
+        Args:
+            data (Optional[List[Dict]]): Countries data in form provided by World Bank
+
+        Returns:
+            None
+        """
+        Location._countriesdata = dict()
+        Location._countriesdata['countries'] = dict()
+        Location._countriesdata['iso2iso3'] = dict()
+        Location._countriesdata['countrynames2iso3'] = dict()
+        Location._countriesdata['regions2countries'] = dict()
+        Location._countriesdata['regionids2names'] = dict()
+        Location._countriesdata['regionnames2ids'] = dict()
+        for country in data:
             if country['region']['value'] != 'Aggregates':
                 iso2 = country['iso2Code'].upper()
                 iso3 = country['id'].upper()
                 countryname = country['name']
                 regionid = country['region']['id']
                 regionname = country['region']['value']
-                self.countries[iso3] = country
-                self.iso2iso3[iso2] = iso3
-                self.countrynames2iso3[countryname.upper()] = iso3
-                region = self.regions2countries.get(regionid)
+                Location._countriesdata['countries'][iso3] = country
+                Location._countriesdata['iso2iso3'][iso2] = iso3
+                Location._countriesdata['countrynames2iso3'][countryname.upper()] = iso3
+                region = Location._countriesdata['regions2countries'].get(regionid)
                 if region is None:
                     region = set()
-                    self.regions2countries[regionid] = region
+                    Location._countriesdata['regions2countries'][regionid] = region
                 region.add(iso3)
-                self.regionids2names[regionid] = regionname
-                self.regionnames2ids[regionname.upper()] = regionid
-        for regionid in self.regions2countries:
-            self.regions2countries[regionid] = sorted(list(self.regions2countries[regionid]))
+                Location._countriesdata['regionids2names'][regionid] = regionname
+                Location._countriesdata['regionnames2ids'][regionname.upper()] = regionid
+        for regionid in Location._countriesdata['regions2countries']:
+            Location._countriesdata['regions2countries'][regionid] = \
+                sorted(list(Location._countriesdata['regions2countries'][regionid]))
 
-    def get_country_info_from_iso3(self, iso3, exception=None):
+    @staticmethod
+    def countriesdata():
+        # type: () -> List[Dict[Dict]]
+        """
+        Read countries data from World Bank API (falling back to file)
+
+        Returns:
+            List[Dict[Dict]]: Countries dictionaries
+        """
+        if Location._countriesdata is None:
+            json = None
+            if Location._url is not None:
+                try:
+                    response = Download().download(Location._url)
+                    json = response.json()
+                except DownloadError:
+                    logger.exception('Download from API failed! Falling back to stored countries file.')
+            if json is None:
+                json = load_json(script_dir_plus_file('countries.json', Location))
+            data = json[1]
+            Location.set_countriesdata(data)
+        return Location._countriesdata
+
+
+    @staticmethod
+    def set_data_url(url):
+        # type: (Optional[str]) -> None
+        """
+        Set url from which to retrieve countries data. Setting it to None avoids using the network and instead uses
+        the internal fallback file.
+
+        Args:
+            url (Optional[str]): Url from which to retrieve countries data. Set to None to use fallback file.
+
+        Returns:
+            None
+        """
+        Location._url = url
+
+    @staticmethod
+    def get_country_info_from_iso3(iso3, exception=None):
         # type: (str, Optional[ExceptionUpperBound]) -> Optional[Dict[str]]
         """Get country information from iso3 code
 
@@ -79,7 +120,8 @@ class Location(object):
         Returns:
             Optional[Dict[str]]: country information
         """
-        country = self.countries.get(iso3.upper())
+        countriesdata = Location.countriesdata()
+        country = countriesdata['countries'].get(iso3.upper())
         if country is not None:
             return country
 
@@ -87,7 +129,8 @@ class Location(object):
             raise exception
         return None
 
-    def get_country_name_from_iso3(self, iso3, exception=None):
+    @staticmethod
+    def get_country_name_from_iso3(iso3, exception=None):
         # type: (str, Optional[ExceptionUpperBound]) -> Optional[str]
         """Get country name from iso3 code
 
@@ -98,12 +141,13 @@ class Location(object):
         Returns:
             Optional[str]: country name
         """
-        countryinfo = self.get_country_info_from_iso3(iso3, exception)
+        countryinfo = Location.get_country_info_from_iso3(iso3, exception=exception)
         if countryinfo is not None:
             return countryinfo['name']
         return None
 
-    def get_iso3_from_iso2(self, iso2, exception=None):
+    @staticmethod
+    def get_iso3_from_iso2(iso2, exception=None):
         # type: (str, Optional[ExceptionUpperBound]) -> Optional[str]
         """Get iso3 from iso2 code
 
@@ -114,7 +158,8 @@ class Location(object):
         Returns:
             Optional[str]: Iso 3 code
         """
-        iso3 = self.iso2iso3.get(iso2.upper())
+        countriesdata = Location.countriesdata()
+        iso3 = countriesdata['iso2iso3'].get(iso2.upper())
         if iso3 is not None:
             return iso3
 
@@ -122,7 +167,8 @@ class Location(object):
             raise exception
         return None
 
-    def get_country_info_from_iso2(self, iso2, exception=None):
+    @staticmethod
+    def get_country_info_from_iso2(iso2, exception=None):
         # type: (str, Optional[ExceptionUpperBound]) -> Optional[Dict[str]]
         """Get country name from iso2 code
 
@@ -133,12 +179,13 @@ class Location(object):
         Returns:
             Optional[Dict[str]]: country information
         """
-        iso3 = self.get_iso3_from_iso2(iso2, exception)
+        iso3 = Location.get_iso3_from_iso2(iso2, exception=exception)
         if iso3 is not None:
-            return self.get_country_info_from_iso3(iso3, exception)
+            return Location.get_country_info_from_iso3(iso3, exception=exception)
         return None
 
-    def get_country_name_from_iso2(self, iso2, exception=None):
+    @staticmethod
+    def get_country_name_from_iso2(iso2, exception=None):
         # type: (str, Optional[ExceptionUpperBound]) -> Optional[str]
         """Get country name from iso2 code
 
@@ -149,13 +196,14 @@ class Location(object):
         Returns:
             Optional[str]: country name
         """
-        iso3 = self.get_iso3_from_iso2(iso2, exception)
+        iso3 = Location.get_iso3_from_iso2(iso2, exception=exception)
         if iso3 is not None:
-            return self.get_country_name_from_iso3(iso3, exception)
+            return Location.get_country_name_from_iso3(iso3, exception=exception)
         return None
 
-    def get_iso3_country_code(self, country, exception=None):
-        # type: (str, Optional[ExceptionUpperBound]) -> Optional[str]]
+    @staticmethod
+    def get_iso3_country_code(country, exception=None):
+        # type: (str, Optional[ExceptionUpperBound]) -> Optional[str]
         """Get iso 3 code for country. Only exact matches or None are returned.
 
         Args:
@@ -165,17 +213,18 @@ class Location(object):
         Returns:
             Optional[str]: Return iso 3 country code or None
         """
+        countriesdata = Location.countriesdata()
         countryupper = country.upper()
         len_countryupper = len(countryupper)
         if len_countryupper == 3:
-            if countryupper in self.countries:
+            if countryupper in countriesdata['countries']:
                 return countryupper
         elif len_countryupper == 2:
-            iso3 = self.iso2iso3.get(countryupper)
+            iso3 = countriesdata['iso2iso3'].get(countryupper)
             if iso3 is not None:
                 return iso3
 
-        iso3 = self.countrynames2iso3.get(countryupper)
+        iso3 = countriesdata['countrynames2iso3'].get(countryupper)
         if iso3 is not None:
             return iso3
 
@@ -183,8 +232,9 @@ class Location(object):
             raise exception
         return None
 
-    def get_iso3_country_code_partial(self, country, exception=None):
-        # type: (str, Optional[ExceptionUpperBound]) -> Tuple[Optional[str], bool]]
+    @staticmethod
+    def get_iso3_country_code_partial(country, exception=None):
+        # type: (str, Optional[ExceptionUpperBound]) -> Tuple[[Optional[str], bool]]
         """Get iso 3 code for country. A tuple is returned with the first value being the iso 3 code and the second
         showing if the match is exact or not.
 
@@ -193,36 +243,43 @@ class Location(object):
             exception (Optional[ExceptionUpperBound]): An exception to raise if country not found. Defaults to None.
 
         Returns:
-            Tuple[Optional[str], bool]]: Return iso 3 code and if the match is exact or (None, False).
+            Tuple[[Optional[str], bool]]: Return iso 3 code and if the match is exact or (None, False).
         """
-        iso3 = self.get_iso3_country_code(country)
+        countriesdata = Location.countriesdata()
+        iso3 = Location.get_iso3_country_code(country)  # don't put exception param here as we don't want it to throw
 
         if iso3 is not None:
             return iso3, True
 
         countryupper = country.upper()
-        for countryname in self.countrynames2iso3:
+        for countryname in countriesdata['countrynames2iso3']:
             if countryupper in countryname or countryname in countryupper:
-                return self.countrynames2iso3[countryname], False
+                return countriesdata['countrynames2iso3'][countryname], False
 
         if exception is not None:
             raise exception
         return None, False
 
-    def get_countries_in_region(self, region):
-        # type: (str, Any]) -> List[str]
+    @staticmethod
+    def get_countries_in_region(region, exception=None):
+        # type: (str, Optional[ExceptionUpperBound]) -> List[str]
         """Get countries (iso 3 codes) in continent
 
         Args:
             region (str): Three letter region code or region name
+            exception (Optional[ExceptionUpperBound]): An exception to raise if region not found. Defaults to None.
 
         Returns:
             List(str): Sorted list of iso 3 country names
         """
+        countriesdata = Location.countriesdata()
         regionupper = region.upper()
-        if regionupper in self.regionids2names:
-            return self.regions2countries[regionupper]
-        regionid = self.regionnames2ids.get(regionupper)
+        if regionupper in countriesdata['regionids2names']:
+            return countriesdata['regions2countries'][regionupper]
+        regionid = countriesdata['regionnames2ids'].get(regionupper)
         if regionid is not None:
-            return self.regions2countries[regionid]
+            return countriesdata['regions2countries'][regionid]
+
+        if exception is not None:
+            raise exception
         return list()
