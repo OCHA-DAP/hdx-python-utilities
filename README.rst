@@ -2,8 +2,7 @@
 
 The HDX Python Utilities Library provides a range of helpful utilities:
 
-1. Country mappings including iso 2,iso 3 and region transformations (based on
-World Bank live api, falling back to a static file if for some reason the feed goes down)
+1. Country mappings including iso 2, iso 3 and region (uses World Bank live api with static file fallback)
 #. Easy downloading of files with support for authentication, streaming and hashing
 #. Simple emailing
 #. Easy logging setup

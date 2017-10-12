@@ -81,7 +81,7 @@ setup(
     version=get_version(),
     author='Michael Rans',
     author_email='rans@email.com',
-    keywords=['HDX', 'API', 'library'],
+    keywords=['HDX', 'utilities', 'library', 'country', 'iso 3166'],
     long_description=get_readme(),
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
