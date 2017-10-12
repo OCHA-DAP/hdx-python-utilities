@@ -33,16 +33,19 @@ The usage of the countries functionality is best illustrated by some examples:
     location.get_country_name_from_iso3('jpn')  # returns 'Japan'
     location.get_country_name_from_iso2('Pl')  # returns 'Poland'
     location.get_iso3_country_code('UZBEKISTAN')  # returns 'UZB'
-    location.get_iso3_country_code_partial('Sierra')  # performs
-    # partial match and returns ('SLE', False)
-    location.get_country_info_from_iso2('jp')  # returns
+
+    location.get_iso3_country_code_partial('Sierra')
+    # performs partial match and returns ('SLE', False)
+
+    location.get_country_info_from_iso2('jp')
     # {'id': 'JPN', 'iso2Code': 'JP', 'name': 'Japan',
     # 'latitude': '35.67', 'longitude': '139.77',
     # 'region': {'value': 'East Asia & Pacific', 'id': 'EAS'},
     # 'adminregion': {'value': '', 'id': ''}, 'capitalCity': 'Tokyo',
     # 'incomeLevel': {'value': 'High income', 'id': 'HIC'},
     # 'lendingType': {'value': 'Not classified', 'id': 'LNX'}}
-    location.get_countries_in_region('South Asia')  # returns
+
+    location.get_countries_in_region('South Asia')
     # ['AFG', 'BGD', 'BTN', 'IND', 'LKA', 'MDV', 'NPL', 'PAK']
 
 Configuring Logging
