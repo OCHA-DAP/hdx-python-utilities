@@ -30,6 +30,7 @@ The usage of the countries functionality is best illustrated by some examples:
 
     from hdx.utilities.location import Location
     location = Location()
+
     location.get_country_name_from_iso3('jpn')  # returns 'Japan'
     location.get_country_name_from_iso2('Pl')  # returns 'Poland'
     location.get_iso3_country_code('UZBEKISTAN')  # returns 'UZB'
