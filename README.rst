@@ -24,7 +24,7 @@ library is here: \ https://github.com/ocha-dap/hdx-python-utilities.
 Countries
 ~~~~~~~~~
 
-The usage of the countries functionality is best illustrated by some examples:
+The usage of the country mappings functionality is best illustrated by some examples:
 
 ::
 
