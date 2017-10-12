@@ -1,15 +1,15 @@
 |Build_Status| |Coverage_Status|
 
-| The HDX Python Utilities Library provides a range of helpful utilities:
+The HDX Python Utilities Library provides a range of helpful utilities:
 
 1. Country mappings including iso 2,iso 3 and region transformations (based on
 World Bank live api, falling back to a static file if for some reason the feed goes down)
-2. Easy downloading of files with support for authentication, streaming and hashing
-3. Simple emailing
-4. Easy logging setup
-5. Dictionary and list utilities
-6. Text block matching
-7. Path utilities
+#. Easy downloading of files with support for authentication, streaming and hashing
+#. Simple emailing
+#. Easy logging setup
+#. Dictionary and list utilities
+#. Text block matching
+#. Path utilities
 
 -  `Usage <#usage>`__
 -  `Configuring Logging <#configuring-logging>`__

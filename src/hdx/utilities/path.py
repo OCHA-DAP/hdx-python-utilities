@@ -18,7 +18,7 @@ def script_dir(pyobject, follow_symlinks=True):
         str: Current script's directory
     """
     if getattr(sys, 'frozen', False):  # py2exe, PyInstaller, cx_Freeze
-        path = abspath(sys.executable)
+        path = abspath(sys.executable)   # pragma: no cover
     else:
         path = inspect.getabsfile(pyobject)
     if follow_symlinks:
