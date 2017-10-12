@@ -2,7 +2,7 @@
 
 The HDX Python Utilities Library provides a range of helpful utilities:
 
-1. Country mappings including iso 2, iso 3 and region (uses World Bank live api with static file fallback)
+1. Country mappings including ISO 2/3 letter (ISO 3166) and region (uses World Bank live api with static file fallback)
 #. Easy downloading of files with support for authentication, streaming and hashing
 #. Simple emailing
 #. Easy logging setup
@@ -11,6 +11,7 @@ The HDX Python Utilities Library provides a range of helpful utilities:
 #. Path utilities
 
 -  `Usage <#usage>`__
+-  `Countries <#countries>`__
 -  `Configuring Logging <#configuring-logging>`__
 
 Usage
@@ -20,11 +21,36 @@ The library has detailed API documentation which can be found
 here: \ http://ocha-dap.github.io/hdx-python-utilities/. The code for the
 library is here: \ https://github.com/ocha-dap/hdx-python-utilities.
 
+Countries
+~~~~~~~~~
+
+The usage of the countries functionality is best illustrated by some examples:
+
+::
+
+    from hdx.utilities.location import Location
+    location = Location()
+    location.get_country_name_from_iso3('jpn')  # returns 'Japan'
+    location.get_country_name_from_iso2('Pl')  # returns 'Poland'
+    location.get_iso3_country_code('UZBEKISTAN')  # returns 'UZB'
+    location.get_iso3_country_code_partial('Sierra')  # performs
+    # partial match and returns ('SLE', False)
+    location.get_country_info_from_iso2('jp')  # returns
+    # {'id': 'JPN', 'iso2Code': 'JP', 'name': 'Japan',
+    # 'latitude': '35.67', 'longitude': '139.77',
+    # 'region': {'value': 'East Asia & Pacific', 'id': 'EAS'},
+    # 'adminregion': {'value': '', 'id': ''}, 'capitalCity': 'Tokyo',
+    # 'incomeLevel': {'value': 'High income', 'id': 'HIC'},
+    # 'lendingType': {'value': 'Not classified', 'id': 'LNX'}}
+    location.get_countries_in_region('South Asia')  # returns
+    # ['AFG', 'BGD', 'BTN', 'IND', 'LKA', 'MDV', 'NPL', 'PAK']
+
 Configuring Logging
 ~~~~~~~~~~~~~~~~~~~
 
-If you wish to change the logging configuration from the defaults, you
-will need to call \ **setup_logging** with arguments.
+The library provides coloured logs with a simple default setup. If you wish
+to change the logging configuration from the defaults, you will need to
+call \ **setup_logging** with arguments.
 
 ::
 

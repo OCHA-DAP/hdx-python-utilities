@@ -64,7 +64,8 @@ class TestLocation:
 
     def test_get_countries_in_region(self, location):
         assert len(location.get_countries_in_region('SSF')) == 48
-        assert len(location.get_countries_in_region('South Asia')) == 8
+        assert location.get_countries_in_region('South Asia') == ['AFG', 'BGD', 'BTN', 'IND', 'LKA',
+                                                                  'MDV', 'NPL', 'PAK']
         assert len(location.get_countries_in_region('NOTEXIST')) == 0
 
     def test_wb_feed_working(self):
