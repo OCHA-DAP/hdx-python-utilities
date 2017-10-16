@@ -6,7 +6,7 @@ contain the root `toctree` directive.
 HDX Python Utilities Documentation
 ==================================
 
-The HDX Python Utilities Library provides some helpful utilities eg. downloading files and country codes.
+The HDX Python Utilities Library provides some helpful utilities eg. downloading files, emailing.
 
 Contents
 --------
