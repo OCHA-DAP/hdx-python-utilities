@@ -1,11 +1,6 @@
 # -*- coding: utf-8 -*-
-'''
-Emailer:
-----------------------
+"""Utility class to simplify sending emails"""
 
-Utility to simplify sending emails
-
-'''
 import logging
 import smtplib
 from os.path import join, expanduser
