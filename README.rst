@@ -9,6 +9,9 @@ The HDX Python Utilities Library provides a range of helpful utilities:
 #. Text block matching
 #. Path utilities
 
+This library is part of the `Humanitarian Data Exchange`_ (HDX) project. If you have
+humanitarian-related data, please upload your datasets to HDX.
+
 -  `Usage <#usage>`__
 -  `Configuring Logging <#configuring-logging>`__
 
@@ -102,4 +105,5 @@ Then use the logger like this:
 .. |Coverage_Status| image:: https://coveralls.io/repos/github/OCHA-DAP/hdx-python-utilities/badge.svg?branch=master
     :alt: Coveralls Build Status
     :target: https://coveralls.io/github/OCHA-DAP/hdx-python-utilities?branch=master
+.. _Humanitarian Data Exchange: https://data.humdata.org/
 
