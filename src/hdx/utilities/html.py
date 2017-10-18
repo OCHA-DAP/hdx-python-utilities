@@ -40,7 +40,7 @@ def get_text(tag):
         str: Text of tag stripped of leading and trailing whitespace and newlines and with &nbsp replaced with space
 
     """
-    return tag.get_text().strip(' \t\n\r').replace('\xa0', ' ')
+    return tag.get_text().strip(' \t\n\r').replace(u'\xa0', u' ')
 
 
 def extract_table(tabletag):

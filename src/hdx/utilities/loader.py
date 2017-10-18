@@ -116,7 +116,7 @@ def load_file_to_str(path):
         path (str): Path to file
 
     Returns:
-        str: String contenats of file
+        str: String contents of file
 
     """
     with open(path, 'rt') as f:
