@@ -49,11 +49,11 @@ class TestDownloader:
         extraparamsyaml = join(downloaderfolder, 'extra_params.yml')
         with Download(basic_auth_file=basicauthfile, extra_params_dict={'key1': 'val1'}) as downloader:
             assert downloader.session.auth == ('testuser', 'testpass')
-            assert downloader.session.params == {'key1': 'val1'}
+            assert downloader.get_extra_params() == {'key1': 'val1'}
         with Download(extra_params_json=extraparamsjson) as downloader:
-            assert downloader.session.params == {'param_1': 'value 1', 'param_2': 'value_2', 'param_3': 12}
+            assert downloader.get_extra_params() == {'param_1': 'value 1', 'param_2': 'value_2', 'param_3': 12}
         with Download(extra_params_yaml=extraparamsyaml) as downloader:
-            assert downloader.session.params == {'param1': 'value1', 'param2': 'value 2', 'param3': 10}
+            assert downloader.get_extra_params() == {'param1': 'value1', 'param2': 'value 2', 'param3': 10}
         with pytest.raises(SessionError):
             Download(extra_params_dict={'key1': 'val1'}, extra_params_json=extraparamsjson)
         with pytest.raises(SessionError):

@@ -10,7 +10,7 @@ The HDX Python Utilities Library provides a range of helpful utilities:
 #. Path utilities
 
 This library is part of the `Humanitarian Data Exchange`_ (HDX) project. If you have
-humanitarian-related data, please upload your datasets to HDX.
+humanitarian related data, please upload your datasets to HDX.
 
 -  `Usage <#usage>`__
 -  `Configuring Logging <#configuring-logging>`__
