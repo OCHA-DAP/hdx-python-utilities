@@ -104,6 +104,8 @@ class TestDownloader:
             assert result == {'615': '2231RTA', 'GWNO': 'EVENT_ID_CNTY'}
             result = downloader.download_tabular_key_value(fixtureprocessurl, headers=2)
             assert result == {'coal': '3', 'gas': '2'}
+            with pytest.raises(DownloadError):
+                downloader.download_tabular_key_value('NOTEXIST://NOTEXIST.csv')
 
     def test_download_tabular_rows_as_dicts(self, fixtureprocessurl):
         with Download() as downloader:

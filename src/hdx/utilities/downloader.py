@@ -50,7 +50,10 @@ class Download(object):
 
         """
         if self.response:
-            self.response.close()
+            try:
+                self.response.close()
+            except Exception:
+                pass
 
     def close(self):
         # type: () -> None
@@ -231,7 +234,7 @@ class Download(object):
             self.response.open()
             return self.response
         except TabulatorException as e:
-            raisefrom(DownloadError, 'Getting tabular stream failed!' % url, e)
+            raisefrom(DownloadError, 'Getting tabular stream for %s failed!' % url, e)
 
     def get_tabular_rows(self, url, dict_rows=False, **kwargs):
         # type: (str, bool, ...) -> Iterator[Dict]
