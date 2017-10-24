@@ -220,6 +220,10 @@ class Download(object):
 
         """
         self.close_response()
+        file_type = kwargs.get('file_type')
+        if file_type is not None:
+            kwargs['format'] = file_type
+            del kwargs['file_type']
         self.response = tabulator.Stream(url, **kwargs)
         self.response.open()
         return self.response
