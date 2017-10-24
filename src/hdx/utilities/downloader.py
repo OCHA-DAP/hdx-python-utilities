@@ -5,11 +5,11 @@ import logging
 from os.path import splitext, join, exists
 from posixpath import basename
 from tempfile import gettempdir
-from typing import Optional, Dict
+from typing import Optional, Dict, Iterator, Union, List
 
 import requests
+import tabulator
 from six.moves.urllib.parse import urlparse
-from tabulator import Stream
 
 from hdx.utilities import raisefrom
 from hdx.utilities.session import get_session
@@ -40,13 +40,33 @@ class Download(object):
         self.session = get_session(**kwargs)
         self.response = None
 
+    def close_response(self):
+        # type: () -> None
+        """Close response
+
+        Returns:
+            None
+
+        """
+        if self.response:
+            self.response.close()
+
+    def close(self):
+        # type: () -> None
+        """Close response and session
+
+        Returns:
+            None
+
+        """
+        self.close_response()
+        self.session.close()
+
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
-        if self.response:
-            self.response.close()
-        self.session.close()
+        self.close()
 
     @staticmethod
     def get_path_for_url(url, folder=None):
@@ -92,6 +112,7 @@ class Download(object):
 
 
         """
+        self.close_response()
         self.response = None
         try:
             self.response = self.session.get(url, stream=True, timeout=timeout)
@@ -175,6 +196,7 @@ class Download(object):
             requests.Response: Response
 
         """
+        self.close_response()
         try:
             self.response = self.session.get(url, timeout=timeout)
             self.response.raise_for_status()
@@ -182,48 +204,85 @@ class Download(object):
             raisefrom(DownloadError, 'Download of %s failed!' % url, e)
         return self.response
 
-    @staticmethod
-    def download_csv_key_value(url, delimiter=',', headers=None):
-        # type: (str, str, Optional[int]) -> Dict
+    def get_tabular_stream(self, url, **kwargs):
+        # type: (str, ...) -> tabulator.Stream
+        """Get iterator for reading rows from tabular data. Each row is returned as a dictionary.
+
+        Args:
+            url (str): URL to download
+            **kwargs:
+            headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            file_type (Optional[str]): Type of file. Defaults to inferring.
+            delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
+
+        Returns:
+            tabulator.Stream: Returns Tabulator Stream object.
+
+        """
+        self.close_response()
+        self.response = tabulator.Stream(url, **kwargs)
+        self.response.open()
+        return self.response
+
+    def get_tabular_rows(self, url, dict_rows=False, **kwargs):
+        # type: (str, bool, ...) -> Iterator[Dict]
+        """Get iterator for reading rows from tabular data. Each row is returned as a dictionary.
+
+        Args:
+            url (str): URL to download
+            dict_rows (bool): Return dict (requires headers parameter) or list for each row. Defaults to False (list).
+            **kwargs:
+            headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            file_type (Optional[str]): Type of file. Defaults to inferring.
+            delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
+
+        Returns:
+            Iterator[Dict]: Returns Iterator where each row is returned as a dictionary.
+
+        """
+        return self.get_tabular_stream(url, **kwargs).iter(keyed=dict_rows)
+
+    def download_tabular_key_value(self, url, **kwargs):
+        # type: (str, ...) -> Dict
         """Download 2 column csv from url and return a dictionary of keys (first column) and values (second column)
 
         Args:
             url (str): URL to download
-            delimiter (str): Delimiter for each row in csv. Defaults to ','.
-            headers (Optional[int]): Number of row containing headers. Defaults to None.
+            **kwargs:
+            headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            file_type (Optional[str]): Type of file. Defaults to inferring.
+            delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
 
         Returns:
             Dict: Dictionary keys (first column) and values (second column)
 
         """
-        stream = Stream(url, delimiter=delimiter, headers=headers)
-        stream.open()
         output_dict = dict()
-        for row in stream.iter():
+        for row in self.get_tabular_rows(url, **kwargs):
             if len(row) < 2:
                 continue
             output_dict[row[0]] = row[1]
-        stream.close()
         return output_dict
 
-    @staticmethod
-    def download_csv_rows_as_dicts(url, delimiter=',', headers=1):
-        # type: (str, str, int) -> Dict[Dict]
+    def download_tabular_rows_as_dicts(self, url, headers=1, **kwargs):
+        # type: (str, Union[int, List[int], List[str]], ...) -> Dict[Dict]
         """Download multicolumn csv from url and return dictionary where keys are first column and values are
         dictionaries with keys from column headers and values from columns beneath
 
         Args:
             url (str): URL to download
-            delimiter (str): Delimiter for each row in csv. Defaults to ','.
-            headers (int): Number of row containing headers. Defaults to 1.
+            headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            **kwargs:
+            file_type (Optional[str]): Type of file. Defaults to inferring.
+            delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
 
         Returns:
             Dict[Dict]: Dictionary where keys are first column and values are dictionaries with keys from column
             headers and values from columns beneath
 
         """
-        stream = Stream(url, delimiter=delimiter, headers=headers)
-        stream.open()
+        kwargs['headers'] = headers
+        stream = self.get_tabular_stream(url, **kwargs)
         output_dict = dict()
         headers = stream.headers
         first_header = headers[0]
@@ -235,27 +294,27 @@ class Download(object):
                     continue
                 else:
                     output_dict[first_val][header] = row[header]
-        stream.close()
         return output_dict
 
-    @staticmethod
-    def download_csv_cols_as_dicts(url, delimiter=',', headers=1):
-        # type: (str, str, int) -> Dict[Dict]
+    def download_tabular_cols_as_dicts(self, url, headers=1, **kwargs):
+        # type: (str, Union[int, List[int], List[str]], ...) -> Dict[Dict]
         """Download multicolumn csv from url and return dictionary where keys are header names and values are
         dictionaries with keys from first column and values from other columns
 
         Args:
             url (str): URL to download
-            delimiter (str): Delimiter for each row in csv. Defaults to ','.
-            headers (int): Number of row containing headers. Defaults to 1.
+            headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            **kwargs:
+            file_type (Optional[str]): Type of file. Defaults to inferring.
+            delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
 
         Returns:
             Dict[Dict]: Dictionary where keys are header names and values are dictionaries with keys from first column
             and values from other columns
 
         """
-        stream = Stream(url, delimiter=delimiter, headers=headers)
-        stream.open()
+        kwargs['headers'] = headers
+        stream = self.get_tabular_stream(url, **kwargs)
         output_dict = dict()
         headers = stream.headers
         first_header = headers[0]
@@ -268,5 +327,4 @@ class Download(object):
                 if header == first_header:
                     continue
                 output_dict[header][row[first_header]] = row[header]
-        stream.close()
         return output_dict
