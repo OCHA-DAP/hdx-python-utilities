@@ -10,6 +10,7 @@ from typing import Optional, Dict, Iterator, Union, List
 import requests
 import tabulator
 from six.moves.urllib.parse import urlparse
+from tabulator.exceptions import TabulatorException
 
 from hdx.utilities import raisefrom
 from hdx.utilities.session import get_session
@@ -225,9 +226,12 @@ class Download(object):
             kwargs['format'] = file_type
             del kwargs['file_type']
         kwargs['http_session'] = self.session
-        self.response = tabulator.Stream(url, **kwargs)
-        self.response.open()
-        return self.response
+        try:
+            self.response = tabulator.Stream(url, **kwargs)
+            self.response.open()
+            return self.response
+        except TabulatorException as e:
+            raisefrom(DownloadError, 'Getting tabular stream failed!' % url, e)
 
     def get_tabular_rows(self, url, dict_rows=False, **kwargs):
         # type: (str, bool, ...) -> Iterator[Dict]
