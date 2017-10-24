@@ -224,6 +224,7 @@ class Download(object):
         if file_type is not None:
             kwargs['format'] = file_type
             del kwargs['file_type']
+        kwargs['http_session'] = self.session
         self.response = tabulator.Stream(url, **kwargs)
         self.response.open()
         return self.response
