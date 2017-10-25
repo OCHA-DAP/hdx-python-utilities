@@ -9,6 +9,7 @@ from typing import Optional, Dict, Iterator, Union, List
 
 import requests
 import tabulator
+from requests import Request
 from six.moves.urllib.parse import urlparse
 from tabulator.exceptions import TabulatorException
 
@@ -23,7 +24,7 @@ class DownloadError(Exception):
 
 
 class Download(object):
-    """Download class with various download operations.
+    """Download class with various download operations. Currently only GET requests are used and supported.
 
     Args:
         **kwargs: See below
@@ -97,14 +98,16 @@ class Download(object):
             path = join(folder, '%s%d%s' % (filename, count, extension))
         return path
 
-    def get_extra_params(self):
-        # type: () -> Dict[str, str]
-        """Get extra parameters to put on end of url as a dictionary
+    def get_full_url(self, url):
+        # type: () -> str
+        """Get full url including any additional parameters
 
         Returns:
-            Dict[str, str]: Extra parameters to put on end of url as a dictionary
+            str: Returns full url including any additional parameters
         """
-        return self.session.params
+        request = Request('GET', url)
+        preparedrequest = self.session.prepare_request(request)
+        return preparedrequest.url
 
     def setup_stream(self, url, timeout=None):
         # type: (str, Optional[float]) -> None

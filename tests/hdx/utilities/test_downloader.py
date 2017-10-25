@@ -47,13 +47,20 @@ class TestDownloader:
             Download(basic_auth_file='NOTEXIST')
         extraparamsjson = join(downloaderfolder, 'extra_params.json')
         extraparamsyaml = join(downloaderfolder, 'extra_params.yml')
+        test_url = 'http://www.lalala.com/lala'
         with Download(basic_auth_file=basicauthfile, extra_params_dict={'key1': 'val1'}) as downloader:
             assert downloader.session.auth == ('testuser', 'testpass')
-            assert downloader.get_extra_params() == {'key1': 'val1'}
+            assert downloader.get_full_url(test_url) == '%s?key1=val1' % test_url
         with Download(extra_params_json=extraparamsjson) as downloader:
-            assert downloader.get_extra_params() == {'param_1': 'value 1', 'param_2': 'value_2', 'param_3': 12}
+            full_url = downloader.get_full_url(test_url)
+            assert 'param_1=value+1' in full_url
+            assert 'param_2=value_2' in full_url
+            assert 'param_3=12' in full_url
         with Download(extra_params_yaml=extraparamsyaml) as downloader:
-            assert downloader.get_extra_params() == {'param1': 'value1', 'param2': 'value 2', 'param3': 10}
+            full_url = downloader.get_full_url(test_url)
+            assert 'param1=value1' in full_url
+            assert 'param2=value+2' in full_url
+            assert 'param3=10' in full_url
         with pytest.raises(SessionError):
             Download(extra_params_dict={'key1': 'val1'}, extra_params_json=extraparamsjson)
         with pytest.raises(SessionError):
