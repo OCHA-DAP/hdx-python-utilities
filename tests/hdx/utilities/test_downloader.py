@@ -107,7 +107,7 @@ class TestDownloader:
 
     def test_download_tabular_key_value(self, fixtureurl, fixtureprocessurl):
         with Download() as downloader:
-            result = downloader.download_tabular_key_value(fixtureurl)
+            result = downloader.download_tabular_key_value(fixtureurl, file_type='csv')
             assert result == {'615': '2231RTA', 'GWNO': 'EVENT_ID_CNTY'}
             result = downloader.download_tabular_key_value(fixtureprocessurl, headers=2)
             assert result == {'coal': '3', 'gas': '2'}
