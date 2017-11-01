@@ -12,7 +12,7 @@ class LoggingError(Exception):
 
 
 def setup_logging(**kwargs):
-    # type: (...) -> None
+    # type: (Any) -> None
     """Setup logging configuration
 
     Args:

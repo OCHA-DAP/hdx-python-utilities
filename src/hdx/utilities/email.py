@@ -40,7 +40,7 @@ class Email:
     default_email_config_yaml = join(expanduser('~'), 'hdx_email_configuration.yml')
 
     def __init__(self, **kwargs):
-        # type: (...) -> None
+        # type: (Any) -> None
         email_config_found = False
         email_config_dict = kwargs.get('email_config_dict', None)
         if email_config_dict:
@@ -88,7 +88,7 @@ class Email:
         return self
 
     def __exit__(self, *args):
-        # type: (...) -> None
+        # type: (Any) -> None
         """
         Close Email object for end of with statement
 
@@ -133,7 +133,7 @@ class Email:
         self.server.quit()
 
     def send(self, recipients, subject, text_body, html_body=None, sender=None, **kwargs):
-        # type: (str, str, str, Optional[str], Optional[str], ...) -> None
+        # type: (str, str, str, Optional[str], Optional[str], Any) -> None
         """
         Send email
 

@@ -38,7 +38,7 @@ class Download(object):
         method_whitelist (iterable): HTTP methods for which to force retry. Defaults t0 frozenset(['GET']).
     """
     def __init__(self, **kwargs):
-        # type: (...) -> None
+        # type: (Any) -> None
         self.session = get_session(**kwargs)
         self.response = None
 
@@ -212,7 +212,7 @@ class Download(object):
         return self.response
 
     def get_tabular_stream(self, url, **kwargs):
-        # type: (str, ...) -> tabulator.Stream
+        # type: (str, Any) -> tabulator.Stream
         """Get iterator for reading rows from tabular data. Each row is returned as a dictionary.
 
         Args:
@@ -240,7 +240,7 @@ class Download(object):
             raisefrom(DownloadError, 'Getting tabular stream for %s failed!' % url, e)
 
     def get_tabular_rows(self, url, dict_rows=False, **kwargs):
-        # type: (str, bool, ...) -> Iterator[Dict]
+        # type: (str, bool, Any) -> Iterator[Dict]
         """Get iterator for reading rows from tabular data. Each row is returned as a dictionary.
 
         Args:
@@ -258,7 +258,7 @@ class Download(object):
         return self.get_tabular_stream(url, **kwargs).iter(keyed=dict_rows)
 
     def download_tabular_key_value(self, url, **kwargs):
-        # type: (str, ...) -> Dict
+        # type: (str, Any) -> Dict
         """Download 2 column csv from url and return a dictionary of keys (first column) and values (second column)
 
         Args:
@@ -280,7 +280,7 @@ class Download(object):
         return output_dict
 
     def download_tabular_rows_as_dicts(self, url, headers=1, **kwargs):
-        # type: (str, Union[int, List[int], List[str]], ...) -> Dict[Dict]
+        # type: (str, Union[int, List[int], List[str]], Any) -> Dict[Dict]
         """Download multicolumn csv from url and return dictionary where keys are first column and values are
         dictionaries with keys from column headers and values from columns beneath
 
@@ -312,7 +312,7 @@ class Download(object):
         return output_dict
 
     def download_tabular_cols_as_dicts(self, url, headers=1, **kwargs):
-        # type: (str, Union[int, List[int], List[str]], ...) -> Dict[Dict]
+        # type: (str, Union[int, List[int], List[str]], Any) -> Dict[Dict]
         """Download multicolumn csv from url and return dictionary where keys are header names and values are
         dictionaries with keys from first column and values from other columns
 

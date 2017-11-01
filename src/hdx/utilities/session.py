@@ -17,7 +17,7 @@ class SessionError(Exception):
 
 
 def get_session(**kwargs):
-    # type: (...) -> requests.Session
+    # type: (Any) -> requests.Session
     """Set up and return Session object that is set up with retrying
 
     Args:
