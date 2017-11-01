@@ -47,13 +47,20 @@ class TestDownloader:
             Download(basic_auth_file='NOTEXIST')
         extraparamsjson = join(downloaderfolder, 'extra_params.json')
         extraparamsyaml = join(downloaderfolder, 'extra_params.yml')
+        test_url = 'http://www.lalala.com/lala'
         with Download(basic_auth_file=basicauthfile, extra_params_dict={'key1': 'val1'}) as downloader:
             assert downloader.session.auth == ('testuser', 'testpass')
-            assert downloader.get_extra_params() == {'key1': 'val1'}
+            assert downloader.get_full_url(test_url) == '%s?key1=val1' % test_url
         with Download(extra_params_json=extraparamsjson) as downloader:
-            assert downloader.get_extra_params() == {'param_1': 'value 1', 'param_2': 'value_2', 'param_3': 12}
+            full_url = downloader.get_full_url(test_url)
+            assert 'param_1=value+1' in full_url
+            assert 'param_2=value_2' in full_url
+            assert 'param_3=12' in full_url
         with Download(extra_params_yaml=extraparamsyaml) as downloader:
-            assert downloader.get_extra_params() == {'param1': 'value1', 'param2': 'value 2', 'param3': 10}
+            full_url = downloader.get_full_url(test_url)
+            assert 'param1=value1' in full_url
+            assert 'param2=value+2' in full_url
+            assert 'param3=10' in full_url
         with pytest.raises(SessionError):
             Download(extra_params_dict={'key1': 'val1'}, extra_params_json=extraparamsjson)
         with pytest.raises(SessionError):
@@ -97,20 +104,25 @@ class TestDownloader:
         with Download() as downloader:
             result = downloader.download(fixtureurl)
             assert result.headers['Content-Length'] == '728'
-            result = downloader.download_csv_key_value(fixtureurl)
+
+    def test_download_tabular_key_value(self, fixtureurl, fixtureprocessurl):
+        with Download() as downloader:
+            result = downloader.download_tabular_key_value(fixtureurl, file_type='csv')
             assert result == {'615': '2231RTA', 'GWNO': 'EVENT_ID_CNTY'}
+            result = downloader.download_tabular_key_value(fixtureprocessurl, headers=2)
+            assert result == {'coal': '3', 'gas': '2'}
+            with pytest.raises(DownloadError):
+                downloader.download_tabular_key_value('NOTEXIST://NOTEXIST.csv')
 
-    def test_download_csv_key_value(self, fixtureprocessurl):
-        result = Download.download_csv_key_value(fixtureprocessurl, headers=2)
-        assert result == {'coal': '3', 'gas': '2'}
+    def test_download_tabular_rows_as_dicts(self, fixtureprocessurl):
+        with Download() as downloader:
+            result = downloader.download_tabular_rows_as_dicts(fixtureprocessurl, headers=2)
+            assert result == {'coal': {'header2': '3', 'header3': '7.4', 'header4': "'needed'"},
+                              'gas': {'header2': '2', 'header3': '6.5', 'header4': "'n/a'"}}
 
-    def test_download_csv_rows_as_dicts(self, fixtureprocessurl):
-        result = Download.download_csv_rows_as_dicts(fixtureprocessurl, headers=2)
-        assert result == {'coal': {'header2': '3', 'header3': '7.4', 'header4': "'needed'"},
-                          'gas': {'header2': '2', 'header3': '6.5', 'header4': "'n/a'"}}
-
-    def test_download_csv_cols_as_dicts(self, fixtureprocessurl):
-        result = Download.download_csv_cols_as_dicts(fixtureprocessurl, headers=2)
-        assert result == {'header2': {'coal': '3', 'gas': '2'},
-                          'header3': {'coal': '7.4', 'gas': '6.5'},
-                          'header4': {'coal': "'needed'", 'gas': "'n/a'"}}
+    def test_download_tabular_cols_as_dicts(self, fixtureprocessurl):
+        with Download() as downloader:
+            result = downloader.download_tabular_cols_as_dicts(fixtureprocessurl, headers=2)
+            assert result == {'header2': {'coal': '3', 'gas': '2'},
+                              'header3': {'coal': '7.4', 'gas': '6.5'},
+                              'header4': {'coal': "'needed'", 'gas': "'n/a'"}}
