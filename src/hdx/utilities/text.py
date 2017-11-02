@@ -1,7 +1,23 @@
 # -*- coding: utf-8 -*-
 """Text processing utilities"""
 import difflib
+import string
 from typing import List
+import re
+
+
+def get_words_in_sentence(sentence):
+    # type: (str) -> List[str]
+    """Returns list of words in a sentence
+
+    Args:
+        sentence (str): Sentence
+
+    Returns:
+        List[str]: List of words in sentence
+
+    """
+    return re.sub('[' + string.punctuation.replace("'", "") + ']', '', sentence).split()
 
 
 def get_matching_text_in_strs(a, b, match_min_size=30, ignore='', end_characters=''):

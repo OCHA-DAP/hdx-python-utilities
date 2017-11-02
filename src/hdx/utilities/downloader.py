@@ -103,7 +103,7 @@ class Download(object):
         """Get full url including any additional parameters
 
         Returns:
-            str: Returns full url including any additional parameters
+            str: Full url including any additional parameters
         """
         request = Request('GET', url)
         preparedrequest = self.session.prepare_request(request)
@@ -223,7 +223,7 @@ class Download(object):
             delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
 
         Returns:
-            tabulator.Stream: Returns Tabulator Stream object.
+            tabulator.Stream: Tabulator Stream object.
 
         """
         self.close_response()
@@ -252,7 +252,7 @@ class Download(object):
             delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
 
         Returns:
-            Iterator[Dict]: Returns Iterator where each row is returned as a dictionary.
+            Iterator[Dict]: Iterator where each row is returned as a dictionary.
 
         """
         return self.get_tabular_stream(url, **kwargs).iter(keyed=dict_rows)

@@ -1,12 +1,17 @@
 # -*- coding: UTF-8 -*-
 """Text Processing Tests"""
-from hdx.utilities.text import get_matching_text_in_strs, get_matching_then_nonmatching_text, get_matching_text
+from hdx.utilities.text import get_matching_text_in_strs, get_matching_then_nonmatching_text, get_matching_text, \
+    get_words_in_sentence
 
 
 class TestText:
     a = 'The quick brown fox jumped over the lazy dog. It was so fast!'
     b = 'The quicker brown fox leapt over the slower fox. It was so fast!'
     c = 'The quick brown fox climbed over the lazy dog. It was so fast!'
+
+    def test_get_words_in_sentence(self):
+        result = get_words_in_sentence("Korea (Democratic People's Republic of)")
+        assert result == ['Korea', 'Democratic', "People's", 'Republic', 'of']
 
     def test_get_matching_text_in_strs(self):
         result = get_matching_text_in_strs(TestText.a, TestText.b)
