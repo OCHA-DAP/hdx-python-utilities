@@ -12,6 +12,8 @@ class TestText:
     def test_get_words_in_sentence(self):
         result = get_words_in_sentence("Korea (Democratic People's Republic of)")
         assert result == ['Korea', 'Democratic', "People's", 'Republic', 'of']
+        result = get_words_in_sentence('Serbia and Kosovo: S/RES/1244 (1999)')
+        assert result == ['Serbia', 'and', 'Kosovo', 'S', 'RES', '1244', '1999']
 
     def test_get_matching_text_in_strs(self):
         result = get_matching_text_in_strs(TestText.a, TestText.b)

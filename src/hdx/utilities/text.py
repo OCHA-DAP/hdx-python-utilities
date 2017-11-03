@@ -17,7 +17,7 @@ def get_words_in_sentence(sentence):
         List[str]: List of words in sentence
 
     """
-    return re.sub('[' + string.punctuation.replace("'", "") + ']', '', sentence).split()
+    return re.sub('[' + string.punctuation.replace("'", "") + ']', ' ', sentence).split()
 
 
 def get_matching_text_in_strs(a, b, match_min_size=30, ignore='', end_characters=''):
