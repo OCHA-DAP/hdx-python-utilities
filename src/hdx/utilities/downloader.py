@@ -218,7 +218,7 @@ class Download(object):
         Args:
             url (str): URL to download
             **kwargs:
-            headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers
             file_type (Optional[str]): Type of file. Defaults to inferring.
             delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
 
@@ -248,7 +248,7 @@ class Download(object):
             url (str): URL to download
             dict_rows (bool): Return dict (requires headers parameter) or list for each row. Defaults to False (list).
             **kwargs:
-            headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers
             file_type (Optional[str]): Type of file. Defaults to inferring.
             delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
 
@@ -265,7 +265,7 @@ class Download(object):
         Args:
             url (str): URL to download
             **kwargs:
-            headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers
             file_type (Optional[str]): Type of file. Defaults to inferring.
             delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
 
