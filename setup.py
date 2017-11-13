@@ -57,7 +57,7 @@ requirements = ['basicauth',
                 'email_validator',
                 'pyaml',
                 'six',
-                'tabulator',
+                'tabulator>=1.12',
                 'typing'
                 ]
 
