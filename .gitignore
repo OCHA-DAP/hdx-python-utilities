@@ -89,6 +89,3 @@ ENV/
 
 # Rope project settings
 .ropeproject
-
-# IDE
-.idea/
