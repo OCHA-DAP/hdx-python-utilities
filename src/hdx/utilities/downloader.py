@@ -5,7 +5,7 @@ import logging
 from os.path import splitext, join, exists
 from posixpath import basename
 from tempfile import gettempdir
-from typing import Optional, Dict, Iterator, Union, List
+from typing import Optional, Dict, Iterator, Union, List, Any
 
 import requests
 import tabulator

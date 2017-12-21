@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 """Text processing utilities"""
 import difflib
+import re
 import string
 from typing import List
-import re
 
 
 def get_words_in_sentence(sentence):

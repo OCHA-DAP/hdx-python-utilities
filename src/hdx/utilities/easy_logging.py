@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 """Configuration of logging"""
 import logging.config
+from typing import Any
 
 from hdx.utilities.dictandlist import merge_dictionaries
 from hdx.utilities.loader import load_yaml, load_json

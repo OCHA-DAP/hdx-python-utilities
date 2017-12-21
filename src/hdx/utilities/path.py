@@ -4,6 +4,7 @@
 import inspect
 import sys
 from os.path import abspath, realpath, dirname, join
+from typing import Any
 
 
 def script_dir(pyobject, follow_symlinks=True):

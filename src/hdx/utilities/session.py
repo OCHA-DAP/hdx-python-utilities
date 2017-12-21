@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Session utilities for urls"""
 import logging
+from typing import Any
 
 import requests
 from basicauth import decode

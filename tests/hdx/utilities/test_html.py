@@ -1,7 +1,8 @@
 # -*- coding: UTF-8 -*-
 """HTML Tests"""
-import pytest
 from os.path import join
+
+import pytest
 
 from hdx.utilities.html import get_soup, extract_table
 from hdx.utilities.loader import load_file_to_str

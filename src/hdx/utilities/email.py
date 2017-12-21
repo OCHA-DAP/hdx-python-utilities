@@ -4,11 +4,11 @@
 import logging
 import smtplib
 from os.path import join, expanduser
+from typing import Optional, Any
 
 from email_validator import validate_email
 from six.moves.email_mime_multipart import MIMEMultipart
 from six.moves.email_mime_text import MIMEText
-from typing import Optional
 
 from hdx.utilities.loader import load_yaml, load_json
 

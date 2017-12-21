@@ -2,7 +2,7 @@
 """Loading utilities for YAML, JSON etc."""
 
 import json
-from typing import List
+from typing import List, Dict
 
 import yaml
 
