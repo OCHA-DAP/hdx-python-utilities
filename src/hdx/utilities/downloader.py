@@ -251,7 +251,7 @@ class Download(object):
             delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
 
         Returns:
-            Iterator[Dict]: Iterator where each row is returned as a dictionary.
+            Iterator[Union[List,Dict]]: Iterator where each row is returned as a list or dictionary.
 
         """
         return self.get_tabular_stream(url, **kwargs).iter(keyed=dict_rows)
