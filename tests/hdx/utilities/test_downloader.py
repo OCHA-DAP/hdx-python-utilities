@@ -32,6 +32,9 @@ class TestDownloader:
         assert abspath(path) == abspath(join(configfolder, 'test_data.csv'))
         path = Download.get_path_for_url(fixtureurl, downloaderfolder)
         assert abspath(path) == abspath(join(downloaderfolder, 'test_data3.csv'))
+        filename = 'myfilename.txt'
+        path = Download.get_path_for_url(fixtureurl, downloaderfolder, filename)
+        assert abspath(path) == abspath(join(downloaderfolder, filename))
 
     def test_init(self, downloaderfolder):
         basicauthfile = join(downloaderfolder, 'basicauth.txt')
@@ -95,6 +98,11 @@ class TestDownloader:
             fpath = abspath(f)
             unlink(f)
             assert fpath == abspath(join(tmpdir, 'test_data.csv'))
+            filename = 'myfilename.txt'
+            f = downloader.download_file(fixtureurl, tmpdir, filename)
+            fpath = abspath(f)
+            unlink(f)
+            assert fpath == abspath(join(tmpdir, filename))
 
     def test_download(self, fixtureurl, fixturenotexistsurl):
         with pytest.raises(DownloadError), Download() as downloader:

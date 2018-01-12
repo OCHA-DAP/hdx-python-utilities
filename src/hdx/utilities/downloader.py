@@ -74,21 +74,23 @@ class Download(object):
         self.close()
 
     @staticmethod
-    def get_path_for_url(url, folder=None):
-        # type: (str, Optional[str]) -> str
+    def get_path_for_url(url, folder=None, filename=None):
+        # type: (str, Optional[str], Optional[str]) -> str
         """Get filename from url and join to provided folder or temporary folder if no folder supplied, ensuring uniqueness
 
         Args:
             url (str): URL to download
             folder (Optional[str]): Folder to download it to. Defaults to None (temporary folder).
+            filename (Optional[str]): Filename to use for downloaded file. Defaults to None (derive from the url).
 
         Returns:
             str: Path of downloaded file
 
         """
-        urlpath = urlparse(url).path
-        filenameext = basename(urlpath)
-        filename, extension = splitext(filenameext)
+        if not filename:
+            urlpath = urlparse(url).path
+            filename = basename(urlpath)
+        filename, extension = splitext(filename)
         if not folder:
             folder = gettempdir()
         path = join(folder, '%s%s' % (filename, extension))
@@ -147,20 +149,21 @@ class Download(object):
         except Exception as e:
             raisefrom(DownloadError, 'Download of %s failed in retrieval of stream!' % url, e)
 
-    def stream_file(self, url, folder=None):
-        # type: (str, Optional[str]) -> str
+    def stream_file(self, url, folder=None, filename=None):
+        # type: (str, Optional[str], Optional[str]) -> str
         """Stream file from url and store in provided folder or temporary folder if no folder supplied.
         Must call setup_streaming_download method first.
 
         Args:
             url (str): URL to download
             folder (Optional[str]): Folder to download it to. Defaults to None (temporary folder).
+            filename (Optional[str]): Filename to use for downloaded file. Defaults to None (derive from the url).
 
         Returns:
             str: Path of downloaded file
 
         """
-        path = self.get_path_for_url(url, folder)
+        path = self.get_path_for_url(url, folder, filename)
         f = None
         try:
             f = open(path, 'wb')
@@ -175,13 +178,14 @@ class Download(object):
             if f:
                 f.close()
 
-    def download_file(self, url, folder=None, timeout=None):
-        # type: (str, Optional[str], Optional[float]) -> str
+    def download_file(self, url, folder=None, filename=None, timeout=None):
+        # type: (str, Optional[str], Optional[str], Optional[float]) -> str
         """Download file from url and store in provided folder or temporary folder if no folder supplied
 
         Args:
             url (str): URL to download
             folder (Optional[str]): Folder to download it to. Defaults to None.
+            filename (Optional[str]): Filename to use for downloaded file. Defaults to None (derive from the url).
             timeout (Optional[float]): Timeout for connecting to URL. Defaults to None (no timeout).
 
         Returns:
@@ -189,7 +193,7 @@ class Download(object):
 
         """
         self.setup_stream(url, timeout)
-        return self.stream_file(url, folder)
+        return self.stream_file(url, folder, filename)
 
     def download(self, url, timeout=None):
         # type: (str, Optional[float]) -> requests.Response
