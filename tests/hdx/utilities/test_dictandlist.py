@@ -1,6 +1,6 @@
 # -*- coding: UTF-8 -*-
 """Dictionary Tests"""
-from os import unlink
+from os import remove
 from os.path import join
 from tempfile import gettempdir
 
@@ -143,7 +143,7 @@ class TestDictAndList:
         assert write_list_to_csv(l, folder, filename, headers=['h1', 'h2', 'h3', 'h4']) == filepath
         newll = read_list_from_csv(folder, filename)
         newld = read_list_from_csv(folder, filename, dict_form=True, headers=1)
-        unlink(filepath)
+        remove(filepath)
         assert newll == [['h1', 'h2', 'h3', 'h4'], ['1', '2', '3', 'a'], ['4', '5', '6', 'b'], ['7', '8', '9', 'c']]
         assert newld == [{'h1': '1', 'h2': '2', 'h4': 'a', 'h3': '3'},
                         {'h1': '4', 'h2': '5', 'h4': 'b', 'h3': '6'},

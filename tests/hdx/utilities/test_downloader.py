@@ -1,8 +1,9 @@
 # -*- coding: UTF-8 -*-
 """Downloader Tests"""
-import tempfile
-from os import unlink
+from os import remove
 from os.path import join, abspath
+from shutil import rmtree, copytree
+from tempfile import gettempdir
 
 import pytest
 
@@ -11,9 +12,11 @@ from hdx.utilities.session import SessionError
 
 
 class TestDownloader:
+    downloaderfoldername = 'downloader'
+
     @pytest.fixture(scope='class')
     def downloaderfolder(self, fixturesfolder):
-        return join(fixturesfolder, 'downloader')
+        return join(fixturesfolder, self.downloaderfoldername)
 
     @pytest.fixture(scope='class')
     def fixtureurl(self):
@@ -28,11 +31,20 @@ class TestDownloader:
         return 'https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/downloader/test_csv_processing.csv?a=1'
 
     def test_get_path_for_url(self, fixtureurl, configfolder, downloaderfolder):
+        filename = 'test_data.csv'
         path = Download.get_path_for_url(fixtureurl, configfolder)
-        assert abspath(path) == abspath(join(configfolder, 'test_data.csv'))
+        assert abspath(path) == abspath(join(configfolder, filename))
         path = Download.get_path_for_url(fixtureurl, downloaderfolder)
         assert abspath(path) == abspath(join(downloaderfolder, 'test_data3.csv'))
+        testfolder = join(gettempdir(), self.downloaderfoldername)
+        rmtree(testfolder, ignore_errors=True)
+        copytree(downloaderfolder, testfolder)
+        path = Download.get_path_for_url(fixtureurl, testfolder, overwrite=True)
+        assert abspath(path) == abspath(join(testfolder, filename))
+        rmtree(testfolder)
         filename = 'myfilename.txt'
+        path = Download.get_path_for_url(fixtureurl, filename=filename)
+        assert abspath(path) == abspath(join(gettempdir(), filename))
         path = Download.get_path_for_url(fixtureurl, downloaderfolder, filename)
         assert abspath(path) == abspath(join(downloaderfolder, filename))
 
@@ -88,7 +100,7 @@ class TestDownloader:
             assert md5hash == 'da9db35a396cca10c618f6795bdb9ff2'
 
     def test_download_file(self, fixtureurl, fixturenotexistsurl):
-        tmpdir = tempfile.gettempdir()
+        tmpdir = gettempdir()
         with pytest.raises(DownloadError), Download() as downloader:
             downloader.download_file('NOTEXIST://NOTEXIST.csv', tmpdir)
         with pytest.raises(DownloadError), Download() as downloader:
@@ -96,12 +108,12 @@ class TestDownloader:
         with Download() as downloader:
             f = downloader.download_file(fixtureurl, tmpdir)
             fpath = abspath(f)
-            unlink(f)
+            remove(f)
             assert fpath == abspath(join(tmpdir, 'test_data.csv'))
             filename = 'myfilename.txt'
             f = downloader.download_file(fixtureurl, tmpdir, filename)
             fpath = abspath(f)
-            unlink(f)
+            remove(f)
             assert fpath == abspath(join(tmpdir, filename))
 
     def test_download(self, fixtureurl, fixturenotexistsurl):
