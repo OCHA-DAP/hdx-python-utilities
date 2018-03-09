@@ -97,7 +97,10 @@ class Download(object):
             folder = gettempdir()
         path = join(folder, '%s%s' % (filename, extension))
         if overwrite:
-            remove(path)
+            try:
+                remove(path)
+            except OSError:
+                pass
         else:
             count = 0
             while exists(path):
