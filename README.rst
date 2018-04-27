@@ -8,6 +8,8 @@ The HDX Python Utilities Library provides a range of helpful utilities:
 #. Dictionary and list utilities
 #. Text block matching
 #. Path utilities
+#. Loading and saving JSON and YAML (inc. OrderedDict)
+
 
 This library is part of the `Humanitarian Data Exchange`_ (HDX) project. If you have
 humanitarian related data, please upload your datasets to HDX.
