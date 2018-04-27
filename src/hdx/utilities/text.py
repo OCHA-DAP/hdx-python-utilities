@@ -29,7 +29,7 @@ def get_matching_text_in_strs(a, b, match_min_size=30, ignore='', end_characters
         b (str): Second string to match
         match_min_size (int): Minimum block size to match on. Defaults to 30.
         ignore (str): Any characters to ignore in matching. Defaults to ''.
-        end_characters (str): End characters to look for. Defaults to ''
+        end_characters (str): End characters to look for. Defaults to ''.
 
     Returns:
         List[str]: List of matching blocks of text
@@ -63,7 +63,7 @@ def get_matching_text(string_list, match_min_size=30, ignore='', end_characters=
         string_list (List[str]): List of strings to match
         match_min_size (int): Minimum block size to match on. Defaults to 30.
         ignore (str): Any characters to ignore in matching. Defaults to ''.
-        end_characters (str): End characters to look for. Defaults to '.\r\n'
+        end_characters (str): End characters to look for. Defaults to '.\r\n'.
 
     Returns:
         str: String containing matching blocks of text followed by non-matching
@@ -88,7 +88,7 @@ def get_matching_then_nonmatching_text(string_list, separator='', match_min_size
         separator (str): Separator to add between blocks of text. Defaults to ''.
         match_min_size (int): Minimum block size to match on. Defaults to 30.
         ignore (str): Any characters to ignore in matching. Defaults to ''.
-        end_characters (str): End characters to look for. Defaults to '.\r\n'
+        end_characters (str): End characters to look for. Defaults to '.\r\n'.
 
     Returns:
         str: String containing matching blocks of text followed by non-matching
