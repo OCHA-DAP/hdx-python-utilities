@@ -30,13 +30,14 @@ class TestDownloader:
     def fixtureprocessurl(self):
         return 'https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/downloader/test_csv_processing.csv?a=1'
 
-    def test_get_path_for_url(self, fixtureurl, configfolder, downloaderfolder):
+    def test_get_path_for_url(self, tmpdir, fixtureurl, configfolder, downloaderfolder):
+        tmpdir = str(tmpdir)
         filename = 'test_data.csv'
         path = Download.get_path_for_url(fixtureurl, configfolder)
         assert abspath(path) == abspath(join(configfolder, filename))
         path = Download.get_path_for_url(fixtureurl, downloaderfolder)
         assert abspath(path) == abspath(join(downloaderfolder, 'test_data3.csv'))
-        testfolder = join(gettempdir(), self.downloaderfoldername)
+        testfolder = join(tmpdir, self.downloaderfoldername)
         rmtree(testfolder, ignore_errors=True)
         copytree(downloaderfolder, testfolder)
         path = Download.get_path_for_url(fixtureurl, testfolder, overwrite=True)
@@ -99,8 +100,8 @@ class TestDownloader:
             md5hash = downloader.hash_stream(fixtureurl)
             assert md5hash == 'da9db35a396cca10c618f6795bdb9ff2'
 
-    def test_download_file(self, fixtureurl, fixturenotexistsurl):
-        tmpdir = gettempdir()
+    def test_download_file(self, tmpdir, fixtureurl, fixturenotexistsurl):
+        tmpdir = str(tmpdir)
         with pytest.raises(DownloadError), Download() as downloader:
             downloader.download_file('NOTEXIST://NOTEXIST.csv', tmpdir)
         with pytest.raises(DownloadError), Download() as downloader:

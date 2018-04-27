@@ -2,9 +2,11 @@
 """Loading utilities for YAML, JSON etc."""
 
 import json
+from collections import OrderedDict
 from typing import List, Dict
 
 import yaml
+import yamlloader
 
 from hdx.utilities.dictandlist import merge_two_dictionaries, merge_dictionaries
 
@@ -74,34 +76,34 @@ def load_json_into_existing_dict(data, path):
 
 
 def load_yaml(path):
-    # type: (str) -> Dict
-    """Load YAML file into dictionary
+    # type: (str) -> OrderedDict
+    """Load YAML file into an ordered dictionary
 
     Args:
         path (str): Path to YAML file
 
     Returns:
-        Dict: Dictionary containing loaded YAML file
+        OrderedDict: Ordered dictionary containing loaded YAML file
     """
     with open(path, 'rt') as f:
-        yamldict = yaml.safe_load(f.read())
+        yamldict = yaml.load(f.read(), Loader=yamlloader.ordereddict.CSafeLoader)
     if not yamldict:
         raise (LoadError('YAML file: %s is empty!' % path))
     return yamldict
 
 
 def load_json(path):
-    # type: (str) -> Dict
-    """Load JSON file into dictionary
+    # type: (str) -> OrderedDict
+    """Load JSON file into an ordered dictionary
 
     Args:
         path (str): Path to JSON file
 
     Returns:
-        Dict: Dictionary containing loaded JSON file
+        OrderedDict: Ordered dictionary containing loaded JSON file
     """
     with open(path, 'rt') as f:
-        jsondict = json.loads(f.read())
+        jsondict = json.loads(f.read(), object_pairs_hook=OrderedDict)
     if not jsondict:
         raise (LoadError('JSON file: %s is empty!' % path))
     return jsondict

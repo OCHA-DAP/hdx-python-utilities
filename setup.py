@@ -56,10 +56,12 @@ requirements = ['basicauth',
                 'cchardet>=2.1.1',
                 'colorlog',
                 'email_validator',
+                'html5lib',
                 'pyaml',
                 'six',
-                'tabulator>=1.13.0',
-                'typing'
+                'tabulator>=1.14.0',
+                'typing',
+                'yamlloader'
                 ]
 
 classifiers = [
