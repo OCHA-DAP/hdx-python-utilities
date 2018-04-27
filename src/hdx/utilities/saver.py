@@ -46,6 +46,8 @@ def save_json(dictionary, path, pretty=False, sortkeys=False):
     with open(path, 'w') as f:
         if pretty:
             indent = 2
+            separators = (',', ': ')
         else:
             indent = None
-        json.dump(dictionary, f, indent=indent, sort_keys=sortkeys)
+            separators = (', ', ': ')
+        json.dump(dictionary, f, indent=indent, sort_keys=sortkeys, separators=separators)
