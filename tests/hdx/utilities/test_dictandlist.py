@@ -23,12 +23,12 @@ class TestDictAndList:
         assert result == {1: 1, 2: 6, 3: 3, 4: {8: '8', 'g': 3, 'b': 'c', 'a': 1}, 5: 7, 6: 9, 8: {'k': 'b', 3: 12},
                           9: {'e': 'h', 'c': 12}}
         d1 = {1: 1, 2: 2, 3: 3, 4: ['a', 'b', 'c']}
-        d2 = {2: 6, 4: 8, 6: 9, 4: ['d', 'e']}
+        d2 = {2: 6, 5: 8, 6: 9, 4: ['d', 'e']}
         result = merge_dictionaries([d1, d2])
-        assert result == {1: 1, 2: 6, 3: 3, 4: ['d', 'e'], 6: 9}
+        assert result == {1: 1, 2: 6, 3: 3, 4: ['d', 'e'], 5: 8, 6: 9}
         d1 = {1: 1, 2: 2, 3: 3, 4: ['a', 'b', 'c']}
         result = merge_dictionaries([d1, d2], merge_lists=True)
-        assert result == {1: 1, 2: 6, 3: 3, 4: ['a', 'b', 'c', 'd', 'e'], 6: 9}
+        assert result == {1: 1, 2: 6, 3: 3, 4: ['a', 'b', 'c', 'd', 'e'], 5: 8, 6: 9}
 
     def test_dict_diff(self):
         d1 = {1: 1, 2: 2, 3: 3, 4: {'a': 1, 'b': 'c'}}
@@ -140,9 +140,9 @@ class TestDictAndList:
         folder = gettempdir()
         filename = 'test_read_write_list_to_csv.csv'
         filepath = join(folder, filename)
-        assert write_list_to_csv(l, folder, filename, headers=['h1', 'h2', 'h3', 'h4']) == filepath
-        newll = read_list_from_csv(folder, filename)
-        newld = read_list_from_csv(folder, filename, dict_form=True, headers=1)
+        assert write_list_to_csv(l, filepath, headers=['h1', 'h2', 'h3', 'h4']) == filepath
+        newll = read_list_from_csv(filepath)
+        newld = read_list_from_csv(filepath, dict_form=True, headers=1)
         remove(filepath)
         assert newll == [['h1', 'h2', 'h3', 'h4'], ['1', '2', '3', 'a'], ['4', '5', '6', 'b'], ['7', '8', '9', 'c']]
         assert newld == [{'h1': '1', 'h2': '2', 'h4': 'a', 'h3': '3'},

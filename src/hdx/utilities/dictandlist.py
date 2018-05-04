@@ -3,7 +3,6 @@
 from __future__ import division
 
 import itertools
-from os.path import join
 from typing import List, TypeVar, Callable, Dict, Any, Union, Optional
 
 import six
@@ -329,13 +328,12 @@ def avg_dicts(dictin1, dictin2):
     return dictout
 
 
-def read_list_from_csv(folder, filename, dict_form=False, headers=None):
-    # type: (str, str, bool, Optional[int]) -> List[Union[Dict, List]]
+def read_list_from_csv(filepath, dict_form=False, headers=None):
+    # type: (str, bool, Optional[int]) -> List[Union[Dict, List]]
     """Read a list of rows in dict or list form from a csv.
 
     Args:
-        folder (str): Folder to write to
-        filename (str): Name of file to write to
+        filepath (str): Path to read from
         dict_form (bool): Return in dict form. Defaults to False.
         headers (Optional[List[str]]): Row number of headers. Defaults to None.
 
@@ -343,7 +341,6 @@ def read_list_from_csv(folder, filename, dict_form=False, headers=None):
         List[Union[Dict, List]]: List of rows in dict or list form
 
     """
-    filepath = join(folder, filename)
     stream = Stream(filepath, headers=headers)
     stream.open()
     result = stream.read(keyed=dict_form)
@@ -351,21 +348,19 @@ def read_list_from_csv(folder, filename, dict_form=False, headers=None):
     return result
 
 
-def write_list_to_csv(list_of_rows, folder, filename, headers=None):
-    # type: (List[Union[DictUpperBound, List]], str, str, Optional[List[str]]) -> str
+def write_list_to_csv(list_of_rows, filepath, headers=None):
+    # type: (List[Union[DictUpperBound, List]], str, Optional[List[str]]) -> str
     """Write a list of rows in dict or list form to a csv.
 
     Args:
         list_of_rows (List[Union[DictUpperBound, List]]): List of rows in dict or list form
-        folder (str): Folder to write to
-        filename (str): Name of file to write to
+        filepath (str): Path to write to
         headers (Optional[List[str]]): Headers to write. Defaults to None.
 
     Returns:
         str: Path of file
 
     """
-    filepath = join(folder, filename)
     stream = Stream(list_of_rows, headers=headers)
     stream.open()
     stream.save(filepath, format='csv')
