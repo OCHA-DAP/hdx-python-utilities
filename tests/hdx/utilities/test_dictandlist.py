@@ -140,7 +140,7 @@ class TestDictAndList:
         folder = gettempdir()
         filename = 'test_read_write_list_to_csv.csv'
         filepath = join(folder, filename)
-        assert write_list_to_csv(l, filepath, headers=['h1', 'h2', 'h3', 'h4']) == filepath
+        write_list_to_csv(l, filepath, headers=['h1', 'h2', 'h3', 'h4'])
         newll = read_list_from_csv(filepath)
         newld = read_list_from_csv(filepath, dict_form=True, headers=1)
         remove(filepath)

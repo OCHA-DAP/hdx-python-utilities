@@ -349,7 +349,7 @@ def read_list_from_csv(filepath, dict_form=False, headers=None):
 
 
 def write_list_to_csv(list_of_rows, filepath, headers=None):
-    # type: (List[Union[DictUpperBound, List]], str, Optional[List[str]]) -> str
+    # type: (List[Union[DictUpperBound, List]], str, Optional[List[str]]) -> None
     """Write a list of rows in dict or list form to a csv.
 
     Args:
@@ -358,11 +358,10 @@ def write_list_to_csv(list_of_rows, filepath, headers=None):
         headers (Optional[List[str]]): Headers to write. Defaults to None.
 
     Returns:
-        str: Path of file
+        None
 
     """
     stream = Stream(list_of_rows, headers=headers)
     stream.open()
     stream.save(filepath, format='csv')
     stream.close()
-    return filepath
