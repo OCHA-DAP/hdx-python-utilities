@@ -18,5 +18,6 @@ class TestCompare:
 
     def test_compare_files(self, testfile1, testfile2):
         result = compare_files(testfile1, testfile2)
-        assert result == ["- coal,3,7.4,'needed'\n", '?      ^\n', "+ coal,1,7.4,'notneeded'\n", '?      ^      +++\n']
+        assert result == ["- coal   ,3      ,7.4    ,'needed'\n", '?         ^\n',
+                          "+ coal   ,1      ,7.4    ,'notneeded'\n", '?         ^                +++\n']
         assert_files_same(testfile1, testfile1)
