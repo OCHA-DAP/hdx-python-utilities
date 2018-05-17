@@ -292,14 +292,15 @@ class Download(object):
             output_dict[row[0]] = row[1]
         return output_dict
 
-    def download_tabular_rows_as_dicts(self, url, headers=1, **kwargs):
-        # type: (str, Union[int, List[int], List[str]], Any) -> Dict[Dict]
+    def download_tabular_rows_as_dicts(self, url, headers=1, keycolumn=1, **kwargs):
+        # type: (str, Union[int, List[int], List[str]], int, Any) -> Dict[Dict]
         """Download multicolumn csv from url and return dictionary where keys are first column and values are
         dictionaries with keys from column headers and values from columns beneath
 
         Args:
             url (str): URL to download
             headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            keycolumn (int): Number of column to be used for key. Defaults to 1.
             **kwargs:
             file_type (Optional[str]): Type of file. Defaults to inferring.
             delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
@@ -313,25 +314,26 @@ class Download(object):
         stream = self.get_tabular_stream(url, **kwargs)
         output_dict = dict()
         headers = stream.headers
-        first_header = headers[0]
+        key_header = headers[keycolumn - 1]
         for row in stream.iter(keyed=True):
-            first_val = row[first_header]
+            first_val = row[key_header]
             output_dict[first_val] = dict()
             for header in row:
-                if header == first_header:
+                if header == key_header:
                     continue
                 else:
                     output_dict[first_val][header] = row[header]
         return output_dict
 
-    def download_tabular_cols_as_dicts(self, url, headers=1, **kwargs):
-        # type: (str, Union[int, List[int], List[str]], Any) -> Dict[Dict]
+    def download_tabular_cols_as_dicts(self, url, headers=1, keycolumn=1, **kwargs):
+        # type: (str, Union[int, List[int], List[str]], int, Any) -> Dict[Dict]
         """Download multicolumn csv from url and return dictionary where keys are header names and values are
         dictionaries with keys from first column and values from other columns
 
         Args:
             url (str): URL to download
             headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            keycolumn (int): Number of column to be used for key. Defaults to 1.
             **kwargs:
             file_type (Optional[str]): Type of file. Defaults to inferring.
             delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
@@ -345,14 +347,14 @@ class Download(object):
         stream = self.get_tabular_stream(url, **kwargs)
         output_dict = dict()
         headers = stream.headers
-        first_header = headers[0]
+        key_header = headers[keycolumn - 1]
         for header in stream.headers:
-            if header == first_header:
+            if header == key_header:
                 continue
             output_dict[header] = dict()
         for row in stream.iter(keyed=True):
             for header in row:
-                if header == first_header:
+                if header == key_header:
                     continue
-                output_dict[header][row[first_header]] = row[header]
+                output_dict[header][row[key_header]] = row[header]
         return output_dict

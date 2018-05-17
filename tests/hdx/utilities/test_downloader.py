@@ -140,6 +140,9 @@ class TestDownloader:
             result = downloader.download_tabular_rows_as_dicts(fixtureprocessurl, headers=2)
             assert result == {'coal': {'header2': '3', 'header3': '7.4', 'header4': "'needed'"},
                               'gas': {'header2': '2', 'header3': '6.5', 'header4': "'n/a'"}}
+            result = downloader.download_tabular_rows_as_dicts(fixtureprocessurl, headers=2, keycolumn=2)
+            assert result == {'2': {'header1': 'gas', 'header3': '6.5', 'header4': "'n/a'"},
+                              '3': {'header1': 'coal', 'header3': '7.4', 'header4': "'needed'"}}
 
     def test_download_tabular_cols_as_dicts(self, fixtureprocessurl):
         with Download() as downloader:
@@ -147,3 +150,7 @@ class TestDownloader:
             assert result == {'header2': {'coal': '3', 'gas': '2'},
                               'header3': {'coal': '7.4', 'gas': '6.5'},
                               'header4': {'coal': "'needed'", 'gas': "'n/a'"}}
+            result = downloader.download_tabular_cols_as_dicts(fixtureprocessurl, headers=2, keycolumn=2)
+            assert result == {'header1': {'3': 'coal', '2': 'gas'},
+                              'header3': {'3': '7.4', '2': '6.5'},
+                              'header4': {'3': "'needed'", '2': "'n/a'"}}
