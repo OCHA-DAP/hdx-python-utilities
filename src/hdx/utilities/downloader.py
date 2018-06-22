@@ -2,16 +2,17 @@
 """Downloading utilities for urls"""
 import hashlib
 import logging
+from collections import OrderedDict
 from os import remove
 from os.path import splitext, join, exists
 from posixpath import basename
 from tempfile import gettempdir
-from typing import Optional, Dict, Iterator, Union, List, Any
+from typing import Optional, Dict, Iterator, Union, List, Any, Tuple
 
 import requests
 import tabulator
 from requests import Request
-from six.moves.urllib.parse import urlparse
+from six.moves.urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
 from tabulator.exceptions import TabulatorException
 
 from hdx.utilities import raisefrom
@@ -90,7 +91,7 @@ class Download(object):
 
         """
         if not filename:
-            urlpath = urlparse(url).path
+            urlpath = urlsplit(url).path
             filename = basename(urlpath)
         filename, extension = splitext(filename)
         if not folder:
@@ -119,20 +120,69 @@ class Download(object):
         preparedrequest = self.session.prepare_request(request)
         return preparedrequest.url
 
-    def setup_stream(self, url, timeout=None):
-        # type: (str, Optional[float]) -> None
+    @staticmethod
+    def get_url_for_get(url, parameters=None):
+        # type: (str, Optional[Dict]) -> str
+        """Get full url for GET request including parameters
+
+        Args:
+            url (str): URL to download
+            parameters (Optional[Dict]): Parameters to pass. Defaults to None.
+
+        Returns:
+            str: Full url
+
+        """
+        spliturl = urlsplit(url)
+        getparams = OrderedDict(parse_qsl(spliturl.query))
+        if parameters is not None:
+            getparams.update(parameters)
+        spliturl = spliturl._replace(query=urlencode(getparams))
+        return urlunsplit(spliturl)
+
+    @staticmethod
+    def get_url_params_for_post(url, parameters=None):
+        # type: (str, Optional[Dict]) -> Tuple[str, Dict]
+        """Get full url for POST request and all parameters including any in the url
+
+        Args:
+            url (str): URL to download
+            parameters (Optional[Dict]): Parameters to pass. Defaults to None.
+
+        Returns:
+            Tuple[str, Dict]: (Full url, parameters)
+
+        """
+        spliturl = urlsplit(url)
+        getparams = OrderedDict(parse_qsl(spliturl.query))
+        if parameters is not None:
+            getparams.update(parameters)
+        spliturl = spliturl._replace(query='')
+        full_url = urlunsplit(spliturl)
+        return full_url, getparams
+
+    def setup_stream(self, url, post=False, parameters=None, timeout=None):
+        # type: (str, bool, Optional[Dict], Optional[float]) -> None
         """Setup streaming download from provided url
 
         Args:
             url (str): URL to download
+            post (bool): Whether to use POST instead of GET. Defaults to False.
+            parameters (Optional[Dict]): Parameters to pass. Defaults to None.
             timeout (Optional[float]): Timeout for connecting to URL. Defaults to None (no timeout).
 
+        Returns:
+            None
 
         """
         self.close_response()
         self.response = None
         try:
-            self.response = self.session.get(url, stream=True, timeout=timeout)
+            if post:
+                full_url, parameters = self.get_url_params_for_post(url, parameters)
+                self.response = self.session.post(full_url, data=parameters, stream=True, timeout=timeout)
+            else:
+                self.response = self.session.get(self.get_url_for_get(url, parameters), stream=True, timeout=timeout)
             self.response.raise_for_status()
         except Exception as e:
             raisefrom(DownloadError, 'Setup of Streaming Download of %s failed!', e)
@@ -187,30 +237,35 @@ class Download(object):
             if f:
                 f.close()
 
-    def download_file(self, url, folder=None, filename=None, timeout=None, overwrite=False):
-        # type: (str, Optional[str], Optional[str], Optional[float], bool) -> str
+    def download_file(self, url, post=False, parameters=None, folder=None, filename=None, overwrite=False,
+                      timeout=None):
+        # type: (str, bool, Optional[Dict], Optional[str], Optional[str], bool, Optional[float]) -> str
         """Download file from url and store in provided folder or temporary folder if no folder supplied
 
         Args:
             url (str): URL to download
-            filename (Optional[str]): Filename to use for downloaded file. Defaults to None (derive from the url).
-            timeout (Optional[float]): Timeout for connecting to URL. Defaults to None (no timeout).
+            post (bool): Whether to use POST instead of GET. Defaults to False.
+            parameters (Optional[Dict]): Parameters to pass. Defaults to None.
             folder (Optional[str]): Folder to download it to. Defaults to None.
+            filename (Optional[str]): Filename to use for downloaded file. Defaults to None (derive from the url).
             overwrite (bool): Whether to overwrite existing file. Defaults to False.
+            timeout (Optional[float]): Timeout for connecting to URL. Defaults to None (no timeout).
 
         Returns:
             str: Path of downloaded file
 
         """
-        self.setup_stream(url, timeout)
+        self.setup_stream(url, post, parameters, timeout)
         return self.stream_file(url, folder, filename, overwrite)
 
-    def download(self, url, timeout=None):
-        # type: (str, Optional[float]) -> requests.Response
+    def download(self, url, post=False, parameters=None, timeout=None):
+        # type: (str, bool, Optional[Dict], Optional[float]) -> requests.Response
         """Download url
 
         Args:
             url (str): URL to download
+            post (bool): Whether to use POST instead of GET. Defaults to False.
+            parameters (Optional[Dict]): Parameters to pass. Defaults to None.
             timeout (Optional[float]): Timeout for connecting to URL. Defaults to None (no timeout).
 
         Returns:
@@ -219,7 +274,11 @@ class Download(object):
         """
         self.close_response()
         try:
-            self.response = self.session.get(url, timeout=timeout)
+            if post:
+                full_url, parameters = self.get_url_params_for_post(url, parameters)
+                self.response = self.session.post(full_url, data=parameters, timeout=timeout)
+            else:
+                self.response = self.session.get(self.get_url_for_get(url, parameters), timeout=timeout)
             self.response.raise_for_status()
         except Exception as e:
             raisefrom(DownloadError, 'Download of %s failed!' % url, e)

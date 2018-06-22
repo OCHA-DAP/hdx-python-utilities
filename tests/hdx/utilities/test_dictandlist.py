@@ -130,8 +130,9 @@ class TestDictAndList:
 
     def test_avg_dicts(self):
         d1 = {1: 1, 2: 1.0, 3: 3, 4: 4}
-        d2 = {1: 2, 2: 2.0, 3: 5, 4: 4}
+        d2 = {1: 2, 2: 2.0, 3: 5, 4: 4, 7: 3}
         assert avg_dicts(d1, d2) == {1: 1.5, 2: 1.5, 3: 4, 4: 4}
+        assert avg_dicts(d1, d2, dropmissing=False) == {1: 1.5, 2: 1.5, 3: 4, 4: 4, 7: 3}
 
     def test_read_write_list_to_csv(self):
         l = [[1, 2, 3, 'a'],

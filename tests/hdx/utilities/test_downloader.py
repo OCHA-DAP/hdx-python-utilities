@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 """Downloader Tests"""
+from collections import OrderedDict
 from os import remove
 from os.path import join, abspath
 from shutil import rmtree, copytree
@@ -21,6 +22,14 @@ class TestDownloader:
     @pytest.fixture(scope='class')
     def fixtureurl(self):
         return 'https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/test_data.csv'
+
+    @pytest.fixture(scope='class')
+    def getfixtureurl(self):
+        return 'http://httpbin.org/get'
+
+    @pytest.fixture(scope='class')
+    def postfixtureurl(self):
+        return 'http://httpbin.org/post'
 
     @pytest.fixture(scope='class')
     def fixturenotexistsurl(self):
@@ -84,7 +93,16 @@ class TestDownloader:
         with pytest.raises(IOError):
             Download(extra_params_json='NOTEXIST')
 
-    def test_setup_stream(self, fixtureurl, fixturenotexistsurl):
+    def test_get_url_for_get(self):
+        assert Download.get_url_for_get('http://www.lala.com/hdfa?a=3&b=4', OrderedDict(
+            [('c', 'e'), ('d', 'f')])) == 'http://www.lala.com/hdfa?a=3&b=4&c=e&d=f'
+
+    def test_get_url_params_for_post(self):
+        assert Download.get_url_params_for_post('http://www.lala.com/hdfa?a=3&b=4',
+                                                OrderedDict([('c', 'e'), ('d', 'f')])) == (
+               'http://www.lala.com/hdfa', OrderedDict([('a', '3'), ('b', '4'), ('c', 'e'), ('d', 'f')]))
+
+    def test_setup_stream(self, fixtureurl, fixturenotexistsurl, getfixtureurl, postfixtureurl):
         with pytest.raises(DownloadError), Download() as downloader:
             downloader.setup_stream('NOTEXIST://NOTEXIST.csv')
         with pytest.raises(DownloadError), Download() as downloader:
@@ -93,6 +111,16 @@ class TestDownloader:
             downloader.setup_stream(fixtureurl)
             headers = downloader.response.headers
             assert headers['Content-Length'] == '728'
+        with Download() as downloader:
+            downloader.setup_stream(postfixtureurl, post=True)
+            headers = downloader.response.headers
+            assert headers['Content-Length'] == '276'
+            downloader.setup_stream('%s?id=10&lala=a' % getfixtureurl, post=False,
+                                    parameters=OrderedDict([('b', '4'), ('d', '3')]))
+            assert downloader.response.json()['args'] == {'id': '10', 'lala': 'a', 'b': '4', 'd': '3'}
+            downloader.setup_stream('%s?id=3&lala=b' % postfixtureurl, post=True,
+                                    parameters=OrderedDict([('a', '3'), ('c', '2')]))
+            assert downloader.response.json()['form'] == {'id': '3', 'lala': 'b', 'a': '3', 'c': '2'}
 
     def test_hash_stream(self, fixtureurl):
         with Download() as downloader:
@@ -100,24 +128,48 @@ class TestDownloader:
             md5hash = downloader.hash_stream(fixtureurl)
             assert md5hash == 'da9db35a396cca10c618f6795bdb9ff2'
 
-    def test_download_file(self, tmpdir, fixtureurl, fixturenotexistsurl):
+    def test_download_file(self, tmpdir, fixtureurl, fixturenotexistsurl, getfixtureurl, postfixtureurl):
         tmpdir = str(tmpdir)
         with pytest.raises(DownloadError), Download() as downloader:
             downloader.download_file('NOTEXIST://NOTEXIST.csv', tmpdir)
         with pytest.raises(DownloadError), Download() as downloader:
             downloader.download_file(fixturenotexistsurl)
         with Download() as downloader:
-            f = downloader.download_file(fixtureurl, tmpdir)
+            f = downloader.download_file(fixtureurl, folder=tmpdir)
             fpath = abspath(f)
             remove(f)
             assert fpath == abspath(join(tmpdir, 'test_data.csv'))
             filename = 'myfilename.txt'
-            f = downloader.download_file(fixtureurl, tmpdir, filename)
+            f = downloader.download_file(fixtureurl, folder=tmpdir, filename=filename)
             fpath = abspath(f)
             remove(f)
             assert fpath == abspath(join(tmpdir, filename))
+            f = downloader.download_file('%s?id=10&lala=a' % getfixtureurl, post=False,
+                                         parameters=OrderedDict([('b', '4'), ('d', '3')]), folder=tmpdir,
+                                         filename=filename)
+            fpath = abspath(f)
+            with open(fpath, 'rt') as fi:
+                text = fi.read()
+                assert '"id":"10"' in text
+                assert '"lala":"a"' in text
+                assert '"b":"4"' in text
+                assert '"d":"3"' in text
+            remove(f)
+            assert fpath == abspath(join(tmpdir, filename))
+            f = downloader.download_file('%s?id=3&lala=b' % postfixtureurl, post=True,
+                                         parameters=OrderedDict([('a', '3'), ('c', '2')]), folder=tmpdir,
+                                         filename=filename)
+            fpath = abspath(f)
+            with open(fpath, 'rt') as fi:
+                text = fi.read()
+                assert '"id":"3"' in text
+                assert '"lala":"b"' in text
+                assert '"a":"3"' in text
+                assert '"c":"2"' in text
+            remove(f)
+            assert fpath == abspath(join(tmpdir, filename))
 
-    def test_download(self, fixtureurl, fixturenotexistsurl):
+    def test_download(self, fixtureurl, fixturenotexistsurl, getfixtureurl, postfixtureurl):
         with pytest.raises(DownloadError), Download() as downloader:
             downloader.download('NOTEXIST://NOTEXIST.csv')
         with pytest.raises(DownloadError), Download() as downloader:
@@ -125,6 +177,12 @@ class TestDownloader:
         with Download() as downloader:
             result = downloader.download(fixtureurl)
             assert result.headers['Content-Length'] == '728'
+            result = downloader.download('%s?id=10&lala=a' % getfixtureurl, post=False,
+                                         parameters=OrderedDict([('b', '4'), ('d', '3')]))
+            assert result.json()['args'] == {'id': '10', 'lala': 'a', 'b': '4', 'd': '3'}
+            result = downloader.download('%s?id=3&lala=b' % postfixtureurl, post=True,
+                                         parameters=OrderedDict([('a', '3'), ('c', '2')]))
+            assert result.json()['form'] == {'id': '3', 'lala': 'b', 'a': '3', 'c': '2'}
 
     def test_download_tabular_key_value(self, fixtureurl, fixtureprocessurl):
         with Download() as downloader:
