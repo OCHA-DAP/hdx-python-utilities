@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 """Downloader Tests"""
+import re
 from collections import OrderedDict
 from os import remove
 from os.path import join, abspath
@@ -114,7 +115,7 @@ class TestDownloader:
         with Download() as downloader:
             downloader.setup_stream(postfixtureurl, post=True)
             headers = downloader.response.headers
-            assert headers['Content-Length'] == '276'
+            assert bool(re.match(r'27\d', headers['Content-Length'])) is True
             downloader.setup_stream('%s?id=10&lala=a' % getfixtureurl, post=False,
                                     parameters=OrderedDict([('b', '4'), ('d', '3')]))
             assert downloader.response.json()['args'] == {'id': '10', 'lala': 'a', 'b': '4', 'd': '3'}
