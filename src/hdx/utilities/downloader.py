@@ -161,18 +161,19 @@ class Download(object):
         full_url = urlunsplit(spliturl)
         return full_url, getparams
 
-    def setup_stream(self, url, post=False, parameters=None, timeout=None):
-        # type: (str, bool, Optional[Dict], Optional[float]) -> None
-        """Setup streaming download from provided url
+    def setup(self, url, stream=True, post=False, parameters=None, timeout=None):
+        # type: (str, bool, bool, Optional[Dict], Optional[float]) -> requests.Response
+        """Setup download from provided url returning the response
 
         Args:
             url (str): URL to download
+            stream (bool): Whether to stream download. Defaults to True.
             post (bool): Whether to use POST instead of GET. Defaults to False.
             parameters (Optional[Dict]): Parameters to pass. Defaults to None.
             timeout (Optional[float]): Timeout for connecting to URL. Defaults to None (no timeout).
 
         Returns:
-            None
+            requests.Response: requests.Response object
 
         """
         self.close_response()
@@ -180,16 +181,17 @@ class Download(object):
         try:
             if post:
                 full_url, parameters = self.get_url_params_for_post(url, parameters)
-                self.response = self.session.post(full_url, data=parameters, stream=True, timeout=timeout)
+                self.response = self.session.post(full_url, data=parameters, stream=stream, timeout=timeout)
             else:
-                self.response = self.session.get(self.get_url_for_get(url, parameters), stream=True, timeout=timeout)
+                self.response = self.session.get(self.get_url_for_get(url, parameters), stream=stream, timeout=timeout)
             self.response.raise_for_status()
         except Exception as e:
             raisefrom(DownloadError, 'Setup of Streaming Download of %s failed!', e)
+        return self.response
 
     def hash_stream(self, url):
         # type: (str) -> str
-        """Stream file from url and hash it using MD5. Must call setup_streaming_download method first.
+        """Stream file from url and hash it using MD5. Must call setup method first.
 
         Args:
             url (str): URL to download
@@ -210,7 +212,7 @@ class Download(object):
     def stream_file(self, url, folder=None, filename=None, overwrite=False):
         # type: (str, Optional[str], Optional[str], bool) -> str
         """Stream file from url and store in provided folder or temporary folder if no folder supplied.
-        Must call setup_streaming_download method first.
+        Must call setup method first.
 
         Args:
             url (str): URL to download
@@ -255,7 +257,7 @@ class Download(object):
             str: Path of downloaded file
 
         """
-        self.setup_stream(url, post, parameters, timeout)
+        self.setup(url, stream=True, post=post, parameters=parameters, timeout=timeout)
         return self.stream_file(url, folder, filename, overwrite)
 
     def download(self, url, post=False, parameters=None, timeout=None):
@@ -272,17 +274,7 @@ class Download(object):
             requests.Response: Response
 
         """
-        self.close_response()
-        try:
-            if post:
-                full_url, parameters = self.get_url_params_for_post(url, parameters)
-                self.response = self.session.post(full_url, data=parameters, timeout=timeout)
-            else:
-                self.response = self.session.get(self.get_url_for_get(url, parameters), timeout=timeout)
-            self.response.raise_for_status()
-        except Exception as e:
-            raisefrom(DownloadError, 'Download of %s failed!' % url, e)
-        return self.response
+        return self.setup(url, stream=False, post=post, parameters=parameters, timeout=timeout)
 
     def get_tabular_stream(self, url, **kwargs):
         # type: (str, Any) -> tabulator.Stream
@@ -296,7 +288,7 @@ class Download(object):
             delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
 
         Returns:
-            tabulator.Stream: Tabulator Stream object.
+            tabulator.Stream: Tabulator Stream object
 
         """
         self.close_response()

@@ -105,27 +105,27 @@ class TestDownloader:
 
     def test_setup_stream(self, fixtureurl, fixturenotexistsurl, getfixtureurl, postfixtureurl):
         with pytest.raises(DownloadError), Download() as downloader:
-            downloader.setup_stream('NOTEXIST://NOTEXIST.csv')
+            downloader.setup('NOTEXIST://NOTEXIST.csv')
         with pytest.raises(DownloadError), Download() as downloader:
-            downloader.setup_stream(fixturenotexistsurl)
+            downloader.setup(fixturenotexistsurl)
         with Download() as downloader:
-            downloader.setup_stream(fixtureurl)
+            downloader.setup(fixtureurl)
             headers = downloader.response.headers
             assert headers['Content-Length'] == '728'
         with Download() as downloader:
-            downloader.setup_stream(postfixtureurl, post=True)
+            downloader.setup(postfixtureurl, post=True)
             headers = downloader.response.headers
             assert bool(re.match(r'27\d', headers['Content-Length'])) is True
-            downloader.setup_stream('%s?id=10&lala=a' % getfixtureurl, post=False,
-                                    parameters=OrderedDict([('b', '4'), ('d', '3')]))
+            downloader.setup('%s?id=10&lala=a' % getfixtureurl, post=False,
+                             parameters=OrderedDict([('b', '4'), ('d', '3')]))
             assert downloader.response.json()['args'] == {'id': '10', 'lala': 'a', 'b': '4', 'd': '3'}
-            downloader.setup_stream('%s?id=3&lala=b' % postfixtureurl, post=True,
-                                    parameters=OrderedDict([('a', '3'), ('c', '2')]))
+            downloader.setup('%s?id=3&lala=b' % postfixtureurl, post=True,
+                             parameters=OrderedDict([('a', '3'), ('c', '2')]))
             assert downloader.response.json()['form'] == {'id': '3', 'lala': 'b', 'a': '3', 'c': '2'}
 
     def test_hash_stream(self, fixtureurl):
         with Download() as downloader:
-            downloader.setup_stream(fixtureurl)
+            downloader.setup(fixtureurl)
             md5hash = downloader.hash_stream(fixtureurl)
             assert md5hash == 'da9db35a396cca10c618f6795bdb9ff2'
 
