@@ -276,9 +276,19 @@ class Download(object):
         """
         return self.setup(url, stream=False, post=post, parameters=parameters, timeout=timeout)
 
+    def get_json(self):
+        # type: () -> Any
+        """Get JSON content of download
+
+        Returns:
+            Any: JSON content of download
+
+        """
+        return self.response.json(object_pairs_hook=OrderedDict)
+
     def get_tabular_stream(self, url, **kwargs):
         # type: (str, Any) -> tabulator.Stream
-        """Get iterator for reading rows from tabular data. Each row is returned as a dictionary.
+        """Get Tabulator stream.
 
         Args:
             url (str): URL to download
