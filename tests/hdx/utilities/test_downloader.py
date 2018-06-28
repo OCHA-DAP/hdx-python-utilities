@@ -118,10 +118,10 @@ class TestDownloader:
             assert bool(re.match(r'27\d', headers['Content-Length'])) is True
             downloader.setup('%s?id=10&lala=a' % getfixtureurl, post=False,
                              parameters=OrderedDict([('b', '4'), ('d', '3')]))
-            assert downloader.get_json()['args'] == {'id': '10', 'lala': 'a', 'b': '4', 'd': '3'}
+            assert downloader.get_json()['args'] == OrderedDict([('b', '4'), ('d', '3'), ('id', '10'), ('lala', 'a')])
             downloader.setup('%s?id=3&lala=b' % postfixtureurl, post=True,
                              parameters=OrderedDict([('a', '3'), ('c', '2')]))
-            assert downloader.get_json()['form'] == {'id': '3', 'lala': 'b', 'a': '3', 'c': '2'}
+            assert downloader.get_json()['form'] == OrderedDict([('a', '3'), ('c', '2'), ('id', '3'), ('lala', 'b')])
 
     def test_hash_stream(self, fixtureurl):
         with Download() as downloader:
@@ -180,10 +180,10 @@ class TestDownloader:
             assert result.headers['Content-Length'] == '728'
             downloader.download('%s?id=10&lala=a' % getfixtureurl, post=False,
                                 parameters=OrderedDict([('b', '4'), ('d', '3')]))
-            assert downloader.get_json()['args'] == {'id': '10', 'lala': 'a', 'b': '4', 'd': '3'}
+            assert downloader.get_json()['args'] == OrderedDict([('b', '4'), ('d', '3'), ('id', '10'), ('lala', 'a')])
             downloader.download('%s?id=3&lala=b' % postfixtureurl, post=True,
                                          parameters=OrderedDict([('a', '3'), ('c', '2')]))
-            assert downloader.get_json()['form'] == {'id': '3', 'lala': 'b', 'a': '3', 'c': '2'}
+            assert downloader.get_json()['form'] == OrderedDict([('a', '3'), ('c', '2'), ('id', '3'), ('lala', 'b')])
 
     def test_download_tabular_key_value(self, fixtureurl, fixtureprocessurl):
         with Download() as downloader:
