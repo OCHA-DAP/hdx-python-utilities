@@ -1,6 +1,5 @@
 # -*- coding: UTF-8 -*-
 """Downloader Tests"""
-import re
 from collections import OrderedDict
 from os import remove
 from os.path import join, abspath
@@ -61,6 +60,10 @@ class TestDownloader:
 
     def test_init(self, downloaderfolder):
         basicauthfile = join(downloaderfolder, 'basicauth.txt')
+        with Download(auth=('u', 'p')) as downloader:
+            assert downloader.session.auth == ('u', 'p')
+        with Download(basic_auth='Basic dXNlcjpwYXNz') as downloader:
+            assert downloader.session.auth == ('user', 'pass')
         with Download(basic_auth_file=basicauthfile) as downloader:
             assert downloader.session.auth == ('testuser', 'testpass')
         with pytest.raises(SessionError):
@@ -69,6 +72,13 @@ class TestDownloader:
             Download(auth=('u', 'p'), basic_auth_file=join('lala', 'lala.txt'))
         with pytest.raises(SessionError):
             Download(basic_auth='Basic dXNlcjpwYXNz', basic_auth_file=join('lala', 'lala.txt'))
+        extraparamsyamltree = join(downloaderfolder, 'extra_params_tree.yml')
+        with pytest.raises(SessionError):
+            Download(auth=('u', 'p'), extra_params_yaml=extraparamsyamltree, extra_params_key='mykey')
+        with pytest.raises(SessionError):
+            Download(basic_auth='Basic dXNlcjpwYXNz', extra_params_yaml=extraparamsyamltree, extra_params_key='mykey')
+        with pytest.raises(SessionError):
+            Download(basic_auth_file=basicauthfile, extra_params_yaml=extraparamsyamltree, extra_params_key='mykey')
         with pytest.raises(IOError):
             Download(basic_auth_file='NOTEXIST')
         extraparamsjson = join(downloaderfolder, 'extra_params.json')
@@ -87,10 +97,20 @@ class TestDownloader:
             assert 'param1=value1' in full_url
             assert 'param2=value+2' in full_url
             assert 'param3=10' in full_url
+        with Download(extra_params_yaml=extraparamsyamltree, extra_params_key='mykey') as downloader:
+            assert downloader.session.auth == ('testuser', 'testpass')
+            full_url = downloader.get_full_url(test_url)
+            assert 'param1=value+1' in full_url
+            assert 'param2=value2' in full_url
+            assert 'param3=11' in full_url
+            assert 'basic_auth' not in full_url
         with pytest.raises(SessionError):
             Download(extra_params_dict={'key1': 'val1'}, extra_params_json=extraparamsjson)
         with pytest.raises(SessionError):
             Download(extra_params_dict={'key1': 'val1'}, extra_params_yaml=extraparamsyaml)
+        with pytest.raises(SessionError):
+            Download(extra_params_dict={'key1': 'val1'}, extra_params_yaml=extraparamsyamltree,
+                     extra_params_key='mykey')
         with pytest.raises(IOError):
             Download(extra_params_json='NOTEXIST')
 
@@ -115,7 +135,7 @@ class TestDownloader:
         with Download() as downloader:
             downloader.setup(postfixtureurl, post=True)
             headers = downloader.response.headers
-            assert bool(re.match(r'27\d', headers['Content-Length'])) is True
+            assert headers['Content-Length'] == '360'
             downloader.setup('%s?id=10&lala=a' % getfixtureurl, post=False,
                              parameters=OrderedDict([('b', '4'), ('d', '3')]))
             assert downloader.get_json()['args'] == OrderedDict([('b', '4'), ('d', '3'), ('id', '10'), ('lala', 'a')])
@@ -151,10 +171,10 @@ class TestDownloader:
             fpath = abspath(f)
             with open(fpath, 'rt') as fi:
                 text = fi.read()
-                assert '"id":"10"' in text
-                assert '"lala":"a"' in text
-                assert '"b":"4"' in text
-                assert '"d":"3"' in text
+                assert '"id": "10"' in text
+                assert '"lala": "a"' in text
+                assert '"b": "4"' in text
+                assert '"d": "3"' in text
             remove(f)
             assert fpath == abspath(join(tmpdir, filename))
             f = downloader.download_file('%s?id=3&lala=b' % postfixtureurl, post=True,
@@ -163,10 +183,10 @@ class TestDownloader:
             fpath = abspath(f)
             with open(fpath, 'rt') as fi:
                 text = fi.read()
-                assert '"id":"3"' in text
-                assert '"lala":"b"' in text
-                assert '"a":"3"' in text
-                assert '"c":"2"' in text
+                assert '"id": "3"' in text
+                assert '"lala": "b"' in text
+                assert '"a": "3"' in text
+                assert '"c": "2"' in text
             remove(f)
             assert fpath == abspath(join(tmpdir, filename))
 
@@ -197,19 +217,19 @@ class TestDownloader:
     def test_download_tabular_rows_as_dicts(self, fixtureprocessurl):
         with Download() as downloader:
             result = downloader.download_tabular_rows_as_dicts(fixtureprocessurl, headers=2)
-            assert result == {'coal': {'header2': '3', 'header3': '7.4', 'header4': "'needed'"},
-                              'gas': {'header2': '2', 'header3': '6.5', 'header4': "'n/a'"}}
+            assert result == {'coal': {'header2': '3', 'header3': '7.4', 'header4': 'needed'},
+                              'gas': {'header2': '2', 'header3': '6.5', 'header4': 'n/a'}}
             result = downloader.download_tabular_rows_as_dicts(fixtureprocessurl, headers=2, keycolumn=2)
-            assert result == {'2': {'header1': 'gas', 'header3': '6.5', 'header4': "'n/a'"},
-                              '3': {'header1': 'coal', 'header3': '7.4', 'header4': "'needed'"}}
+            assert result == {'2': {'header1': 'gas', 'header3': '6.5', 'header4': 'n/a'},
+                              '3': {'header1': 'coal', 'header3': '7.4', 'header4': 'needed'}}
 
     def test_download_tabular_cols_as_dicts(self, fixtureprocessurl):
         with Download() as downloader:
             result = downloader.download_tabular_cols_as_dicts(fixtureprocessurl, headers=2)
             assert result == {'header2': {'coal': '3', 'gas': '2'},
                               'header3': {'coal': '7.4', 'gas': '6.5'},
-                              'header4': {'coal': "'needed'", 'gas': "'n/a'"}}
+                              'header4': {'coal': 'needed', 'gas': 'n/a'}}
             result = downloader.download_tabular_cols_as_dicts(fixtureprocessurl, headers=2, keycolumn=2)
             assert result == {'header1': {'3': 'coal', '2': 'gas'},
                               'header3': {'3': '7.4', '2': '6.5'},
-                              'header4': {'3': "'needed'", '2': "'n/a'"}}
+                              'header4': {'3': 'needed', '2': 'n/a'}}

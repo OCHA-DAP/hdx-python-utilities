@@ -26,33 +26,14 @@ def get_session(**kwargs):
         auth (Tuple[str, str]): Authorisation information in tuple form (user, pass) OR
         basic_auth (str): Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
         basic_auth_file (str): Path to file containing authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx)
-        extra_params_dict (Dict[str, str]): Extra parameters to put on end of url as a dictionary OR
+        extra_params_dict (Dict): Extra parameters to put on end of url as a dictionary OR
         extra_params_json (str): Path to JSON file containing extra parameters to put on end of url OR
         extra_params_yaml (str): Path to YAML file containing extra parameters to put on end of url
+        extra_params_key (str): Key to look up parameters. If not given assumes parameters are at root of the dict.
         status_forcelist (iterable): HTTP statuses for which to force retry. Defaults to [429, 500, 502, 503, 504].
         method_whitelist (iterable): HTTP methods for which to force retry. Defaults t0 frozenset(['GET']).
     """
     s = requests.Session()
-    auth_found = False
-    auth = kwargs.get('auth')
-    if auth:
-        auth_found = True
-        logger.info('Loading authorisation from auth argument')
-    basic_auth = kwargs.get('basic_auth')
-    if basic_auth:
-        if auth_found:
-            raise SessionError('More than one authorisation given!')
-        auth_found = True
-        logger.info('Loading authorisation from basic_auth argument')
-        auth = decode(basic_auth)
-    basic_auth_file = kwargs.get('basic_auth_file')
-    if basic_auth_file:
-        if auth_found:
-            raise SessionError('More than one authorisation given!')
-        logger.info('Loading authorisation from: %s' % basic_auth_file)
-        basic_auth = load_file_to_str(basic_auth_file)
-        auth = decode(basic_auth)
-    s.auth = auth
 
     extra_params_found = False
     extra_params_dict = kwargs.get('extra_params_dict', None)
@@ -78,7 +59,42 @@ def get_session(**kwargs):
             extra_params_dict = load_yaml(extra_params_yaml)
         else:
             extra_params_dict = dict()
+    extra_params_key = kwargs.get('extra_params_key')
+    if extra_params_key:
+        extra_params_dict = extra_params_dict.get(extra_params_key)
+        if extra_params_dict is None:
+            raise SessionError('%s does not exist in extra_params!' % extra_params_key)
+
+    auth_found = False
+    basic_auth = extra_params_dict.get('basic_auth')
+    if basic_auth:
+        logger.info('Loading authorisation from basic_auth parameter')
+        auth_found = True
+        del extra_params_dict['basic_auth']
     s.params = extra_params_dict
+
+    auth = kwargs.get('auth')
+    if auth:
+        if auth_found:
+            raise SessionError('More than one authorisation given!')
+        logger.info('Loading authorisation from auth argument')
+        auth_found = True
+    bauth = kwargs.get('basic_auth')
+    if bauth:
+        if auth_found:
+            raise SessionError('More than one authorisation given!')
+        logger.info('Loading authorisation from basic_auth argument')
+        basic_auth = bauth
+        auth_found = True
+    basic_auth_file = kwargs.get('basic_auth_file')
+    if basic_auth_file:
+        if auth_found:
+            raise SessionError('More than one authorisation given!')
+        logger.info('Loading authorisation from: %s' % basic_auth_file)
+        basic_auth = load_file_to_str(basic_auth_file)
+    if basic_auth:
+        auth = decode(basic_auth)
+    s.auth = auth
 
     status_forcelist = kwargs.get('status_forcelist', [429, 500, 502, 503, 504])
     method_whitelist = kwargs.get('method_whitelist', frozenset(['HEAD', 'TRACE', 'GET', 'PUT', 'OPTIONS', 'DELETE']))
