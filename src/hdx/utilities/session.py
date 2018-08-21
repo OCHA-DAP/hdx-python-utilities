@@ -29,7 +29,7 @@ def get_session(**kwargs):
         extra_params_dict (Dict): Extra parameters to put on end of url as a dictionary OR
         extra_params_json (str): Path to JSON file containing extra parameters to put on end of url OR
         extra_params_yaml (str): Path to YAML file containing extra parameters to put on end of url
-        extra_params_key (str): Key to look up parameters. If not given assumes parameters are at root of the dict.
+        extra_params_lookup (str): Lookup key for parameters. If not given assumes parameters are at root of the dict.
         status_forcelist (iterable): HTTP statuses for which to force retry. Defaults to [429, 500, 502, 503, 504].
         method_whitelist (iterable): HTTP methods for which to force retry. Defaults t0 frozenset(['GET']).
     """
@@ -59,11 +59,11 @@ def get_session(**kwargs):
             extra_params_dict = load_yaml(extra_params_yaml)
         else:
             extra_params_dict = dict()
-    extra_params_key = kwargs.get('extra_params_key')
-    if extra_params_key:
-        extra_params_dict = extra_params_dict.get(extra_params_key)
+    extra_params_lookup = kwargs.get('extra_params_lookup')
+    if extra_params_lookup:
+        extra_params_dict = extra_params_dict.get(extra_params_lookup)
         if extra_params_dict is None:
-            raise SessionError('%s does not exist in extra_params!' % extra_params_key)
+            raise SessionError('%s does not exist in extra_params!' % extra_params_lookup)
 
     auth_found = False
     basic_auth = extra_params_dict.get('basic_auth')

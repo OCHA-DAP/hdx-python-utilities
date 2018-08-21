@@ -36,7 +36,7 @@ class Download(object):
         extra_params_dict (Dict[str, str]): Extra parameters to put on end of url as a dictionary OR
         extra_params_json (str): Path to JSON file containing extra parameters to put on end of url OR
         extra_params_yaml (str): Path to YAML file containing extra parameters to put on end of url
-        extra_params_key (str): Key to look up parameters. If not given assumes parameters are at root of the dict.
+        extra_params_lookup (str): Lookup key for parameters. If not given assumes parameters are at root of the dict.
         status_forcelist (List[int]): HTTP statuses for which to force retry
         method_whitelist (iterable): HTTP methods for which to force retry. Defaults t0 frozenset(['GET']).
     """

@@ -75,11 +75,12 @@ class TestDownloader:
             Download(basic_auth='Basic dXNlcjpwYXNz', basic_auth_file=join('lala', 'lala.txt'))
         extraparamsyamltree = join(downloaderfolder, 'extra_params_tree.yml')
         with pytest.raises(SessionError):
-            Download(auth=('u', 'p'), extra_params_yaml=extraparamsyamltree, extra_params_key='mykey')
+            Download(auth=('u', 'p'), extra_params_yaml=extraparamsyamltree, extra_params_lookup='mykey')
         with pytest.raises(SessionError):
-            Download(basic_auth='Basic dXNlcjpwYXNz', extra_params_yaml=extraparamsyamltree, extra_params_key='mykey')
+            Download(basic_auth='Basic dXNlcjpwYXNz', extra_params_yaml=extraparamsyamltree,
+                     extra_params_lookup='mykey')
         with pytest.raises(SessionError):
-            Download(basic_auth_file=basicauthfile, extra_params_yaml=extraparamsyamltree, extra_params_key='mykey')
+            Download(basic_auth_file=basicauthfile, extra_params_yaml=extraparamsyamltree, extra_params_lookup='mykey')
         with pytest.raises(IOError):
             Download(basic_auth_file='NOTEXIST')
         extraparamsjson = join(downloaderfolder, 'extra_params.json')
@@ -98,7 +99,7 @@ class TestDownloader:
             assert 'param1=value1' in full_url
             assert 'param2=value+2' in full_url
             assert 'param3=10' in full_url
-        with Download(extra_params_yaml=extraparamsyamltree, extra_params_key='mykey') as downloader:
+        with Download(extra_params_yaml=extraparamsyamltree, extra_params_lookup='mykey') as downloader:
             assert downloader.session.auth == ('testuser', 'testpass')
             full_url = downloader.get_full_url(test_url)
             assert 'param1=value+1' in full_url
@@ -111,7 +112,7 @@ class TestDownloader:
             Download(extra_params_dict={'key1': 'val1'}, extra_params_yaml=extraparamsyaml)
         with pytest.raises(SessionError):
             Download(extra_params_dict={'key1': 'val1'}, extra_params_yaml=extraparamsyamltree,
-                     extra_params_key='mykey')
+                     extra_params_lookup='mykey')
         with pytest.raises(IOError):
             Download(extra_params_json='NOTEXIST')
 
