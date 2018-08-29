@@ -4,7 +4,7 @@
 import logging
 import smtplib
 from os.path import join, expanduser
-from typing import Optional, Any
+from typing import Optional, Any, List
 
 from email_validator import validate_email
 from six.moves.email_mime_multipart import MIMEMultipart
@@ -29,6 +29,7 @@ class Email:
      | timeout: 3
      | username: "user"
      | password: "pass"
+     | sender: "a@b.com"    (if not supplied username is used as sender)
 
     Args:
         **kwargs: See below
@@ -74,6 +75,7 @@ class Email:
         self.source_address = email_config_dict.get('source_address')
         self.username = email_config_dict.get('username')
         self.password = email_config_dict.get('password')
+        self.sender = email_config_dict.get('sender', self.username)
         self.server = None
 
     def __enter__(self):
@@ -133,16 +135,16 @@ class Email:
         self.server.quit()
 
     def send(self, recipients, subject, text_body, html_body=None, sender=None, **kwargs):
-        # type: (str, str, str, Optional[str], Optional[str], Any) -> None
+        # type: (List[str], str, str, Optional[str], Optional[str], Any) -> None
         """
         Send email
 
         Args:
-            recipients (str): Email recipient
+            recipients (List[str]): Email recipient
             subject (str): Email subject
             text_body (str): Plain text email body
-            html_body (str): HTML email body
-            sender (Optional[str]): Email sender. Defaults to SMTP username.
+            html_body (Optional[str]): HTML email body
+            sender (Optional[str]): Email sender. Defaults to global sender.
             **kwargs: See below
             mail_options (list): Mail options (see smtplib documentation)
             rcpt_options (list): Recipient options (see smtplib documentation)
@@ -152,7 +154,7 @@ class Email:
 
         """
         if sender is None:
-            sender = self.username
+            sender = self.sender
         v = validate_email(sender, check_deliverability=False)  # validate and get info
         sender = v['email']  # replace with normalized form
         normalised_recipients = list()
