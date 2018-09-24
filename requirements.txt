@@ -6,6 +6,6 @@ email_validator==1.0.3
 html5lib==1.0.1
 pyaml==17.12.1
 six==1.11.0
-tabulator==1.14.2
+tabulator==1.14.3
 typing==3.6.6
 yamlloader==0.5.5
