@@ -336,7 +336,7 @@ def avg_dicts(dictin1, dictin2, dropmissing=True):
     return dictout
 
 
-def read_list_from_csv(filepath, dict_form=False, headers=None, format=None):
+def read_list_from_csv(filepath, dict_form=False, headers=None, **kwargs):
     # type: (str, bool, Optional[int]) -> List[Union[Dict, List]]
     """Read a list of rows in dict or list form from a csv.
 
@@ -344,13 +344,13 @@ def read_list_from_csv(filepath, dict_form=False, headers=None, format=None):
         filepath (str): Path to read from
         dict_form (bool): Return in dict form. Defaults to False.
         headers (Optional[List[str]]): Row number of headers. Defaults to None.
-        format (Optional[str]): Format to read. Defaults to None (inferring).
+        **kwargs: Other arguments to pass to Tabulator Stream
 
     Returns:
         List[Union[Dict, List]]: List of rows in dict or list form
 
     """
-    stream = Stream(filepath, headers=headers, format=format)
+    stream = Stream(filepath, headers=headers, **kwargs)
     stream.open()
     result = stream.read(keyed=dict_form)
     stream.close()
