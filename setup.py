@@ -53,13 +53,13 @@ def get_readme():
 
 requirements = ['basicauth',
                 'beautifulsoup4',
-                'cchardet>=2.1.1',
+                'cchardet>=2.1.4',
                 'colorlog',
                 'email_validator',
                 'html5lib',
                 'pyaml',
                 'six>=1.11.0',
-                'tabulator>=1.14.3',
+                'tabulator>=1.17.0',
                 'typing',
                 'yamlloader'
                 ]
