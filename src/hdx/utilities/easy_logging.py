@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 """Configuration of logging"""
 import logging.config
+import os
 from typing import Any
 
 from hdx.utilities.dictandlist import merge_dictionaries
@@ -85,4 +86,14 @@ def setup_logging(**kwargs):
             logging_config_dict = merge_dictionaries([logging_config_dict, logging_smtp_config_dict, smtp_config_dict])
         else:
             raise LoggingError('SMTP logging configuration file given but not using default logging configuration!')
+    file_only = os.getenv('LOG_FILE_ONLY')
+    if file_only is not None and file_only.lower() not in ['false', 'f', 'n', 'no']:
+        root = logging_config_dict.get('root')
+        if root is not None:
+            handlers = root.get('handlers', list())
+            for i, handler in enumerate(handlers):
+                if handler.lower() == 'console':
+                    del handlers[i]
+                    break
+
     logging.config.dictConfig(logging_config_dict)

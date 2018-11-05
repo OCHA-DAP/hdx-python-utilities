@@ -98,12 +98,20 @@ class TestLogging:
         for handler in ['Stream', 'File']:
             assert handler in actual_logging_tree
 
-    def test_setup_logging_yaml(self, logging_config_yaml):
+    def test_setup_logging_yaml(self, monkeypatch, logging_config_yaml):
         setup_logging(logging_config_yaml=logging_config_yaml)
         actual_logging_tree = format.build_description()
         for handler in ['Stream', 'SMTP']:
             assert handler in actual_logging_tree
         assert 'abc@abc.com' in actual_logging_tree
+        monkeypatch.setenv('LOG_FILE_ONLY', 'true')
+        setup_logging(logging_config_yaml=logging_config_yaml)
+        actual_logging_tree = format.build_description()
+        assert 'Stream' not in actual_logging_tree
+        monkeypatch.setenv('LOG_FILE_ONLY', 'false')
+        setup_logging(logging_config_yaml=logging_config_yaml)
+        actual_logging_tree = format.build_description()
+        assert 'Stream' in actual_logging_tree
 
     def test_setup_logging_smtp_dict(self):
         smtp_config_dict = {'handlers': {'error_mail_handler': {'toaddrs': 'lalala@la.com', 'subject': 'lala'}}}
