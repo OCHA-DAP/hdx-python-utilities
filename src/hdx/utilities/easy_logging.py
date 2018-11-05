@@ -87,7 +87,7 @@ def setup_logging(**kwargs):
         else:
             raise LoggingError('SMTP logging configuration file given but not using default logging configuration!')
     file_only = os.getenv('LOG_FILE_ONLY')
-    if file_only is not None and file_only.lower() not in ['false', 'f', 'n', 'no']:
+    if file_only is not None and file_only.lower() not in ['false', 'f', 'n', 'no', '0']:
         root = logging_config_dict.get('root')
         if root is not None:
             handlers = root.get('handlers', list())
