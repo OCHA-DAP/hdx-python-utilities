@@ -6,7 +6,6 @@ from collections import OrderedDict
 from os import remove
 from os.path import splitext, join, exists
 from posixpath import basename
-from tempfile import gettempdir
 from typing import Optional, Dict, Iterator, Union, List, Any, Tuple
 
 import requests
@@ -16,6 +15,7 @@ from six.moves.urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
 from tabulator.exceptions import TabulatorException
 
 from hdx.utilities import raisefrom
+from hdx.utilities.path import temp_dir
 from hdx.utilities.session import get_session
 
 logger = logging.getLogger(__name__)
@@ -96,7 +96,7 @@ class Download(object):
             filename = basename(urlpath)
         filename, extension = splitext(filename)
         if not folder:
-            folder = gettempdir()
+            folder = temp_dir()
         path = join(folder, '%s%s' % (filename, extension))
         if overwrite:
             try:

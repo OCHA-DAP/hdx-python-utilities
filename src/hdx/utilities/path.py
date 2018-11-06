@@ -2,8 +2,10 @@
 """Directory Path Utilities"""
 
 import inspect
+import os
 import sys
 from os.path import abspath, realpath, dirname, join
+from tempfile import gettempdir
 from typing import Any
 
 
@@ -40,3 +42,13 @@ def script_dir_plus_file(filename, pyobject, follow_symlinks=True):
         str: Current script's directory and with filename appended
     """
     return join(script_dir(pyobject, follow_symlinks), filename)
+
+
+def temp_dir():
+    # type: () -> str
+    """Get a temporary directory
+
+    Returns:
+        str: A temporary directory
+    """
+    return os.getenv('TEMP_DIR', gettempdir())
