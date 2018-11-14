@@ -17,7 +17,7 @@ class TestDatabase:
     started = False
     stopped = False
     dbpath = join('tests', 'test_database.db')
-    params = {'host': 'myserver', 'port': 1234, 'username': 'myuser', 'password': 'mypass', 'database': 'mydatabase',
+    params = {'database': 'mydatabase', 'host': 'myserver', 'port': 1234, 'username': 'myuser', 'password': 'mypass',
               'driver': 'postgres'}
     sqlalchemy_url = 'postgres://myuser:mypass@myserver:1234/mydatabase'
 
@@ -25,7 +25,7 @@ class TestDatabase:
     def nodatabase(self):
         try:
             os.remove(TestDatabase.dbpath)
-        except FileNotFoundError:
+        except IOError:
             pass
         return 'sqlite:///%s' % TestDatabase.dbpath
 
@@ -62,12 +62,15 @@ class TestDatabase:
         monkeypatch.setattr(SSHTunnelForwarder, 'local_bind_port', 5678)
 
         def get_session(_, db_url):
-            session = namedtuple('Session', 'bind')
-            session.bind = namedtuple('Bind', 'engine')
-            session.bind.engine = namedtuple('Engine', 'url')
-            session.bind.engine.url = db_url
-            session.close = lambda: None
-            return session
+            class Session:
+                bind = namedtuple('Bind', 'engine')
+
+                def close(self):
+                    return None
+
+            Session.bind.engine = namedtuple('Engine', 'url')
+            Session.bind.engine.url = db_url
+            return Session()
 
         monkeypatch.setattr(Database, 'get_session', get_session)
 
