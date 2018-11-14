@@ -2,12 +2,12 @@
 """Session utilities for urls"""
 import logging
 import os
-from typing import Any
 
 import requests
 from basicauth import decode
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3 import Retry
+from typing import Any
 
 from hdx.utilities.loader import load_file_to_str, load_json, load_yaml
 
@@ -36,42 +36,43 @@ def get_session(**kwargs):
     """
     s = requests.Session()
 
-    extra_params_found = False
-    extra_params_dict = kwargs.get('extra_params_dict')
-    if extra_params_dict:
-        extra_params_found = True
-        logger.info('Loading extra parameters from dictionary')
-
-    extra_params_json = kwargs.get('extra_params_json', '')
-    if extra_params_json:
-        if extra_params_found:
-            raise SessionError('More than one set of extra parameters given!')
-        extra_params_found = True
-        logger.info('Loading extra parameters from: %s' % extra_params_json)
-        extra_params_dict = load_json(extra_params_json)
-
-    extra_params_yaml = kwargs.get('extra_params_yaml', '')
-    if extra_params_found:
-        if extra_params_yaml:
-            raise SessionError('More than one set of extra parameters given!')
-    else:
-        if extra_params_yaml:
-            logger.info('Loading extra parameters from: %s' % extra_params_yaml)
-            extra_params_dict = load_yaml(extra_params_yaml)
-        else:
-            extra_params_dict = dict()
-    extra_params_lookup = kwargs.get('extra_params_lookup')
-    if extra_params_lookup:
-        extra_params_dict = extra_params_dict.get(extra_params_lookup)
-        if extra_params_dict is None:
-            raise SessionError('%s does not exist in extra_params!' % extra_params_lookup)
-
     extra_params = os.getenv('EXTRA_PARAMS')
     if extra_params:
         logger.info('Loading extra parameters from environment variable')
+        extra_params_dict = dict()
         for extra_param in extra_params.split(','):
             key, value = extra_param.split('=')
             extra_params_dict[key] = value
+    else:
+        extra_params_found = False
+        extra_params_dict = kwargs.get('extra_params_dict')
+        if extra_params_dict:
+            extra_params_found = True
+            logger.info('Loading extra parameters from dictionary')
+
+        extra_params_json = kwargs.get('extra_params_json', '')
+        if extra_params_json:
+            if extra_params_found:
+                raise SessionError('More than one set of extra parameters given!')
+            extra_params_found = True
+            logger.info('Loading extra parameters from: %s' % extra_params_json)
+            extra_params_dict = load_json(extra_params_json)
+
+        extra_params_yaml = kwargs.get('extra_params_yaml', '')
+        if extra_params_found:
+            if extra_params_yaml:
+                raise SessionError('More than one set of extra parameters given!')
+        else:
+            if extra_params_yaml:
+                logger.info('Loading extra parameters from: %s' % extra_params_yaml)
+                extra_params_dict = load_yaml(extra_params_yaml)
+            else:
+                extra_params_dict = dict()
+        extra_params_lookup = kwargs.get('extra_params_lookup')
+        if extra_params_lookup:
+            extra_params_dict = extra_params_dict.get(extra_params_lookup)
+            if extra_params_dict is None:
+                raise SessionError('%s does not exist in extra_params!' % extra_params_lookup)
 
     auth_found = False
     basic_auth = os.getenv('BASIC_AUTH')
