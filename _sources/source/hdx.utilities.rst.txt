@@ -12,6 +12,14 @@ hdx.utilities.compare module
     :undoc-members:
     :show-inheritance:
 
+hdx.utilities.database module
+-----------------------------
+
+.. automodule:: hdx.utilities.database
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 hdx.utilities.dictandlist module
 --------------------------------
 

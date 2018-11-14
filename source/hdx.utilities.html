@@ -88,6 +88,134 @@ lines that are the same</p>
 </dd></dl>
 
 </div>
+<div class="section" id="module-hdx.utilities.database">
+<span id="hdx-utilities-database-module"></span><h2>hdx.utilities.database module<a class="headerlink" href="#module-hdx.utilities.database" title="Permalink to this headline">¶</a></h2>
+<p>Database utilities</p>
+<dl class="class">
+<dt id="hdx.utilities.database.Database">
+<em class="property">class </em><code class="descclassname">hdx.utilities.database.</code><code class="descname">Database</code><span class="sig-paren">(</span><em>database=None</em>, <em>host=None</em>, <em>username=None</em>, <em>password=None</em>, <em>port=5432</em>, <em>driver='postgres'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.database.Database" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Database helper class to handle ssh tunnels, waiting for PostgreSQL to be up etc.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>database</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Database name</li>
+<li><strong>host</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Host where database is located</li>
+<li><strong>username</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Username to log into database</li>
+<li><strong>password</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Password to log into database</li>
+<li><strong>port</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – Database port. Defaults to 5432.</li>
+<li><strong>driver</strong> (<em>str</em>) – Database driver. Defaults to ‘postgres’.</li>
+<li><strong>**kwargs</strong> – See below</li>
+<li><strong>ssh_host</strong> (<em>str</em>) – SSH host (the server to connect to)</li>
+<li><strong>ssh_port</strong> (<em>int</em>) – SSH port. Defaults to 22.</li>
+<li><strong>ssh_username</strong> (<em>str</em>) – SSH username</li>
+<li><strong>ssh_password</strong> (<em>str</em>) – SSH password</li>
+<li><strong>ssh_private_key</strong> – Location of SSH private key (instead of ssh_password)</li>
+<li><strong>more advanced usage</strong><strong>, </strong><strong>see SSHTunnelForwarder documentation.</strong> (<em>For</em>) – </li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="staticmethod">
+<dt id="hdx.utilities.database.Database.get_params_from_sqlalchemy_url">
+<em class="property">static </em><code class="descname">get_params_from_sqlalchemy_url</code><span class="sig-paren">(</span><em>db_url</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.database.Database.get_params_from_sqlalchemy_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets PostgreSQL database connection parameters from SQLAlchemy url</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>db_url</strong> (<em>str</em>) – SQLAlchemy url</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Dictionary of database connection parameters</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Dict[str,Any]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="hdx.utilities.database.Database.get_session">
+<em class="property">static </em><code class="descname">get_session</code><span class="sig-paren">(</span><em>db_url</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.database.Database.get_session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets PostgreSQL database connection parameters from SQLAlchemy url</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>db_url</strong> (<em>str</em>) – SQLAlchemy url</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">SQLAlchemy session</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">sqlalchemy.orm.session.Session</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="hdx.utilities.database.Database.get_sqlalchemy_url">
+<em class="property">static </em><code class="descname">get_sqlalchemy_url</code><span class="sig-paren">(</span><em>database=None</em>, <em>host=None</em>, <em>username=None</em>, <em>password=None</em>, <em>port=5432</em>, <em>driver='postgres'</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.database.Database.get_sqlalchemy_url" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets SQLAlchemy url from database connection parameters</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>database</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Database name</li>
+<li><strong>host</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Host where database is located</li>
+<li><strong>username</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Username to log into database</li>
+<li><strong>password</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Password to log into database</li>
+<li><strong>port</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – Database port. Defaults to 5432.</li>
+<li><strong>driver</strong> (<em>str</em>) – Database driver. Defaults to ‘postgres’.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">SQLAlchemy url</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">db_url (str)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="hdx.utilities.database.Database.wait_for_postgres">
+<em class="property">static </em><code class="descname">wait_for_postgres</code><span class="sig-paren">(</span><em>database</em>, <em>host</em>, <em>username</em>, <em>password</em>, <em>port=5432</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.database.Database.wait_for_postgres" title="Permalink to this definition">¶</a></dt>
+<dd><p>Waits for PostgreSQL database to be up</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>database</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Database name</li>
+<li><strong>host</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Host where database is located</li>
+<li><strong>username</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Username to log into database</li>
+<li><strong>password</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Password to log into database</li>
+<li><strong>port</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – Database port. Defaults to 5432.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="hdx.utilities.database.HDXBase">
+<em class="property">class </em><code class="descclassname">hdx.utilities.database.</code><code class="descname">HDXBase</code><a class="headerlink" href="#hdx.utilities.database.HDXBase" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+</dd></dl>
+
+</div>
 <div class="section" id="module-hdx.utilities.dictandlist">
 <span id="hdx-utilities-dictandlist-module"></span><h2>hdx.utilities.dictandlist module<a class="headerlink" href="#module-hdx.utilities.dictandlist" title="Permalink to this headline">¶</a></h2>
 <p>Dict and List utilities</p>
@@ -411,7 +539,7 @@ like dictionaries in which case the function can return the appropriate value eg
 
 <dl class="function">
 <dt id="hdx.utilities.dictandlist.read_list_from_csv">
-<code class="descclassname">hdx.utilities.dictandlist.</code><code class="descname">read_list_from_csv</code><span class="sig-paren">(</span><em>filepath</em>, <em>dict_form=False</em>, <em>headers=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.dictandlist.read_list_from_csv" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hdx.utilities.dictandlist.</code><code class="descname">read_list_from_csv</code><span class="sig-paren">(</span><em>filepath</em>, <em>dict_form=False</em>, <em>headers=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.dictandlist.read_list_from_csv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a list of rows in dict or list form from a csv.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -421,6 +549,7 @@ like dictionaries in which case the function can return the appropriate value eg
 <li><strong>filepath</strong> (<em>str</em>) – Path to read from</li>
 <li><strong>dict_form</strong> (<em>bool</em>) – Return in dict form. Defaults to False.</li>
 <li><strong>headers</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – Row number of headers. Defaults to None.</li>
+<li><strong>**kwargs</strong> – Other arguments to pass to Tabulator Stream</li>
 </ul>
 </td>
 </tr>
@@ -1298,6 +1427,22 @@ Must call setup method first.</p>
 </tr>
 <tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
 </td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hdx.utilities.path.temp_dir">
+<code class="descclassname">hdx.utilities.path.</code><code class="descname">temp_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.path.temp_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a temporary directory</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A temporary directory</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
 </tr>
 </tbody>
 </table>
