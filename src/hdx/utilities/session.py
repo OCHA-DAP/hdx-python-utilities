@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Session utilities for urls"""
 import logging
+import os
 from typing import Any
 
 import requests
@@ -36,7 +37,7 @@ def get_session(**kwargs):
     s = requests.Session()
 
     extra_params_found = False
-    extra_params_dict = kwargs.get('extra_params_dict', None)
+    extra_params_dict = kwargs.get('extra_params_dict')
     if extra_params_dict:
         extra_params_found = True
         logger.info('Loading extra parameters from dictionary')
@@ -65,11 +66,29 @@ def get_session(**kwargs):
         if extra_params_dict is None:
             raise SessionError('%s does not exist in extra_params!' % extra_params_lookup)
 
+    extra_params = os.getenv('EXTRA_PARAMS')
+    if extra_params:
+        logger.info('Loading extra parameters from environment variable')
+        for extra_param in extra_params.split(','):
+            key, value = extra_param.split('=')
+            extra_params_dict[key] = value
+
     auth_found = False
-    basic_auth = extra_params_dict.get('basic_auth')
+    basic_auth = os.getenv('BASIC_AUTH')
     if basic_auth:
-        logger.info('Loading authorisation from basic_auth parameter')
+        logger.info('Loading authorisation from basic_auth environment variable')
         auth_found = True
+    else:
+        basic_auth = kwargs.get('basic_auth')
+        if basic_auth:
+            logger.info('Loading authorisation from basic_auth argument')
+            auth_found = True
+    bauth = extra_params_dict.get('basic_auth')
+    if bauth:
+        if not auth_found:
+            basic_auth = bauth
+            logger.info('Loading authorisation from basic_auth parameter')
+            auth_found = True
         del extra_params_dict['basic_auth']
     s.params = extra_params_dict
 
@@ -78,13 +97,6 @@ def get_session(**kwargs):
         if auth_found:
             raise SessionError('More than one authorisation given!')
         logger.info('Loading authorisation from auth argument')
-        auth_found = True
-    bauth = kwargs.get('basic_auth')
-    if bauth:
-        if auth_found:
-            raise SessionError('More than one authorisation given!')
-        logger.info('Loading authorisation from basic_auth argument')
-        basic_auth = bauth
         auth_found = True
     basic_auth_file = kwargs.get('basic_auth_file')
     if basic_auth_file:

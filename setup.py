@@ -57,9 +57,11 @@ requirements = ['basicauth',
                 'colorlog',
                 'email_validator',
                 'html5lib',
+                'psycopg2-binary',
                 'pyaml',
                 'six>=1.11.0',
-                'tabulator>=1.18.0',
+                'sshtunnel',
+                'tabulator>=1.19.0',
                 'typing',
                 'yamlloader'
                 ]

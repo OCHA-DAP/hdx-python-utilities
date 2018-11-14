@@ -59,26 +59,31 @@ class TestDownloader:
         path = Download.get_path_for_url(fixtureurl, downloaderfolder, filename)
         assert abspath(path) == abspath(join(downloaderfolder, filename))
 
-    def test_init(self, downloaderfolder):
+    def test_init(self, monkeypatch, downloaderfolder):
         basicauthfile = join(downloaderfolder, 'basicauth.txt')
         with Download(auth=('u', 'p')) as downloader:
             assert downloader.session.auth == ('u', 'p')
-        with Download(basic_auth='Basic dXNlcjpwYXNz') as downloader:
+        basicauth = 'Basic dXNlcjpwYXNz'
+        with Download(basic_auth=basicauth) as downloader:
             assert downloader.session.auth == ('user', 'pass')
         with Download(basic_auth_file=basicauthfile) as downloader:
             assert downloader.session.auth == ('testuser', 'testpass')
+        extraparamsyamltree = join(downloaderfolder, 'extra_params_tree.yml')
+        with Download(basic_auth='Basic dXNlcjpwYXNz', extra_params_yaml=extraparamsyamltree,
+                      extra_params_lookup='mykey') as downloader:
+            assert downloader.session.auth == ('user', 'pass')
+        monkeypatch.setenv('BASIC_AUTH', basicauth)
+        with Download(basic_auth='12345') as downloader:
+            assert downloader.session.auth == ('user', 'pass')
+        monkeypatch.delenv('BASIC_AUTH')
         with pytest.raises(SessionError):
             Download(auth=('u', 'p'), basic_auth='Basic xxxxxxxxxxxxxxxx')
         with pytest.raises(SessionError):
             Download(auth=('u', 'p'), basic_auth_file=join('lala', 'lala.txt'))
         with pytest.raises(SessionError):
             Download(basic_auth='Basic dXNlcjpwYXNz', basic_auth_file=join('lala', 'lala.txt'))
-        extraparamsyamltree = join(downloaderfolder, 'extra_params_tree.yml')
         with pytest.raises(SessionError):
             Download(auth=('u', 'p'), extra_params_yaml=extraparamsyamltree, extra_params_lookup='mykey')
-        with pytest.raises(SessionError):
-            Download(basic_auth='Basic dXNlcjpwYXNz', extra_params_yaml=extraparamsyamltree,
-                     extra_params_lookup='mykey')
         with pytest.raises(SessionError):
             Download(basic_auth_file=basicauthfile, extra_params_yaml=extraparamsyamltree, extra_params_lookup='mykey')
         with pytest.raises(IOError):
@@ -104,6 +109,14 @@ class TestDownloader:
             full_url = downloader.get_full_url(test_url)
             assert 'param1=value+1' in full_url
             assert 'param2=value2' in full_url
+            assert 'param3=11' in full_url
+            assert 'basic_auth' not in full_url
+        monkeypatch.setenv('EXTRA_PARAMS', 'param1=value2+3,param2=value3+7')
+        with Download(extra_params_yaml=extraparamsyamltree, extra_params_lookup='mykey') as downloader:
+            assert downloader.session.auth == ('testuser', 'testpass')
+            full_url = downloader.get_full_url(test_url)
+            assert 'param1=value2%2B3' in full_url
+            assert 'param2=value3%2B7' in full_url
             assert 'param3=11' in full_url
             assert 'basic_auth' not in full_url
         with pytest.raises(SessionError):

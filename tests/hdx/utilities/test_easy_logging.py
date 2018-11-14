@@ -1,9 +1,10 @@
 # -*- coding: UTF-8 -*-
 """Logging Tests"""
+from logging.handlers import SMTPHandler
 from os.path import join
 
 import pytest
-from logging_tree import format
+from logging_tree import tree
 
 from hdx.utilities.easy_logging import setup_logging, LoggingError
 
@@ -28,6 +29,17 @@ class TestLogging:
     @pytest.fixture(scope='class')
     def smtp_config_json(self):
         return join('tests', 'fixtures', 'config', 'smtp_config.json')
+
+    @staticmethod
+    def get_root_handlers_names():
+        return [x.name for x in tree()[1].handlers]
+
+    @staticmethod
+    def get_root_mail_handler_email():
+        for handler in tree()[1].handlers:
+            if isinstance(handler, SMTPHandler):
+                return handler.toaddrs
+        return None
 
     def test_setup_logging(self, logging_config_json, logging_config_yaml, smtp_config_json, smtp_config_yaml):
         with pytest.raises(FILENOTFOUND_EXCTYPE):
@@ -64,6 +76,7 @@ class TestLogging:
             setup_logging(smtp_config_json=smtp_config_json, smtp_config_yaml=smtp_config_yaml)
 
     def test_setup_logging_dict(self, smtp_config_yaml):
+        handlers = ['error_file_handler', 'error_mail_handler']
         logging_config_dict = {'version': 1,
                                'handlers': {
                                    'error_file_handler': {
@@ -84,53 +97,55 @@ class TestLogging:
                                },
                                'root': {
                                    'level': 'INFO',
-                                   'handlers': ['error_file_handler', 'error_mail_handler']
+                                   'handlers': handlers
                                }}
         setup_logging(logging_config_dict=logging_config_dict)
-        actual_logging_tree = format.build_description()
-        for handler in ['File', 'SMTP']:
-            assert handler in actual_logging_tree
-        assert 'abc@abc.com' in actual_logging_tree
+        actual_handler_names = self.get_root_handlers_names()
+        for handler in handlers:
+            assert handler in actual_handler_names
+        assert 'abc@abc.com' in self.get_root_mail_handler_email()
 
     def test_setup_logging_json(self, logging_config_json):
         setup_logging(logging_config_json=logging_config_json)
-        actual_logging_tree = format.build_description()
-        for handler in ['Stream', 'File']:
-            assert handler in actual_logging_tree
+        actual_handler_names = self.get_root_handlers_names()
+        for handler in ['console', 'error_file_handler']:
+            assert handler in actual_handler_names
 
     def test_setup_logging_yaml(self, monkeypatch, logging_config_yaml):
         setup_logging(logging_config_yaml=logging_config_yaml)
-        actual_logging_tree = format.build_description()
-        for handler in ['Stream', 'SMTP']:
-            assert handler in actual_logging_tree
-        assert 'abc@abc.com' in actual_logging_tree
+        actual_handler_names = self.get_root_handlers_names()
+        for handler in ['console', 'error_mail_handler']:
+            assert handler in actual_handler_names
+        assert 'abc@abc.com' in self.get_root_mail_handler_email()
+
+    def test_setup_logging_env(self, monkeypatch, logging_config_yaml):
         monkeypatch.setenv('LOG_FILE_ONLY', 'true')
         setup_logging(logging_config_yaml=logging_config_yaml)
-        actual_logging_tree = format.build_description()
-        assert 'Stream' not in actual_logging_tree
+        actual_handler_names = self.get_root_handlers_names()
+        assert 'console' not in actual_handler_names
         monkeypatch.setenv('LOG_FILE_ONLY', 'false')
         setup_logging(logging_config_yaml=logging_config_yaml)
-        actual_logging_tree = format.build_description()
-        assert 'Stream' in actual_logging_tree
+        actual_handler_names = self.get_root_handlers_names()
+        assert 'console' in actual_handler_names
 
     def test_setup_logging_smtp_dict(self):
         smtp_config_dict = {'handlers': {'error_mail_handler': {'toaddrs': 'lalala@la.com', 'subject': 'lala'}}}
         setup_logging(smtp_config_dict=smtp_config_dict)
-        actual_logging_tree = format.build_description()
-        for handler in ['Stream', 'File', 'SMTP']:
-            assert handler in actual_logging_tree
-        assert 'lalala@la.com' in actual_logging_tree
+        actual_handler_names = self.get_root_handlers_names()
+        for handler in ['console', 'error_file_handler', 'error_mail_handler']:
+            assert handler in actual_handler_names
+        assert 'lalala@la.com' in self.get_root_mail_handler_email()
 
     def test_setup_logging_smtp_json(self, smtp_config_json):
         setup_logging(smtp_config_json=smtp_config_json)
-        actual_logging_tree = format.build_description()
-        for handler in ['Stream', 'File', 'SMTP']:
-            assert handler in actual_logging_tree
-        assert '123@123.com' in actual_logging_tree
+        actual_handler_names = self.get_root_handlers_names()
+        for handler in ['console', 'error_file_handler', 'error_mail_handler']:
+            assert handler in actual_handler_names
+        assert '123@123.com' in self.get_root_mail_handler_email()
 
     def test_setup_logging_smtp_yaml(self, smtp_config_yaml):
         setup_logging(smtp_config_yaml=smtp_config_yaml)
-        actual_logging_tree = format.build_description()
-        for handler in ['Stream', 'File', 'SMTP']:
-            assert handler in actual_logging_tree
-        assert 'abc@abc.com' in actual_logging_tree
+        actual_handler_names = self.get_root_handlers_names()
+        for handler in ['console', 'error_file_handler', 'error_mail_handler']:
+            assert handler in actual_handler_names
+        assert 'abc@abc.com' in self.get_root_mail_handler_email()

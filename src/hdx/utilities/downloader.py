@@ -71,9 +71,11 @@ class Download(object):
         self.session.close()
 
     def __enter__(self):
+        # type: () -> 'Download'
         return self
 
     def __exit__(self, exc_type, exc_value, traceback):
+        # type: (Any, Any, Any) -> None
         self.close()
 
     @staticmethod
