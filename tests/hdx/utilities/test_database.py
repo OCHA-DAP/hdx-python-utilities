@@ -25,7 +25,7 @@ class TestDatabase:
     def nodatabase(self):
         try:
             os.remove(TestDatabase.dbpath)
-        except IOError:
+        except OSError:
             pass
         return 'sqlite:///%s' % TestDatabase.dbpath
 
