@@ -33,7 +33,7 @@ class Database(object):
         host (Optional[str]): Host where database is located
         username (Optional[str]): Username to log into database
         password (Optional[str]): Password to log into database
-        port (Optional[int]): Database port. Defaults to 5432.
+        port (Optional[int]): Database port
         driver (str): Database driver. Defaults to 'postgres'.
         **kwargs: See below
         ssh_host (str): SSH host (the server to connect to)
@@ -45,7 +45,7 @@ class Database(object):
 
     """
 
-    def __init__(self, database=None, host=None, username=None, password=None, port=5432, driver='postgres', **kwargs):
+    def __init__(self, database=None, host=None, username=None, password=None, port=None, driver='postgres', **kwargs):
         # type: (Optional[str], Optional[str], Optional[str], Optional[str], Optional[int], str, Any) -> None
         if len(kwargs) != 0:
             ssh_host = kwargs['ssh_host']
@@ -108,7 +108,7 @@ class Database(object):
                 'database': result.path[1:], 'driver': result.scheme}
 
     @staticmethod
-    def get_sqlalchemy_url(database=None, host=None, username=None, password=None, port=5432, driver='postgres'):
+    def get_sqlalchemy_url(database=None, host=None, username=None, password=None, port=None, driver='postgres'):
         # type: (Optional[str], Optional[str], Optional[str], Optional[str], Optional[int], str) -> str
         """Gets SQLAlchemy url from database connection parameters
 
@@ -117,7 +117,7 @@ class Database(object):
             host (Optional[str]): Host where database is located
             username (Optional[str]): Username to log into database
             password (Optional[str]): Password to log into database
-            port (Optional[int]): Database port. Defaults to 5432.
+            port (Optional[int]): Database port
             driver (str): Database driver. Defaults to 'postgres'.
 
         Returns:
@@ -139,7 +139,7 @@ class Database(object):
         return ''.join(strings)
 
     @staticmethod
-    def wait_for_postgres(database, host, username, password, port=5432):
+    def wait_for_postgres(database, host, username, password, port):
         # type: (Optional[str], Optional[str], Optional[str], Optional[str], Optional[int]) -> None
         """Waits for PostgreSQL database to be up
 
@@ -148,7 +148,7 @@ class Database(object):
             host (Optional[str]): Host where database is located
             username (Optional[str]): Username to log into database
             password (Optional[str]): Password to log into database
-            port (Optional[int]): Database port. Defaults to 5432.
+            port (Optional[int]): Database port
 
         Returns:
             None
