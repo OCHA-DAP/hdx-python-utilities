@@ -91,7 +91,7 @@ class TestDatabase:
         with Database(database=TestDatabase.dbpath, port=None, driver='sqlite') as dbsession:
             assert str(dbsession.bind.engine.url) == nodatabase
 
-    def test_get_session_ssh(self, mock_SSHTunnelForwarder):
+    def test_get_session_ssh(self, mock_psycopg2, mock_SSHTunnelForwarder):
         with Database(ssh_host='mysshhost', **TestDatabase.params) as dbsession:
             assert str(dbsession.bind.engine.url) == 'postgres://myuser:mypass@mysshhost:5678/mydatabase'
         params = copy.deepcopy(TestDatabase.params)

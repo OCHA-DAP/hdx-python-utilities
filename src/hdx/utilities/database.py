@@ -61,6 +61,8 @@ class Database(object):
             port = self.server.local_bind_port
         else:
             self.server = None
+        if driver == 'postgres':
+            Database.wait_for_postgres(database, host, username, password, port)
         db_url = self.get_sqlalchemy_url(database, host, username, password, port=port, driver=driver)
         self.session = self.get_session(db_url)
 
