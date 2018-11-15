@@ -3,14 +3,14 @@
 from __future__ import division
 
 import itertools
-from typing import List, TypeVar, Callable, Dict, Any, Union, Optional
+from typing import List, TypeVar, Callable, Dict, Any, Union
 
 import six
 from six.moves import UserDict, zip_longest
 from tabulator import Stream
 
-DictUpperBound = TypeVar('T', bound='dict')
-ExceptionUpperBound = TypeVar('TE', bound='Exception')
+DictUpperBound = TypeVar('DictUpperBound', bound='dict')
+ExceptionUpperBound = TypeVar('ExceptionUpperBound', bound='Exception')
 
 
 def merge_two_dictionaries(a, b, merge_lists=False):
@@ -337,13 +337,16 @@ def avg_dicts(dictin1, dictin2, dropmissing=True):
 
 
 def read_list_from_csv(filepath, dict_form=False, headers=None, **kwargs):
-    # type: (str, bool, Optional[int]) -> List[Union[Dict, List]]
-    """Read a list of rows in dict or list form from a csv.
+    # type: (str, bool, Union[int, List[int], List[str], None], Any) -> List[Union[Dict, List]]
+    """Read a list of rows in dict or list form from a csv. (The headers argument is either a row
+       number or list of row numbers (in case of multi-line headers) to be considered as headers
+       (rows start counting at 1), or the actual headers defined a list of strings. If not set,
+       all rows will be treated as containing values.)
 
     Args:
         filepath (str): Path to read from
         dict_form (bool): Return in dict form. Defaults to False.
-        headers (Optional[List[str]]): Row number of headers. Defaults to None.
+        headers (Union[int, List[int], List[str], None]): Row number of headers. Defaults to None.
         **kwargs: Other arguments to pass to Tabulator Stream
 
     Returns:
@@ -358,13 +361,16 @@ def read_list_from_csv(filepath, dict_form=False, headers=None, **kwargs):
 
 
 def write_list_to_csv(list_of_rows, filepath, headers=None):
-    # type: (List[Union[DictUpperBound, List]], str, Optional[List[str]]) -> None
-    """Write a list of rows in dict or list form to a csv.
+    # type: (List[Union[DictUpperBound, List]], str, Union[int, List[int], List[str], None]) -> None
+    """Write a list of rows in dict or list form to a csv. (The headers argument is either a row
+       number or list of row numbers (in case of multi-line headers) to be considered as headers
+       (rows start counting at 1), or the actual headers defined a list of strings. If not set,
+       all rows will be treated as containing values.)
 
     Args:
         list_of_rows (List[Union[DictUpperBound, List]]): List of rows in dict or list form
         filepath (str): Path to write to
-        headers (Optional[List[str]]): Headers to write. Defaults to None.
+        headers (Union[int, List[int], List[str], None]): Headers to write. Defaults to None.
 
     Returns:
         None
@@ -374,3 +380,21 @@ def write_list_to_csv(list_of_rows, filepath, headers=None):
     stream.open()
     stream.save(filepath, format='csv')
     stream.close()
+
+
+def args_to_dict(args):
+    # type: (str) -> DictUpperBound[str,str]
+    """Convert command line arguments in a comma separated string to a dictionary
+
+    Args:
+        args (str): Command line arguments
+
+    Returns:
+        DictUpperBound[str,str]: Dictionary of arguments
+
+    """
+    arguments = dict()
+    for arg in args.split(','):
+        key, value = arg.split('=')
+        arguments[key] = value
+    return arguments

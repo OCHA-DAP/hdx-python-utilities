@@ -8,7 +8,7 @@ import pytest
 
 from hdx.utilities.dictandlist import merge_dictionaries, dict_diff, dict_of_lists_add, list_distribute_contents, \
     list_distribute_contents_simple, extract_list_from_list_of_dict, avg_dicts, key_value_convert, integer_key_convert, \
-    integer_value_convert, float_value_convert, write_list_to_csv, read_list_from_csv, dict_of_sets_add
+    integer_value_convert, float_value_convert, write_list_to_csv, read_list_from_csv, dict_of_sets_add, args_to_dict
 
 
 class TestDictAndList:
@@ -149,3 +149,7 @@ class TestDictAndList:
         assert newld == [{'h1': '1', 'h2': '2', 'h4': 'a', 'h3': '3'},
                         {'h1': '4', 'h2': '5', 'h4': 'b', 'h3': '6'},
                         {'h1': '7', 'h2': '8', 'h4': 'c', 'h3': '9'}]
+
+    def test_args_to_dict(self):
+        args = 'a=1,big=hello,1=3'
+        assert args_to_dict(args) == {'a': '1', 'big': 'hello', '1': '3'}
