@@ -84,7 +84,7 @@ class TestDatabase:
 
     def test_wait_for_postgres(self, mock_psycopg2):
         TestDatabase.connected = False
-        Database.wait_for_postgres('myserver', 'myuser', 'mypass', 'mydatabase', 5432)
+        Database.wait_for_postgres('mydatabase', 'myserver', 5432, 'myuser', 'mypass')
         assert TestDatabase.connected is True
 
     def test_get_session(self, nodatabase):

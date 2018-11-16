@@ -2,7 +2,7 @@
 """Database utilities"""
 import logging
 import time
-from typing import Dict, Any, Optional
+from typing import Dict, Any, Optional, Union
 
 import psycopg2
 from six.moves.urllib.parse import urlsplit
@@ -31,9 +31,9 @@ class Database(object):
     Args:
         database (Optional[str]): Database name
         host (Optional[str]): Host where database is located
+        port (Union[int, str, None]): Database port
         username (Optional[str]): Username to log into database
         password (Optional[str]): Password to log into database
-        port (Optional[int]): Database port
         driver (str): Database driver. Defaults to 'postgres'.
         **kwargs: See below
         ssh_host (str): SSH host (the server to connect to)
@@ -45,13 +45,16 @@ class Database(object):
 
     """
 
-    def __init__(self, database=None, host=None, username=None, password=None, port=None, driver='postgres', **kwargs):
-        # type: (Optional[str], Optional[str], Optional[str], Optional[str], Optional[int], str, Any) -> None
+    def __init__(self, database=None, host=None, port=None, username=None, password=None, driver='postgres', **kwargs):
+        # type: (Optional[str], Optional[str], Union[int, str, None], Optional[str], Optional[str], str, Any) -> None
+        if port is not None:
+            port = int(port)
         if len(kwargs) != 0:
             ssh_host = kwargs['ssh_host']
             del kwargs['ssh_host']
             ssh_port = kwargs.get('ssh_port')
-            if ssh_port:
+            if ssh_port is not None:
+                ssh_port = int(ssh_port)
                 del kwargs['ssh_port']
             else:
                 ssh_port = 22
@@ -62,8 +65,8 @@ class Database(object):
         else:
             self.server = None
         if driver == 'postgres':
-            Database.wait_for_postgres(database, host, username, password, port)
-        db_url = self.get_sqlalchemy_url(database, host, username, password, port=port, driver=driver)
+            Database.wait_for_postgres(database, host, port, username, password)
+        db_url = self.get_sqlalchemy_url(database, host, port, username, password, driver=driver)
         self.session = self.get_session(db_url)
 
     def __enter__(self):
@@ -104,20 +107,20 @@ class Database(object):
             Dict[str,Any]: Dictionary of database connection parameters
         """
         result = urlsplit(db_url)
-        return {'host': result.hostname, 'port': result.port, 'username': result.username, 'password': result.password,
-                'database': result.path[1:], 'driver': result.scheme}
+        return {'database': result.path[1:], 'host': result.hostname, 'port': result.port,
+                'username': result.username, 'password': result.password, 'driver': result.scheme}
 
     @staticmethod
-    def get_sqlalchemy_url(database=None, host=None, username=None, password=None, port=None, driver='postgres'):
-        # type: (Optional[str], Optional[str], Optional[str], Optional[str], Optional[int], str) -> str
+    def get_sqlalchemy_url(database=None, host=None, port=None, username=None, password=None, driver='postgres'):
+        # type: (Optional[str], Optional[str], Union[int, str, None], Optional[str], Optional[str], str) -> str
         """Gets SQLAlchemy url from database connection parameters
 
         Args:
             database (Optional[str]): Database name
             host (Optional[str]): Host where database is located
+            port (Union[int, str, None]): Database port
             username (Optional[str]): Username to log into database
             password (Optional[str]): Password to log into database
-            port (Optional[int]): Database port
             driver (str): Database driver. Defaults to 'postgres'.
 
         Returns:
@@ -133,36 +136,38 @@ class Database(object):
         if host:
             strings.append(host)
         if port is not None:
-            strings.append(':%d' % port)
+            strings.append(':%d' % int(port))
         if database:
             strings.append('/%s' % database)
         return ''.join(strings)
 
     @staticmethod
-    def wait_for_postgres(database, host, username, password, port):
-        # type: (Optional[str], Optional[str], Optional[str], Optional[str], Optional[int]) -> None
+    def wait_for_postgres(database, host, port, username, password):
+        # type: (Optional[str], Optional[str], Union[int, str, None], Optional[str], Optional[str]) -> None
         """Waits for PostgreSQL database to be up
 
         Args:
             database (Optional[str]): Database name
             host (Optional[str]): Host where database is located
+            port (Union[int, str, None]): Database port
             username (Optional[str]): Username to log into database
             password (Optional[str]): Password to log into database
-            port (Optional[int]): Database port
 
         Returns:
             None
         """
         connecting_string = 'Checking for PostgreSQL...'
+        if port is not None:
+            port = int(port)
         while True:
             try:
                 logger.info(connecting_string)
                 connection = psycopg2.connect(
                     database=database,
-                    user=username,
-                    password=password,
                     host=host,
                     port=port,
+                    user=username,
+                    password=password,
                     connect_timeout=3
                 )
                 connection.close()
