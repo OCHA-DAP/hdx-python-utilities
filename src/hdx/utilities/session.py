@@ -2,12 +2,12 @@
 """Session utilities for urls"""
 import logging
 import os
+from typing import Any
 
 import requests
 from basicauth import decode
 from requests.adapters import HTTPAdapter
 from requests.packages.urllib3 import Retry
-from typing import Any
 
 from hdx.utilities.loader import load_file_to_str, load_json, load_yaml
 
@@ -37,12 +37,13 @@ def get_session(**kwargs):
     s = requests.Session()
 
     extra_params = os.getenv('EXTRA_PARAMS')
-    if extra_params:
-        logger.info('Loading extra parameters from environment variable')
+    if extra_params is not None:
         extra_params_dict = dict()
-        for extra_param in extra_params.split(','):
-            key, value = extra_param.split('=')
-            extra_params_dict[key] = value
+        if '=' in extra_params:
+            logger.info('Loading extra parameters from environment variable')
+            for extra_param in extra_params.split(','):
+                key, value = extra_param.split('=')
+                extra_params_dict[key] = value
     else:
         extra_params_found = False
         extra_params_dict = kwargs.get('extra_params_dict')
