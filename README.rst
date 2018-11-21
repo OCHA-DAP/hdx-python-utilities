@@ -9,6 +9,7 @@ The HDX Python Utilities Library provides a range of helpful utilities:
 #. Text block matching
 #. Path utilities
 #. Loading and saving JSON and YAML (inc. OrderedDict)
+#. Database utilities (inc. connecting through SSH)
 
 
 This library is part of the `Humanitarian Data Exchange`_ (HDX) project. If you have
