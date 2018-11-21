@@ -82,7 +82,8 @@ class Database(object):
     @staticmethod
     def get_session(db_url):
         # type: (str) -> Session
-        """Gets PostgreSQL database connection parameters from SQLAlchemy url
+        """Gets SQLAlchemy session given url. Your tables must inherit
+        from Base in hdx.utilities.database.
 
         Args:
             db_url (str): SQLAlchemy url

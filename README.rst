@@ -106,6 +106,17 @@ Examples:
 Database utilities
 ~~~~~~~~~~~~~~~~~~
 
+These are built on top of SQLAlchemy and simplify its setup.
+
+Your SQLAlchemy database tables must inherit from Base in
+hdx.utilities.database eg.
+::
+
+    from hdx.utilities.database import Base
+    class MyTable(Base):
+        my_col = Column(Integer, ForeignKey(MyTable2.col2), primary_key=True)
+
+
 Examples:
 ::
 
@@ -210,6 +221,8 @@ Examples:
 
 HTML utilities
 ~~~~~~~~~~~~~~
+
+These are built on top of BeautifulSoup and simplify its setup.
 
 Examples:
 
