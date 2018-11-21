@@ -140,7 +140,8 @@ lines that are the same</p>
 <dl class="staticmethod">
 <dt id="hdx.utilities.database.Database.get_session">
 <em class="property">static </em><code class="descname">get_session</code><span class="sig-paren">(</span><em>db_url</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.database.Database.get_session" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets PostgreSQL database connection parameters from SQLAlchemy url</p>
+<dd><p>Gets SQLAlchemy session given url. Your tables must inherit
+from Base in hdx.utilities.database.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
