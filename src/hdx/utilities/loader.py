@@ -3,6 +3,7 @@
 
 import json
 from collections import OrderedDict
+from os import linesep
 from typing import List, Dict
 
 import yaml
@@ -112,7 +113,7 @@ def load_json(path):
 def load_file_to_str(path):
     # type: (str) -> str
     """
-    Load file into a string
+    Load file into a string removing newlines
 
     Args:
         path (str): Path to file
@@ -122,7 +123,7 @@ def load_file_to_str(path):
 
     """
     with open(path, 'rt') as f:
-        string = f.read().replace('\n', '')
+        string = f.read().replace(linesep, '')
     if not string:
         raise LoadError('%s file is empty!' % path)
     return string
