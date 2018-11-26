@@ -15,7 +15,7 @@ from six.moves.urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
 from tabulator.exceptions import TabulatorException
 
 from hdx.utilities import raisefrom
-from hdx.utilities.path import temp_dir
+from hdx.utilities.path import get_temp_dir
 from hdx.utilities.session import get_session
 
 logger = logging.getLogger(__name__)
@@ -98,7 +98,7 @@ class Download(object):
             filename = basename(urlpath)
         filename, extension = splitext(filename)
         if not folder:
-            folder = temp_dir()
+            folder = get_temp_dir()
         path = join(folder, '%s%s' % (filename, extension))
         if overwrite:
             try:
