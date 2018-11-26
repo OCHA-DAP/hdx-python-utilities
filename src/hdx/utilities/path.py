@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 """Directory Path Utilities"""
-
+import contextlib
 import inspect
-import os
 import sys
-from os.path import abspath, realpath, dirname, join
+from os import getenv, makedirs
+from os.path import abspath, realpath, dirname, join, exists
+from shutil import rmtree
 from tempfile import gettempdir
-from typing import Any
+from typing import Any, Optional
 
 
 def script_dir(pyobject, follow_symlinks=True):
@@ -44,11 +45,34 @@ def script_dir_plus_file(filename, pyobject, follow_symlinks=True):
     return join(script_dir(pyobject, follow_symlinks), filename)
 
 
-def temp_dir():
+def get_temp_dir():
     # type: () -> str
-    """Get a temporary directory
+    """Get a temporary directory. Looks for environment variable TEMP_DIR and falls
+    back on os.ggettempdir.
 
     Returns:
         str: A temporary directory
     """
-    return os.getenv('TEMP_DIR', gettempdir())
+    return getenv('TEMP_DIR', gettempdir())
+
+
+@contextlib.contextmanager
+def temp_dir(folder=None):
+    # type: (Optional[str]) -> str
+    """Get a temporary directory optionally with folder appended (and created if it doesn't exist)
+
+    Args:
+        folder (Optional[str]): Folder to create in temporary folder. Defaults to None.
+
+    Returns:
+        str: A temporary directory
+    """
+    tempdir = get_temp_dir()
+    if folder:
+        tempdir = join(tempdir, folder)
+    if not exists(tempdir):
+        makedirs(tempdir)
+    try:
+        yield tempdir
+    finally:
+        rmtree(tempdir)
