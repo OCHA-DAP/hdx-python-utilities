@@ -383,7 +383,15 @@ Examples:
 
     # Gets temporary directory from environment variable
     # TEMP_DIR and falls back to os function
-    temp_folder = temp_dir()
+    temp_folder = get_temp_dir()
+
+    # Gets temporary directory from environment variable
+    # TEMP_DIR and falls back to os function,
+    # optionally appends the given folder, creates the
+    # folder and on exiting, deletes the folder
+    with temp_dir('papa') as tempdir:
+        ...
+
 
 Text processing
 ~~~~~~~~~~~~~~~
