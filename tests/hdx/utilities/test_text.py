@@ -1,13 +1,17 @@
 # -*- coding: UTF-8 -*-
 """Text Processing Tests"""
 from hdx.utilities.text import get_matching_text_in_strs, get_matching_then_nonmatching_text, get_matching_text, \
-    get_words_in_sentence
+    get_words_in_sentence, multiple_replace
 
 
 class TestText:
     a = 'The quick brown fox jumped over the lazy dog. It was so fast!'
     b = 'The quicker brown fox leapt over the slower fox. It was so fast!'
     c = 'The quick brown fox climbed over the lazy dog. It was so fast!'
+
+    def test_multiple_replace(self):
+        result = multiple_replace(TestText.a, {'quick': 'slow', 'fast': 'slow', 'lazy': 'busy'})
+        assert result == 'The slow brown fox jumped over the busy dog. It was so slow!'
 
     def test_get_words_in_sentence(self):
         result = get_words_in_sentence("Korea (Democratic People's Republic of)")

@@ -3,7 +3,23 @@
 import difflib
 import re
 import string
-from typing import List
+from typing import List, Dict
+
+
+def multiple_replace(string, replacements):
+    # type: (str, Dict[str,str]) -> str
+    """Simultaneously replace multiple strigns in a string
+
+    Args:
+        string (str): Input string
+        replacements (Dict[str,str]): Replacements dictionary
+
+    Returns:
+        str: String with replacements
+
+    """
+    pattern = re.compile("|".join([re.escape(k) for k in sorted(replacements, key=len, reverse=True)]), flags=re.DOTALL)
+    return pattern.sub(lambda x: replacements[x.group(0)], string)
 
 
 def get_words_in_sentence(sentence):
@@ -80,7 +96,7 @@ def get_matching_text(string_list, match_min_size=30, ignore='', end_characters=
 
 def get_matching_then_nonmatching_text(string_list, separator='', match_min_size=30, ignore='',
                                        end_characters='.!\r\n'):
-    # type: (List[str], str, int, str, str, bool) -> str
+    # type: (List[str], str, int, str, str) -> str
     """Returns a string containing matching blocks of text in a list of strings followed by non-matching.
 
     Args:

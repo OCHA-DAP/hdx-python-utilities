@@ -375,12 +375,6 @@ Path utilities
 Examples:
 ::
 
-    # Get current directory of script
-    dir = script_dir(ANY_PYTHON_OBJECT_IN_SCRIPT)
-
-    # Get current directory of script with filename appended
-    path = script_dir_plus_file('myfile.txt', ANY_PYTHON_OBJECT_IN_SCRIPT)
-
     # Gets temporary directory from environment variable
     # TEMP_DIR and falls back to os function
     temp_folder = get_temp_dir()
@@ -392,12 +386,23 @@ Examples:
     with temp_dir('papa') as tempdir:
         ...
 
+    # Get current directory of script
+    dir = script_dir(ANY_PYTHON_OBJECT_IN_SCRIPT)
+
+    # Get current directory of script with filename appended
+    path = script_dir_plus_file('myfile.txt', ANY_PYTHON_OBJECT_IN_SCRIPT)
+
 
 Text processing
 ~~~~~~~~~~~~~~~
 
 Examples:
 ::
+
+    # Replace multiple strings in a string simultaneously
+    a = 'The quick brown fox jumped over the lazy dog. It was so fast!'
+    result = multiple_replace(a, {'quick': 'slow', 'fast': 'slow', 'lazy': 'busy'})
+    assert result == 'The slow brown fox jumped over the busy dog. It was so slow!'
 
     # Extract words from a string sentence into a list
     result = get_words_in_sentence("Korea (Democratic People's Republic of)")
