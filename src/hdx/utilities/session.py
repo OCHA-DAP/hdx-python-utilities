@@ -41,7 +41,7 @@ def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=
     """
     s = requests.Session()
 
-    ua = UserAgent.get(user_agent, user_agent_config_yaml, user_agent_lookup, **kwargs)
+    ua = kwargs.get('full_agent', UserAgent.get(user_agent, user_agent_config_yaml, user_agent_lookup, **kwargs))
     s.headers['User-Agent'] = ua
 
     extra_params = os.getenv('EXTRA_PARAMS')
