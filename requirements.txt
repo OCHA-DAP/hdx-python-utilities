@@ -6,7 +6,7 @@ email_validator==1.0.3
 html5lib==1.0.1
 psycopg2-binary==2.7.6.1
 pyaml==17.12.1
-six==1.11.0
+six==1.12.0
 sshtunnel==0.1.4
 tabulator==1.19.0
 typing==3.6.6

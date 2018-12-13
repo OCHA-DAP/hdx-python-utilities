@@ -42,7 +42,8 @@ def script_dir_plus_file(filename, pyobject, follow_symlinks=True):
 
 
 def get_version():
-    version_file = open(script_dir_plus_file(join('src', 'hdx', 'version.txt'), get_version), encoding='utf-8')
+    version_file = open(script_dir_plus_file(join('src', 'hdx', 'utilities', 'version.txt'), get_version),
+                        encoding='utf-8')
     return version_file.read().strip()
 
 

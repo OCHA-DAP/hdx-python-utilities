@@ -12,6 +12,8 @@ The HDX Python Utilities Library provides a range of helpful utilities:
 #. `Easy logging setup <#configuring-logging>`__
 #. `Path utilities <#path-utilities>`__
 #. `Text processing <#text-processing>`__
+#. `Py3-like raise from for Py2 <#raise-from>`__
+#. `Check valid UUID <#valid-uuid>`__
 
 
 This library is part of the `Humanitarian Data Exchange`_ (HDX) project. If you have
@@ -41,7 +43,7 @@ in basic_auth and add the parameter locale=en to each request
 (eg. for get request http://myurl/lala?param1=p1&locale=en):
 ::
 
-    with Download(extra_params_yaml='extraparams.yml', extra_params_lookup='mykey') as downloader:
+    with Download(user_agent='test', extra_params_yaml='extraparams.yml', extra_params_lookup='mykey') as downloader:
         response = downloader.download(url)  # get requests library response
         json = response.json()
 
@@ -54,6 +56,15 @@ in basic_auth and add the parameter locale=en to each request
         # Read row by row from tabular file
         for row in downloader.get_tabular_rows('http://myurl/my.csv', dict_rows=True, headers=1)
             a = row['col']
+
+If we want a user agent that will be used in all relevant HDX Python Utilities
+methods (and all HDX Python API ones too if that library is included), then it
+can be configured once and used automatically:
+::
+
+    UserAgent.configure_user_agent('test')
+    with Download() as downloader:
+        response = downloader.download(url)  # get requests library response
 
 Other useful functions:
 
@@ -229,7 +240,9 @@ Examples:
 ::
 
     # Get soup for url with optional kwarg downloader=Download() object
-    soup = get_soup('http://myurl')
+    soup = get_soup('http://myurl', user_agent='test')
+    # user agent can be set globally using:
+    # UserAgent.configure_user_agent('test')
     tag = soup.find(id='mytag')
 
     # Get text of tag stripped of leading and trailing whitespace
@@ -414,6 +427,28 @@ Examples:
     c = 'The quick brown fox climbed over the lazy dog. It was so fast!'
     result = get_matching_text([a, b, c], match_min_size=10)
     assert result == ' brown fox  over the  It was so fast!'
+
+
+Raise from
+~~~~~~~~~~
+
+Examples:
+::
+
+    # Raise an exception from another exception on Py2 or Py3
+    except IOError as e:
+        raisefrom(IOError, 'My Error Message', e)
+
+
+Valid UUID
+~~~~~~~~~~
+
+Examples:
+::
+
+    assert is_valid_uuid('jpsmith') is False
+    assert is_valid_uuid('c9bf9e57-1685-4c89-bafb-ff5af830be8a') is True
+
 
 .. |Build_Status| image:: https://travis-ci.org/OCHA-DAP/hdx-python-utilities.svg?branch=master
     :alt: Travis-CI Build Status

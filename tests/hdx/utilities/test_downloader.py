@@ -11,10 +11,15 @@ import pytest
 
 from hdx.utilities.downloader import Download, DownloadError
 from hdx.utilities.session import SessionError
+from hdx.utilities.useragent import UserAgent
 
 
 class TestDownloader:
     downloaderfoldername = 'downloader'
+
+    @pytest.fixture(scope='class', autouse=True)
+    def useragent(self):
+        UserAgent.configure('test')
 
     @pytest.fixture(scope='class')
     def downloaderfolder(self, fixturesfolder):

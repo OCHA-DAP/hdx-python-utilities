@@ -29,6 +29,9 @@ class Download(object):
     """Download class with various download operations. Currently only GET requests are used and supported.
 
     Args:
+        user_agent (Optional[str]): User agent string. HDXPythonUtilities/X.X.X- is prefixed. Must be supplied if remoteckan is not.
+        user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.
+        user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
         **kwargs: See below
         auth (Tuple[str, str]): Authorisation information in tuple form (user, pass) OR
         basic_auth (str): Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
@@ -40,9 +43,10 @@ class Download(object):
         status_forcelist (List[int]): HTTP statuses for which to force retry
         method_whitelist (iterable): HTTP methods for which to force retry. Defaults t0 frozenset(['GET']).
     """
-    def __init__(self, **kwargs):
-        # type: (Any) -> None
-        self.session = get_session(**kwargs)
+
+    def __init__(self, user_agent=None, user_agent_config_yaml=None, user_agent_lookup=None, **kwargs):
+        # type: (Optional[str], Optional[str], Optional[str], Any) -> None
+        self.session = get_session(user_agent, user_agent_config_yaml, user_agent_lookup, **kwargs)
         self.response = None
 
     def close_response(self):
@@ -192,7 +196,7 @@ class Download(object):
                 self.response = self.session.get(self.get_url_for_get(url, parameters), stream=stream, timeout=timeout)
             self.response.raise_for_status()
         except Exception as e:
-            raisefrom(DownloadError, 'Setup of Streaming Download of %s failed!', e)
+            raisefrom(DownloadError, 'Setup of Streaming Download of %s failed!' % url, e)
         return self.response
 
     def hash_stream(self, url):
