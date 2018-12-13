@@ -62,7 +62,7 @@ methods (and all HDX Python API ones too if that library is included), then it
 can be configured once and used automatically:
 ::
 
-    UserAgent.configure_user_agent('test')
+    UserAgent.set_global('test')
     with Download() as downloader:
         response = downloader.download(url)  # get requests library response
 
@@ -242,7 +242,7 @@ Examples:
     # Get soup for url with optional kwarg downloader=Download() object
     soup = get_soup('http://myurl', user_agent='test')
     # user agent can be set globally using:
-    # UserAgent.configure_user_agent('test')
+    # UserAgent.set_global('test')
     tag = soup.find(id='mytag')
 
     # Get text of tag stripped of leading and trailing whitespace

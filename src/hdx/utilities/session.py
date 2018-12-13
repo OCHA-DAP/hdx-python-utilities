@@ -21,10 +21,11 @@ class SessionError(Exception):
 
 def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=None, **kwargs):
     # type: (Optional[str], Optional[str], Optional[str], Any) -> requests.Session
-    """Set up and return Session object that is set up with retrying
+    """Set up and return Session object that is set up with retrying. Requires either global user agent to be set or
+    appropriate user agent parameter(s) to be completed.
 
     Args:
-        user_agent (Optional[str]): User agent string. HDXPythonUtilities/X.X.X- is prefixed. Must be supplied if remoteckan is not.
+        user_agent (Optional[str]): User agent string. HDXPythonUtilities/X.X.X- is prefixed.
         user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.
         user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
         **kwargs: See below

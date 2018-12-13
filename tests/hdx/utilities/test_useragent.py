@@ -33,27 +33,28 @@ class TestUserAgent:
     def test_user_agent(self, monkeypatch, user_agent_config_yaml, user_agent_config2_yaml, user_agent_config3_yaml,
                         empty_yaml, user_agent_config_wrong_yaml):
         version = get_utils_version()
-        UserAgent.configure(user_agent_config_yaml=user_agent_config_yaml)
-        assert UserAgent.get() == 'lala:HDXPythonUtilities/%s-myua' % version
-        UserAgent.configure(user_agent_config_yaml=user_agent_config2_yaml)
-        assert UserAgent.get() == 'HDXPythonUtilities/%s-myuseragent' % version
-        UserAgent.configure(user_agent_config_yaml=user_agent_config3_yaml, user_agent_lookup='lookup')
-        assert UserAgent.get() == 'HDXPythonUtilities/%s-mylookupagent' % version
-        UserAgent.configure(user_agent_config_yaml=user_agent_config3_yaml, user_agent_lookup='lookup2')
-        assert UserAgent.get() == 'HDXPythonUtilities/%s-mylookupagent2' % version
-        UserAgent.clear()
+        assert UserAgent.get(
+            user_agent_config_yaml=user_agent_config_yaml) == 'lala:HDXPythonUtilities/%s-myua' % version
+        assert UserAgent.get(
+            user_agent_config_yaml=user_agent_config2_yaml) == 'HDXPythonUtilities/%s-myuseragent' % version
+        assert UserAgent.get(user_agent_config_yaml=user_agent_config3_yaml,
+                             user_agent_lookup='lookup') == 'HDXPythonUtilities/%s-mylookupagent' % version
         assert UserAgent.get(user_agent='my_ua', preprefix='papa') == 'papa:HDXPythonUtilities/%s-my_ua' % version
+        UserAgent.set_global(user_agent_config_yaml=user_agent_config3_yaml, user_agent_lookup='lookup2')
+        assert UserAgent.get() == 'HDXPythonUtilities/%s-mylookupagent2' % version
+        UserAgent.clear_global()
         with pytest.raises(UserAgentError):
-            UserAgent.configure(user_agent_config_yaml=user_agent_config3_yaml, user_agent_lookup='fail')
+            UserAgent.get(user_agent_config_yaml=user_agent_config3_yaml, user_agent_lookup='fail')
         with pytest.raises(LoadError):
-            UserAgent.configure(user_agent_config_yaml=empty_yaml)
+            UserAgent.get(user_agent_config_yaml=empty_yaml)
         with pytest.raises(UserAgentError):
-            UserAgent.configure(user_agent_config_yaml=user_agent_config_wrong_yaml)
+            UserAgent.get(user_agent_config_yaml=user_agent_config_wrong_yaml)
         with pytest.raises(UserAgentError):
-            UserAgent.configure()
-        UserAgent.clear()
+            UserAgent.get(user_agent_config_yaml='')
         with pytest.raises(UserAgentError):
             UserAgent.get()
+        with pytest.raises(UserAgentError):
+            UserAgent._load(prefix='', user_agent_config_yaml='')
         my_user_agent = 'lala'
         monkeypatch.setenv('USER_AGENT', my_user_agent)
         assert UserAgent.get() == 'HDXPythonUtilities/%s-%s' % (version, my_user_agent)
@@ -62,3 +63,4 @@ class TestUserAgent:
         assert UserAgent.get() == '%s:HDXPythonUtilities/%s-%s' % (my_preprefix, version, my_user_agent)
         my_prefix = 'HDXPythonLibrary/%s' % version
         assert UserAgent.get(prefix=my_prefix) == '%s:%s-%s' % (my_preprefix, my_prefix, my_user_agent)
+        UserAgent.clear_global()

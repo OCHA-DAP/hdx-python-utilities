@@ -57,8 +57,7 @@ class UserAgent(object):
 
         """
         if not ua:
-            raise UserAgentError(
-                "user_agent should be supplied in a YAML config file or directly as a parameter. It can be your project's name for example.")
+            raise UserAgentError("User_agent parameter missing. It can be your project's name for example.")
         preprefix = configdict.get('preprefix')
         if preprefix:
             user_agent = '%s:' % preprefix
@@ -90,7 +89,7 @@ class UserAgent(object):
                 'No user agent or user agent config file given. Using default user agent config file: %s.' % user_agent_config_yaml)
         if not isfile(user_agent_config_yaml):
             raise UserAgentError(
-                "User_agent should be supplied in a YAML config file or directly as a parameter. It can be your project's name for example.")
+                "User_agent should be supplied in a YAML config file. It can be your project's name for example.")
         logger.info('Loading user agent config from: %s' % user_agent_config_yaml)
         user_agent_config_dict = load_yaml(user_agent_config_yaml)
         if user_agent_lookup:
@@ -101,42 +100,8 @@ class UserAgent(object):
         return cls._construct(user_agent_config_dict, prefix, ua)
 
     @classmethod
-    def clear(cls):
-        # type: () -> None
-        """
-        Clear stored user agent string
-
-        Returns:
-            None
-
-        """
-        cls.user_agent = None
-
-    @classmethod
-    def get(cls, user_agent=None, user_agent_config_yaml=None, user_agent_lookup=None, **kwargs):
-        # type: (Optional[str], Optional[str], Optional[str], Any) -> str
-        """
-        Get full user agent string
-
-        Args:
-            user_agent (Optional[str]): User agent string. HDXPythonLibrary/X.X.X- is prefixed.
-            user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.
-            user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
-
-        Returns:
-            str: Full user agent string
-
-        """
-        if user_agent or user_agent_config_yaml or 'user_agent' in UserAgent._environment_variables(**kwargs):
-            UserAgent.configure(user_agent, user_agent_config_yaml, user_agent_lookup, **kwargs)
-        if cls.user_agent:
-            return cls.user_agent
-        else:
-            raise UserAgentError('User agent has not been configured!')
-
-    @classmethod
-    def configure(cls, user_agent=None, user_agent_config_yaml=None,
-                  user_agent_lookup=None, **kwargs):
+    def _create(cls, user_agent=None, user_agent_config_yaml=None,
+                user_agent_lookup=None, **kwargs):
         # type: (Optional[str], Optional[str], Optional[str], Any) -> str
         """
         Get full user agent string
@@ -163,5 +128,56 @@ class UserAgent(object):
             ua = cls._load(prefix, user_agent_config_yaml, user_agent_lookup)
         else:
             ua = cls._construct(kwargs, prefix, user_agent)
-        cls.user_agent = ua
         return ua
+
+    @classmethod
+    def clear_global(cls):
+        # type: () -> None
+        """
+        Clear stored user agent string
+
+        Returns:
+            None
+
+        """
+        cls.user_agent = None
+
+    @classmethod
+    def set_global(cls, user_agent=None, user_agent_config_yaml=None,
+                   user_agent_lookup=None, **kwargs):
+        # type: (Optional[str], Optional[str], Optional[str], Any) -> None
+        """
+        Set global user agent string
+
+        Args:
+            user_agent (Optional[str]): User agent string. HDXPythonLibrary/X.X.X- is prefixed.
+            user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.
+            user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
+
+        Returns:
+            None
+        """
+        cls.user_agent = cls._create(user_agent, user_agent_config_yaml, user_agent_lookup, **kwargs)
+
+    @classmethod
+    def get(cls, user_agent=None, user_agent_config_yaml=None, user_agent_lookup=None, **kwargs):
+        # type: (Optional[str], Optional[str], Optional[str], Any) -> str
+        """
+        Get full user agent string from parameters if supplied falling back on global user agent if set.
+
+        Args:
+            user_agent (Optional[str]): User agent string. HDXPythonLibrary/X.X.X- is prefixed.
+            user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.
+            user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
+
+        Returns:
+            str: Full user agent string
+
+        """
+        if user_agent or user_agent_config_yaml or 'user_agent' in UserAgent._environment_variables(**kwargs):
+            return UserAgent._create(user_agent, user_agent_config_yaml, user_agent_lookup, **kwargs)
+        if cls.user_agent:
+            return cls.user_agent
+        else:
+            raise UserAgentError(
+                'You must either set the global user agent: UserAgent.set_global(...) or pass in user agent parameters!')

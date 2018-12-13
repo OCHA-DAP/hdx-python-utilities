@@ -27,9 +27,10 @@ class DownloadError(Exception):
 
 class Download(object):
     """Download class with various download operations. Currently only GET requests are used and supported.
+    Requires either global user agent to be set or appropriate user agent parameter(s) to be completed.
 
     Args:
-        user_agent (Optional[str]): User agent string. HDXPythonUtilities/X.X.X- is prefixed. Must be supplied if remoteckan is not.
+        user_agent (Optional[str]): User agent string. HDXPythonUtilities/X.X.X- is prefixed.
         user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.
         user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
         **kwargs: See below

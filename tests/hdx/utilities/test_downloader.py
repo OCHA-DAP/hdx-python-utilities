@@ -19,7 +19,9 @@ class TestDownloader:
 
     @pytest.fixture(scope='class', autouse=True)
     def useragent(self):
-        UserAgent.configure('test')
+        UserAgent.set_global('test')
+        yield
+        UserAgent.clear_global()
 
     @pytest.fixture(scope='class')
     def downloaderfolder(self, fixturesfolder):
