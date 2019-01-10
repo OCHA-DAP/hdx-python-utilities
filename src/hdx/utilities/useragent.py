@@ -27,7 +27,7 @@ class UserAgent(object):
 
         Args:
             **kwargs: See below
-            user_agent (Optional[str]): User agent string.
+            user_agent (str): User agent string.
 
         Returns:
             kwargs: Changed keyword arguments

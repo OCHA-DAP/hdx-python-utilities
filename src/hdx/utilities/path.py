@@ -57,12 +57,13 @@ def get_temp_dir():
 
 
 @contextlib.contextmanager
-def temp_dir(folder=None):
-    # type: (Optional[str]) -> str
+def temp_dir(folder=None, delete=True):
+    # type: (Optional[str], bool) -> str
     """Get a temporary directory optionally with folder appended (and created if it doesn't exist)
 
     Args:
         folder (Optional[str]): Folder to create in temporary folder. Defaults to None.
+        delete (bool): Whether to delete folder on exiting with statement
 
     Returns:
         str: A temporary directory
@@ -75,4 +76,5 @@ def temp_dir(folder=None):
     try:
         yield tempdir
     finally:
-        rmtree(tempdir)
+        if delete:
+            rmtree(tempdir)
