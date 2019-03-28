@@ -1,11 +1,11 @@
 # -*- coding: UTF-8 -*-
 """Saver Tests"""
-import filecmp
 from collections import OrderedDict
 from os.path import join
 
 import pytest
 
+from hdx.utilities.compare import assert_files_same
 from hdx.utilities.saver import save_yaml, save_json
 
 
@@ -44,7 +44,7 @@ class TestLoader:
         test_path = join(str(tmpdir), filename)
         ref_path = join(saverfolder, filename)
         save_yaml(TestLoader.yaml_to_write, test_path, pretty=pretty, sortkeys=sortkeys)
-        assert filecmp.cmp(test_path, ref_path, shallow=False) is True, '%s does not match %s!' % (test_path, ref_path)
+        assert_files_same(ref_path, test_path)
 
     @pytest.mark.parametrize('filename,pretty,sortkeys', [
         ('pretty-false_sortkeys-false.json', False, False),
@@ -56,4 +56,4 @@ class TestLoader:
         test_path = join(str(tmpdir), filename)
         ref_path = join(saverfolder, filename)
         save_json(TestLoader.json_to_write, test_path, pretty=pretty, sortkeys=sortkeys)
-        assert filecmp.cmp(test_path, ref_path, shallow=False) is True, '%s does not match %s!' % (test_path, ref_path)
+        assert_files_same(ref_path, test_path)
