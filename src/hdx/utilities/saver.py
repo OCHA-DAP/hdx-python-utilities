@@ -8,6 +8,10 @@ import yaml
 import yamlloader
 
 
+def represent_none(self, _):
+    return self.represent_scalar('tag:yaml.org,2002:null', '')
+
+
 def save_yaml(dictionary, path, pretty=False, sortkeys=False):
     # type: (Dict, str, bool, bool) -> None
     """Save dictionary to YAML file preserving order if it is an OrderedDict
@@ -27,7 +31,7 @@ def save_yaml(dictionary, path, pretty=False, sortkeys=False):
         if pretty:
             pyaml.dump(dictionary, f)
         else:
-            yaml.dump(dictionary, f, Dumper=yamlloader.ordereddict.CDumper)
+            yaml.dump(dictionary, f, default_flow_style=None, Dumper=yamlloader.ordereddict.CDumper)
 
 
 def save_json(dictionary, path, pretty=False, sortkeys=False):
