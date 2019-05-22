@@ -86,5 +86,5 @@ test'''
             assert result == TestLoader.expected_text_strip
             result = load_file_to_str(text_file, replace_newlines=' ')
             assert result == TestLoader.expected_text_newlines_to_spaces
-            with pytest.raises(FileNotFoundError):
+            with pytest.raises(IOError):
                 load_file_to_str(join(tmpdir, 'NOTEXIST.txt'))
