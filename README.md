@@ -1,5 +1,4 @@
-![Build\_Status](https://travis-ci.org/OCHA-DAP/hdx-python-utilities.svg?branch=master%0A%20:alt:%20Travis-CI%20Build%20Status%0A%20:target:%20https://travis-ci.org/OCHA-DAP/hdx-python-utilities)
-![Coverage\_Status](https://coveralls.io/repos/github/OCHA-DAP/hdx-python-utilities/badge.svg?branch=master%0A%20:alt:%20Coveralls%20Build%20Status%0A%20:target:%20https://coveralls.io/github/OCHA-DAP/hdx-python-utilities?branch=master)
+[![Build Status](https://travis-ci.org/OCHA-DAP/hdx-python-utilities.svg?branch=master&ts=1)](https://travis-ci.org/OCHA-DAP/hdx-python-utilities) [![Coverage Status](https://coveralls.io/repos/github/OCHA-DAP/hdx-python-utilities/badge.svg?branch=master&ts=1)](https://coveralls.io/github/OCHA-DAP/hdx-python-utilities?branch=master)
 
 The HDX Python Utilities Library provides a range of helpful utilities:
 
@@ -19,12 +18,12 @@ The HDX Python Utilities Library provides a range of helpful utilities:
 This library is part of the [Humanitarian Data Exchange](https://data.humdata.org/) (HDX) project. If you have 
 humanitarian related data, please upload your datasets to HDX.
 
-# Usage
+### Usage
 
 The library has detailed API documentation which can be found here: <http://ocha-dap.github.io/hdx-python-utilities/>. 
 The code for the library is here: <https://github.com/ocha-dap/hdx-python-utilities>.
 
-## Downloading files
+#### Downloading files
 
 
 Various utilities to help with downloading files. Includes retrying by default.
@@ -64,15 +63,15 @@ Other useful functions:
     # Build get url from url and dictionary of parameters
     Download.get_url_for_get('http://www.lala.com/hdfa?a=3&b=4',
                              OrderedDict([('c', 'e'), ('d', 'f')]))
-        # == 'http://www.lala.com/hdfa?a=3&b=4&c=e&d=f'
+    # == 'http://www.lala.com/hdfa?a=3&b=4&c=e&d=f'
 
     # Extract url and dictionary of parameters from get url
     Download.get_url_params_for_post('http://www.lala.com/hdfa?a=3&b=4',
                                      OrderedDict([('c', 'e'), ('d', 'f')]))
-        # == ('http://www.lala.com/hdfa',
+    # == ('http://www.lala.com/hdfa',
               OrderedDict([('a', '3'), ('b', '4'), ('c', 'e'), ('d', 'f')]))
 
-## Loading and Saving JSON and YAML
+#### Loading and Saving JSON and YAML
 
 Examples:
 
@@ -102,7 +101,7 @@ Examples:
     # sorting the keys
     save_json(mydict, 'mypath.json', pretty=False, sortkeys=False)
 
-## Database utilities
+#### Database utilities
 
 These are built on top of SQLAlchemy and simplify its setup.
 
@@ -132,7 +131,7 @@ Examples:
     # Wait util PostgreSQL is up
     Database.wait_for_postgres('mydatabase', 'myserver', 5432, 'myuser', 'mypass')
 
-## Dictionary and list utilities
+#### Dictionary and list utilities
 
 Examples:
 
@@ -208,11 +207,11 @@ Examples:
                     {'h1': '4', 'h2': '5', 'h4': 'b', 'h3': '6'},
                     {'h1': '7', 'h2': '8', 'h4': 'c', 'h3': '9'}]
 
-    # Convert command line arguments to dictionary
+    ### Convert command line arguments to dictionary
     args = 'a=1,big=hello,1=3'
     assert args_to_dict(args) == {'a': '1', 'big': 'hello', '1': '3'}
 
-## HTML utilities
+#### HTML utilities
 
 These are built on top of BeautifulSoup and simplify its setup.
 
@@ -231,7 +230,7 @@ Examples:
     # Extract HTML table as list of dictionaries
     result = extract_table(tabletag)
 
-## Compare files
+#### Compare files
 
 Compare two files:
 
@@ -240,7 +239,7 @@ Compare two files:
     # ["- coal   ,3      ,7.4    ,'needed'\n", '?         ^\n',
     #  "+ coal   ,1      ,7.4    ,'notneeded'\n", '?         ^                +++\n']
 
-## Emailing
+#### Emailing
 
 Example of setup and sending email:
 
@@ -279,7 +278,7 @@ Example of setup and sending email:
     with Email(email_config_dict=email_config_dict) as email:
         email.send(recipients, subject, text_body, sender=sender)
 
-## Configuring Logging
+#### Configuring Logging
 
 The library provides coloured logs with a simple default setup which
 should be adequate for most cases. If you wish to change the logging
@@ -331,7 +330,7 @@ Then use the logger like this:
     logger.error('ERROR message')
     logger.critical('CRITICAL error message')
 
-## Path utilities
+#### Path utilities
 
 Examples:
 
@@ -352,11 +351,11 @@ Examples:
     # Get current directory of script with filename appended
     path = script_dir_plus_file('myfile.txt', ANY_PYTHON_OBJECT_IN_SCRIPT)
 
-## Text processing
+#### Text processing
 
 Examples:
 
-    # Replace multiple strings in a string simultaneously
+    ### Replace multiple strings in a string simultaneously
     a = 'The quick brown fox jumped over the lazy dog. It was so fast!'
     result = multiple_replace(a, {'quick': 'slow', 'fast': 'slow', 'lazy': 'busy'})
     assert result == 'The slow brown fox jumped over the busy dog. It was so slow!'
@@ -372,7 +371,7 @@ Examples:
     result = get_matching_text([a, b, c], match_min_size=10)
     assert result == ' brown fox  over the  It was so fast!'
 
-## Raise from
+#### Raise from
 
 Examples:
 
@@ -380,14 +379,14 @@ Examples:
     except IOError as e:
         raisefrom(IOError, 'My Error Message', e)
 
-## Valid UUID
+#### Valid UUID
 
 Examples:
 
     assert is_valid_uuid('jpsmith') is False
     assert is_valid_uuid('c9bf9e57-1685-4c89-bafb-ff5af830be8a') is True
 
-## Easy building and packaging
+#### Easy building and packaging
 
 The **clean** command of setup.py has been extended to use the --all flag by default and to clean the **dist**. Two new 
 commands folder have been created. **package** calls the new clean command and also **sdist** and also **bdist_wheel**.
