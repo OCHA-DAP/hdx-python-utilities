@@ -5,7 +5,7 @@ from os.path import join
 from setuptools import setup, find_packages
 
 sys.path.append('src')  # Only needed for this project
-from hdx.utilities import CleanMore
+from hdx.utilities import CleanCommand, PackageCommand, PublishCommand
 from hdx.utilities.loader import load_file_to_str
 
 requirements = ['basicauth',
@@ -17,7 +17,7 @@ requirements = ['basicauth',
                 'pyaml',
                 'six>=1.12.0',
                 'sshtunnel',
-                'tabulator>=1.19.0',
+                'tabulator>=1.20.0',
                 'typing',
                 'yamlloader'
                 ]
@@ -52,5 +52,5 @@ setup(
     zip_safe=True,
     classifiers=classifiers,
     install_requires=requirements,
-    cmdclass={'clean': CleanMore}
+    cmdclass={'clean': CleanCommand, 'package': PackageCommand, 'publish': PublishCommand},
 )
