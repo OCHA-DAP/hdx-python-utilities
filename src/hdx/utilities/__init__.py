@@ -10,7 +10,7 @@ from uuid import UUID
 import six
 from setuptools import Command
 
-from hdx.utilities.version import get_utils_version
+project_version = None
 
 
 def raisefrom(exc_type, message, exc):
@@ -103,7 +103,9 @@ class PublishCommand(Command):
         log.info('Uploading the package to PyPI using twine...')
         os.system('twine upload dist/*')
 
-        log.info('Pushing git tags...')
-        os.system('git tag v{0}'.format(get_utils_version()))
-        os.system('git push --tags')
+        if project_version:
+            log.info('Pushing git tags...')
+            os.system('git tag v{0}'.format(project_version))
+            os.system('git push --tags')
+
         sys.exit()
