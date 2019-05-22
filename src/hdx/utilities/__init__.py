@@ -10,8 +10,6 @@ from uuid import UUID
 import six
 from setuptools import Command
 
-project_version = None
-
 
 def raisefrom(exc_type, message, exc):
     # type: (Any, str, BaseException) -> None
@@ -90,6 +88,7 @@ class PublishCommand(Command):
     """Publish command for setup.py that creates git tags and publishes to pypi.
     Requires that twine and git be installed."""
 
+    version = None
     description = 'Publish the packages.'
     user_options = []
 
@@ -103,9 +102,9 @@ class PublishCommand(Command):
         log.info('Uploading the package to PyPI using twine...')
         os.system('twine upload dist/*')
 
-        if project_version:
+        if PublishCommand.version:
             log.info('Pushing git tags...')
-            os.system('git tag v{0}'.format(project_version))
+            os.system('git tag v{0}'.format(PublishCommand.version))
             os.system('git push --tags')
 
         sys.exit()
