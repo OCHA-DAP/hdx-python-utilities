@@ -1,56 +1,10 @@
 # -*- coding: utf-8 -*-
-import inspect
-import sys
-from codecs import open
-from os.path import join, abspath, realpath, dirname
+from os.path import join
 
 from setuptools import setup, find_packages
 
-
-# Sadly we cannot use the utilities here because of the typing module which isn't in Python < 3.5
-def script_dir(pyobject, follow_symlinks=True):
-    """Get current script's directory
-
-    Args:
-        pyobject (Any): Any Python object in the script
-        follow_symlinks (Optional[bool]): Follow symlinks or not. Defaults to True.
-
-    Returns:
-        str: Current script's directory
-    """
-    if getattr(sys, 'frozen', False):  # py2exe, PyInstaller, cx_Freeze
-        path = abspath(sys.executable)
-    else:
-        path = inspect.getabsfile(pyobject)
-    if follow_symlinks:
-        path = realpath(path)
-    return dirname(path)
-
-
-def script_dir_plus_file(filename, pyobject, follow_symlinks=True):
-    """Get current script's directory and then append a filename
-
-    Args:
-        filename (str): Filename to append to directory path
-        pyobject (Any): Any Python object in the script
-        follow_symlinks (Optional[bool]): Follow symlinks or not. Defaults to True.
-
-    Returns:
-        str: Current script's directory and with filename appended
-    """
-    return join(script_dir(pyobject, follow_symlinks), filename)
-
-
-def get_version():
-    version_file = open(script_dir_plus_file(join('src', 'hdx', 'utilities', 'version.txt'), get_version),
-                        encoding='utf-8')
-    return version_file.read().strip()
-
-
-def get_readme():
-    readme_file = open(script_dir_plus_file('README.rst', get_readme), encoding='utf-8')
-    return readme_file.read()
-
+from hdx.utilities import CleanMore
+from hdx.utilities.loader import load_file_to_str
 
 requirements = ['basicauth',
                 'beautifulsoup4',
@@ -83,11 +37,11 @@ setup(
     description='HDX Python Utilities',
     license='MIT',
     url='https://github.com/OCHA-DAP/hdx-python-utilities',
-    version=get_version(),
+    version=load_file_to_str(join('src', 'hdx', 'version.txt'), strip=True),
     author='Michael Rans',
     author_email='rans@email.com',
     keywords=['HDX', 'utilities', 'library', 'country', 'iso 3166'],
-    long_description=get_readme(),
+    long_description=load_file_to_str('README.rst'),
     packages=find_packages(where='src'),
     package_dir={'': 'src'},
     include_package_data=True,
@@ -96,4 +50,5 @@ setup(
     zip_safe=True,
     classifiers=classifiers,
     install_requires=requirements,
+    cmdclass={'clean': CleanMore}
 )

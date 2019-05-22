@@ -1,4 +1,9 @@
 import sys
+from distutils import log
+from distutils.command.clean import clean
+from os.path import exists
+from shutil import rmtree
+from typing import Any
 from uuid import UUID
 
 import six
@@ -40,3 +45,20 @@ def is_valid_uuid(uuid_to_test, version=4):
     except:
         return False
     return str(uuid_obj) == uuid_to_test
+
+
+class CleanMore(clean):
+    """
+    Custom implementation of ``clean`` setuptools command."""
+
+    def run(self):  # pragma: no cover
+        """After calling the super class implementation, this function removes
+        the dist directory if it exists."""
+        self.all = True  # --all by default when cleaning
+        super(CleanMore, self).run()
+        dir_ = 'dist'
+        if exists(dir_):
+            log.info("removing '%s' (and everything under it)", dir_)
+            rmtree(dir_)
+        else:
+            log.info("'%s' does not exist -- can't clean it", dir_)

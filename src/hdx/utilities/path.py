@@ -63,7 +63,7 @@ def temp_dir(folder=None, delete=True):
 
     Args:
         folder (Optional[str]): Folder to create in temporary folder. Defaults to None.
-        delete (bool): Whether to delete folder on exiting with statement
+        delete (bool): Whether to delete folder (assuming folder arg supplied) on exiting with statement
 
     Returns:
         str: A temporary directory
@@ -76,5 +76,5 @@ def temp_dir(folder=None, delete=True):
     try:
         yield tempdir
     finally:
-        if delete:
+        if folder and delete:
             rmtree(tempdir)

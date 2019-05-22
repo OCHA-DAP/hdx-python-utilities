@@ -7,7 +7,7 @@ from typing import Any, Optional
 import requests
 from basicauth import decode
 from requests.adapters import HTTPAdapter
-from requests.packages.urllib3 import Retry
+from urllib3.util import Retry
 
 from hdx.utilities.loader import load_file_to_str, load_json, load_yaml
 from hdx.utilities.useragent import UserAgent
@@ -115,7 +115,7 @@ def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=
         if auth_found:
             raise SessionError('More than one authorisation given!')
         logger.info('Loading authorisation from: %s' % basic_auth_file)
-        basic_auth = load_file_to_str(basic_auth_file)
+        basic_auth = load_file_to_str(basic_auth_file, strip=True)
     if basic_auth:
         auth = decode(basic_auth)
     s.auth = auth
