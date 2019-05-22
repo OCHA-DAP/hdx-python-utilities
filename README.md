@@ -236,8 +236,10 @@ Compare two files:
 
     result = compare_files(testfile1, testfile2)
     # Result is of form eg.:
-    # ["- coal   ,3      ,7.4    ,'needed'\n", '?         ^\n',
-    #  "+ coal   ,1      ,7.4    ,'notneeded'\n", '?         ^                +++\n']
+    # ["- coal   ,3      ,7.4    ,'needed'\n",
+    #  '?         ^\n',
+    #  "+ coal   ,1      ,7.4    ,'notneeded'\n",
+    #  '?         ^                +++\n']
 
 ### Emailing
 
