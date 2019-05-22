@@ -1,47 +1,42 @@
-|Build_Status| |Coverage_Status|
+![Build\_Status](https://travis-ci.org/OCHA-DAP/hdx-python-utilities.svg?branch=master%0A%20:alt:%20Travis-CI%20Build%20Status%0A%20:target:%20https://travis-ci.org/OCHA-DAP/hdx-python-utilities)
+![Coverage\_Status](https://coveralls.io/repos/github/OCHA-DAP/hdx-python-utilities/badge.svg?branch=master%0A%20:alt:%20Coveralls%20Build%20Status%0A%20:target:%20https://coveralls.io/github/OCHA-DAP/hdx-python-utilities?branch=master)
 
 The HDX Python Utilities Library provides a range of helpful utilities:
 
-1. `Easy downloading of files with support for authentication, streaming and hashing <#downloading-files>`__
-#. `Loading and saving JSON and YAML (inc. with OrderedDict) <#loading-and-saving-json-and-yaml>`__
-#. `Database utilities (inc. connecting through SSH and SQLAlchemy helpers) <#database-utilities>`__
-#. `Dictionary and list utilities <#dictionary-and-list-utilities>`__
-#. `HTML utilities (inc. BeautifulSoup helper) <#html-utilities>`__
-#. `Compare files (eg. for testing) <#compare-files>`__
-#. `Simple emailing <#emailing>`__
-#. `Easy logging setup <#configuring-logging>`__
-#. `Path utilities <#path-utilities>`__
-#. `Text processing <#text-processing>`__
-#. `Py3-like raise from for Py2 <#raise-from>`__
-#. `Check valid UUID <#valid-uuid>`__
+1.  [Easy downloading of files with support for authentication, streaming and hashing](#downloading-files)
+1.  [Loading and saving JSON and YAML (inc. with OrderedDict)](#loading-and-saving-json-and-yaml)
+1.  [Database utilities (inc. connecting through SSH and SQLAlchemy helpers)](#database-utilities)
+1.  [Dictionary and list utilities](#dictionary-and-list-utilities)
+1.  [HTML utilities (inc. BeautifulSoup helper)](#html-utilities)
+1.  [Compare files (eg. for testing)](#compare-files)
+1.  [Simple emailing](#emailing)
+1.  [Easy logging setup](#configuring-logging)
+1.  [Path utilities](#path-utilities)
+1. [Text processing](#text-processing)
+1. [Py3-like raise from for Py2](#raise-from)
+1. [Check valid UUID](#valid-uuid)
 
-
-This library is part of the `Humanitarian Data Exchange`_ (HDX) project. If you have
+This library is part of the [Humanitarian Data Exchange](https://data.humdata.org/) (HDX) project. If you have 
 humanitarian related data, please upload your datasets to HDX.
 
-Usage
------
+# Usage
 
-The library has detailed API documentation which can be found
-here: \ http://ocha-dap.github.io/hdx-python-utilities/. The code for the
-library is here: \ https://github.com/ocha-dap/hdx-python-utilities.
+The library has detailed API documentation which can be found here: <http://ocha-dap.github.io/hdx-python-utilities/>. 
+The code for the library is here: <https://github.com/ocha-dap/hdx-python-utilities>.
 
-Downloading files
-~~~~~~~~~~~~~~~~~
+## Downloading files
+
 
 Various utilities to help with downloading files. Includes retrying by default.
 
 For example, given YAML file extraparams.yml:
-::
 
     mykey:
         basic_auth: "XXXXXXXX"
         locale: "en"
 
-We can create a downloader as shown below that will use the authentication defined
-in basic_auth and add the parameter locale=en to each request
-(eg. for get request http://myurl/lala?param1=p1&locale=en):
-::
+We can create a downloader as shown below that will use the authentication defined in basic\_auth and add the parameter 
+locale=en to each request (eg. for get request <http://myurl/lala?param1=p1&locale=en>):
 
     with Download(user_agent='test', extra_params_yaml='extraparams.yml', extra_params_lookup='mykey') as downloader:
         response = downloader.download(url)  # get requests library response
@@ -57,18 +52,14 @@ in basic_auth and add the parameter locale=en to each request
         for row in downloader.get_tabular_rows('http://myurl/my.csv', dict_rows=True, headers=1)
             a = row['col']
 
-If we want a user agent that will be used in all relevant HDX Python Utilities
-methods (and all HDX Python API ones too if that library is included), then it
-can be configured once and used automatically:
-::
+If we want a user agent that will be used in all relevant HDX Python Utilities methods (and all HDX Python API ones too 
+if that library is included), then it can be configured once and used automatically:
 
     UserAgent.set_global('test')
     with Download() as downloader:
         response = downloader.download(url)  # get requests library response
 
 Other useful functions:
-
-::
 
     # Build get url from url and dictionary of parameters
     Download.get_url_for_get('http://www.lala.com/hdfa?a=3&b=4',
@@ -81,11 +72,9 @@ Other useful functions:
         # == ('http://www.lala.com/hdfa',
               OrderedDict([('a', '3'), ('b', '4'), ('c', 'e'), ('d', 'f')]))
 
-Loading and Saving JSON and YAML
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+## Loading and Saving JSON and YAML
 
 Examples:
-::
 
     # Load YAML
     mydict = load_yaml('my_yaml.yml')
@@ -113,23 +102,18 @@ Examples:
     # sorting the keys
     save_json(mydict, 'mypath.json', pretty=False, sortkeys=False)
 
-
-Database utilities
-~~~~~~~~~~~~~~~~~~
+## Database utilities
 
 These are built on top of SQLAlchemy and simplify its setup.
 
 Your SQLAlchemy database tables must inherit from Base in
-hdx.utilities.database eg.
-::
+hdx.utilities.database eg. :
 
     from hdx.utilities.database import Base
     class MyTable(Base):
         my_col = Column(Integer, ForeignKey(MyTable2.col2), primary_key=True)
 
-
 Examples:
-::
 
     # Get SQLAlchemy session object given database parameters and
     # if needed SSH parameters. If database is PostgreSQL, will poll
@@ -148,11 +132,9 @@ Examples:
     # Wait util PostgreSQL is up
     Database.wait_for_postgres('mydatabase', 'myserver', 5432, 'myuser', 'mypass')
 
-Dictionary and list utilities
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+## Dictionary and list utilities
 
 Examples:
-::
 
     # Merge dictionaries
     d1 = {1: 1, 2: 2, 3: 3, 4: ['a', 'b', 'c']}
@@ -230,14 +212,11 @@ Examples:
     args = 'a=1,big=hello,1=3'
     assert args_to_dict(args) == {'a': '1', 'big': 'hello', '1': '3'}
 
-HTML utilities
-~~~~~~~~~~~~~~
+## HTML utilities
 
 These are built on top of BeautifulSoup and simplify its setup.
 
 Examples:
-
-::
 
     # Get soup for url with optional kwarg downloader=Download() object
     soup = get_soup('http://myurl', user_agent='test')
@@ -252,22 +231,18 @@ Examples:
     # Extract HTML table as list of dictionaries
     result = extract_table(tabletag)
 
-Compare files
-~~~~~~~~~~~~~
+## Compare files
 
 Compare two files:
-::
 
     result = compare_files(testfile1, testfile2)
     # Result is of form eg.:
     # ["- coal   ,3      ,7.4    ,'needed'\n", '?         ^\n',
     #  "+ coal   ,1      ,7.4    ,'notneeded'\n", '?         ^                +++\n']
 
-Emailing
-~~~~~~~~
+## Emailing
 
 Example of setup and sending email:
-::
 
     smtp_initargs = {
         'host': 'localhost',
@@ -304,15 +279,12 @@ Example of setup and sending email:
     with Email(email_config_dict=email_config_dict) as email:
         email.send(recipients, subject, text_body, sender=sender)
 
-Configuring Logging
-~~~~~~~~~~~~~~~~~~~
+## Configuring Logging
 
 The library provides coloured logs with a simple default setup which
 should be adequate for most cases. If you wish to change the logging
 configuration from the defaults, you will need to call 
-\ **setup_logging** with arguments.
-
-::
+**setup\_logging** with arguments.
 
     from hdx.utilities.easy_logging import setup_logging
     ...
@@ -321,60 +293,37 @@ configuration from the defaults, you will need to call 
 
 **KEYWORD ARGUMENTS** can be:
 
-+-----------+-----------------------+------+--------------------------+----------------------------+
-| Choose    | Argument              | Type | Value                    | Default                    |
-|           |                       |      |                          |                            |
-+===========+=======================+======+==========================+============================+
-| One of:   | logging\_config\_dict | dict | Logging configuration    |                            |
-|           |                       |      | dictionary               |                            |
-+-----------+-----------------------+------+--------------------------+----------------------------+
-| or        | logging\_config\_json | str  | Path to JSON Logging     |                            |
-|           |                       |      | configuration            |                            |
-+-----------+-----------------------+------+--------------------------+----------------------------+
-| or        | logging\_config\_yaml | str  | Path to YAML Logging     | Library's internal         |
-|           |                       |      | configuration            | logging\_configuration.yml |
-+-----------+-----------------------+------+--------------------------+----------------------------+
-| One of:   | smtp\_config\_dict    | dict | Email Logging            |                            |
-|           |                       |      | configuration dictionary |                            |
-+-----------+-----------------------+------+--------------------------+----------------------------+
-| or        | smtp\_config\_json    | str  | Path to JSON Email       |                            |
-|           |                       |      | Logging configuration    |                            |
-+-----------+-----------------------+------+--------------------------+----------------------------+
-| or        | smtp\_config\_yaml    | str  | Path to YAML Email       |                            |
-|           |                       |      | Logging configuration    |                            |
-+-----------+-----------------------+------+--------------------------+----------------------------+
+Choose|Argument|Type|Value|Default               
+---|---|---|---|---
+One of:|logging\_config\_dict|dict|Logging configuration<br>dictionary
+or|logging\_config\_json|str|Path to JSON<br>Logging configuration
+or| logging\_config\_yaml|str|Path to YAML<br>Logging configuration|Library's internal<br>logging\_configuration.yml
+One of:|smtp\_config\_dict|dict|Email Logging<br>configuration dictionary
+or|smtp\_config\_json|str|Path to JSON Email<br>Logging configuration 
+or|smtp\_config\_yaml|str|Path to YAML Email<br>Logging configuration 
+  
 
-Do not supply **smtp_config_dict**, **smtp_config_json** or
-**smtp_config_yaml** unless you are using the default logging
-configuration!
+Do not supply **smtp\_config\_dict**, **smtp\_config\_json** or **smtp\_config\_yaml** unless you are using the default 
+logging configuration!
 
-If you are using the default logging configuration, you have the option
-to have a default SMTP handler that sends an email in the event of a
-CRITICAL error by supplying either **smtp_config_dict**,
-**smtp_config_json** or **smtp_config_yaml**. Here is a template of a
-YAML file that can be passed as the **smtp_config_yaml** parameter:
-
-::
+If you are using the default logging configuration, you have the option to have a default SMTP handler that sends an 
+email in the event of a CRITICAL error by supplying either **smtp\_config\_dict**, **smtp\_config\_json** or 
+**smtp\_config\_yaml**. Here is a template of a YAML file that can be passed as the **smtp\_config\_yaml** parameter:
 
     handlers:
         error_mail_handler:
             toaddrs: EMAIL_ADDRESSES
             subject: "RUN FAILED: MY_PROJECT_NAME"
 
-Unless you override it, the mail server **mailhost** for the default
-SMTP handler is **localhost** and the from address **fromaddr** is
-**noreply@localhost**.
+Unless you override it, the mail server **mailhost** for the default SMTP handler is **localhost** and the from address
+**fromaddr** is <**noreply@localhost**>.
 
 To use logging in your files, simply add the line below to the top of
 each Python file:
 
-::
-
     logger = logging.getLogger(__name__)
 
 Then use the logger like this:
-
-::
 
     logger.debug('DEBUG message')
     logger.info('INFORMATION message')
@@ -382,11 +331,9 @@ Then use the logger like this:
     logger.error('ERROR message')
     logger.critical('CRITICAL error message')
 
-Path utilities
-~~~~~~~~~~~~~~
+## Path utilities
 
 Examples:
-::
 
     # Gets temporary directory from environment variable
     # TEMP_DIR and falls back to os function
@@ -405,12 +352,9 @@ Examples:
     # Get current directory of script with filename appended
     path = script_dir_plus_file('myfile.txt', ANY_PYTHON_OBJECT_IN_SCRIPT)
 
-
-Text processing
-~~~~~~~~~~~~~~~
+## Text processing
 
 Examples:
-::
 
     # Replace multiple strings in a string simultaneously
     a = 'The quick brown fox jumped over the lazy dog. It was so fast!'
@@ -428,33 +372,68 @@ Examples:
     result = get_matching_text([a, b, c], match_min_size=10)
     assert result == ' brown fox  over the  It was so fast!'
 
-
-Raise from
-~~~~~~~~~~
+## Raise from
 
 Examples:
-::
 
     # Raise an exception from another exception on Py2 or Py3
     except IOError as e:
         raisefrom(IOError, 'My Error Message', e)
 
-
-Valid UUID
-~~~~~~~~~~
+## Valid UUID
 
 Examples:
-::
 
     assert is_valid_uuid('jpsmith') is False
     assert is_valid_uuid('c9bf9e57-1685-4c89-bafb-ff5af830be8a') is True
 
+## Easy building and packaging
 
-.. |Build_Status| image:: https://travis-ci.org/OCHA-DAP/hdx-python-utilities.svg?branch=master
-    :alt: Travis-CI Build Status
-    :target: https://travis-ci.org/OCHA-DAP/hdx-python-utilities
-.. |Coverage_Status| image:: https://coveralls.io/repos/github/OCHA-DAP/hdx-python-utilities/badge.svg?branch=master
-    :alt: Coveralls Build Status
-    :target: https://coveralls.io/github/OCHA-DAP/hdx-python-utilities?branch=master
-.. _Humanitarian Data Exchange: https://data.humdata.org/
+The **clean** command of setup.py has been extended to use the --all flag by default and to clean the **dist**. Two new 
+commands folder have been created. **package** calls the new clean command and also **sdist** and also **bdist_wheel**.
+In other words, it cleans thoroughly and builds source and wheel distributions. **publish** publishes to pypi and 
+creates a git tag eg.
+
+    python setup.py clean
+    python setup.py package
+    python setup.py publish
+   
+To use these commands, create a setup.py like this: 
+
+    requirements = ['ckanapi>=4.2']
+    
+    classifiers = [
+        "Development Status :: 5 - Production/Stable",
+        "Intended Audience :: Developers",
+        "Natural Language :: English",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+        "Programming Language :: Python",
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3",
+        "Topic :: Software Development :: Libraries :: Python Modules",
+    ]
+    
+    PublishCommand.version = load_file_to_str(join('src', 'hdx', 'version.txt'), strip=True)
+    
+    setup(
+        name='hdx-python-api',
+        description='HDX Python Library',
+        license='MIT',
+        url='https://github.com/OCHA-DAP/hdx-python-api',
+        version=PublishCommand.version,
+        author='Michael Rans',
+        author_email='rans@email.com',
+        keywords=['HDX', 'API', 'library'],
+        long_description=load_file_to_str('README.rst'),
+        packages=find_packages(where='src'),
+        package_dir={'': 'src'},
+        include_package_data=True,
+        setup_requires=['pytest-runner'],
+        tests_require=['pytest'],
+        zip_safe=True,
+        classifiers=classifiers,
+        install_requires=requirements,
+        cmdclass={'clean': CleanCommand, 'package': PackageCommand, 'publish': PublishCommand},
+    )
 
