@@ -620,14 +620,18 @@ all rows will be treated as containing values.)</dd>
 <p>Downloading utilities for urls</p>
 <dl class="class">
 <dt id="hdx.utilities.downloader.Download">
-<em class="property">class </em><code class="descclassname">hdx.utilities.downloader.</code><code class="descname">Download</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.downloader.Download" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">hdx.utilities.downloader.</code><code class="descname">Download</code><span class="sig-paren">(</span><em>user_agent=None</em>, <em>user_agent_config_yaml=None</em>, <em>user_agent_lookup=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.downloader.Download" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
-<p>Download class with various download operations. Currently only GET requests are used and supported.</p>
+<p>Download class with various download operations. Currently only GET requests are used and supported.
+Requires either global user agent to be set or appropriate user agent parameter(s) to be completed.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>user_agent</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – User agent string. HDXPythonUtilities/X.X.X- is prefixed.</li>
+<li><strong>user_agent_config_yaml</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.</li>
+<li><strong>user_agent_lookup</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Lookup key for YAML. Ignored if user_agent supplied.</li>
 <li><strong>**kwargs</strong> – See below</li>
 <li><strong>auth</strong> (<em>Tuple</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em>) – Authorisation information in tuple form (user, pass) OR</li>
 <li><strong>basic_auth</strong> (<em>str</em>) – Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR</li>
@@ -1220,15 +1224,19 @@ Must call setup method first.</p>
 
 <dl class="function">
 <dt id="hdx.utilities.html.get_soup">
-<code class="descclassname">hdx.utilities.html.</code><code class="descname">get_soup</code><span class="sig-paren">(</span><em>url</em>, <em>downloader=&lt;hdx.utilities.downloader.Download object&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.html.get_soup" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get BeautifulSoup object for a url</p>
+<code class="descclassname">hdx.utilities.html.</code><code class="descname">get_soup</code><span class="sig-paren">(</span><em>url</em>, <em>downloader=None</em>, <em>user_agent=None</em>, <em>user_agent_config_yaml=None</em>, <em>user_agent_lookup=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.html.get_soup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get BeautifulSoup object for a url. Requires either global user agent to be set or appropriate user agent
+parameter(s) to be completed.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>url</strong> (<em>str</em>) – url to read</li>
-<li><strong>downloader</strong> (<a class="reference internal" href="#hdx.utilities.downloader.Download" title="hdx.utilities.downloader.Download"><em>Download</em></a>) – Download object. Defaults to Download().</li>
+<li><strong>downloader</strong> (<a class="reference internal" href="#hdx.utilities.downloader.Download" title="hdx.utilities.downloader.Download"><em>Download</em></a>) – Download object. Defaults to creating a Download object with given user agent values.</li>
+<li><strong>user_agent</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – User agent string. HDXPythonUtilities/X.X.X- is prefixed.</li>
+<li><strong>user_agent_config_yaml</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.</li>
+<li><strong>user_agent_lookup</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Lookup key for YAML. Ignored if user_agent supplied.</li>
 </ul>
 </td>
 </tr>
@@ -1272,17 +1280,23 @@ Must call setup method first.</p>
 
 <dl class="function">
 <dt id="hdx.utilities.loader.load_and_merge_json">
-<code class="descclassname">hdx.utilities.loader.</code><code class="descname">load_and_merge_json</code><span class="sig-paren">(</span><em>paths</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.loader.load_and_merge_json" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hdx.utilities.loader.</code><code class="descname">load_and_merge_json</code><span class="sig-paren">(</span><em>paths</em>, <em>encoding='utf-8'</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.loader.load_and_merge_json" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load multiple JSON files and merge into one dictionary</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>paths</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – Paths to JSON files</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>paths</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – Paths to JSON files</li>
+<li><strong>encoding</strong> (<em>str</em>) – Encoding of file. Defaults to utf-8.</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Dictionary of merged JSON files</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Dictionary of merged JSON files</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Dict</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Dict</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1290,17 +1304,23 @@ Must call setup method first.</p>
 
 <dl class="function">
 <dt id="hdx.utilities.loader.load_and_merge_yaml">
-<code class="descclassname">hdx.utilities.loader.</code><code class="descname">load_and_merge_yaml</code><span class="sig-paren">(</span><em>paths</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.loader.load_and_merge_yaml" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hdx.utilities.loader.</code><code class="descname">load_and_merge_yaml</code><span class="sig-paren">(</span><em>paths</em>, <em>encoding='utf-8'</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.loader.load_and_merge_yaml" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load multiple YAML files and merge into one dictionary</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>paths</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – Paths to YAML files</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>paths</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – Paths to YAML files</li>
+<li><strong>encoding</strong> (<em>str</em>) – Encoding of file. Defaults to utf-8.</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Dictionary of merged YAML files</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Dictionary of merged YAML files</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">Dict</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Dict</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1308,17 +1328,25 @@ Must call setup method first.</p>
 
 <dl class="function">
 <dt id="hdx.utilities.loader.load_file_to_str">
-<code class="descclassname">hdx.utilities.loader.</code><code class="descname">load_file_to_str</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.loader.load_file_to_str" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hdx.utilities.loader.</code><code class="descname">load_file_to_str</code><span class="sig-paren">(</span><em>path</em>, <em>encoding='utf-8'</em>, <em>strip=False</em>, <em>replace_newlines=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.loader.load_file_to_str" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load file into a string removing newlines</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – Path to file</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> (<em>str</em>) – Path to file</li>
+<li><strong>encoding</strong> (<em>str</em>) – Encoding of file. Defaults to utf-8.</li>
+<li><strong>strip</strong> (<em>bool</em>) – Whether to strip whitespace from start and end. Defaults to False.</li>
+<li><strong>replace_newlines</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – String with which tp replace newlines. Defaults to None (don’t replace).</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">String contents of file</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">String contents of file</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1326,17 +1354,23 @@ Must call setup method first.</p>
 
 <dl class="function">
 <dt id="hdx.utilities.loader.load_json">
-<code class="descclassname">hdx.utilities.loader.</code><code class="descname">load_json</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.loader.load_json" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hdx.utilities.loader.</code><code class="descname">load_json</code><span class="sig-paren">(</span><em>path</em>, <em>encoding='utf-8'</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.loader.load_json" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load JSON file into an ordered dictionary</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – Path to JSON file</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> (<em>str</em>) – Path to JSON file</li>
+<li><strong>encoding</strong> (<em>str</em>) – Encoding of file. Defaults to utf-8.</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Ordered dictionary containing loaded JSON file</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Ordered dictionary containing loaded JSON file</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">OrderedDict</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">OrderedDict</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1344,7 +1378,7 @@ Must call setup method first.</p>
 
 <dl class="function">
 <dt id="hdx.utilities.loader.load_json_into_existing_dict">
-<code class="descclassname">hdx.utilities.loader.</code><code class="descname">load_json_into_existing_dict</code><span class="sig-paren">(</span><em>data</em>, <em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.loader.load_json_into_existing_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hdx.utilities.loader.</code><code class="descname">load_json_into_existing_dict</code><span class="sig-paren">(</span><em>data</em>, <em>path</em>, <em>encoding='utf-8'</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.loader.load_json_into_existing_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Merge JSON file into existing dictionary</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1353,6 +1387,7 @@ Must call setup method first.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>data</strong> (<em>dict</em>) – Dictionary to merge into</li>
 <li><strong>path</strong> (<em>str</em>) – JSON file to load and merge</li>
+<li><strong>encoding</strong> (<em>str</em>) – Encoding of file. Defaults to utf-8.</li>
 </ul>
 </td>
 </tr>
@@ -1368,17 +1403,23 @@ Must call setup method first.</p>
 
 <dl class="function">
 <dt id="hdx.utilities.loader.load_yaml">
-<code class="descclassname">hdx.utilities.loader.</code><code class="descname">load_yaml</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.loader.load_yaml" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hdx.utilities.loader.</code><code class="descname">load_yaml</code><span class="sig-paren">(</span><em>path</em>, <em>encoding='utf-8'</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.loader.load_yaml" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load YAML file into an ordered dictionary</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>path</strong> (<em>str</em>) – Path to YAML file</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>path</strong> (<em>str</em>) – Path to YAML file</li>
+<li><strong>encoding</strong> (<em>str</em>) – Encoding of file. Defaults to utf-8.</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Ordered dictionary containing loaded YAML file</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Ordered dictionary containing loaded YAML file</p>
+</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">OrderedDict</td>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">OrderedDict</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1386,7 +1427,7 @@ Must call setup method first.</p>
 
 <dl class="function">
 <dt id="hdx.utilities.loader.load_yaml_into_existing_dict">
-<code class="descclassname">hdx.utilities.loader.</code><code class="descname">load_yaml_into_existing_dict</code><span class="sig-paren">(</span><em>data</em>, <em>path</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.loader.load_yaml_into_existing_dict" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hdx.utilities.loader.</code><code class="descname">load_yaml_into_existing_dict</code><span class="sig-paren">(</span><em>data</em>, <em>path</em>, <em>encoding='utf-8'</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.loader.load_yaml_into_existing_dict" title="Permalink to this definition">¶</a></dt>
 <dd><p>Merge YAML file into existing dictionary</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1395,6 +1436,7 @@ Must call setup method first.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>data</strong> (<em>dict</em>) – Dictionary to merge into</li>
 <li><strong>path</strong> (<em>str</em>) – YAML file to load and merge</li>
+<li><strong>encoding</strong> (<em>str</em>) – Encoding of file. Defaults to utf-8.</li>
 </ul>
 </td>
 </tr>
@@ -1412,6 +1454,23 @@ Must call setup method first.</p>
 <div class="section" id="module-hdx.utilities.path">
 <span id="hdx-utilities-path-module"></span><h2>hdx.utilities.path module<a class="headerlink" href="#module-hdx.utilities.path" title="Permalink to this headline">¶</a></h2>
 <p>Directory Path Utilities</p>
+<dl class="function">
+<dt id="hdx.utilities.path.get_temp_dir">
+<code class="descclassname">hdx.utilities.path.</code><code class="descname">get_temp_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.path.get_temp_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a temporary directory. Looks for environment variable TEMP_DIR and falls
+back on os.ggettempdir.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A temporary directory</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="function">
 <dt id="hdx.utilities.path.script_dir">
 <code class="descclassname">hdx.utilities.path.</code><code class="descname">script_dir</code><span class="sig-paren">(</span><em>pyobject</em>, <em>follow_symlinks=True</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.path.script_dir" title="Permalink to this definition">¶</a></dt>
@@ -1463,15 +1522,23 @@ Must call setup method first.</p>
 
 <dl class="function">
 <dt id="hdx.utilities.path.temp_dir">
-<code class="descclassname">hdx.utilities.path.</code><code class="descname">temp_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.path.temp_dir" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a temporary directory</p>
+<code class="descclassname">hdx.utilities.path.</code><code class="descname">temp_dir</code><span class="sig-paren">(</span><em>folder=None</em>, <em>delete=True</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.path.temp_dir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a temporary directory optionally with folder appended (and created if it doesn’t exist)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A temporary directory</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>folder</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Folder to create in temporary folder. Defaults to None.</li>
+<li><strong>delete</strong> (<em>bool</em>) – Whether to delete folder (assuming folder arg supplied) on exiting with statement</li>
+</ul>
+</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A temporary directory</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1483,7 +1550,7 @@ Must call setup method first.</p>
 <p>Saving utilities for YAML, JSON etc.</p>
 <dl class="function">
 <dt id="hdx.utilities.saver.save_json">
-<code class="descclassname">hdx.utilities.saver.</code><code class="descname">save_json</code><span class="sig-paren">(</span><em>dictionary</em>, <em>path</em>, <em>pretty=False</em>, <em>sortkeys=False</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.saver.save_json" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hdx.utilities.saver.</code><code class="descname">save_json</code><span class="sig-paren">(</span><em>dictionary</em>, <em>path</em>, <em>encoding='utf-8'</em>, <em>pretty=False</em>, <em>sortkeys=False</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.saver.save_json" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save dictionary to JSON file preserving order if it is an OrderedDict</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1492,6 +1559,7 @@ Must call setup method first.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>dictionary</strong> (<em>Dict</em>) – Python dictionary to save</li>
 <li><strong>path</strong> (<em>str</em>) – Path to JSON file</li>
+<li><strong>encoding</strong> (<em>str</em>) – Encoding of file. Defaults to utf-8.</li>
 <li><strong>pretty</strong> (<em>bool</em>) – Whether to pretty print. Defaults to False.</li>
 <li><strong>sortkeys</strong> (<em>bool</em>) – Whether to sort dictionary keys. Defaults to False.</li>
 </ul>
@@ -1505,8 +1573,30 @@ Must call setup method first.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="hdx.utilities.saver.save_str_to_file">
+<code class="descclassname">hdx.utilities.saver.</code><code class="descname">save_str_to_file</code><span class="sig-paren">(</span><em>string</em>, <em>path</em>, <em>encoding='utf-8'</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.saver.save_str_to_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Save string to file</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>string</strong> (<em>str</em>) – String to save</li>
+<li><strong>path</strong> (<em>str</em>) – Path to file</li>
+<li><strong>encoding</strong> (<em>str</em>) – Encoding of file. Defaults to utf-8.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="hdx.utilities.saver.save_yaml">
-<code class="descclassname">hdx.utilities.saver.</code><code class="descname">save_yaml</code><span class="sig-paren">(</span><em>dictionary</em>, <em>path</em>, <em>pretty=False</em>, <em>sortkeys=False</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.saver.save_yaml" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hdx.utilities.saver.</code><code class="descname">save_yaml</code><span class="sig-paren">(</span><em>dictionary</em>, <em>path</em>, <em>encoding='utf-8'</em>, <em>pretty=False</em>, <em>sortkeys=False</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.saver.save_yaml" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save dictionary to YAML file preserving order if it is an OrderedDict</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1515,6 +1605,7 @@ Must call setup method first.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>dictionary</strong> (<em>Dict</em>) – Python dictionary to save</li>
 <li><strong>path</strong> (<em>str</em>) – Path to YAML file</li>
+<li><strong>encoding</strong> (<em>str</em>) – Encoding of file. Defaults to utf-8.</li>
 <li><strong>pretty</strong> (<em>bool</em>) – Whether to pretty print. Defaults to False.</li>
 <li><strong>sortkeys</strong> (<em>bool</em>) – Whether to sort dictionary keys. Defaults to False.</li>
 </ul>
@@ -1539,13 +1630,17 @@ Must call setup method first.</p>
 
 <dl class="function">
 <dt id="hdx.utilities.session.get_session">
-<code class="descclassname">hdx.utilities.session.</code><code class="descname">get_session</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.session.get_session" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set up and return Session object that is set up with retrying</p>
+<code class="descclassname">hdx.utilities.session.</code><code class="descname">get_session</code><span class="sig-paren">(</span><em>user_agent=None</em>, <em>user_agent_config_yaml=None</em>, <em>user_agent_lookup=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.session.get_session" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up and return Session object that is set up with retrying. Requires either global user agent to be set or
+appropriate user agent parameter(s) to be completed.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>user_agent</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – User agent string. HDXPythonUtilities/X.X.X- is prefixed.</li>
+<li><strong>user_agent_config_yaml</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.</li>
+<li><strong>user_agent_lookup</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Lookup key for YAML. Ignored if user_agent supplied.</li>
 <li><strong>**kwargs</strong> – See below</li>
 <li><strong>auth</strong> (<em>Tuple</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em>) – Authorisation information in tuple form (user, pass) OR</li>
 <li><strong>basic_auth</strong> (<em>str</em>) – Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR</li>
@@ -1657,9 +1752,143 @@ end_characters (str): End characters to look for. Defaults to ‘.</dd>
 </table>
 </dd></dl>
 
+<dl class="function">
+<dt id="hdx.utilities.text.multiple_replace">
+<code class="descclassname">hdx.utilities.text.</code><code class="descname">multiple_replace</code><span class="sig-paren">(</span><em>string</em>, <em>replacements</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.text.multiple_replace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Simultaneously replace multiple strigns in a string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>string</strong> (<em>str</em>) – Input string</li>
+<li><strong>replacements</strong> (<em>Dict</em><em>[</em><em>str</em><em>,</em><em>str</em><em>]</em>) – Replacements dictionary</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">String with replacements</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-hdx.utilities.useragent">
+<span id="hdx-utilities-useragent-module"></span><h2>hdx.utilities.useragent module<a class="headerlink" href="#module-hdx.utilities.useragent" title="Permalink to this headline">¶</a></h2>
+<p>User agent utilities</p>
+<dl class="class">
+<dt id="hdx.utilities.useragent.UserAgent">
+<em class="property">class </em><code class="descclassname">hdx.utilities.useragent.</code><code class="descname">UserAgent</code><a class="headerlink" href="#hdx.utilities.useragent.UserAgent" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="classmethod">
+<dt id="hdx.utilities.useragent.UserAgent.clear_global">
+<em class="property">classmethod </em><code class="descname">clear_global</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.useragent.UserAgent.clear_global" title="Permalink to this definition">¶</a></dt>
+<dd><p>Clear stored user agent string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hdx.utilities.useragent.UserAgent.default_user_agent_config_yaml">
+<code class="descname">default_user_agent_config_yaml</code><em class="property"> = '/home/mcarans/.useragent.yml'</em><a class="headerlink" href="#hdx.utilities.useragent.UserAgent.default_user_agent_config_yaml" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="classmethod">
+<dt id="hdx.utilities.useragent.UserAgent.get">
+<em class="property">classmethod </em><code class="descname">get</code><span class="sig-paren">(</span><em>user_agent=None</em>, <em>user_agent_config_yaml=None</em>, <em>user_agent_lookup=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.useragent.UserAgent.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get full user agent string from parameters if supplied falling back on global user agent if set.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>user_agent</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – User agent string. HDXPythonLibrary/X.X.X- is prefixed.</li>
+<li><strong>user_agent_config_yaml</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.</li>
+<li><strong>user_agent_lookup</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Lookup key for YAML. Ignored if user_agent supplied.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">Full user agent string</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">str</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="hdx.utilities.useragent.UserAgent.set_global">
+<em class="property">classmethod </em><code class="descname">set_global</code><span class="sig-paren">(</span><em>user_agent=None</em>, <em>user_agent_config_yaml=None</em>, <em>user_agent_lookup=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.useragent.UserAgent.set_global" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set global user agent string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>user_agent</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – User agent string. HDXPythonLibrary/X.X.X- is prefixed.</li>
+<li><strong>user_agent_config_yaml</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.</li>
+<li><strong>user_agent_lookup</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Lookup key for YAML. Ignored if user_agent supplied.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hdx.utilities.useragent.UserAgent.user_agent">
+<code class="descname">user_agent</code><em class="property"> = None</em><a class="headerlink" href="#hdx.utilities.useragent.UserAgent.user_agent" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="exception">
+<dt id="hdx.utilities.useragent.UserAgentError">
+<em class="property">exception </em><code class="descclassname">hdx.utilities.useragent.</code><code class="descname">UserAgentError</code><a class="headerlink" href="#hdx.utilities.useragent.UserAgentError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-hdx.utilities.version">
+<span id="hdx-utilities-version-module"></span><h2>hdx.utilities.version module<a class="headerlink" href="#module-hdx.utilities.version" title="Permalink to this headline">¶</a></h2>
+<p>Version utility</p>
+<dl class="function">
+<dt id="hdx.utilities.version.get_utils_version">
+<code class="descclassname">hdx.utilities.version.</code><code class="descname">get_utils_version</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.version.get_utils_version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </div>
 <div class="section" id="module-hdx.utilities">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-hdx.utilities" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="hdx.utilities.CleanMore">
+<em class="property">class </em><code class="descclassname">hdx.utilities.</code><code class="descname">CleanMore</code><span class="sig-paren">(</span><em>dist</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.CleanMore" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">distutils.command.clean.clean</span></code></p>
+<p>Custom implementation of <code class="docutils literal notranslate"><span class="pre">clean</span></code> setuptools command.</p>
+<dl class="method">
+<dt id="hdx.utilities.CleanMore.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.CleanMore.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>After calling the super class implementation, this function removes
+the dist directory if it exists.</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="function">
 <dt id="hdx.utilities.is_valid_uuid">
 <code class="descclassname">hdx.utilities.</code><code class="descname">is_valid_uuid</code><span class="sig-paren">(</span><em>uuid_to_test</em>, <em>version=4</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.is_valid_uuid" title="Permalink to this definition">¶</a></dt>

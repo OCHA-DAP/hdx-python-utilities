@@ -100,6 +100,22 @@ hdx.utilities.text module
     :undoc-members:
     :show-inheritance:
 
+hdx.utilities.useragent module
+------------------------------
+
+.. automodule:: hdx.utilities.useragent
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+hdx.utilities.version module
+----------------------------
+
+.. automodule:: hdx.utilities.version
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 
 Module contents
 ---------------
