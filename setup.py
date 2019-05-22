@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
+import sys
 from os.path import join
 
 from setuptools import setup, find_packages
 
+sys.path.append('src')  # Only needed for this project
 from hdx.utilities import CleanMore
 from hdx.utilities.loader import load_file_to_str
 
@@ -37,7 +39,7 @@ setup(
     description='HDX Python Utilities',
     license='MIT',
     url='https://github.com/OCHA-DAP/hdx-python-utilities',
-    version=load_file_to_str(join('src', 'hdx', 'version.txt'), strip=True),
+    version=load_file_to_str(join('src', 'hdx', 'utilities', 'version.txt'), strip=True),
     author='Michael Rans',
     author_email='rans@email.com',
     keywords=['HDX', 'utilities', 'library', 'country', 'iso 3166'],
