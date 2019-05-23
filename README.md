@@ -14,6 +14,7 @@ The HDX Python Utilities Library provides a range of helpful utilities:
 1. [Text processing](#text-processing)
 1. [Py3-like raise from for Py2](#raise-from)
 1. [Check valid UUID](#valid-uuid)
+1. [Easy building and packaging](#easy-building-and-packaging)
 
 This library is part of the [Humanitarian Data Exchange](https://data.humdata.org/) (HDX) project. If you have 
 humanitarian related data, please upload your datasets to HDX.
@@ -426,7 +427,8 @@ To use these commands, create a setup.py like this:
         author='Michael Rans',
         author_email='rans@email.com',
         keywords=['HDX', 'API', 'library'],
-        long_description=load_file_to_str('README.rst'),
+        long_description=load_file_to_str('README.md'),
+        long_description_content_type='text/markdown',
         packages=find_packages(where='src'),
         package_dir={'': 'src'},
         include_package_data=True,
