@@ -295,14 +295,14 @@ configuration from the defaults, you will need to call 
 
 **KEYWORD ARGUMENTS** can be:
 
-Choose|Argument|Type|Value|Default               
----|---|---|---|---
-One of:|logging\_config\_dict|dict|Logging configuration<br>dictionary
-or|logging\_config\_json|str|Path to JSON<br>Logging configuration
-or| logging\_config\_yaml|str|Path to YAML<br>Logging configuration|Library's internal<br>logging\_configuration.yml
-One of:|smtp\_config\_dict|dict|Email Logging<br>configuration dictionary
-or|smtp\_config\_json|str|Path to JSON Email<br>Logging configuration 
-or|smtp\_config\_yaml|str|Path to YAML Email<br>Logging configuration 
+|Choose|Argument|Type|Value|Default|
+|---|---|---|---|---|
+|One of:|logging\_config\_dict|dict|Logging configuration<br>dictionary|
+|or|logging\_config\_json|str|Path to JSON<br>Logging configuration|
+|or| logging\_config\_yaml|str|Path to YAML<br>Logging configuration|Library's internal<br>logging\_configuration.yml|
+|One of:|smtp\_config\_dict|dict|Email Logging<br>configuration dictionary|
+|or|smtp\_config\_json|str|Path to JSON Email<br>Logging configuration|
+|or|smtp\_config\_yaml|str|Path to YAML Email<br>Logging configuration|
   
 
 Do not supply **smtp\_config\_dict**, **smtp\_config\_json** or **smtp\_config\_yaml** unless you are using the default 
