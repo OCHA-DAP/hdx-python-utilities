@@ -283,10 +283,8 @@ Example of setup and sending email:
 
 ### Configuring Logging
 
-The library provides coloured logs with a simple default setup which
-should be adequate for most cases. If you wish to change the logging
-configuration from the defaults, you will need to call 
-**setup\_logging** with arguments.
+The library provides coloured logs with a simple default setup which should be adequate for most cases. If you wish to 
+change the logging configuration from the defaults, you will need to call **setup\_logging** with arguments.
 
     from hdx.utilities.easy_logging import setup_logging
     ...
@@ -391,10 +389,10 @@ Examples:
 
 ### Easy building and packaging
 
-The **clean** command of setup.py has been extended to use the --all flag by default and to clean the **dist**. Two new 
-commands folder have been created. **package** calls the new clean command and also **sdist** and also **bdist_wheel**.
-In other words, it cleans thoroughly and builds source and wheel distributions. **publish** publishes to pypi and 
-creates a git tag eg.
+The **clean** command of setup.py has been extended to use the --all flag by default and to clean the **dist** folder. 
+Two new commands folder have been created. **package** calls the new clean command and also **sdist** and also 
+**bdist_wheel**. In other words, it cleans thoroughly and builds source and wheel distributions. **publish** publishes 
+to pypi and creates a git tag eg.
 
     python setup.py clean
     python setup.py package
@@ -416,6 +414,7 @@ To use these commands, create a setup.py like this:
         "Topic :: Software Development :: Libraries :: Python Modules",
     ]
     
+    # Version of project in plain text file in src/hdx/version.txt
     PublishCommand.version = load_file_to_str(join('src', 'hdx', 'version.txt'), strip=True)
     
     setup(
