@@ -58,9 +58,9 @@ class Database(object):
                 del kwargs['ssh_port']
             else:
                 ssh_port = 22
-            self.server = SSHTunnelForwarder((host, ssh_port), remote_bind_address=(ssh_host, port), **kwargs)
+            self.server = SSHTunnelForwarder((ssh_host, ssh_port), remote_bind_address=(host, port), **kwargs)
             self.server.start()
-            host = ssh_host
+            host = self.server.local_bind_host
             port = self.server.local_bind_port
         else:
             self.server = None

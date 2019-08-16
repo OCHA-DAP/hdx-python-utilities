@@ -59,7 +59,8 @@ class TestDatabase:
         monkeypatch.setattr(SSHTunnelForwarder, '__init__', init)
         monkeypatch.setattr(SSHTunnelForwarder, 'start', start)
         monkeypatch.setattr(SSHTunnelForwarder, 'stop', stop)
-        monkeypatch.setattr(SSHTunnelForwarder, 'local_bind_port', 5678)
+        monkeypatch.setattr(SSHTunnelForwarder, 'local_bind_host', '0.0.0.0')
+        monkeypatch.setattr(SSHTunnelForwarder, 'local_bind_port', 12345)
 
         def get_session(_, db_url):
             class Session:
@@ -93,8 +94,8 @@ class TestDatabase:
 
     def test_get_session_ssh(self, mock_psycopg2, mock_SSHTunnelForwarder):
         with Database(ssh_host='mysshhost', **TestDatabase.params) as dbsession:
-            assert str(dbsession.bind.engine.url) == 'postgres://myuser:mypass@mysshhost:5678/mydatabase'
+            assert str(dbsession.bind.engine.url) == 'postgres://myuser:mypass@0.0.0.0:12345/mydatabase'
         params = copy.deepcopy(TestDatabase.params)
         del params['password']
         with Database(ssh_host='mysshhost', ssh_port=25, **params) as dbsession:
-            assert str(dbsession.bind.engine.url) == 'postgres://myuser@mysshhost:5678/mydatabase'
+            assert str(dbsession.bind.engine.url) == 'postgres://myuser@0.0.0.0:12345/mydatabase'
