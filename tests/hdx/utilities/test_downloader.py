@@ -154,7 +154,7 @@ class TestDownloader:
         with Download() as downloader:
             downloader.setup(fixtureurl)
             headers = downloader.response.headers
-            assert headers['Content-Length'] == '742'
+            assert headers['Content-Length'] == '728'
         with Download() as downloader:
             downloader.setup(postfixtureurl, post=True)
             headers = downloader.response.headers
@@ -220,7 +220,7 @@ class TestDownloader:
             downloader.download(fixturenotexistsurl)
         with Download() as downloader:
             result = downloader.download(fixtureurl)
-            assert result.headers['Content-Length'] == '742'
+            assert result.headers['Content-Length'] == '728'
             downloader.download('%s?id=10&lala=a' % getfixtureurl, post=False,
                                 parameters=OrderedDict([('b', '4'), ('d', '3')]))
             assert downloader.get_json()['args'] == OrderedDict([('b', '4'), ('d', '3'), ('id', '10'), ('lala', 'a')])
