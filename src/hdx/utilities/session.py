@@ -19,8 +19,8 @@ class SessionError(Exception):
     pass
 
 
-def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=None, **kwargs):
-    # type: (Optional[str], Optional[str], Optional[str], Any) -> requests.Session
+def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=None, use_env=True, **kwargs):
+    # type: (Optional[str], Optional[str], Optional[str], bool, Any) -> requests.Session
     """Set up and return Session object that is set up with retrying. Requires either global user agent to be set or
     appropriate user agent parameter(s) to be completed.
 
@@ -28,6 +28,7 @@ def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=
         user_agent (Optional[str]): User agent string. HDXPythonUtilities/X.X.X- is prefixed.
         user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.
         user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
+        use_env (bool): Whether to read environment variables. Defaults to True.
         **kwargs: See below
         auth (Tuple[str, str]): Authorisation information in tuple form (user, pass) OR
         basic_auth (str): Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
@@ -46,8 +47,10 @@ def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=
         ua = UserAgent.get(user_agent, user_agent_config_yaml, user_agent_lookup, **kwargs)
     s.headers['User-Agent'] = ua
 
-    extra_params = os.getenv('EXTRA_PARAMS')
-    if extra_params is not None:
+    extra_params = None
+    if use_env:
+        extra_params = os.getenv('EXTRA_PARAMS')
+    if extra_params:
         extra_params_dict = dict()
         if '=' in extra_params:
             logger.info('Loading extra parameters from environment variable')
@@ -86,7 +89,9 @@ def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=
                 raise SessionError('%s does not exist in extra_params!' % extra_params_lookup)
 
     auth_found = False
-    basic_auth = os.getenv('BASIC_AUTH')
+    basic_auth = None
+    if use_env:
+        basic_auth = os.getenv('BASIC_AUTH')
     if basic_auth:
         logger.info('Loading authorisation from basic_auth environment variable')
         auth_found = True

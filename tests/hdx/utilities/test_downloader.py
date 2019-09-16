@@ -126,6 +126,13 @@ class TestDownloader:
             assert 'param2=value3%2B7' in full_url
             assert 'param3=11' not in full_url
             assert 'basic_auth' not in full_url
+        with Download(extra_params_yaml=extraparamsyamltree, extra_params_lookup='mykey', use_env=False) as downloader:
+            assert downloader.session.auth == ('testuser', 'testpass')
+            full_url = downloader.get_full_url(test_url)
+            assert 'param1=value+1' in full_url
+            assert 'param2=value2' in full_url
+            assert 'param3=11' in full_url
+            assert 'basic_auth' not in full_url
         monkeypatch.delenv('EXTRA_PARAMS')
         with pytest.raises(SessionError):
             Download(extra_params_dict={'key1': 'val1'}, extra_params_json=extraparamsjson)

@@ -33,6 +33,7 @@ class Download(object):
         user_agent (Optional[str]): User agent string. HDXPythonUtilities/X.X.X- is prefixed.
         user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.
         user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
+        use_env (bool): Whether to read environment variables. Defaults to True.
         **kwargs: See below
         auth (Tuple[str, str]): Authorisation information in tuple form (user, pass) OR
         basic_auth (str): Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
@@ -45,9 +46,9 @@ class Download(object):
         method_whitelist (iterable): HTTP methods for which to force retry. Defaults t0 frozenset(['GET']).
     """
 
-    def __init__(self, user_agent=None, user_agent_config_yaml=None, user_agent_lookup=None, **kwargs):
-        # type: (Optional[str], Optional[str], Optional[str], Any) -> None
-        self.session = get_session(user_agent, user_agent_config_yaml, user_agent_lookup, **kwargs)
+    def __init__(self, user_agent=None, user_agent_config_yaml=None, user_agent_lookup=None, use_env=True, **kwargs):
+        # type: (Optional[str], Optional[str], Optional[str], bool, Any) -> None
+        self.session = get_session(user_agent, user_agent_config_yaml, user_agent_lookup, use_env, **kwargs)
         self.response = None
 
     def close_response(self):
