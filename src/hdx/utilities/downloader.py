@@ -175,7 +175,7 @@ class Download(object):
         return full_url, getparams
 
     @sleep_and_retry
-    @limits(calls=1, period=1)
+    @limits(calls=1, period=0.1)
     def setup(self, url, stream=True, post=False, parameters=None, timeout=None):
         # type: (str, bool, bool, Optional[Dict], Optional[float]) -> requests.Response
         """Setup download from provided url returning the response
