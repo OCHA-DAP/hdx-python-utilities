@@ -35,6 +35,7 @@ class Download(object):
         user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.
         user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
         use_env (bool): Whether to read environment variables. Defaults to True.
+        rate_limit (bool): Whether to rate limit calls to 1 per 0.1s. Defaults to False.
         **kwargs: See below
         auth (Tuple[str, str]): Authorisation information in tuple form (user, pass) OR
         basic_auth (str): Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
@@ -47,10 +48,15 @@ class Download(object):
         method_whitelist (iterable): HTTP methods for which to force retry. Defaults t0 frozenset(['GET']).
     """
 
-    def __init__(self, user_agent=None, user_agent_config_yaml=None, user_agent_lookup=None, use_env=True, **kwargs):
-        # type: (Optional[str], Optional[str], Optional[str], bool, Any) -> None
+    def __init__(self, user_agent=None, user_agent_config_yaml=None, user_agent_lookup=None, use_env=True,
+                 rate_limit=False, **kwargs):
+        # type: (Optional[str], Optional[str], Optional[str], bool, bool, Any) -> None
         self.session = get_session(user_agent, user_agent_config_yaml, user_agent_lookup, use_env, **kwargs)
         self.response = None
+        if rate_limit:
+            self.setup = self.rate_limited_setup
+        else:
+            self.setup = self.normal_setup
 
     def close_response(self):
         # type: () -> None
@@ -174,7 +180,7 @@ class Download(object):
         full_url = urlunsplit(spliturl)
         return full_url, getparams
 
-    def setup(self, url, stream=True, post=False, parameters=None, timeout=None):
+    def normal_setup(self, url, stream=True, post=False, parameters=None, timeout=None):
         # type: (str, bool, bool, Optional[Dict], Optional[float]) -> requests.Response
         """Setup download from provided url returning the response
 
@@ -293,8 +299,8 @@ class Download(object):
         self.setup(url, stream=True, post=post, parameters=parameters, timeout=timeout)
         return self.stream_file(url, folder, filename, overwrite)
 
-    def download(self, url, post=False, parameters=None, timeout=None, ratelimit=False):
-        # type: (str, bool, Optional[Dict], Optional[float], bool) -> requests.Response
+    def download(self, url, post=False, parameters=None, timeout=None):
+        # type: (str, bool, Optional[Dict], Optional[float]) -> requests.Response
         """Download url
 
         Args:
@@ -302,16 +308,12 @@ class Download(object):
             post (bool): Whether to use POST instead of GET. Defaults to False.
             parameters (Optional[Dict]): Parameters to pass. Defaults to None.
             timeout (Optional[float]): Timeout for connecting to URL. Defaults to None (no timeout).
-            ratelimit (bool): Whether to rate limit calls to 1 per 0.1s. Defaults to False.
 
         Returns:
             requests.Response: Response
 
         """
-        if ratelimit:
-            return self.rate_limited_setup(url, stream=False, post=post, parameters=parameters, timeout=timeout)
-        else:
-            return self.setup(url, stream=False, post=post, parameters=parameters, timeout=timeout)
+        return self.setup(url, stream=False, post=post, parameters=parameters, timeout=timeout)
 
     def get_json(self):
         # type: () -> Any

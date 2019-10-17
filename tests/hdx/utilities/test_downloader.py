@@ -234,8 +234,9 @@ class TestDownloader:
             downloader.download('%s?id=3&lala=b' % postfixtureurl, post=True,
                                          parameters=OrderedDict([('a', '3'), ('c', '2')]))
             assert downloader.get_json()['form'] == OrderedDict([('a', '3'), ('c', '2'), ('id', '3'), ('lala', 'b')])
+        with Download(rate_limit=True) as downloader:
             downloader.download('%s?id=10&lala=a' % getfixtureurl, post=False,
-                                parameters=OrderedDict([('b', '4'), ('d', '3')]), ratelimit=True)
+                                parameters=OrderedDict([('b', '4'), ('d', '3')]))
             assert downloader.get_json()['args'] == OrderedDict([('b', '4'), ('d', '3'), ('id', '10'), ('lala', 'a')])
 
     def test_download_tabular_key_value(self, fixtureurl, fixtureprocessurl):
