@@ -10,6 +10,7 @@ from typing import Optional, Dict, Iterator, Union, List, Any, Tuple
 
 import requests
 import tabulator
+from ratelimit import limits, sleep_and_retry
 from requests import Request
 from six.moves.urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
 from tabulator.exceptions import TabulatorException
@@ -173,6 +174,8 @@ class Download(object):
         full_url = urlunsplit(spliturl)
         return full_url, getparams
 
+    @sleep_and_retry
+    @limits(calls=1, period=1)
     def setup(self, url, stream=True, post=False, parameters=None, timeout=None):
         # type: (str, bool, bool, Optional[Dict], Optional[float]) -> requests.Response
         """Setup download from provided url returning the response
