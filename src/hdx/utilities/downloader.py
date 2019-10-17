@@ -174,8 +174,6 @@ class Download(object):
         full_url = urlunsplit(spliturl)
         return full_url, getparams
 
-    @sleep_and_retry
-    @limits(calls=1, period=0.1)
     def setup(self, url, stream=True, post=False, parameters=None, timeout=None):
         # type: (str, bool, bool, Optional[Dict], Optional[float]) -> requests.Response
         """Setup download from provided url returning the response
@@ -203,6 +201,26 @@ class Download(object):
         except Exception as e:
             raisefrom(DownloadError, 'Setup of Streaming Download of %s failed!' % url, e)
         return self.response
+
+    @sleep_and_retry
+    @limits(calls=1, period=0.1)
+    def rate_limited_setup(self, url, stream=True, post=False, parameters=None, timeout=None):
+        # type: (str, bool, bool, Optional[Dict], Optional[float]) -> requests.Response
+        """Setup download from provided url returning the response. Rate limit calls to
+        1 per 0.1 seconds.
+
+        Args:
+            url (str): URL to download
+            stream (bool): Whether to stream download. Defaults to True.
+            post (bool): Whether to use POST instead of GET. Defaults to False.
+            parameters (Optional[Dict]): Parameters to pass. Defaults to None.
+            timeout (Optional[float]): Timeout for connecting to URL. Defaults to None (no timeout).
+
+        Returns:
+            requests.Response: requests.Response object
+
+        """
+        return self.setup(url, stream, post, parameters, timeout)
 
     def hash_stream(self, url):
         # type: (str) -> str
@@ -275,8 +293,8 @@ class Download(object):
         self.setup(url, stream=True, post=post, parameters=parameters, timeout=timeout)
         return self.stream_file(url, folder, filename, overwrite)
 
-    def download(self, url, post=False, parameters=None, timeout=None):
-        # type: (str, bool, Optional[Dict], Optional[float]) -> requests.Response
+    def download(self, url, post=False, parameters=None, timeout=None, ratelimit=False):
+        # type: (str, bool, Optional[Dict], Optional[float], bool) -> requests.Response
         """Download url
 
         Args:
@@ -284,12 +302,16 @@ class Download(object):
             post (bool): Whether to use POST instead of GET. Defaults to False.
             parameters (Optional[Dict]): Parameters to pass. Defaults to None.
             timeout (Optional[float]): Timeout for connecting to URL. Defaults to None (no timeout).
+            ratelimit (bool): Whether to rate limit calls to 1 per 0.1s. Defaults to False.
 
         Returns:
             requests.Response: Response
 
         """
-        return self.setup(url, stream=False, post=post, parameters=parameters, timeout=timeout)
+        if ratelimit:
+            return self.rate_limited_setup(url, stream=False, post=post, parameters=parameters, timeout=timeout)
+        else:
+            return self.setup(url, stream=False, post=post, parameters=parameters, timeout=timeout)
 
     def get_json(self):
         # type: () -> Any
