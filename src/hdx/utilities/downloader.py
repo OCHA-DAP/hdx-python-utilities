@@ -226,7 +226,7 @@ class Download(object):
             requests.Response: requests.Response object
 
         """
-        return self.setup(url, stream, post, parameters, timeout)
+        return self.normal_setup(url, stream, post, parameters, timeout)
 
     def hash_stream(self, url):
         # type: (str) -> str
