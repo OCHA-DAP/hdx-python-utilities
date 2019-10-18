@@ -22,7 +22,8 @@ class SessionError(Exception):
 def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=None, use_env=True, **kwargs):
     # type: (Optional[str], Optional[str], Optional[str], bool, Any) -> requests.Session
     """Set up and return Session object that is set up with retrying. Requires either global user agent to be set or
-    appropriate user agent parameter(s) to be completed.
+    appropriate user agent parameter(s) to be completed. If the EXTRA_PARAMS or BASIC_AUTH environment variable is
+    supplied, the extra_params* parameters will be ignored.
 
     Args:
         user_agent (Optional[str]): User agent string. HDXPythonUtilities/X.X.X- is prefixed.
@@ -47,18 +48,26 @@ def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=
         ua = UserAgent.get(user_agent, user_agent_config_yaml, user_agent_lookup, **kwargs)
     s.headers['User-Agent'] = ua
 
-    extra_params = None
+    extra_params_found = False
+    extra_params_dict = None
+    auth_found = False
+    basic_auth = None
     if use_env:
+        basic_auth = os.getenv('BASIC_AUTH')
+        if basic_auth:
+            logger.info('Loading authorisation from basic_auth environment variable')
+            auth_found = True
         extra_params = os.getenv('EXTRA_PARAMS')
-    if extra_params:
-        extra_params_dict = dict()
-        if '=' in extra_params:
-            logger.info('Loading extra parameters from environment variable')
-            for extra_param in extra_params.split(','):
-                key, value = extra_param.split('=')
-                extra_params_dict[key] = value
-    else:
-        extra_params_found = False
+        if extra_params:
+            if '=' in extra_params:
+                extra_params_dict = dict()
+                logger.info('Loading extra parameters from environment variable')
+                for extra_param in extra_params.split(','):
+                    key, value = extra_param.split('=')
+                    extra_params_dict[key] = value
+            extra_params_found = True
+    if not auth_found and not extra_params_found:
+        # only do this if basic authorisation and extra params env vars not supplied
         extra_params_dict = kwargs.get('extra_params_dict')
         if extra_params_dict:
             extra_params_found = True
@@ -73,42 +82,31 @@ def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=
             extra_params_dict = load_json(extra_params_json)
 
         extra_params_yaml = kwargs.get('extra_params_yaml', '')
-        if extra_params_found:
-            if extra_params_yaml:
+        if extra_params_yaml:
+            if extra_params_found:
                 raise SessionError('More than one set of extra parameters given!')
-        else:
-            if extra_params_yaml:
-                logger.info('Loading extra parameters from: %s' % extra_params_yaml)
-                extra_params_dict = load_yaml(extra_params_yaml)
-            else:
-                extra_params_dict = dict()
+            logger.info('Loading extra parameters from: %s' % extra_params_yaml)
+            extra_params_dict = load_yaml(extra_params_yaml)
         extra_params_lookup = kwargs.get('extra_params_lookup')
         if extra_params_lookup:
             extra_params_dict = extra_params_dict.get(extra_params_lookup)
             if extra_params_dict is None:
                 raise SessionError('%s does not exist in extra_params!' % extra_params_lookup)
 
-    auth_found = False
-    basic_auth = None
-    if use_env:
-        basic_auth = os.getenv('BASIC_AUTH')
-    if basic_auth:
-        logger.info('Loading authorisation from basic_auth environment variable')
-        auth_found = True
-    else:
+    if not auth_found:
         basic_auth = kwargs.get('basic_auth')
         if basic_auth:
             logger.info('Loading authorisation from basic_auth argument')
             auth_found = True
-    bauth = extra_params_dict.get('basic_auth')
-    if bauth:
-        if not auth_found:
-            basic_auth = bauth
-            logger.info('Loading authorisation from basic_auth parameter')
-            auth_found = True
-        del extra_params_dict['basic_auth']
-    s.params = extra_params_dict
+        elif extra_params_dict:
+            bauth = extra_params_dict.get('basic_auth')
+            if bauth:
+                basic_auth = bauth
+                logger.info('Loading authorisation from basic_auth parameter')
+                auth_found = True
+                del extra_params_dict['basic_auth']
 
+    s.params = extra_params_dict
     auth = kwargs.get('auth')
     if auth:
         if auth_found:

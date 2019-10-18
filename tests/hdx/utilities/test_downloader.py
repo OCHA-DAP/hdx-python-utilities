@@ -82,6 +82,8 @@ class TestDownloader:
         monkeypatch.setenv('BASIC_AUTH', basicauth)
         with Download(basic_auth='12345') as downloader:
             assert downloader.session.auth == ('user', 'pass')
+        with Download(extra_params_yaml=extraparamsyamltree, extra_params_lookup='mykey') as downloader:
+            assert downloader.session.auth == ('user', 'pass')
         monkeypatch.delenv('BASIC_AUTH')
         with pytest.raises(SessionError):
             Download(auth=('u', 'p'), basic_auth='Basic xxxxxxxxxxxxxxxx')
@@ -93,6 +95,8 @@ class TestDownloader:
             Download(auth=('u', 'p'), extra_params_yaml=extraparamsyamltree, extra_params_lookup='mykey')
         with pytest.raises(SessionError):
             Download(basic_auth_file=basicauthfile, extra_params_yaml=extraparamsyamltree, extra_params_lookup='mykey')
+        with pytest.raises(SessionError):
+            Download(extra_params_yaml=extraparamsyamltree, extra_params_lookup='missingkey')
         with pytest.raises(IOError):
             Download(basic_auth_file='NOTEXIST')
         extraparamsjson = join(downloaderfolder, 'extra_params.json')
