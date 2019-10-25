@@ -12,6 +12,7 @@ The HDX Python Utilities Library provides a range of helpful utilities:
 1.  [Easy logging setup](#configuring-logging)
 1.  [Path utilities](#path-utilities)
 1. [Text processing](#text-processing)
+1. [Encoding utilities](#encoding-utilities)
 1. [Py3-like raise from for Py2](#raise-from)
 1. [Check valid UUID](#valid-uuid)
 1. [Easy building and packaging](#easy-building-and-packaging)
@@ -377,6 +378,15 @@ Examples:
     c = 'The quick brown fox climbed over the lazy dog. It was so fast!'
     result = get_matching_text([a, b, c], match_min_size=10)
     assert result == ' brown fox  over the  It was so fast!'
+
+### Encoding utilities
+
+Examples:
+
+    ## Base 64 encode and decode string
+    a = 'The quick brown fox jumped over the lazy dog. It was so fast!'
+    b = str_to_base64(a)
+    c = base64_to_str(b)
 
 ### Raise from
 

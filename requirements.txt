@@ -1,13 +1,13 @@
 basicauth==0.4.1
 beautifulsoup4==4.8.1
 colorlog==4.0.2
-email_validator==1.0.4
+email_validator==1.0.5
 html5lib==1.0.1
-psycopg2-binary==2.8.3
+psycopg2-binary==2.8.4
 pyaml==19.4.1
 ratelimit==2.2.1
 six==1.12.0
 sshtunnel==0.1.5
-tabulator==1.27.0
+tabulator==1.28.0
 typing==3.7.4.1
 yamlloader==0.5.5

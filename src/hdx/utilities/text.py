@@ -8,7 +8,7 @@ from typing import List, Dict
 
 def multiple_replace(string, replacements):
     # type: (str, Dict[str,str]) -> str
-    """Simultaneously replace multiple strigns in a string
+    """Simultaneously replace multiple strings in a string
 
     Args:
         string (str): Input string
