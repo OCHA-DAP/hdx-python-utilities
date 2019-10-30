@@ -620,7 +620,7 @@ all rows will be treated as containing values.)</dd>
 <p>Downloading utilities for urls</p>
 <dl class="class">
 <dt id="hdx.utilities.downloader.Download">
-<em class="property">class </em><code class="descclassname">hdx.utilities.downloader.</code><code class="descname">Download</code><span class="sig-paren">(</span><em>user_agent=None</em>, <em>user_agent_config_yaml=None</em>, <em>user_agent_lookup=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.downloader.Download" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">hdx.utilities.downloader.</code><code class="descname">Download</code><span class="sig-paren">(</span><em>user_agent=None</em>, <em>user_agent_config_yaml=None</em>, <em>user_agent_lookup=None</em>, <em>use_env=True</em>, <em>rate_limit=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.downloader.Download" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
 <p>Download class with various download operations. Currently only GET requests are used and supported.
 Requires either global user agent to be set or appropriate user agent parameter(s) to be completed.</p>
@@ -632,6 +632,8 @@ Requires either global user agent to be set or appropriate user agent parameter(
 <li><strong>user_agent</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – User agent string. HDXPythonUtilities/X.X.X- is prefixed.</li>
 <li><strong>user_agent_config_yaml</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.</li>
 <li><strong>user_agent_lookup</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Lookup key for YAML. Ignored if user_agent supplied.</li>
+<li><strong>use_env</strong> (<em>bool</em>) – Whether to read environment variables. Defaults to True.</li>
+<li><strong>rate_limit</strong> (<em>bool</em>) – Whether to rate limit calls to 1 per 0.1s. Defaults to False.</li>
 <li><strong>**kwargs</strong> – See below</li>
 <li><strong>auth</strong> (<em>Tuple</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em>) – Authorisation information in tuple form (user, pass) OR</li>
 <li><strong>basic_auth</strong> (<em>str</em>) – Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR</li>
@@ -999,9 +1001,37 @@ headers and values from columns beneath</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="hdx.utilities.downloader.Download.setup">
-<code class="descname">setup</code><span class="sig-paren">(</span><em>url</em>, <em>stream=True</em>, <em>post=False</em>, <em>parameters=None</em>, <em>timeout=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.downloader.Download.setup" title="Permalink to this definition">¶</a></dt>
+<dt id="hdx.utilities.downloader.Download.normal_setup">
+<code class="descname">normal_setup</code><span class="sig-paren">(</span><em>url</em>, <em>stream=True</em>, <em>post=False</em>, <em>parameters=None</em>, <em>timeout=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.downloader.Download.normal_setup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Setup download from provided url returning the response</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>url</strong> (<em>str</em>) – URL to download</li>
+<li><strong>stream</strong> (<em>bool</em>) – Whether to stream download. Defaults to True.</li>
+<li><strong>post</strong> (<em>bool</em>) – Whether to use POST instead of GET. Defaults to False.</li>
+<li><strong>parameters</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>]</em>) – Parameters to pass. Defaults to None.</li>
+<li><strong>timeout</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – Timeout for connecting to URL. Defaults to None (no timeout).</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">requests.Response object</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">requests.Response</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="hdx.utilities.downloader.Download.rate_limited_setup">
+<code class="descname">rate_limited_setup</code><span class="sig-paren">(</span><em>url</em>, <em>stream=True</em>, <em>post=False</em>, <em>parameters=None</em>, <em>timeout=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.downloader.Download.rate_limited_setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup download from provided url returning the response. Rate limit calls to
+1 per 0.1 seconds.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1198,6 +1228,46 @@ Must call setup method first.</p>
 <dt id="hdx.utilities.email.EmailConfigurationError">
 <em class="property">exception </em><code class="descclassname">hdx.utilities.email.</code><code class="descname">EmailConfigurationError</code><a class="headerlink" href="#hdx.utilities.email.EmailConfigurationError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-hdx.utilities.encoding">
+<span id="hdx-utilities-encoding-module"></span><h2>hdx.utilities.encoding module<a class="headerlink" href="#module-hdx.utilities.encoding" title="Permalink to this headline">¶</a></h2>
+<p>Encoding utilities</p>
+<dl class="function">
+<dt id="hdx.utilities.encoding.base64_to_str">
+<code class="descclassname">hdx.utilities.encoding.</code><code class="descname">base64_to_str</code><span class="sig-paren">(</span><em>bstring</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.encoding.base64_to_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base 64 decode string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>bstring</strong> (<em>str</em>) – Base 64 encoded string to encode</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Decoded string</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hdx.utilities.encoding.str_to_base64">
+<code class="descclassname">hdx.utilities.encoding.</code><code class="descname">str_to_base64</code><span class="sig-paren">(</span><em>string</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.encoding.str_to_base64" title="Permalink to this definition">¶</a></dt>
+<dd><p>Base 64 encode string</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>string</strong> (<em>str</em>) – String to encode</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Base 64 encoded string</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 </div>
@@ -1630,9 +1700,10 @@ back on os.ggettempdir.</p>
 
 <dl class="function">
 <dt id="hdx.utilities.session.get_session">
-<code class="descclassname">hdx.utilities.session.</code><code class="descname">get_session</code><span class="sig-paren">(</span><em>user_agent=None</em>, <em>user_agent_config_yaml=None</em>, <em>user_agent_lookup=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.session.get_session" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hdx.utilities.session.</code><code class="descname">get_session</code><span class="sig-paren">(</span><em>user_agent=None</em>, <em>user_agent_config_yaml=None</em>, <em>user_agent_lookup=None</em>, <em>use_env=True</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.session.get_session" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set up and return Session object that is set up with retrying. Requires either global user agent to be set or
-appropriate user agent parameter(s) to be completed.</p>
+appropriate user agent parameter(s) to be completed. If the EXTRA_PARAMS or BASIC_AUTH environment variable is
+supplied, the extra_params* parameters will be ignored.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1641,6 +1712,7 @@ appropriate user agent parameter(s) to be completed.</p>
 <li><strong>user_agent</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – User agent string. HDXPythonUtilities/X.X.X- is prefixed.</li>
 <li><strong>user_agent_config_yaml</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.</li>
 <li><strong>user_agent_lookup</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Lookup key for YAML. Ignored if user_agent supplied.</li>
+<li><strong>use_env</strong> (<em>bool</em>) – Whether to read environment variables. Defaults to True.</li>
 <li><strong>**kwargs</strong> – See below</li>
 <li><strong>auth</strong> (<em>Tuple</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em>) – Authorisation information in tuple form (user, pass) OR</li>
 <li><strong>basic_auth</strong> (<em>str</em>) – Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR</li>
@@ -1755,7 +1827,7 @@ end_characters (str): End characters to look for. Defaults to ‘.</dd>
 <dl class="function">
 <dt id="hdx.utilities.text.multiple_replace">
 <code class="descclassname">hdx.utilities.text.</code><code class="descname">multiple_replace</code><span class="sig-paren">(</span><em>string</em>, <em>replacements</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.text.multiple_replace" title="Permalink to this definition">¶</a></dt>
-<dd><p>Simultaneously replace multiple strigns in a string</p>
+<dd><p>Simultaneously replace multiple strings in a string</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1876,16 +1948,130 @@ end_characters (str): End characters to look for. Defaults to ‘.</dd>
 <div class="section" id="module-hdx.utilities">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-hdx.utilities" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="hdx.utilities.CleanMore">
-<em class="property">class </em><code class="descclassname">hdx.utilities.</code><code class="descname">CleanMore</code><span class="sig-paren">(</span><em>dist</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.CleanMore" title="Permalink to this definition">¶</a></dt>
+<dt id="hdx.utilities.CleanCommand">
+<em class="property">class </em><code class="descclassname">hdx.utilities.</code><code class="descname">CleanCommand</code><span class="sig-paren">(</span><em>dist</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.CleanCommand" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">distutils.command.clean.clean</span></code></p>
 <p>Custom implementation of <code class="docutils literal notranslate"><span class="pre">clean</span></code> setuptools command.</p>
 <dl class="method">
-<dt id="hdx.utilities.CleanMore.run">
-<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.CleanMore.run" title="Permalink to this definition">¶</a></dt>
+<dt id="hdx.utilities.CleanCommand.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.CleanCommand.run" title="Permalink to this definition">¶</a></dt>
 <dd><p>After calling the super class implementation, this function removes
 the dist directory if it exists.</p>
 </dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="hdx.utilities.PackageCommand">
+<em class="property">class </em><code class="descclassname">hdx.utilities.</code><code class="descname">PackageCommand</code><span class="sig-paren">(</span><em>dist</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.PackageCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">setuptools.Command</span></code></p>
+<p>Package command for setup.py that creates source and wheel packages.</p>
+<dl class="attribute">
+<dt id="hdx.utilities.PackageCommand.description">
+<code class="descname">description</code><em class="property"> = 'Build the packages.'</em><a class="headerlink" href="#hdx.utilities.PackageCommand.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="hdx.utilities.PackageCommand.finalize_options">
+<code class="descname">finalize_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.PackageCommand.finalize_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set final values for all the options that this command supports.
+This is always called as late as possible, ie.  after any option
+assignments from the command-line or from other commands have been
+done.  Thus, this is the place to code option dependencies: if
+‘foo’ depends on ‘bar’, then it is safe to set ‘foo’ from ‘bar’ as
+long as ‘foo’ still has the same value it was assigned in
+‘initialize_options()’.</p>
+<p>This method must be implemented by all command classes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hdx.utilities.PackageCommand.initialize_options">
+<code class="descname">initialize_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.PackageCommand.initialize_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set default values for all the options that this command
+supports.  Note that these defaults may be overridden by other
+commands, by the setup script, by config files, or by the
+command-line.  Thus, this is not the place to code dependencies
+between options; generally, ‘initialize_options()’ implementations
+are just a bunch of “self.foo = None” assignments.</p>
+<p>This method must be implemented by all command classes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hdx.utilities.PackageCommand.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.PackageCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>A command’s raison d’etre: carry out the action it exists to
+perform, controlled by the options initialized in
+‘initialize_options()’, customized by other commands, the setup
+script, the command-line, and config files, and finalized in
+‘finalize_options()’.  All terminal output and filesystem
+interaction should be done by ‘run()’.</p>
+<p>This method must be implemented by all command classes.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hdx.utilities.PackageCommand.user_options">
+<code class="descname">user_options</code><em class="property"> = []</em><a class="headerlink" href="#hdx.utilities.PackageCommand.user_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="hdx.utilities.PublishCommand">
+<em class="property">class </em><code class="descclassname">hdx.utilities.</code><code class="descname">PublishCommand</code><span class="sig-paren">(</span><em>dist</em>, <em>**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.PublishCommand" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">setuptools.Command</span></code></p>
+<p>Publish command for setup.py that creates git tags and publishes to pypi.
+Requires that twine and git be installed.</p>
+<dl class="attribute">
+<dt id="hdx.utilities.PublishCommand.description">
+<code class="descname">description</code><em class="property"> = 'Publish the packages.'</em><a class="headerlink" href="#hdx.utilities.PublishCommand.description" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="hdx.utilities.PublishCommand.finalize_options">
+<code class="descname">finalize_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.PublishCommand.finalize_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set final values for all the options that this command supports.
+This is always called as late as possible, ie.  after any option
+assignments from the command-line or from other commands have been
+done.  Thus, this is the place to code option dependencies: if
+‘foo’ depends on ‘bar’, then it is safe to set ‘foo’ from ‘bar’ as
+long as ‘foo’ still has the same value it was assigned in
+‘initialize_options()’.</p>
+<p>This method must be implemented by all command classes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hdx.utilities.PublishCommand.initialize_options">
+<code class="descname">initialize_options</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.PublishCommand.initialize_options" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set default values for all the options that this command
+supports.  Note that these defaults may be overridden by other
+commands, by the setup script, by config files, or by the
+command-line.  Thus, this is not the place to code dependencies
+between options; generally, ‘initialize_options()’ implementations
+are just a bunch of “self.foo = None” assignments.</p>
+<p>This method must be implemented by all command classes.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="hdx.utilities.PublishCommand.run">
+<code class="descname">run</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.PublishCommand.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>A command’s raison d’etre: carry out the action it exists to
+perform, controlled by the options initialized in
+‘initialize_options()’, customized by other commands, the setup
+script, the command-line, and config files, and finalized in
+‘finalize_options()’.  All terminal output and filesystem
+interaction should be done by ‘run()’.</p>
+<p>This method must be implemented by all command classes.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="hdx.utilities.PublishCommand.user_options">
+<code class="descname">user_options</code><em class="property"> = []</em><a class="headerlink" href="#hdx.utilities.PublishCommand.user_options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="hdx.utilities.PublishCommand.version">
+<code class="descname">version</code><em class="property"> = None</em><a class="headerlink" href="#hdx.utilities.PublishCommand.version" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
