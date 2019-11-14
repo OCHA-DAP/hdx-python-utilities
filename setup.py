@@ -16,9 +16,9 @@ requirements = ['basicauth',
                 'psycopg2-binary',
                 'pyaml',
                 'ratelimit',
-                'six>=1.12.0',
+                'six>=1.13.0',
                 'sshtunnel',
-                'tabulator>=1.28.0',
+                'tabulator>=1.29.0',
                 'typing',
                 'yamlloader'
                 ]

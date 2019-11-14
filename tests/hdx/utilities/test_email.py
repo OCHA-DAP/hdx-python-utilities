@@ -34,6 +34,8 @@ class TestEmail:
         email_config_dict.update(smtp_initargs)
 
         recipients = ['larry@gmail.com', 'moe@gmail.com', 'curly@gmail.com']
+        cc = ['tweedledum@gmail.com', 'tweedledee@gmail.com']
+        bcc = ['theinvisibleman@gmail.com', 'ghost@gmail.com']
         subject = 'hello'
         text_body = 'hello there'
         html_body = """\
@@ -52,20 +54,21 @@ class TestEmail:
         rcpt_options = [1, 2]
 
         with Email(email_config_dict=email_config_dict) as email:
-            email.send(recipients, subject, text_body, sender=sender, mail_options=mail_options,
+            email.send(recipients, subject, text_body, sender=sender, cc=cc, bcc=bcc, mail_options=mail_options,
                        rcpt_options=rcpt_options)
             assert email.server.type == 'smtpssl'
             assert email.server.initargs == smtp_initargs
             assert email.server.username == username
             assert email.server.password == password
             assert email.server.sender == sender
-            assert email.server.recipients == recipients
+            assert email.server.recipients == recipients + cc + bcc
             assert email.server.msg == '''Content-Type: text/plain; charset="us-ascii"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 Subject: hello
 From: me@gmail.com
 To: larry@gmail.com, moe@gmail.com, curly@gmail.com
+Cc: tweedledum@gmail.com, tweedledee@gmail.com
 
 hello there'''
             assert email.server.send_args == {'mail_options': ['a', 'b'], 'rcpt_options': [1, 2]}

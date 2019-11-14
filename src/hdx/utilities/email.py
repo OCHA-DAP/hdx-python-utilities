@@ -134,8 +134,27 @@ class Email:
         """
         self.server.quit()
 
-    def send(self, recipients, subject, text_body, html_body=None, sender=None, **kwargs):
-        # type: (List[str], str, str, Optional[str], Optional[str], Any) -> None
+    @staticmethod
+    def get_normalised_emails(recipients):
+        # type: (List[str]) -> List[str]
+        """
+        Get list of normalised emails
+
+        Args:
+            recipients (List[str]): Email recipient
+
+        Returns:
+            List[str]: Normalised emails
+
+        """
+        normalised_recipients = list()
+        for recipient in recipients:
+            v = validate_email(recipient, check_deliverability=True)  # validate and get info
+            normalised_recipients.append(v['email'])  # replace with normalized form
+        return normalised_recipients
+
+    def send(self, recipients, subject, text_body, html_body=None, sender=None, cc=None, bcc=None, **kwargs):
+        # type: (List[str], str, str, Optional[str], Optional[str], Optional[List[str]], Optional[List[str]], Any) -> None
         """
         Send email
 
@@ -145,6 +164,8 @@ class Email:
             text_body (str): Plain text email body
             html_body (Optional[str]): HTML email body
             sender (Optional[str]): Email sender. Defaults to global sender.
+            cc (Optional[List[str]]): Email cc. Defaults to None.
+            bcc (Optional[List[str]]): Email cc. Defaults to None.
             **kwargs: See below
             mail_options (list): Mail options (see smtplib documentation)
             rcpt_options (list): Recipient options (see smtplib documentation)
@@ -157,10 +178,6 @@ class Email:
             sender = self.sender
         v = validate_email(sender, check_deliverability=False)  # validate and get info
         sender = v['email']  # replace with normalized form
-        normalised_recipients = list()
-        for recipient in recipients:
-            v = validate_email(recipient, check_deliverability=True)  # validate and get info
-            normalised_recipients.append(v['email'])  # replace with normalized form
 
         if html_body is not None:
             msg = MIMEMultipart('alternative')
@@ -172,7 +189,18 @@ class Email:
             msg = MIMEText(text_body)
         msg['Subject'] = subject
         msg['From'] = sender
+
+        normalised_recipients = self.get_normalised_emails(recipients)
         msg['To'] = ', '.join(normalised_recipients)
+
+        if cc is not None:
+            normalised_cc = self.get_normalised_emails(cc)
+            msg['Cc'] = ', '.join(normalised_cc)
+            normalised_recipients.extend(normalised_cc)
+
+        if bcc is not None:
+            normalised_bcc = self.get_normalised_emails(bcc)
+            normalised_recipients.extend(normalised_bcc)
 
         # Perform operations via server
         self.connect()
