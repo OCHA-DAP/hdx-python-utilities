@@ -349,8 +349,24 @@ Examples:
     # Gets temporary directory from environment variable
     # TEMP_DIR and falls back to os function,
     # optionally appends the given folder, creates the
-    # folder and on exiting, deletes the folder
-    with temp_dir('papa') as tempdir:
+    # folder and deletes the folder if exiting 
+    # successfully else keeps the folder if tehre was
+    # an exception
+    with temp_dir('papa', delete_on_success=True, delete_on_failure=False) as tempdir:
+        ...
+    # Sometimes it is necessary to be able to resume runs if they fail. The following
+    # example creates a temporary folder and iterates through a list of items.
+    # On each iteration, the current state of progress is stored in the temporary
+    # folder. If the iteration were to fail, the temporary folder is not deleted and
+    # on the next run, it will resume where it failed. Once the whole list is iterated
+    # through, the temporary folder is deleted.
+    # The environment variable WHERETOSTART can be set to the starting value. If it is
+    # set to RESET, then the temporary folder is deleted before the run starts to ensure
+    # it starts from the beginning.    
+    iterator = [{'iso3': 'AFG', 'name': 'Afghanistan'}, {'iso3': 'SDN', 'name': 'Sudan'},
+                {'iso3': 'YEM', 'name': 'Yemen'}, {'iso3': 'ZAM', 'name': 'Zambia'}]
+    result = list()
+    for tempdir, nextdict in progress_storing_tempdir(tempfolder, iterator, 'iso3'):
         ...
 
     # Get current directory of script

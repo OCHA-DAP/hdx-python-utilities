@@ -77,7 +77,7 @@ test'''
         assert result == TestLoader.expected_json
 
     def test_load_file_to_str(self):
-        with temp_dir(folder='test_text', delete=True) as tmpdir:
+        with temp_dir(folder='test_text') as tmpdir:
             text_file = join(tmpdir, 'text_file.txt')
             save_str_to_file(TestLoader.text, text_file)
             result = load_file_to_str(text_file)
