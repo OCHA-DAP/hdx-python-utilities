@@ -1195,9 +1195,27 @@ Must call setup method first.</p>
 <code class="descname">default_email_config_yaml</code><em class="property"> = '/home/mcarans/hdx_email_configuration.yml'</em><a class="headerlink" href="#hdx.utilities.email.Email.default_email_config_yaml" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+<dl class="staticmethod">
+<dt id="hdx.utilities.email.Email.get_normalised_emails">
+<em class="property">static </em><code class="descname">get_normalised_emails</code><span class="sig-paren">(</span><em>recipients</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.email.Email.get_normalised_emails" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get list of normalised emails</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>recipients</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – Email recipient</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Normalised emails</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">List[str]</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
 <dl class="method">
 <dt id="hdx.utilities.email.Email.send">
-<code class="descname">send</code><span class="sig-paren">(</span><em>recipients</em>, <em>subject</em>, <em>text_body</em>, <em>html_body=None</em>, <em>sender=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.email.Email.send" title="Permalink to this definition">¶</a></dt>
+<code class="descname">send</code><span class="sig-paren">(</span><em>recipients</em>, <em>subject</em>, <em>text_body</em>, <em>html_body=None</em>, <em>sender=None</em>, <em>cc=None</em>, <em>bcc=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.email.Email.send" title="Permalink to this definition">¶</a></dt>
 <dd><p>Send email</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1209,6 +1227,8 @@ Must call setup method first.</p>
 <li><strong>text_body</strong> (<em>str</em>) – Plain text email body</li>
 <li><strong>html_body</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – HTML email body</li>
 <li><strong>sender</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Email sender. Defaults to global sender.</li>
+<li><strong>cc</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – Email cc. Defaults to None.</li>
+<li><strong>bcc</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – Email cc. Defaults to None.</li>
 <li><strong>**kwargs</strong> – See below</li>
 <li><strong>mail_options</strong> (<em>list</em>) – Mail options (see smtplib documentation)</li>
 <li><strong>rcpt_options</strong> (<em>list</em>) – Recipient options (see smtplib documentation)</li>
@@ -1528,7 +1548,7 @@ parameter(s) to be completed.</p>
 <dt id="hdx.utilities.path.get_temp_dir">
 <code class="descclassname">hdx.utilities.path.</code><code class="descname">get_temp_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.path.get_temp_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a temporary directory. Looks for environment variable TEMP_DIR and falls
-back on os.ggettempdir.</p>
+back on os.gettempdir.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -1536,6 +1556,32 @@ back on os.ggettempdir.</p>
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A temporary directory</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Return type:</th><td class="field-body">str</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="hdx.utilities.path.progress_storing_tempdir">
+<code class="descclassname">hdx.utilities.path.</code><code class="descname">progress_storing_tempdir</code><span class="sig-paren">(</span><em>folder</em>, <em>iterator</em>, <em>key</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.path.progress_storing_tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a temporary directory optionally with folder appended (and created if it doesn’t exist) that
+persists until the contents of the with statement are fully complete, persisting state between runs.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>folder</strong> (<em>str</em>) – Folder to create in temporary folder</li>
+<li><strong>iterator</strong> (<em>Iterable</em><em>[</em><em>Dict</em><em>]</em>) – Iterate over this object persisting progress</li>
+<li><strong>key</strong> (<em>str</em>) – Key to examine from dictionary from iterator</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A tuple of the form (temporary directory, next object in iterator)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">Tuple[str,Dict]</p>
+</td>
 </tr>
 </tbody>
 </table>
@@ -1592,7 +1638,7 @@ back on os.ggettempdir.</p>
 
 <dl class="function">
 <dt id="hdx.utilities.path.temp_dir">
-<code class="descclassname">hdx.utilities.path.</code><code class="descname">temp_dir</code><span class="sig-paren">(</span><em>folder=None</em>, <em>delete=True</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.path.temp_dir" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">hdx.utilities.path.</code><code class="descname">temp_dir</code><span class="sig-paren">(</span><em>folder=None</em>, <em>delete_on_success=True</em>, <em>delete_on_failure=True</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.path.temp_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a temporary directory optionally with folder appended (and created if it doesn’t exist)</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -1600,7 +1646,8 @@ back on os.ggettempdir.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>folder</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Folder to create in temporary folder. Defaults to None.</li>
-<li><strong>delete</strong> (<em>bool</em>) – Whether to delete folder (assuming folder arg supplied) on exiting with statement</li>
+<li><strong>delete_on_success</strong> (<em>bool</em>) – Whether to delete folder (if folder supplied) on exiting with statement successfully. Defaults to True.</li>
+<li><strong>delete_on_failure</strong> (<em>bool</em>) – Whether to delete folder (if folder supplied) on exiting with statement unsuccessfully. Defaults to True.</li>
 </ul>
 </td>
 </tr>
