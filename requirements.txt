@@ -1,6 +1,6 @@
 basicauth==0.4.1
-beautifulsoup4==4.8.1
-colorlog==4.0.2
+beautifulsoup4==4.8.2
+colorlog==4.1.0
 email_validator==1.0.5
 html5lib==1.0.1
 psycopg2-binary==2.8.4

@@ -281,3 +281,6 @@ class TestDownloader:
             assert result == {'header1': {'3': 'coal', '2': 'gas'},
                               'header3': {'3': '7.4', '2': '6.5'},
                               'header4': {'3': 'needed', '2': 'n/a'}}
+
+    def test_get_column_positions(self):
+        assert Download.get_column_positions(['a', 'b', 'c']) == {'a': 0, 'b': 1, 'c': 2}

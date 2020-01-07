@@ -460,3 +460,20 @@ class Download(object):
                     continue
                 output_dict[header][row[key_header]] = row[header]
         return output_dict
+
+    @staticmethod
+    def get_column_positions(headers):
+        # type: (List[str]) -> Dict[str,int]
+        """Get mapping of headers to column positions
+
+        Args:
+            headers (List[str]): List of headers
+
+        Returns:
+            Dict[str,int]: Dictionary where keys are header names and values are header positions
+
+        """
+        columnpositions = dict()
+        for i, header in enumerate(headers):
+            columnpositions[header] = i
+        return columnpositions

@@ -78,6 +78,9 @@ Other useful functions:
                                      OrderedDict([('c', 'e'), ('d', 'f')]))
     # == ('http://www.lala.com/hdfa',
               OrderedDict([('a', '3'), ('b', '4'), ('c', 'e'), ('d', 'f')]))
+    # Get mapping of columns positions of headers          
+    Download.get_column_positions(['a', 'b', 'c'])
+    # == {'a': 0, 'b': 1, 'c': 2}
 
 ### Loading and Saving JSON and YAML
 
