@@ -384,22 +384,22 @@ Examples:
 Examples:
 
     ## Parse dates
-    assert parse_date('20/02/2013') == {'enddate': None, 'startdate': datetime(2013, 2, 20, 0, 0)}
-    assert parse_date('20/02/2013 10:00:00') == {'enddate': None, 'startdate': datetime(2013, 2, 20, 0, 0)}
-    assert parse_date('20/02/2013', '%d/%m/%Y') == {'enddate': None, 'startdate': datetime(2013, 2, 20, 0, 0)}
+    assert parse_date('20/02/2013') == {'enddate': None, 'date': datetime(2013, 2, 20, 0, 0)}
+    assert parse_date('20/02/2013 10:00:00') == {'enddate': None, 'date': datetime(2013, 2, 20, 0, 0)}
+    assert parse_date('20/02/2013', '%d/%m/%Y') == {'enddate': None, 'date': datetime(2013, 2, 20, 0, 0)}
     
     # fuzzy=True allows for looking for dates within  a sentence
     result = parse_date('date is 20/02/2013 for this test', fuzzy=True)
-    assert result == {'enddate': None, 'startdate': datetime(2013, 2, 20, 0, 0), 
+    assert result == {'enddate': None, 'date': datetime(2013, 2, 20, 0, 0), 
                       'nondate': ('date is ', ' for this test')}
 
-    assert parse_date('02/2013') == {'enddate': datetime(2013, 2, 28, 0, 0), 'startdate': datetime(2013, 2, 1, 0, 0)}
-    assert parse_date('2013') == {'enddate': datetime(2013, 12, 31, 0, 0), 'startdate': datetime(2013, 1, 1, 0, 0)}
+    assert parse_date('02/2013') == {'enddate': datetime(2013, 2, 28, 0, 0), 'date': datetime(2013, 2, 1, 0, 0)}
+    assert parse_date('2013') == {'enddate': datetime(2013, 12, 31, 0, 0), 'date': datetime(2013, 1, 1, 0, 0)}
     # Don't allow date ranges when day or month not supplied (allow_range=False)
     parse_date('02/2013', allow_range=False) # raises ValueError
 
     result = parse_date('date is 02/2013 for this test', fuzzy=True)
-    assert result == {'enddate': datetime(2013, 2, 28, 0, 0), 'startdate': datetime(2013, 2, 1, 0, 0), 'nondate': ('date is ', ' for this test')}
+    assert result == {'enddate': datetime(2013, 2, 28, 0, 0), 'date': datetime(2013, 2, 1, 0, 0), 'nondate': ('date is ', ' for this test')}
 
 ### Text processing
 
