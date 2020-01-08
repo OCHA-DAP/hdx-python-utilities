@@ -11,23 +11,24 @@ default_ed_year = 9999
 default_enddate = datetime(year=default_ed_year, month=12, day=31, hour=0, minute=0, second=0, microsecond=0)
 
 
-def parse_date(string, date_format=None, allow_range=True, fuzzy=False):
-    # type: (str, Optional[str], bool, bool) -> Dict[str,Any]
+def parse_date_or_range(string, date_format=None, fuzzy=False):
+    # type: (str, Optional[str], bool) -> Dict[str,Any]
     """Parse date (dropping any time elements) from string using specified format. If no format is supplied, the
     function will guess. For unambiguous formats, this should be fine. Returns date in a dictionary key
-    date. If allow_range is False or month and day are both provided, enddate will be None. If fuzzy is True,
-    then dateutil's fuzzy parsing is used with the non date part of the string returned in key nondate.
+    date and if string lacks month or day, end date in enddate. enddate will be None if the string contains day, month
+    and year. If fuzzy is True, then dateutil's fuzzy parsing is used with the non date part of the string returned
+    in key nondate.
 
     Args:
         string (str): Dataset date string
         date_format (Optional[str]): Date format. If None is given, will attempt to guess. Defaults to None.
-        allow_range (bool): Whether to allow date to be a range. Defaults to True.
         fuzzy (bool): Whether to use fuzzy matching and return nondate part of string. Defaults to False.
 
     Returns:
-        Dict[str,Any]: Dictionary containing date and end date (and nondate if fuzzy is True)
+        Dict[str,Any]: Dictionary containing date, enddate and nondate
     """
     datedict = dict()
+    datedict['nondate'] = None
     if date_format is None or fuzzy:
         if fuzzy:
             parsed_string1 = parser.parse(string, fuzzy_with_tokens=True, default=default_date)
@@ -64,13 +65,27 @@ def parse_date(string, date_format=None, allow_range=True, fuzzy=False):
             enddate = enddate.replace(month=default_enddate.month)
     date = date.replace(hour=0, minute=0, second=0, microsecond=0)
     enddate = enddate.replace(hour=0, minute=0, second=0, microsecond=0)
-    if allow_range is False:
-        if date == enddate:
-            enddate = None
-        else:
-            raise ValueError('allow_range is False and date is a range!')
-    elif date == enddate:
+    if date == enddate:
         enddate = None
     datedict['date'] = date
     datedict['enddate'] = enddate
     return datedict
+
+
+def parse_date(string, date_format=None):
+    # type: (str, Optional[str]) -> datetime
+    """Parse date (dropping any time elements) from string using specified format. If no format is supplied, the
+    function will guess. For unambiguous formats, this should be fine. Returns a datetime object. Raises exception for
+    dates that are missing year, month or day.
+
+    Args:
+        string (str): Dataset date string
+        date_format (Optional[str]): Date format. If None is given, will attempt to guess. Defaults to None.
+
+    Returns:
+        datetime: The parsed date
+    """
+    datedict = parse_date_or_range(string, date_format=date_format, fuzzy=False)
+    if datedict['enddate'] is not None:
+        raise ValueError('date is not a specific day!')
+    return datedict['date']
