@@ -384,22 +384,31 @@ Examples:
 Examples:
 
     ## Parse dates
-    assert parse_date('20/02/2013') == {'enddate': None, 'date': datetime(2013, 2, 20, 0, 0)}
-    assert parse_date('20/02/2013 10:00:00') == {'enddate': None, 'date': datetime(2013, 2, 20, 0, 0)}
-    assert parse_date('20/02/2013', '%d/%m/%Y') == {'enddate': None, 'date': datetime(2013, 2, 20, 0, 0)}
+    assert parse_date('20/02/2013') == datetime(2013, 2, 20, 0, 0)
+    assert parse_date('20/02/2013', '%d/%m/%Y') == datetime(2013, 2, 20, 0, 0)
     
-    # fuzzy=True allows for looking for dates within  a sentence
-    result = parse_date('date is 20/02/2013 for this test', fuzzy=True)
-    assert result == {'enddate': None, 'date': datetime(2013, 2, 20, 0, 0), 
-                      'nondate': ('date is ', ' for this test')}
-
-    assert parse_date('02/2013') == {'enddate': datetime(2013, 2, 28, 0, 0), 'date': datetime(2013, 2, 1, 0, 0)}
-    assert parse_date('2013') == {'enddate': datetime(2013, 12, 31, 0, 0), 'date': datetime(2013, 1, 1, 0, 0)}
-    # Don't allow date ranges when day or month not supplied (allow_range=False)
-    parse_date('02/2013', allow_range=False) # raises ValueError
-
-    result = parse_date('date is 02/2013 for this test', fuzzy=True)
-    assert result == {'enddate': datetime(2013, 2, 28, 0, 0), 'date': datetime(2013, 2, 1, 0, 0), 'nondate': ('date is ', ' for this test')}
+    ## Parse date ranges
+    assert parse_date_range('20/02/2013') == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
+    parse_date_range('20/02/2013 10:00:00')
+    # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
+    parse_date_range('20/02/2013', '%d/%m/%Y')
+    # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
+    parse_date_range('02/2013')
+    # == datetime(2013, 2, 1, 0, 0), datetime(2013, 2, 28, 0, 0)
+    parse_date_range('2013')
+    # == datetime(2013, 1, 1, 0, 0), datetime(2013, 12, 31, 0, 0)
+    
+    # Pass dict in fuzzy activates fuzzy matching that allows for looking for dates within a sentence
+    fuzzy = dict()
+    parse_date_range('date is 20/02/2013 for this test', fuzzy=fuzzy)
+    # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)    
+    assert fuzzy == {'startdate': datetime(2013, 2, 20, 0, 0), 'enddate': datetime(2013, 2, 20, 0, 0), 
+                     'nondate': ('date is ', ' for this test')}
+    fuzzy = dict()
+    parse_date_range('date is 02/2013 for this test', fuzzy=fuzzy)
+    # == datetime(2013, 2, 1, 0, 0), datetime(2013, 2, 28, 0, 0)
+    assert fuzzy == {'startdate': datetime(2013, 2, 1, 0, 0), 'enddate': datetime(2013, 2, 28, 0, 0), 
+                     'nondate': ('date is ', ' for this test')}
 
 ### Text processing
 
