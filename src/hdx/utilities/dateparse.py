@@ -25,7 +25,7 @@ def parse_date(string, date_format=None, allow_range=True, fuzzy=False):
         fuzzy (bool): Whether to use fuzzy matching and return nondate part of string. Defaults to False.
 
     Returns:
-        Dict[str,Any]: Dictionary containing start date and end date (and nondate if fuzzy is True)
+        Dict[str,Any]: Dictionary containing date and end date (and nondate if fuzzy is True)
     """
     datedict = dict()
     if date_format is None or fuzzy:
