@@ -2,15 +2,16 @@
 
 The HDX Python Utilities Library provides a range of helpful utilities:
 
-1.  [Easy downloading of files with support for authentication, streaming and hashing](#downloading-files)
-1.  [Loading and saving JSON and YAML (inc. with OrderedDict)](#loading-and-saving-json-and-yaml)
-1.  [Database utilities (inc. connecting through SSH and SQLAlchemy helpers)](#database-utilities)
-1.  [Dictionary and list utilities](#dictionary-and-list-utilities)
-1.  [HTML utilities (inc. BeautifulSoup helper)](#html-utilities)
-1.  [Compare files (eg. for testing)](#compare-files)
-1.  [Simple emailing](#emailing)
-1.  [Easy logging setup](#configuring-logging)
-1.  [Path utilities](#path-utilities)
+1. [Easy downloading of files with support for authentication, streaming and hashing](#downloading-files)
+1. [Loading and saving JSON and YAML (inc. with OrderedDict)](#loading-and-saving-json-and-yaml)
+1. [Database utilities (inc. connecting through SSH and SQLAlchemy helpers)](#database-utilities)
+1. [Dictionary and list utilities](#dictionary-and-list-utilities)
+1. [HTML utilities (inc. BeautifulSoup helper)](#html-utilities)
+1. [Compare files (eg. for testing)](#compare-files)
+1. [Simple emailing](#emailing)
+1. [Easy logging setup](#configuring-logging)
+1. [Path utilities](#path-utilities)
+1. [Date parsing utilities](#date-parsing-utilities)
 1. [Text processing](#text-processing)
 1. [Encoding utilities](#encoding-utilities)
 1. [Py3-like raise from for Py2](#raise-from)
@@ -377,6 +378,28 @@ Examples:
 
     # Get current directory of script with filename appended
     path = script_dir_plus_file('myfile.txt', ANY_PYTHON_OBJECT_IN_SCRIPT)
+
+### Date parsing utilities
+
+Examples:
+
+    ## Parse dates
+    assert parse_date('20/02/2013') == {'enddate': None, 'startdate': datetime(2013, 2, 20, 0, 0)}
+    assert parse_date('20/02/2013 10:00:00') == {'enddate': None, 'startdate': datetime(2013, 2, 20, 0, 0)}
+    assert parse_date('20/02/2013', '%d/%m/%Y') == {'enddate': None, 'startdate': datetime(2013, 2, 20, 0, 0)}
+    
+    # fuzzy=True allows for looking for dates within  a sentence
+    result = parse_date('date is 20/02/2013 for this test', fuzzy=True)
+    assert result == {'enddate': None, 'startdate': datetime(2013, 2, 20, 0, 0), 
+                      'nondate': ('date is ', ' for this test')}
+
+    assert parse_date('02/2013') == {'enddate': datetime(2013, 2, 28, 0, 0), 'startdate': datetime(2013, 2, 1, 0, 0)}
+    # Don't allow date ranges when day or month not supplied - so end date is None
+    assert parse_date('02/2013', allow_range=False) == {'enddate': None, 'startdate': datetime(2013, 2, 1, 0, 0)}
+    assert parse_date('2013') == {'enddate': datetime(2013, 12, 31, 0, 0), 'startdate': datetime(2013, 1, 1, 0, 0)}
+
+    result = parse_date('date is 02/2013 for this test', fuzzy=True)
+    assert result == {'enddate': datetime(2013, 2, 28, 0, 0), 'startdate': datetime(2013, 2, 1, 0, 0), 'nondate': ('date is ', ' for this test')}
 
 ### Text processing
 
