@@ -1,9 +1,35 @@
 # -*- coding: utf-8 -*-
 """Text processing utilities"""
 import difflib
+import logging
 import re
 import string
-from typing import List, Dict
+from typing import List, Dict, Optional
+
+logger = logging.getLogger(__name__)
+
+
+def remove_from_end(string, things_to_remove, logging_text=None):
+    # type: (str, List[str], Optional[str]) -> str
+    """Remove list of items from end of string, stripping any whitespace
+
+    Args:
+        string (str): Input string
+        things_to_remove (List[str]): Things to remove from the end of string
+        logging_text (Optional[str]): Text to log. Defaults to None.
+
+    Returns:
+        str: String with text removed
+
+    """
+    for thing in things_to_remove:
+        position = -len(thing)
+        if string[position:] == thing:
+            newstring = string[:position].strip()
+            if logging_text:
+                logger.info(logging_text % (string, newstring))
+            string = newstring
+    return string
 
 
 def multiple_replace(string, replacements):

@@ -1,13 +1,17 @@
 # -*- coding: UTF-8 -*-
 """Text Processing Tests"""
 from hdx.utilities.text import get_matching_text_in_strs, get_matching_then_nonmatching_text, get_matching_text, \
-    get_words_in_sentence, multiple_replace
+    get_words_in_sentence, multiple_replace, remove_from_end
 
 
 class TestText:
     a = 'The quick brown fox jumped over the lazy dog. It was so fast!'
     b = 'The quicker brown fox leapt over the slower fox. It was so fast!'
     c = 'The quick brown fox climbed over the lazy dog. It was so fast!'
+
+    def test_remove_from_end(self):
+        result = remove_from_end(TestText.a, ['fast!', 'so'], 'Transforming %s -> %s')
+        assert result == 'The quick brown fox jumped over the lazy dog. It was'
 
     def test_multiple_replace(self):
         result = multiple_replace(TestText.a, {'quick': 'slow', 'fast': 'slow', 'lazy': 'busy'})

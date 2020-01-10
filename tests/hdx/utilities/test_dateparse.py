@@ -37,6 +37,9 @@ class TestDateParse:
         assert parse_date_range('2013') == result
         assert parse_date_range('2013', '%Y') == result
         with pytest.raises(ValueError):
+            fuzzy = dict()
+            parse_date_range('Mon_State_Village_Tract_Boundaries', fuzzy=fuzzy)
+        with pytest.raises(ValueError):
             parse_date_range('20/02')
         with pytest.raises(ValueError):
             parse_date_range('02/20')

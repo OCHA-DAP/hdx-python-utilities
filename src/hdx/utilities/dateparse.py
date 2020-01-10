@@ -7,7 +7,7 @@ from dateutil import parser
 
 default_sd_year = 1
 default_date = datetime(year=default_sd_year, month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
-default_ed_year = 9999
+default_ed_year = 9990
 default_enddate = datetime(year=default_ed_year, month=12, day=31, hour=0, minute=0, second=0, microsecond=0)
 
 

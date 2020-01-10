@@ -383,11 +383,11 @@ Examples:
 
 Examples:
 
-    ## Parse dates
+    # Parse dates
     assert parse_date('20/02/2013') == datetime(2013, 2, 20, 0, 0)
     assert parse_date('20/02/2013', '%d/%m/%Y') == datetime(2013, 2, 20, 0, 0)
     
-    ## Parse date ranges
+    # Parse date ranges
     assert parse_date_range('20/02/2013') == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
     parse_date_range('20/02/2013 10:00:00')
     # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
@@ -414,8 +414,12 @@ Examples:
 
 Examples:
 
-    ## Replace multiple strings in a string simultaneously
     a = 'The quick brown fox jumped over the lazy dog. It was so fast!'
+    # Remove list of items from end of string, stripping any whitespace
+    result = remove_from_end(a, ['fast!', 'so'], 'Transforming %s -> %s')
+    assert result == 'The quick brown fox jumped over the lazy dog. It was'
+
+    # Replace multiple strings in a string simultaneously
     result = multiple_replace(a, {'quick': 'slow', 'fast': 'slow', 'lazy': 'busy'})
     assert result == 'The slow brown fox jumped over the busy dog. It was so slow!'
 
@@ -434,7 +438,7 @@ Examples:
 
 Examples:
 
-    ## Base 64 encode and decode string
+    # Base 64 encode and decode string
     a = 'The quick brown fox jumped over the lazy dog. It was so fast!'
     b = str_to_base64(a)
     c = base64_to_str(b)
