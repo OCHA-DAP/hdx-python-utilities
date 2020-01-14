@@ -3,10 +3,43 @@
 import difflib
 import logging
 import re
-import string
+from string import punctuation, whitespace
 from typing import List, Dict, Optional
 
 logger = logging.getLogger(__name__)
+
+
+def remove_end_characters(string, characters_to_remove=punctuation):
+    # type: (str, str) -> str
+    """Remove any characters at end of string that are in characters_to_remove
+
+    Args:
+        string (str): Input string
+        characters_to_remove (str): Characters to remove. Defaults to punctuation.
+
+    Returns:
+        str: String with any characters at end of string that are in characters_to_remove removed
+
+    """
+    while string[-1] in characters_to_remove:
+        string = string[:-1]
+    return string
+
+
+def remove_end_whitespace_punctuation(string):
+    # type: (str) -> str
+    """Remove whitespace and punctuation from end of string
+
+    Args:
+        string (str): Input string
+
+    Returns:
+        str: String with end whitespace and punctuation removed
+
+    """
+    while string[-1] in punctuation or string[-1] in whitespace:
+        string = string[:-1]
+    return string
 
 
 def remove_from_end(string, things_to_remove, logging_text=None):
@@ -59,7 +92,7 @@ def get_words_in_sentence(sentence):
         List[str]: List of words in sentence
 
     """
-    return re.sub('[' + string.punctuation.replace("'", "") + ']', ' ', sentence).split()
+    return re.sub('[' + punctuation.replace("'", "") + ']', ' ', sentence).split()
 
 
 def get_matching_text_in_strs(a, b, match_min_size=30, ignore='', end_characters=''):

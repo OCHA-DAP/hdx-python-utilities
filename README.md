@@ -415,6 +415,11 @@ Examples:
 Examples:
 
     a = 'The quick brown fox jumped over the lazy dog. It was so fast!'
+    
+    # Remove whitespace and punctuation from end of string
+    assert remove_end_characters('lalala,.,"') == 'lalala'
+    assert remove_end_characters('lalala, .\t/,"', '%s%s' % (punctuation, whitespace)) == 'lalala'
+    
     # Remove list of items from end of string, stripping any whitespace
     result = remove_from_end(a, ['fast!', 'so'], 'Transforming %s -> %s')
     assert result == 'The quick brown fox jumped over the lazy dog. It was'
