@@ -17,7 +17,7 @@ class TestDateParse:
         fuzzy = dict()
         assert parse_date_range('date is 20/02/2013 for this test', fuzzy=fuzzy) == result
         fuzzyresult = {'startdate': datetime(2013, 2, 20, 0, 0), 'enddate': datetime(2013, 2, 20, 0, 0),
-                       'nondate': ('date is ', ' for this test')}
+                       'nondate': ('date is ', ' for this test'), 'date': ('20/02/2013',)}
         assert fuzzy == fuzzyresult
         fuzzy = dict()
         assert parse_date_range('date is 20/02/2013 for this test', date_format='%d/%m/%Y', fuzzy=fuzzy) == result
@@ -32,7 +32,7 @@ class TestDateParse:
         fuzzy = dict()
         assert parse_date_range('date is 02/2013 for this test', fuzzy=fuzzy) == result
         assert fuzzy == {'startdate': datetime(2013, 2, 1, 0, 0), 'enddate': datetime(2013, 2, 28, 0, 0),
-                         'nondate': ('date is ', ' for this test')}
+                         'nondate': ('date is ', ' for this test'), 'date': ('02/2013',)}
         result = datetime(2013, 1, 1, 0, 0), datetime(2013, 12, 31, 0, 0)
         assert parse_date_range('2013') == result
         assert parse_date_range('2013', '%Y') == result

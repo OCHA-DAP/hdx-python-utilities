@@ -38,6 +38,11 @@ def parse_date_range(string, date_format=None, fuzzy=None):
                 fuzzy['nondate'] = nondate
             else:
                 fuzzy['nondate'] = None
+            datestr = parsed_string1[2]
+            if datestr:
+                fuzzy['date'] = datestr
+            else:
+                fuzzy['date'] = None
         else:
             startdate = parser.parse(string, default=default_date)
             enddate = parser.parse(string, default=default_enddate)
