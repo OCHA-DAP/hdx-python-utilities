@@ -15,8 +15,7 @@ requirements = ['basicauth',
                 'html5lib',
                 'psycopg2-binary',
                 'pyaml',
-                #                'python-dateutil',
-                'python-dateutil @ https://github.com/mcarans/dateutil/raw/justforrelease/dist/python_dateutil-2.8.2.dev15%2Bgeb45e83-py2.py3-none-any.whl',
+                'python-dateutil==2.8.2.dev15',
                 'ratelimit',
                 'six>=1.13.0',
                 'sshtunnel',
@@ -24,6 +23,9 @@ requirements = ['basicauth',
                 'typing',
                 'yamlloader'
                 ]
+
+dependencies = [
+    'https://github.com/mcarans/dateutil/raw/justforrelease/dist/python_dateutil-2.8.2.dev15%2Bgeb45e83-py2.py3-none-any.whl']
 
 classifiers = [
     "Development Status :: 5 - Production/Stable",
@@ -58,5 +60,6 @@ setup(
     zip_safe=True,
     classifiers=classifiers,
     install_requires=requirements,
+    dependency_links=dependencies,
     cmdclass={'clean': CleanCommand, 'package': PackageCommand, 'publish': PublishCommand},
 )
