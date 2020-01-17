@@ -385,7 +385,10 @@ def parse_date_range(string, date_format=None, fuzzy=None):
         if startdate.year == default_sd_year and enddate.year == default_ed_year:
             raise ParserError('No year in date!')
     else:
-        startdate = datetime.strptime(string, date_format)
+        try:
+            startdate = datetime.strptime(string, date_format)
+        except ValueError as e:
+            raisefrom(ParserError, str(e), e)
         if startdate.year == 1900 and '%Y' not in date_format:  # 1900 is default when no year supplied
             raise ParserError('No year in date!')
         enddate = startdate
@@ -400,7 +403,7 @@ def parse_date_range(string, date_format=None, fuzzy=None):
                 except ValueError as e:
                     endday -= 1
                     if endday == 0:
-                        raisefrom(ParserError, str(e), e)
+                        raisefrom(ParserError, 'No end day of month found for %s!' % str(enddate), e)
         if not any(str in date_format for str in ['%b', '%B', '%m', '%j']):
             startdate = startdate.replace(month=default_date.month)
             enddate = enddate.replace(month=default_enddate.month)
