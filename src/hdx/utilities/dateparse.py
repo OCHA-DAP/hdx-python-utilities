@@ -8,6 +8,8 @@ import dateutil
 from dateutil.parser import _timelex
 from dateutil.parser._parser import _ymd
 
+from hdx.utilities import raisefrom
+
 default_sd_year = 1
 default_date = datetime(year=default_sd_year, month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
 default_ed_year = 9990
@@ -331,7 +333,10 @@ def parse(timestr, default=None,
     if len(res) == 0:
         raise ParserError("String does not contain a date: %s", timestr)
 
-    ret = DEFAULTPARSER._build_naive(res, default)
+    try:
+        ret = DEFAULTPARSER._build_naive(res, default)
+    except ValueError as e:
+        raisefrom(ParserError, str(e) + ": %s" % timestr, e)
 
     if not ignoretz:
         ret = DEFAULTPARSER._build_tzaware(ret, res, tzinfos)
@@ -378,11 +383,11 @@ def parse_date_range(string, date_format=None, fuzzy=None):
             startdate = parse(string, default=default_date)
             enddate = parse(string, default=default_enddate)
         if startdate.year == default_sd_year and enddate.year == default_ed_year:
-            raise ValueError('No year in date!')
+            raise ParserError('No year in date!')
     else:
         startdate = datetime.strptime(string, date_format)
         if startdate.year == 1900 and '%Y' not in date_format:  # 1900 is default when no year supplied
-            raise ValueError('No year in date!')
+            raise ParserError('No year in date!')
         enddate = startdate
         if not any(str in date_format for str in ['%d', '%j']):
             startdate = startdate.replace(day=default_date.day)
@@ -392,10 +397,10 @@ def parse_date_range(string, date_format=None, fuzzy=None):
                 try:
                     enddate = enddate.replace(day=endday)
                     not_set = False
-                except ValueError:
+                except ValueError as e:
                     endday -= 1
                     if endday == 0:
-                        raise
+                        raisefrom(ParserError, str(e), e)
         if not any(str in date_format for str in ['%b', '%B', '%m', '%j']):
             startdate = startdate.replace(month=default_date.month)
             enddate = enddate.replace(month=default_enddate.month)
@@ -422,5 +427,5 @@ def parse_date(string, date_format=None):
     """
     startdate, enddate = parse_date_range(string, date_format=date_format)
     if startdate != enddate:
-        raise ValueError('date is not a specific day!')
+        raise ParserError('date is not a specific day!')
     return startdate

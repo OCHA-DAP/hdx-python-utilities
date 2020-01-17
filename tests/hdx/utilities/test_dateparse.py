@@ -1,6 +1,7 @@
 # -*- coding: UTF-8 -*-
 """Date Parse Utility Tests"""
 from datetime import datetime
+from parser import ParserError
 
 import pytest
 
@@ -36,20 +37,20 @@ class TestDateParse:
         result = datetime(2013, 1, 1, 0, 0), datetime(2013, 12, 31, 0, 0)
         assert parse_date_range('2013') == result
         assert parse_date_range('2013', '%Y') == result
-        with pytest.raises(ValueError):
+        with pytest.raises(ParserError):
             fuzzy = dict()
             parse_date_range('Mon_State_Village_Tract_Boundaries', fuzzy=fuzzy)
-        with pytest.raises(ValueError):
+        with pytest.raises(ParserError):
             parse_date_range('20/02')
-        with pytest.raises(ValueError):
+        with pytest.raises(ParserError):
             parse_date_range('02/20')
-        with pytest.raises(ValueError):
+        with pytest.raises(ParserError):
             parse_date_range('20/02', '%d/%m')
 
     def test_parse_date(self):
         assert parse_date('20/02/2013') == datetime(2013, 2, 20, 0, 0)
         assert parse_date('20/02/2013', '%d/%m/%Y') == datetime(2013, 2, 20, 0, 0)
-        with pytest.raises(ValueError):
+        with pytest.raises(ParserError):
             parse_date('02/2013')
-        with pytest.raises(ValueError):
+        with pytest.raises(ParserError):
             parse_date('02/2013', '%m/%Y')
