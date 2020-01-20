@@ -38,10 +38,11 @@ class TestDateParse:
         assert parse_date_range('2013') == result
         assert parse_date_range('2013', '%Y') == result
         fuzzy = dict()
-        result = datetime(2001, 12, 10, 0, 0), datetime(2001, 12, 10, 0, 0)
+        date = datetime(2001, 10, 12, 0, 0)
+        result = date, date
         assert parse_date_range('State_Village_Tract_Boundaries 10/12/01 lala', fuzzy=fuzzy) == result
-        assert fuzzy == {'startdate': datetime(2001, 12, 10, 0, 0), 'enddate': datetime(2001, 12, 10, 0, 0),
-                         'nondate': ('State_Village_Tract_Boundaries ', ' lala'), 'date': ('10/12/01',)}
+        assert fuzzy == {'startdate': date, 'enddate': date, 'nondate': ('State_Village_Tract_Boundaries ', ' lala'),
+                         'date': ('10/12/01',)}
         with pytest.raises(ParserError):
             parse_date_range('lalala', '%d/%m/%Y')
         with pytest.raises(ParserError):

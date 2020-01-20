@@ -6,7 +6,7 @@ from typing import Optional, Dict, Tuple
 
 import dateutil
 from dateutil.parser import _timelex
-from dateutil.parser._parser import _ymd, parserinfo
+from dateutil.parser._parser import _ymd
 
 from hdx.utilities import raisefrom
 
@@ -254,7 +254,7 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
         return skipped_tokens, date_tokens
 
 
-DEFAULTPARSER = DateParser(parserinfo(dayfirst=True))
+DEFAULTPARSER = DateParser()
 
 
 def parse(timestr, default=None,
