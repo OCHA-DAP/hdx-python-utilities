@@ -523,18 +523,19 @@ def parse(timestr, default=None,
         return ret
 
 
-def parse_date_range(string, date_format=None, fuzzy=None):
-    # type: (str, Optional[str], Optional[Dict]) -> Tuple[datetime,datetime]
-    """Parse date (dropping any time elements) from string using specified format. If no format is supplied, the
-    function will guess. For unambiguous formats, this should be fine. Returns date range in dictionary keys
-    startdate and enddate. If a dictionary is supplied in the fuzzy parameter, then dateutil's fuzzy parsing is
-    used and the results returned in the dictionary in keys startdate, enddate and nondate (the non date part of
-    the string).
+def parse_date_range(string, date_format=None, fuzzy=None, zero_time=False):
+    # type: (str, Optional[str], Optional[Dict], bool) -> Tuple[datetime,datetime]
+    """Parse date from string using specified format (setting any time elements to 0 if zero_time is True).
+    If no format is supplied, the function will guess. For unambiguous formats, this should be fine.
+    Returns date range in dictionary keys startdate and enddate. If a dictionary is supplied in the fuzzy parameter,
+    then dateutil's fuzzy parsing is used and the results returned in the dictionary in keys startdate, enddate,
+    date (the string elements used to make the date) and nondate (the non date part of the string).
 
     Args:
         string (str): Dataset date string
         date_format (Optional[str]): Date format. If None is given, will attempt to guess. Defaults to None.
         fuzzy (Optional[Dict]): If dict supplied, fuzzy matching will be used and results returned in dict
+        zero_time (bool): Zero time elements of datetime if True. Defaults to False.
 
     Returns:
         Tuple[datetime,datetime]: Tuple containing start date and end date
@@ -579,28 +580,34 @@ def parse_date_range(string, date_format=None, fuzzy=None):
         if not any(str in date_format for str in ['%b', '%B', '%m', '%j']):
             startdate = startdate.replace(month=default_date.month)
             enddate = enddate.replace(month=default_enddate.month)
-    startdate = startdate.replace(hour=0, minute=0, second=0, microsecond=0)
-    enddate = enddate.replace(hour=0, minute=0, second=0, microsecond=0)
+    if zero_time:
+        startdate = startdate.replace(hour=0, minute=0, second=0, microsecond=0)
+        enddate = enddate.replace(hour=0, minute=0, second=0, microsecond=0)
     if fuzzy is not None:
         fuzzy['startdate'] = startdate
         fuzzy['enddate'] = enddate
     return startdate, enddate
 
 
-def parse_date(string, date_format=None):
-    # type: (str, Optional[str]) -> datetime
-    """Parse date (dropping any time elements) from string using specified format. If no format is supplied, the
-    function will guess. For unambiguous formats, this should be fine. Returns a datetime object. Raises exception for
-    dates that are missing year, month or day.
+def parse_date(string, date_format=None, fuzzy=None, zero_time=False):
+    # type: (str, Optional[str], Optional[Dict], bool) -> datetime
+    """Parse date from string using specified format (setting any time elements to 0 if zero_time is True).
+    If no format is supplied, the function will guess. For unambiguous formats, this should be fine.
+    Returns a datetime object. Raises exception for dates that are missing year, month or day.
+    If a dictionary is supplied in the fuzzy parameter, then dateutil's fuzzy parsing is used and the results
+    returned in the dictionary in keys startdate, enddate, date (the string elements used to make the date) and
+    nondate (the non date part of the string).
 
     Args:
         string (str): Dataset date string
         date_format (Optional[str]): Date format. If None is given, will attempt to guess. Defaults to None.
+        fuzzy (Optional[Dict]): If dict supplied, fuzzy matching will be used and results returned in dict
+        zero_time (bool): Zero time elements of datetime if True. Defaults to False.
 
     Returns:
         datetime: The parsed date
     """
-    startdate, enddate = parse_date_range(string, date_format=date_format)
+    startdate, enddate = parse_date_range(string, date_format=date_format, fuzzy=fuzzy, zero_time=zero_time)
     if startdate != enddate:
         raise ParserError('date is not a specific day!')
     return startdate

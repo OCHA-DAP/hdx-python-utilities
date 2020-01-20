@@ -13,11 +13,14 @@ class TestDateParse:
         result = datetime(2013, 2, 10, 0, 0), datetime(2013, 2, 10, 0, 0)
         assert parse_date_range('10/02/2013') == result
         assert parse_date_range('2013/02/10') == result
+        result = datetime(2013, 2, 20, 10, 0), datetime(2013, 2, 20, 10, 0)
+        assert parse_date_range('20/02/2013 10:00:00') == result
+        assert parse_date_range('20/02/2013 10:00:00', '%d/%m/%Y %H:%M:%S') == result
         result = datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
         assert parse_date_range('20/02/2013') == result
-        assert parse_date_range('20/02/2013 10:00:00') == result
+        assert parse_date_range('20/02/2013 10:00:00', zero_time=True) == result
         assert parse_date_range('20/02/2013', '%d/%m/%Y') == result
-        assert parse_date_range('20/02/2013 10:00:00', '%d/%m/%Y %H:%M:%S') == result
+        assert parse_date_range('20/02/2013 10:00:00', '%d/%m/%Y %H:%M:%S', zero_time=True) == result
         fuzzy = dict()
         assert parse_date_range('date is 20/02/2013 for this test', fuzzy=fuzzy) == result
         fuzzyresult = {'startdate': datetime(2013, 2, 20, 0, 0), 'enddate': datetime(2013, 2, 20, 0, 0),

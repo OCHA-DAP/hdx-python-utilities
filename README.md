@@ -391,6 +391,8 @@ Examples:
     parse_date_range('20/02/2013')
     # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
     parse_date_range('20/02/2013 10:00:00')
+    # == datetime(2013, 2, 20, 10, 0), datetime(2013, 2, 20, 10, 0)
+    parse_date_range('20/02/2013 10:00:00', zero_time=True)
     # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
     parse_date_range('20/02/2013', '%d/%m/%Y')
     # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
