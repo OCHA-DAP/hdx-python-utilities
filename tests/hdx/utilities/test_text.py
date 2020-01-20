@@ -3,7 +3,8 @@
 from string import punctuation, whitespace
 
 from hdx.utilities.text import get_matching_text_in_strs, get_matching_then_nonmatching_text, get_matching_text, \
-    get_words_in_sentence, multiple_replace, remove_from_end, remove_end_characters
+    get_words_in_sentence, multiple_replace, remove_from_end, remove_end_characters, remove_string, \
+    PUNCTUATION_MINUS_BRACKETS
 
 
 class TestText:
@@ -18,6 +19,12 @@ class TestText:
     def test_remove_from_end(self):
         result = remove_from_end(TestText.a, ['fast!', 'so'], 'Transforming %s -> %s')
         assert result == 'The quick brown fox jumped over the lazy dog. It was'
+
+    def test_remove_string(self):
+        assert remove_string('lala, 01/02/2020 ', '01/02/2020') == 'lala '
+        assert remove_string('lala,(01/02/2020) ', '01/02/2020') == 'lala) '
+        assert remove_string('lala, 01/02/2020 ', '01/02/2020', PUNCTUATION_MINUS_BRACKETS) == 'lala '
+        assert remove_string('lala,(01/02/2020) ', '01/02/2020', PUNCTUATION_MINUS_BRACKETS) == 'lala,() '
 
     def test_multiple_replace(self):
         result = multiple_replace(TestText.a, {'quick': 'slow', 'fast': 'slow', 'lazy': 'busy'})

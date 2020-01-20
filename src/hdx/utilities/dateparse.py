@@ -6,7 +6,7 @@ from typing import Optional, Dict, Tuple
 
 import dateutil
 from dateutil.parser import _timelex
-from dateutil.parser._parser import _ymd
+from dateutil.parser._parser import _ymd, parserinfo
 
 from hdx.utilities import raisefrom
 
@@ -17,7 +17,7 @@ default_enddate = datetime(year=default_ed_year, month=12, day=31, hour=0, minut
 
 
 # Ugly copy and paste from dateutil.dateparser with minor changes
-class DateParser(dateutil.parser.parser):
+class DateParser(dateutil.parser.parser):  # pragma: no cover
     def _parse(self, timestr, dayfirst=None, yearfirst=None, fuzzy=False,
                fuzzy_with_tokens=False):
         """
@@ -254,11 +254,11 @@ class DateParser(dateutil.parser.parser):
         return skipped_tokens, date_tokens
 
 
-DEFAULTPARSER = DateParser()
+DEFAULTPARSER = DateParser(parserinfo(dayfirst=True))
 
 
 def parse(timestr, default=None,
-          ignoretz=False, tzinfos=None, **kwargs):
+          ignoretz=False, tzinfos=None, **kwargs):  # pragma: no cover
     """
     Parse the date/time string into a :class:`datetime.datetime` object.
 
@@ -374,11 +374,7 @@ def parse_date_range(string, date_format=None, fuzzy=None):
                 fuzzy['nondate'] = nondate
             else:
                 fuzzy['nondate'] = None
-            datestr = parsed_string1[2]
-            if datestr:
-                fuzzy['date'] = datestr
-            else:
-                fuzzy['date'] = None
+            fuzzy['date'] = parsed_string1[2]
         else:
             startdate = parse(string, default=default_date)
             enddate = parse(string, default=default_enddate)

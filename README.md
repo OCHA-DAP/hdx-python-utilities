@@ -388,7 +388,8 @@ Examples:
     assert parse_date('20/02/2013', '%d/%m/%Y') == datetime(2013, 2, 20, 0, 0)
     
     # Parse date ranges
-    assert parse_date_range('20/02/2013') == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
+    parse_date_range('20/02/2013')
+    # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
     parse_date_range('20/02/2013 10:00:00')
     # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
     parse_date_range('20/02/2013', '%d/%m/%Y')
@@ -423,6 +424,13 @@ Examples:
     # Remove list of items from end of string, stripping any whitespace
     result = remove_from_end(a, ['fast!', 'so'], 'Transforming %s -> %s')
     assert result == 'The quick brown fox jumped over the lazy dog. It was'
+
+    # Remove string from another string and delete any preceding end characters - by default 
+    # punctuation (eg. comma) and any whitespace following the punctuation
+    assert remove_string('lala, 01/02/2020 ', '01/02/2020') == 'lala '
+    assert remove_string('lala,(01/02/2020) ', '01/02/2020') == 'lala) '
+    assert remove_string('lala, 01/02/2020 ', '01/02/2020', PUNCTUATION_MINUS_BRACKETS) == 'lala '
+    assert remove_string('lala,(01/02/2020) ', '01/02/2020', PUNCTUATION_MINUS_BRACKETS) == 'lala,() '
 
     # Replace multiple strings in a string simultaneously
     result = multiple_replace(a, {'quick': 'slow', 'fast': 'slow', 'lazy': 'busy'})

@@ -3,10 +3,12 @@
 import difflib
 import logging
 import re
-from string import punctuation, whitespace
+from string import punctuation
 from typing import List, Dict, Optional
 
 logger = logging.getLogger(__name__)
+
+PUNCTUATION_MINUS_BRACKETS = r"""!"#$%&'*+,-./:;<=>?@\^_`|~"""
 
 
 def remove_end_characters(string, characters_to_remove=punctuation):
@@ -22,22 +24,6 @@ def remove_end_characters(string, characters_to_remove=punctuation):
 
     """
     while string[-1] in characters_to_remove:
-        string = string[:-1]
-    return string
-
-
-def remove_end_whitespace_punctuation(string):
-    # type: (str) -> str
-    """Remove whitespace and punctuation from end of string
-
-    Args:
-        string (str): Input string
-
-    Returns:
-        str: String with end whitespace and punctuation removed
-
-    """
-    while string[-1] in punctuation or string[-1] in whitespace:
         string = string[:-1]
     return string
 
@@ -63,6 +49,27 @@ def remove_from_end(string, things_to_remove, logging_text=None):
                 logger.info(logging_text % (string, newstring))
             string = newstring
     return string
+
+
+def remove_string(string, toremove, end_characters_to_remove=punctuation):
+    # type: (str, str, str) -> str
+    """
+    Remove string from another string and delete any preceding end characters - by default punctuation (eg. comma)
+    and any whitespace following the punctuation
+
+    Args:
+        string (str): String to process
+        toremove (str): String to remove
+        end_characters_to_remove (str): Characters to remove. Defaults to punctuation.
+
+    Returns:
+        str: String with other string removed
+
+    """
+    index = string.find(toremove)
+    newstring = string[:index].strip()
+    newstring = remove_end_characters(newstring, characters_to_remove=end_characters_to_remove)
+    return '%s%s' % (newstring, string[index + len(toremove):])
 
 
 def multiple_replace(string, replacements):
