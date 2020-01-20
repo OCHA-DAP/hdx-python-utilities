@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 """Date parsing utilities"""
+from calendar import monthrange
 from datetime import datetime
 from parser import ParserError
 from typing import Optional, Dict, Tuple
 
 import dateutil
-from dateutil.parser import _timelex
-from dateutil.parser._parser import _ymd
+from dateutil.parser import _timelex, parserinfo
 
 from hdx.utilities import raisefrom
 
@@ -14,6 +14,182 @@ default_sd_year = 1
 default_date = datetime(year=default_sd_year, month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
 default_ed_year = 9990
 default_enddate = datetime(year=default_ed_year, month=12, day=31, hour=0, minute=0, second=0, microsecond=0)
+
+
+# Ugly copy and paste from dateutil.parser._parser._ymd with dayfirst modified to mean day is outer value
+# ie. dayfirst prefers dmy or ymd where in dateutil it prefers dmy and ydm!
+class _ymd(list):  # pragma: no cover
+    def __init__(self, *args, **kwargs):
+        super(self.__class__, self).__init__(*args, **kwargs)
+        self.century_specified = False
+        self.dstridx = None
+        self.mstridx = None
+        self.ystridx = None
+
+    @property
+    def has_year(self):
+        return self.ystridx is not None
+
+    @property
+    def has_month(self):
+        return self.mstridx is not None
+
+    @property
+    def has_day(self):
+        return self.dstridx is not None
+
+    def could_be_day(self, value):
+        if self.has_day:
+            return False
+        elif not self.has_month:
+            return 1 <= value <= 31
+        elif not self.has_year:
+            # Be permissive, assume leap year
+            month = self[self.mstridx]
+            return 1 <= value <= monthrange(2000, month)[1]
+        else:
+            month = self[self.mstridx]
+            year = self[self.ystridx]
+            return 1 <= value <= monthrange(year, month)[1]
+
+    def append(self, val, label=None):
+        if hasattr(val, '__len__'):
+            if val.isdigit() and len(val) > 2:
+                self.century_specified = True
+                if label not in [None, 'Y']:  # pragma: no cover
+                    raise ValueError(label)
+                label = 'Y'
+        elif val > 100:
+            self.century_specified = True
+            if label not in [None, 'Y']:  # pragma: no cover
+                raise ValueError(label)
+            label = 'Y'
+
+        super(self.__class__, self).append(int(val))
+
+        if label == 'M':
+            if self.has_month:
+                raise ValueError('Month is already set')
+            self.mstridx = len(self) - 1
+        elif label == 'D':
+            if self.has_day:
+                raise ValueError('Day is already set')
+            self.dstridx = len(self) - 1
+        elif label == 'Y':
+            if self.has_year:
+                raise ValueError('Year is already set')
+            self.ystridx = len(self) - 1
+
+    def _resolve_from_stridxs(self, strids):
+        """
+        Try to resolve the identities of year/month/day elements using
+        ystridx, mstridx, and dstridx, if enough of these are specified.
+        """
+        if len(self) == 3 and len(strids) == 2:
+            # we can back out the remaining stridx value
+            missing = [x for x in range(3) if x not in strids.values()]
+            key = [x for x in ['y', 'm', 'd'] if x not in strids]
+            assert len(missing) == len(key) == 1
+            key = key[0]
+            val = missing[0]
+            strids[key] = val
+
+        assert len(self) == len(strids)  # otherwise this should not be called
+        out = {key: self[strids[key]] for key in strids}
+        return (out.get('y'), out.get('m'), out.get('d'))
+
+    def resolve_ymd(self, yearfirst, dayfirst):
+        len_ymd = len(self)
+        year, month, day = (None, None, None)
+
+        strids = (('y', self.ystridx),
+                  ('m', self.mstridx),
+                  ('d', self.dstridx))
+
+        strids = {key: val for key, val in strids if val is not None}
+        if (len(self) == len(strids) > 0 or
+                (len(self) == 3 and len(strids) == 2)):
+            return self._resolve_from_stridxs(strids)
+
+        mstridx = self.mstridx
+
+        if len_ymd > 3:
+            raise ValueError("More than three YMD values")
+        elif len_ymd == 1 or (mstridx is not None and len_ymd == 2):
+            # One member, or two members with a month string
+            if mstridx is not None:
+                month = self[mstridx]
+                # since mstridx is 0 or 1, self[mstridx-1] always
+                # looks up the other element
+                other = self[mstridx - 1]
+            else:
+                other = self[0]
+
+            if len_ymd > 1 or mstridx is None:
+                if other > 31:
+                    year = other
+                else:
+                    day = other
+
+        elif len_ymd == 2:
+            # Two members with numbers
+            if self[0] > 31:
+                # 99-01
+                year, month = self
+            elif self[1] > 31:
+                # 01-99
+                month, year = self
+            elif dayfirst and self[1] <= 12:
+                # 13-01
+                day, month = self
+            else:
+                # 01-13
+                month, day = self
+
+        elif len_ymd == 3:
+            # Three members
+            if mstridx == 0:
+                if self[1] > 31:
+                    # Apr-2003-25
+                    month, year, day = self
+                else:
+                    month, day, year = self
+            elif mstridx == 1:
+                if self[0] > 31 or (yearfirst and self[2] <= 31):
+                    # 99-Jan-01
+                    year, month, day = self
+                else:
+                    # 01-Jan-01
+                    # Give precedence to day-first, since
+                    # two-digit years is usually hand-written.
+                    day, month, year = self
+
+            elif mstridx == 2:
+                # WTF!?
+                if self[1] > 31:
+                    # 01-99-Jan
+                    day, year, month = self
+                else:
+                    # 99-01-Jan
+                    year, day, month = self
+
+            else:
+                if (self[0] > 31 or
+                        self.ystridx == 0 or
+                        (yearfirst and self[1] <= 12 and self[2] <= 31)):
+                    # 99-01-01
+                    if dayfirst and self[1] <= 12:  # CHANGED
+                        year, month, day = self
+                    else:
+                        year, day, month = self
+                elif self[0] > 12 or (dayfirst and self[1] <= 12):
+                    # 13-01-01
+                    day, month, year = self
+                else:
+                    # 01-13-01
+                    month, day, year = self
+
+        return year, month, day
 
 
 # Ugly copy and paste from dateutil.dateparser with minor changes
@@ -214,7 +390,7 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
             res.year = year
             res.month = month
             res.day = day
-
+        ### CHANGES FROM HERE DOWN TO 3 VALUES IN TUPLE
         except (IndexError, ValueError):
             return None, None, None
 
@@ -254,7 +430,7 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
         return skipped_tokens, date_tokens
 
 
-DEFAULTPARSER = DateParser()
+DEFAULTPARSER = DateParser(parserinfo(dayfirst=True))
 
 
 def parse(timestr, default=None,

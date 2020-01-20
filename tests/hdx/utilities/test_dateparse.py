@@ -10,6 +10,9 @@ from hdx.utilities.dateparse import parse_date_range, parse_date
 
 class TestDateParse:
     def test_parse_date_range(self):
+        result = datetime(2013, 2, 10, 0, 0), datetime(2013, 2, 10, 0, 0)
+        assert parse_date_range('10/02/2013') == result
+        assert parse_date_range('2013/02/10') == result
         result = datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
         assert parse_date_range('20/02/2013') == result
         assert parse_date_range('20/02/2013 10:00:00') == result
@@ -38,7 +41,7 @@ class TestDateParse:
         assert parse_date_range('2013') == result
         assert parse_date_range('2013', '%Y') == result
         fuzzy = dict()
-        date = datetime(2001, 10, 12, 0, 0)
+        date = datetime(2001, 12, 10, 0, 0)
         result = date, date
         assert parse_date_range('State_Village_Tract_Boundaries 10/12/01 lala', fuzzy=fuzzy) == result
         assert fuzzy == {'startdate': date, 'enddate': date, 'nondate': ('State_Village_Tract_Boundaries ', ' lala'),

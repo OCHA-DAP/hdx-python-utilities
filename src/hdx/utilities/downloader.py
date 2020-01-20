@@ -10,7 +10,7 @@ from typing import Optional, Dict, Iterator, Union, List, Any, Tuple
 
 import requests
 import tabulator
-from ratelimit import limits, sleep_and_retry
+from ratelimit import sleep_and_retry, RateLimitDecorator
 from requests import Request
 from six.moves.urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
 from tabulator.exceptions import TabulatorException
@@ -35,7 +35,7 @@ class Download(object):
         user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.
         user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
         use_env (bool): Whether to read environment variables. Defaults to True.
-        rate_limit (bool): Whether to rate limit calls to 1 per 0.1s. Defaults to False.
+        rate_limit (Optional[Dict]): Rate limiting to use as a dict with calls and period. Defaults to None.
         **kwargs: See below
         auth (Tuple[str, str]): Authorisation information in tuple form (user, pass) OR
         basic_auth (str): Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
@@ -49,12 +49,13 @@ class Download(object):
     """
 
     def __init__(self, user_agent=None, user_agent_config_yaml=None, user_agent_lookup=None, use_env=True,
-                 rate_limit=False, **kwargs):
-        # type: (Optional[str], Optional[str], Optional[str], bool, bool, Any) -> None
+                 rate_limit=None, **kwargs):
+        # type: (Optional[str], Optional[str], Optional[str], bool, Optional[Dict], Any) -> None
         self.session = get_session(user_agent, user_agent_config_yaml, user_agent_lookup, use_env, **kwargs)
         self.response = None
-        if rate_limit:
-            self.setup = self.rate_limited_setup
+        if rate_limit is not None:
+            self.setup = sleep_and_retry(
+                RateLimitDecorator(calls=rate_limit['calls'], period=rate_limit['period']).__call__(self.normal_setup))
         else:
             self.setup = self.normal_setup
 
@@ -207,26 +208,6 @@ class Download(object):
         except Exception as e:
             raisefrom(DownloadError, 'Setup of Streaming Download of %s failed!' % url, e)
         return self.response
-
-    @sleep_and_retry
-    @limits(calls=1, period=0.1)
-    def rate_limited_setup(self, url, stream=True, post=False, parameters=None, timeout=None):
-        # type: (str, bool, bool, Optional[Dict], Optional[float]) -> requests.Response
-        """Setup download from provided url returning the response. Rate limit calls to
-        1 per 0.1 seconds.
-
-        Args:
-            url (str): URL to download
-            stream (bool): Whether to stream download. Defaults to True.
-            post (bool): Whether to use POST instead of GET. Defaults to False.
-            parameters (Optional[Dict]): Parameters to pass. Defaults to None.
-            timeout (Optional[float]): Timeout for connecting to URL. Defaults to None (no timeout).
-
-        Returns:
-            requests.Response: requests.Response object
-
-        """
-        return self.normal_setup(url, stream, post, parameters, timeout)
 
     def hash_stream(self, url):
         # type: (str) -> str
