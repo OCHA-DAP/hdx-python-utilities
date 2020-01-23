@@ -381,6 +381,9 @@ Examples:
 
 ### Date parsing utilities
 
+Ambiguous dates are parsed as day first D/M/Y where there are values in front of the year and day last Y/M/D
+where there are values after the year.
+
 Examples:
 
     # Parse dates
@@ -406,12 +409,12 @@ Examples:
     parse_date_range('date is 20/02/2013 for this test', fuzzy=fuzzy)
     # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)    
     assert fuzzy == {'startdate': datetime(2013, 2, 20, 0, 0), 'enddate': datetime(2013, 2, 20, 0, 0), 
-                     'nondate': ('date is ', ' for this test')}
+                     'nondate': ('date is ', ' for this test'), 'date': ('20/02/2013',)}
     fuzzy = dict()
     parse_date_range('date is 02/2013 for this test', fuzzy=fuzzy)
     # == datetime(2013, 2, 1, 0, 0), datetime(2013, 2, 28, 0, 0)
     assert fuzzy == {'startdate': datetime(2013, 2, 1, 0, 0), 'enddate': datetime(2013, 2, 28, 0, 0), 
-                     'nondate': ('date is ', ' for this test')}
+                     'nondate': ('date is ', ' for this test'), 'date': ('02/2013',)}
 
 ### Text processing
 
