@@ -57,7 +57,7 @@ locale=en to each request (eg. for get request <http://myurl/lala?param1=p1&loca
 If we want to limit the rate of get and post requests to 1 per 0.1 seconds, then the rate_limit parameter can be 
 passed:
 
-    with Download(rate_limit=True) as downloader:
+    with Download(rate_limit={'calls': 1, 'period': 0.1}) as downloader:
         response = downloader.download(url)  # get requests library response
 
 If we want a user agent that will be used in all relevant HDX Python Utilities methods (and all HDX Python API ones too 
