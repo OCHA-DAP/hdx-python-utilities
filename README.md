@@ -54,7 +54,7 @@ locale=en to each request (eg. for get request <http://myurl/lala?param1=p1&loca
         for row in downloader.get_tabular_rows('http://myurl/my.csv', dict_rows=True, headers=1)
             a = row['col']
 
-If we want to limit the rate of get and post requests to 1 per 0.1 seconds, then the rate_limit parameter can be 
+If we want to limit the rate of get and post requests to say 1 per 0.1 seconds, then the rate_limit parameter can be 
 passed:
 
     with Download(rate_limit={'calls': 1, 'period': 0.1}) as downloader:
