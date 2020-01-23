@@ -6,12 +6,12 @@ Subpackages
 
 .. toctree::
 
-    hdx.utilities
+   hdx.utilities
 
 Module contents
 ---------------
 
 .. automodule:: hdx
-    :members:
-    :undoc-members:
-    :show-inheritance:
+   :members:
+   :undoc-members:
+   :show-inheritance:

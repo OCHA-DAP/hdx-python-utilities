@@ -1,12 +1,10 @@
 
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
     <title>Index &#8212; HDX Python Utilities 1.0 documentation</title>
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,6 +12,7 @@
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -109,6 +108,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/hdx.utilities.html#hdx.utilities.database.Database">Database (class in hdx.utilities.database)</a>
 </li>
+      <li><a href="source/hdx.utilities.html#hdx.utilities.dateparse.DateParser">DateParser (class in hdx.utilities.dateparse)</a>
+</li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.email.Email.default_email_config_yaml">default_email_config_yaml (hdx.utilities.email.Email attribute)</a>
 </li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.useragent.UserAgent.default_user_agent_config_yaml">default_user_agent_config_yaml (hdx.utilities.useragent.UserAgent attribute)</a>
@@ -181,6 +182,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/hdx.utilities.html#hdx.utilities.useragent.UserAgent.get">get() (hdx.utilities.useragent.UserAgent class method)</a>
 </li>
+      <li><a href="source/hdx.utilities.html#hdx.utilities.downloader.Download.get_column_positions">get_column_positions() (hdx.utilities.downloader.Download static method)</a>
+</li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.downloader.Download.get_full_url">get_full_url() (hdx.utilities.downloader.Download method)</a>
 </li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.downloader.Download.get_json">get_json() (hdx.utilities.downloader.Download method)</a>
@@ -240,6 +243,8 @@
       <li><a href="source/hdx.utilities.html#module-hdx.utilities.compare">hdx.utilities.compare (module)</a>
 </li>
       <li><a href="source/hdx.utilities.html#module-hdx.utilities.database">hdx.utilities.database (module)</a>
+</li>
+      <li><a href="source/hdx.utilities.html#module-hdx.utilities.dateparse">hdx.utilities.dateparse (module)</a>
 </li>
       <li><a href="source/hdx.utilities.html#module-hdx.utilities.dictandlist">hdx.utilities.dictandlist (module)</a>
 </li>
@@ -359,8 +364,14 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/hdx.utilities.html#hdx.utilities.PackageCommand">PackageCommand (class in hdx.utilities)</a>
 </li>
+      <li><a href="source/hdx.utilities.html#hdx.utilities.dateparse.parse">parse() (in module hdx.utilities.dateparse)</a>
+</li>
+      <li><a href="source/hdx.utilities.html#hdx.utilities.dateparse.parse_date">parse_date() (in module hdx.utilities.dateparse)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/hdx.utilities.html#hdx.utilities.dateparse.parse_date_range">parse_date_range() (in module hdx.utilities.dateparse)</a>
+</li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.path.progress_storing_tempdir">progress_storing_tempdir() (in module hdx.utilities.path)</a>
 </li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.PublishCommand">PublishCommand (class in hdx.utilities)</a>
@@ -373,12 +384,16 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/hdx.utilities.html#hdx.utilities.raisefrom">raisefrom() (in module hdx.utilities)</a>
 </li>
-      <li><a href="source/hdx.utilities.html#hdx.utilities.downloader.Download.rate_limited_setup">rate_limited_setup() (hdx.utilities.downloader.Download method)</a>
-</li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.dictandlist.read_list_from_csv">read_list_from_csv() (in module hdx.utilities.dictandlist)</a>
+</li>
+      <li><a href="source/hdx.utilities.html#hdx.utilities.text.remove_end_characters">remove_end_characters() (in module hdx.utilities.text)</a>
+</li>
+      <li><a href="source/hdx.utilities.html#hdx.utilities.text.remove_from_end">remove_from_end() (in module hdx.utilities.text)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/hdx.utilities.html#hdx.utilities.text.remove_string">remove_string() (in module hdx.utilities.text)</a>
+</li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.CleanCommand.run">run() (hdx.utilities.CleanCommand method)</a>
 
       <ul>
@@ -498,13 +513,11 @@
 </ul>
 </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
       <input type="submit" value="Go" />
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
     </form>
     </div>
 </div>
@@ -517,7 +530,7 @@
       &copy;Michael Rans.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.7.7</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.3.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
       
     </div>
