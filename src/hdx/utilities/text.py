@@ -28,26 +28,34 @@ def remove_end_characters(string, characters_to_remove=punctuation):
     return string
 
 
-def remove_from_end(string, things_to_remove, logging_text=None):
-    # type: (str, List[str], Optional[str]) -> str
+def remove_from_end(string, things_to_remove, logging_text=None, whole_words=True):
+    # type: (str, List[str], Optional[str], bool) -> str
     """Remove list of items from end of string, stripping any whitespace
 
     Args:
         string (str): Input string
         things_to_remove (List[str]): Things to remove from the end of string
         logging_text (Optional[str]): Text to log. Defaults to None.
+        whole_words (bool): Remove parts of or whole words. Defaults to True (whole words only).
 
     Returns:
         str: String with text removed
 
     """
     for thing in things_to_remove:
-        position = -len(thing)
-        if string[position:] == thing:
-            newstring = string[:position].strip()
-            if logging_text:
-                logger.info(logging_text % (string, newstring))
-            string = newstring
+        thing_len = len(thing)
+        string_len = len(string)
+        if string_len <= thing_len + 1:
+            continue
+        position = -thing_len
+        if string[position:] != thing:
+            continue
+        if whole_words and string[position - 1].isalpha():
+            continue
+        newstring = string[:position].strip()
+        if logging_text:
+            logger.info(logging_text % (string, newstring))
+        string = newstring
     return string
 
 

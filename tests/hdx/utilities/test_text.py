@@ -17,8 +17,10 @@ class TestText:
         assert remove_end_characters('lalala, .\t/,"', '%s%s' % (punctuation, whitespace)) == 'lalala'
 
     def test_remove_from_end(self):
-        result = remove_from_end(TestText.a, ['fast!', 'so'], 'Transforming %s -> %s')
+        result = remove_from_end(TestText.a, ['fast!', 'so', 'hello', 'as'], 'Transforming %s -> %s')
         assert result == 'The quick brown fox jumped over the lazy dog. It was'
+        result = remove_from_end(TestText.a, ['fast!', 'so', 'hello', 'as'], 'Transforming %s -> %s', False)
+        assert result == 'The quick brown fox jumped over the lazy dog. It w'
 
     def test_remove_string(self):
         assert remove_string('lala, 01/02/2020 ', '01/02/2020') == 'lala '
