@@ -169,7 +169,7 @@ class TestDownloader:
         with Download() as downloader:
             downloader.setup(postfixtureurl, post=True)
             headers = downloader.response.headers
-            assert bool(re.match(r'2\d\d', headers['Content-Length'])) is True
+            assert bool(re.match(r'4\d\d', headers['Content-Length'])) is True
             downloader.setup('%s?id=10&lala=a' % getfixtureurl, post=False,
                              parameters=OrderedDict([('b', '4'), ('d', '3')]))
             assert downloader.get_json()['args'] == OrderedDict([('b', '4'), ('d', '3'), ('id', '10'), ('lala', 'a')])
