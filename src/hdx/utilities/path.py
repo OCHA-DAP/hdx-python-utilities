@@ -92,8 +92,9 @@ def temp_dir(folder=None, delete_on_success=True, delete_on_failure=True):
 
 def progress_storing_tempdir(folder, iterator, key):
     # type: (str, Iterable[Dict], str) -> Tuple[str,Dict]
-    """Get a temporary directory optionally with folder appended (and created if it doesn't exist) that
-    persists until the contents of the with statement are fully complete, persisting state between runs.
+    """Yield a temporary directory optionally with folder appended (and created if it doesn't exist)
+    and the next dictionary in the iterator. The folder persists until the final iteration and which
+    iteration to start at is persisted between runs.
 
     Args:
         folder (str): Folder to create in temporary folder

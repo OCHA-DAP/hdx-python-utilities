@@ -155,7 +155,15 @@ class TestDownloader:
     def test_get_url_params_for_post(self):
         assert Download.get_url_params_for_post('http://www.lala.com/hdfa?a=3&b=4',
                                                 OrderedDict([('c', 'e'), ('d', 'f')])) == (
-               'http://www.lala.com/hdfa', OrderedDict([('a', '3'), ('b', '4'), ('c', 'e'), ('d', 'f')]))
+                   'http://www.lala.com/hdfa', OrderedDict([('a', '3'), ('b', '4'), ('c', 'e'), ('d', 'f')]))
+
+    def test_hxl_row(self):
+        headers = ['a', 'b', 'c']
+        hxltags = {'b': '#b', 'c': '#c'}
+        assert Download.hxl_row(headers, hxltags) == ['', '#b', '#c']
+        assert Download.hxl_row(headers, hxltags, as_dict=True) == {'a': '', 'b': '#b', 'c': '#c'}
+        assert Download.hxl_row(headers, dict()) == ['', '', '']
+        assert Download.hxl_row([], hxltags) == list()
 
     def test_setup_stream(self, fixtureurl, fixturenotexistsurl, getfixtureurl, postfixtureurl):
         with pytest.raises(DownloadError), Download() as downloader:
@@ -257,6 +265,79 @@ class TestDownloader:
         for x in result:
             for y in result[x]:
                 result[x][y] = result[x][y].replace("'", '')
+
+    def test_get_tabular_rows_as_list(self, fixtureprocessurl):
+        with Download() as downloader:
+            rows = list()
+            for row in downloader.get_tabular_rows_as_list(fixtureprocessurl):
+                rows.append(row)
+            assert rows == [['la1', 'ha1', 'ba1', 'ma1'], ['header1', 'header2', 'header3', 'header4'],
+                            ['coal', '3', '7.4', 'needed'], ['gas', '2', '6.5', 'n/a']]
+
+    def test_get_tabular_rows(self, fixtureprocessurl):
+        with Download() as downloader:
+            rows = list()
+            for headers, row in downloader.get_tabular_rows(fixtureprocessurl):
+                rows.append(row)
+            expected = [['la1', 'ha1', 'ba1', 'ma1'], ['header1', 'header2', 'header3', 'header4'],
+                        ['coal', '3', '7.4', 'needed'], ['gas', '2', '6.5', 'n/a']]
+            expected_headers = expected[0]
+            assert headers == expected_headers
+            assert rows == expected[1:]
+            rows = list()
+            for headers, row in downloader.get_tabular_rows(fixtureprocessurl, headers=1):
+                rows.append(row)
+            assert headers == expected_headers
+            assert rows == expected[1:]
+            rows = list()
+            for headers, row in downloader.get_tabular_rows(fixtureprocessurl, headers=2):
+                rows.append(row)
+            assert headers == expected[1]
+            assert rows == expected[2:]
+            rows = list()
+            for headers, row in downloader.get_tabular_rows(fixtureprocessurl, headers=[1, 2]):
+                rows.append(row)
+            assert headers == ['la1 header1', 'ha1 header2', 'ba1 header3', 'ma1 header4']
+            assert rows == expected[2:]
+            rows = list()
+            myheaders = ['a', 'b', 'c', 'd']
+            for headers, row in downloader.get_tabular_rows(fixtureprocessurl, headers=myheaders):
+                rows.append(row)
+            assert headers == myheaders
+            assert rows == expected
+            rows = list()
+            for headers, row in downloader.get_tabular_rows(fixtureprocessurl, dict_rows=True, headers=1):
+                rows.append(row)
+            assert headers == expected_headers
+            expected_dict = [{'la1': 'header1', 'ha1': 'header2', 'ba1': 'header3', 'ma1': 'header4'},
+                             {'la1': 'coal', 'ha1': '3', 'ba1': '7.4', 'ma1': 'needed'},
+                             {'la1': 'gas', 'ha1': '2', 'ba1': '6.5', 'ma1': 'n/a'}]
+            assert rows == expected_dict
+            rows = list()
+            for headers, row in downloader.get_tabular_rows(fixtureprocessurl, dict_rows=True, headers=3):
+                rows.append(row)
+            assert headers == expected[2]
+            expected_dict = [{'coal': 'gas', '3': '2', '7.4': '6.5', 'needed': 'n/a'}]
+            assert rows == expected_dict
+            rows = list()
+            for headers, row in downloader.get_tabular_rows(fixtureprocessurl, headers=3, insertions=[(2, 'la')]):
+                rows.append(row)
+            expected_headers_la = ['coal', '3', 'la', '7.4', 'needed']
+            assert headers == expected_headers_la
+            assert rows == expected[3:]
+            rows = list()
+            for headers, row in downloader.get_tabular_rows(fixtureprocessurl, headers=3, hxltags={'7.4': '#lala'}):
+                rows.append(row)
+            assert headers == expected[2]
+            assert rows == [['', '', '#lala', '']] + expected[3:]
+            rows = list()
+            for headers, row in downloader.get_tabular_rows(fixtureprocessurl, headers=3, dict_rows=True,
+                                                            insertions=[(2, 'la')],
+                                                            hxltags={'la': '#ha', '7.4': '#lala'}):
+                rows.append(row)
+            assert headers == expected_headers_la
+            assert rows == [{'coal': '', '3': '', 'la': '#ha', '7.4': '#lala', 'needed': ''},
+                            {'coal': 'gas', '3': '2', '7.4': '6.5', 'needed': 'n/a'}]
 
     def test_download_tabular_rows_as_dicts(self, fixtureprocessurl):
         with Download() as downloader:

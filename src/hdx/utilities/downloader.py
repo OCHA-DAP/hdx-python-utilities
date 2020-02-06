@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Downloading utilities for urls"""
+import copy
 import hashlib
 import logging
 from collections import OrderedDict
@@ -181,6 +182,25 @@ class Download(object):
         full_url = urlunsplit(spliturl)
         return full_url, getparams
 
+    @staticmethod
+    def hxl_row(headers, hxltags, as_dict=False):
+        # type: (List[str], Dict[str,str], bool) -> Union[List[str], Dict[str,str]]
+        """Return HXL tag row for header row given list of headers and dictionary with header to HXL hashtag mappings.
+        Return list or dictionary depending upon teh as_dict argument.
+
+        Args:
+            headers (List[str]): Headers for which to get HXL hashtags
+            hxltags (Dict[str,str]): Header to HXL hashtag mapping
+
+        Returns:
+            Union[List[str],Dict[str,str]]: Return either a list or dictionary conating HXL hashtags
+
+        """
+        if as_dict:
+            return {header: hxltags.get(header, '') for header in headers}
+        else:
+            return [hxltags.get(header, '') for header in headers]
+
     def normal_setup(self, url, stream=True, post=False, parameters=None, timeout=None):
         # type: (str, bool, bool, Optional[Dict], Optional[float]) -> requests.Response
         """Setup download from provided url returning the response
@@ -335,13 +355,12 @@ class Download(object):
         except TabulatorException as e:
             raisefrom(DownloadError, 'Getting tabular stream for %s failed!' % url, e)
 
-    def get_tabular_rows(self, url, dict_rows=False, **kwargs):
-        # type: (str, bool, Any) -> Iterator[Dict]
-        """Get iterator for reading rows from tabular data. Each row is returned as a dictionary.
+    def get_tabular_rows_as_list(self, url, **kwargs):
+        # type: (str, Any) -> Iterator[List]
+        """Get iterator for reading rows from tabular data. Each row is returned as a list.
 
         Args:
             url (str): URL to download
-            dict_rows (bool): Return dict (requires headers parameter) or list for each row. Defaults to False (list).
             **kwargs:
             headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers
             file_type (Optional[str]): Type of file. Defaults to inferring.
@@ -351,7 +370,39 @@ class Download(object):
             Iterator[Union[List,Dict]]: Iterator where each row is returned as a list or dictionary.
 
         """
-        return self.get_tabular_stream(url, **kwargs).iter(keyed=dict_rows)
+        return self.get_tabular_stream(url, **kwargs).iter(keyed=False)
+
+    def get_tabular_rows(self, url, headers=1, dict_rows=False, insertions=None, hxltags=None, **kwargs):
+        # type: (str, Union[int, List[int], List[str]], bool, Optional[List[Tuple[int,str]]], Optional[Dict[str,str]], Any) -> Iterator[Dict]
+        """Yield header of tabular file pointed to by url and the next row of data. Each row is returned as a list
+        or dictionary depending on the dict_rows argument. Optionally, headers can be inserted at specific positions
+        into the list of headers read from the url. The user us responsible for inserting appropriate values into
+        the returned rows to match the additional headers. Optionally, a dictionary of hxltags can be provided which
+        adds a row below the header containing HXL hashtags.
+
+        Args:
+            url (str): URL to download
+            headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            dict_rows (bool): Return dict (requires headers parameter) or list for each row. Defaults to False (list)
+            insertions (Optional[List[Tuple[int,str]]]): Additional headers to insert at specific positions
+            hxltags (Optional[Dict[str,str]]): HXL tags to put in HXL row below header
+            **kwargs:
+            file_type (Optional[str]): Type of file. Defaults to inferring.
+            delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
+
+        Returns:
+            Iterator[Union[List,Dict]]: Iterator where each row is returned as a list or dictionary.
+
+        """
+        stream = self.get_tabular_stream(url, headers=headers, **kwargs)
+        headers = copy.deepcopy(stream.headers)
+        if insertions is not None:
+            for position, header in insertions:
+                headers.insert(position, header)
+        if hxltags is not None:
+            yield headers, self.hxl_row(headers, hxltags, as_dict=dict_rows)
+        for row in stream.iter(keyed=dict_rows):
+            yield headers, row
 
     def download_tabular_key_value(self, url, **kwargs):
         # type: (str, Any) -> Dict
@@ -369,7 +420,7 @@ class Download(object):
 
         """
         output_dict = dict()
-        for row in self.get_tabular_rows(url, **kwargs):
+        for row in self.get_tabular_rows_as_list(url, **kwargs):
             if len(row) < 2:
                 continue
             output_dict[row[0]] = row[1]

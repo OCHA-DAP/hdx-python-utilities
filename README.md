@@ -26,6 +26,13 @@ humanitarian related data, please upload your datasets to HDX.
 The library has detailed API documentation which can be found here: <http://ocha-dap.github.io/hdx-python-utilities/>. 
 The code for the library is here: <https://github.com/ocha-dap/hdx-python-utilities>.
 
+## Breaking Changes
+
+From 2.1.1, get_tabular_rows in the Download class returns headers, row and a new method get_tabular_rows_as_list 
+returns only the row.
+
+## Overview of the Utilities
+
 ### Downloading files
 
 
@@ -69,6 +76,15 @@ if that library is included), then it can be configured once and used automatica
 
 Other useful functions:
 
+    # Iterate through tabular file returning lists for each row
+    for row in downloader.get_tabular_rows_as_list(fixtureprocessurl):
+        ...
+    # Iterate through tabular file returning dicts or lists, inserting 
+    additional headers and adding a HXL hashtag row:
+    for headers, row in downloader.get_tabular_rows(
+            fixtureprocessurl, headers=3, dict_rows=True, insertions=[(2, 'la')], 
+            hxltags={'la': '#ha', '7.4': '#lala'}):
+        ...
     # Build get url from url and dictionary of parameters
     Download.get_url_for_get('http://www.lala.com/hdfa?a=3&b=4',
                              OrderedDict([('c', 'e'), ('d', 'f')]))
@@ -82,6 +98,8 @@ Other useful functions:
     # Get mapping of columns positions of headers          
     Download.get_column_positions(['a', 'b', 'c'])
     # == {'a': 0, 'b': 1, 'c': 2}
+
+For more detail and additional functions, check the API docs mentioned earlier in the [usage section](#usage).
 
 ### Loading and Saving JSON and YAML
 
