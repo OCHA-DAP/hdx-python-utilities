@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """Downloading utilities for urls"""
-import copy
 import hashlib
 import logging
 from collections import OrderedDict
@@ -372,37 +371,36 @@ class Download(object):
         """
         return self.get_tabular_stream(url, **kwargs).iter(keyed=False)
 
-    def get_tabular_rows(self, url, headers=1, dict_rows=False, insertions=None, hxltags=None, **kwargs):
-        # type: (str, Union[int, List[int], List[str]], bool, Optional[List[Tuple[int,str]]], Optional[Dict[str,str]], Any) -> Iterator[Dict]
-        """Yield header of tabular file pointed to by url and the next row of data. Each row is returned as a list
-        or dictionary depending on the dict_rows argument. Optionally, headers can be inserted at specific positions
-        into the list of headers read from the url. The user us responsible for inserting appropriate values into
-        the returned rows to match the additional headers. Optionally, a dictionary of hxltags can be provided which
-        adds a row below the header containing HXL hashtags.
+    def get_tabular_rows(self, url, headers=1, dict_rows=False, insertions=None, **kwargs):
+        # type: (str, Union[int, List[int], List[str]], bool, Optional[Dict], Any) -> Tuple[List[str],Iterator[Union[List,Dict]]]
+        """Returns header of tabular file pointed to by url and an iterator where each row is returned as a list
+        or dictionary depending on the dict_rows argument. Optionally, headers and values can be inserted at specific
+        positions. This is achieved using the insertions argument. If supplied, it must be a dictionary containing
+        the keys "headers" and "functions". "headers" contains a list of tuples of the form (position, header) to be
+        inserted and "functions" is a list of functions each of which takes a parameter extended_rows which contains
+        the row's number, file headers list and the row values list.
 
         Args:
             url (str): URL to download
             headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             dict_rows (bool): Return dict (requires headers parameter) or list for each row. Defaults to False (list)
-            insertions (Optional[List[Tuple[int,str]]]): Additional headers to insert at specific positions
-            hxltags (Optional[Dict[str,str]]): HXL tags to put in HXL row below header
+            insertions (Optional[Dict]): Dictionary with additional headers and functions (see description).
             **kwargs:
             file_type (Optional[str]): Type of file. Defaults to inferring.
             delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
 
         Returns:
-            Iterator[Union[List,Dict]]: Iterator where each row is returned as a list or dictionary.
+            Tuple[List[str],Iterator[Union[List,Dict]]]: Tuple (headers, iterator where each row is a list or dictionary)
 
         """
-        stream = self.get_tabular_stream(url, headers=headers, **kwargs)
-        headers = copy.deepcopy(stream.headers)
         if insertions is not None:
-            for position, header in insertions:
+            kwargs['post_parse'] = insertions['functions']
+        stream = self.get_tabular_stream(url, headers=headers, **kwargs)
+        headers = stream.headers
+        if insertions is not None:
+            for position, header in insertions['headers']:
                 headers.insert(position, header)
-        if hxltags is not None:
-            yield headers, self.hxl_row(headers, hxltags, as_dict=dict_rows)
-        for row in stream.iter(keyed=dict_rows):
-            yield headers, row
+        return headers, stream.iter(keyed=dict_rows)
 
     def download_tabular_key_value(self, url, **kwargs):
         # type: (str, Any) -> Dict

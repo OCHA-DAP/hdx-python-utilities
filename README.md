@@ -28,8 +28,8 @@ The code for the library is here: <https://github.com/ocha-dap/hdx-python-utili
 
 ## Breaking Changes
 
-From 2.1.1, get_tabular_rows in the Download class returns headers, row and a new method get_tabular_rows_as_list 
-returns only the row.
+From 2.1.2, get_tabular_rows in the Download class returns headers, iterator and a new method get_tabular_rows_as_list 
+returns only the iterator.
 
 ## Overview of the Utilities
 
@@ -74,17 +74,29 @@ if that library is included), then it can be configured once and used automatica
     with Download() as downloader:
         response = downloader.download(url)  # get requests library response
 
+The get_tabular_rows method enables iteration through tabular data. It returns the header of tabular file pointed to by 
+the url and an iterator where each row is returned as a list or dictionary depending on the dict_rows argument. 
+Optionally, headers and values can be inserted at specific positions. This is achieved using the insertions argument. 
+If supplied, it must be a dictionary containing the keys "headers" and "functions". "headers" contains a list of tuples 
+of the form (position, header) to be inserted and "functions" is a list of functions each of which takes a parameter 
+extended_rows which contains the row's number, file headers list and the row values list. Example:
+
+    def testfn(extended_rows):
+        for row_number, headers, row in extended_rows:
+            row.insert(2, 'lala')
+            yield row_number, headers, row
+
+    insertions = {'headers': [(2, 'la')], 'functions': [testfn]}
+    headers, generator = downloader.get_tabular_rows(url, headers=3, insertions=insertions)
+
 Other useful functions:
 
     # Iterate through tabular file returning lists for each row
-    for row in downloader.get_tabular_rows_as_list(fixtureprocessurl):
+    for row in downloader.get_tabular_rows_as_list(url):
         ...
-    # Iterate through tabular file returning dicts or lists, inserting 
-    additional headers and adding a HXL hashtag row:
-    for headers, row in downloader.get_tabular_rows(
-            fixtureprocessurl, headers=3, dict_rows=True, insertions=[(2, 'la')], 
-            hxltags={'la': '#ha', '7.4': '#lala'}):
-        ...
+    # Get hxl row
+    assert Download.hxl_row(['a', 'b', 'c'], {'b': '#b', 'c': '#c'}, as_dict=True)
+    # == {'a': '', 'b': '#b', 'c': '#c'}        
     # Build get url from url and dictionary of parameters
     Download.get_url_for_get('http://www.lala.com/hdfa?a=3&b=4',
                              OrderedDict([('c', 'e'), ('d', 'f')]))
