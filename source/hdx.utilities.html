@@ -590,19 +590,19 @@ like dictionaries in which case the function can return the appropriate value eg
 
 <dl class="function">
 <dt id="hdx.utilities.dictandlist.read_list_from_csv">
-<code class="sig-prename descclassname">hdx.utilities.dictandlist.</code><code class="sig-name descname">read_list_from_csv</code><span class="sig-paren">(</span><em class="sig-param">filepath</em>, <em class="sig-param">dict_form=False</em>, <em class="sig-param">headers=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.dictandlist.read_list_from_csv" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">hdx.utilities.dictandlist.</code><code class="sig-name descname">read_list_from_csv</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">headers=None</em>, <em class="sig-param">dict_form=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.dictandlist.read_list_from_csv" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
-<dt>Read a list of rows in dict or list form from a csv. (The headers argument is either a row</dt><dd><p>number or list of row numbers (in case of multi-line headers) to be considered as headers
+<dt>Read a list of rows in dict or list form from a csv. The headers argument is either a row</dt><dd><p>number or list of row numbers (in case of multi-line headers) to be considered as headers
 (rows start counting at 1), or the actual headers defined a list of strings. If not set,
-all rows will be treated as containing values.)</p>
+all rows will be treated as containing values.</p>
 </dd>
 </dl>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>filepath</strong> (<em>str</em>) – Path to read from</p></li>
-<li><p><strong>dict_form</strong> (<em>bool</em>) – Return in dict form. Defaults to False.</p></li>
+<li><p><strong>url</strong> (<em>str</em>) – URL or path to read from</p></li>
 <li><p><strong>headers</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>List</em><em>[</em><em>int</em><em>]</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>None</em><em>]</em>) – Row number of headers. Defaults to None.</p></li>
+<li><p><strong>dict_form</strong> (<em>bool</em>) – Return dict (requires headers parameter) or list for each row. Defaults to False (list)</p></li>
 <li><p><strong>**kwargs</strong> – Other arguments to pass to Tabulator Stream</p></li>
 </ul>
 </dd>
@@ -617,7 +617,7 @@ all rows will be treated as containing values.)</p>
 
 <dl class="function">
 <dt id="hdx.utilities.dictandlist.write_list_to_csv">
-<code class="sig-prename descclassname">hdx.utilities.dictandlist.</code><code class="sig-name descname">write_list_to_csv</code><span class="sig-paren">(</span><em class="sig-param">list_of_rows</em>, <em class="sig-param">filepath</em>, <em class="sig-param">headers=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.dictandlist.write_list_to_csv" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">hdx.utilities.dictandlist.</code><code class="sig-name descname">write_list_to_csv</code><span class="sig-paren">(</span><em class="sig-param">filepath</em>, <em class="sig-param">list_of_rows</em>, <em class="sig-param">headers=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.dictandlist.write_list_to_csv" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>Write a list of rows in dict or list form to a csv. (The headers argument is either a row</dt><dd><p>number or list of row numbers (in case of multi-line headers) to be considered as headers
 (rows start counting at 1), or the actual headers defined a list of strings. If not set,
@@ -627,8 +627,8 @@ all rows will be treated as containing values.)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>list_of_rows</strong> (<em>List</em><em>[</em><em>Union</em><em>[</em><em>DictUpperBound</em><em>, </em><em>List</em><em>]</em><em>]</em>) – List of rows in dict or list form</p></li>
 <li><p><strong>filepath</strong> (<em>str</em>) – Path to write to</p></li>
+<li><p><strong>list_of_rows</strong> (<em>List</em><em>[</em><em>Union</em><em>[</em><em>DictUpperBound</em><em>, </em><em>List</em><em>]</em><em>]</em>) – List of rows in dict or list form</p></li>
 <li><p><strong>headers</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>List</em><em>[</em><em>int</em><em>]</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>, </em><em>None</em><em>]</em>) – Headers to write. Defaults to None.</p></li>
 </ul>
 </dd>
@@ -885,13 +885,46 @@ headers and values from columns beneath</p>
 
 <dl class="method">
 <dt id="hdx.utilities.downloader.Download.get_tabular_rows">
-<code class="sig-name descname">get_tabular_rows</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">dict_rows=False</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.downloader.Download.get_tabular_rows" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get iterator for reading rows from tabular data. Each row is returned as a dictionary.</p>
+<code class="sig-name descname">get_tabular_rows</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">headers=1</em>, <em class="sig-param">dict_form=False</em>, <em class="sig-param">insertions=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.downloader.Download.get_tabular_rows" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns header of tabular file pointed to by url and an iterator where each row is returned as a list
+or dictionary depending on the dict_rows argument. The headers argument is either a row number or list of row
+numbers (in case of multi-line headers) to be considered as headers (rows start counting at 1), or the actual
+headers defined a list of strings. It defaults to 1 and cannot be None.  The dict_form arguments specifies if
+each row should be returned as a dictionary or a list, defaulting to a list.</p>
+<p>Optionally, headers and values can be inserted at specific positions. This  is achieved using the insertions
+argument. If supplied, it must be a dictionary containing the keys “headers”  and “function”. “headers”
+contains a list of tuples of the form (position, header) to be inserted and  “function” is a function which
+takes in the arguments headers (prior to any insertions) and row (which will be in dict or list form depending
+upon the dict_rows argument).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>url</strong> (<em>str</em>) – URL or path to read from</p></li>
+<li><p><strong>headers</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>List</em><em>[</em><em>int</em><em>]</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – Number of row(s) containing headers or list of headers. Defaults to 1.</p></li>
+<li><p><strong>dict_form</strong> (<em>bool</em>) – Return dict or list for each row. Defaults to False (list)</p></li>
+<li><p><strong>insertions</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>]</em>) – Dictionary with additional headers and functions (see description).</p></li>
+<li><p><strong>**kwargs</strong> – </p></li>
+<li><p><strong>file_type</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Type of file. Defaults to inferring.</p></li>
+<li><p><strong>delimiter</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Delimiter used for values in each row. Defaults to inferring.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Tuple (headers, iterator where each row is a list or dictionary)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[List[str],Iterator[Union[List,Dict]]]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="hdx.utilities.downloader.Download.get_tabular_rows_as_list">
+<code class="sig-name descname">get_tabular_rows_as_list</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.downloader.Download.get_tabular_rows_as_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get iterator for reading rows from tabular data. Each row is returned as a list.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>url</strong> (<em>str</em>) – URL to download</p></li>
-<li><p><strong>dict_rows</strong> (<em>bool</em>) – Return dict (requires headers parameter) or list for each row. Defaults to False (list).</p></li>
 <li><p><strong>**kwargs</strong> – </p></li>
 <li><p><strong>headers</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>List</em><em>[</em><em>int</em><em>]</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – Number of row(s) containing headers or list of headers</p></li>
 <li><p><strong>file_type</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Type of file. Defaults to inferring.</p></li>
@@ -983,6 +1016,28 @@ headers and values from columns beneath</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="hdx.utilities.downloader.Download.hxl_row">
+<em class="property">static </em><code class="sig-name descname">hxl_row</code><span class="sig-paren">(</span><em class="sig-param">headers</em>, <em class="sig-param">hxltags</em>, <em class="sig-param">dict_form=False</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.downloader.Download.hxl_row" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return HXL tag row for header row given list of headers and dictionary with header to HXL hashtag mappings.
+Return list or dictionary depending upon the dict_form argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>headers</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – Headers for which to get HXL hashtags</p></li>
+<li><p><strong>hxltags</strong> (<em>Dict</em><em>[</em><em>str</em><em>,</em><em>str</em><em>]</em>) – Header to HXL hashtag mapping</p></li>
+<li><p><strong>dict_form</strong> (<em>bool</em>) – Return dict or list. Defaults to False (list)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Return either a list or dictionary conating HXL hashtags</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Union[List[str],Dict[str,str]]</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1457,8 +1512,9 @@ back on os.gettempdir.</p>
 <dl class="function">
 <dt id="hdx.utilities.path.progress_storing_tempdir">
 <code class="sig-prename descclassname">hdx.utilities.path.</code><code class="sig-name descname">progress_storing_tempdir</code><span class="sig-paren">(</span><em class="sig-param">folder</em>, <em class="sig-param">iterator</em>, <em class="sig-param">key</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.path.progress_storing_tempdir" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a temporary directory optionally with folder appended (and created if it doesn’t exist) that
-persists until the contents of the with statement are fully complete, persisting state between runs.</p>
+<dd><p>Yield a temporary directory optionally with folder appended (and created if it doesn’t exist)
+and the next dictionary in the iterator. The folder persists until the final iteration and which
+iteration to start at is persisted between runs.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
@@ -1769,7 +1825,7 @@ end_characters (str): End characters to look for. Defaults to ‘.</p>
 
 <dl class="function">
 <dt id="hdx.utilities.text.remove_from_end">
-<code class="sig-prename descclassname">hdx.utilities.text.</code><code class="sig-name descname">remove_from_end</code><span class="sig-paren">(</span><em class="sig-param">string</em>, <em class="sig-param">things_to_remove</em>, <em class="sig-param">logging_text=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.text.remove_from_end" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">hdx.utilities.text.</code><code class="sig-name descname">remove_from_end</code><span class="sig-paren">(</span><em class="sig-param">string</em>, <em class="sig-param">things_to_remove</em>, <em class="sig-param">logging_text=None</em>, <em class="sig-param">whole_words=True</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.text.remove_from_end" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove list of items from end of string, stripping any whitespace</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -1777,6 +1833,7 @@ end_characters (str): End characters to look for. Defaults to ‘.</p>
 <li><p><strong>string</strong> (<em>str</em>) – Input string</p></li>
 <li><p><strong>things_to_remove</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – Things to remove from the end of string</p></li>
 <li><p><strong>logging_text</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Text to log. Defaults to None.</p></li>
+<li><p><strong>whole_words</strong> (<em>bool</em>) – Remove parts of or whole words. Defaults to True (whole words only).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
