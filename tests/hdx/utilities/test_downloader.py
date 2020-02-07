@@ -161,7 +161,7 @@ class TestDownloader:
         headers = ['a', 'b', 'c']
         hxltags = {'b': '#b', 'c': '#c'}
         assert Download.hxl_row(headers, hxltags) == ['', '#b', '#c']
-        assert Download.hxl_row(headers, hxltags, as_dict=True) == {'a': '', 'b': '#b', 'c': '#c'}
+        assert Download.hxl_row(headers, hxltags, dict_form=True) == {'a': '', 'b': '#b', 'c': '#c'}
         assert Download.hxl_row(headers, dict()) == ['', '', '']
         assert Download.hxl_row([], hxltags) == list()
 
@@ -293,13 +293,13 @@ class TestDownloader:
             headers, iterator = downloader.get_tabular_rows(fixtureprocessurl, headers=myheaders)
             assert headers == myheaders
             assert list(iterator) == expected
-            headers, iterator = downloader.get_tabular_rows(fixtureprocessurl, dict_rows=True, headers=1)
+            headers, iterator = downloader.get_tabular_rows(fixtureprocessurl, headers=1, dict_form=True)
             assert headers == expected_headers
             expected_dicts = [{'la1': 'header1', 'ha1': 'header2', 'ba1': 'header3', 'ma1': 'header4'},
                               {'la1': 'coal', 'ha1': '3', 'ba1': '7.4', 'ma1': 'needed'},
                               {'la1': 'gas', 'ha1': '2', 'ba1': '6.5', 'ma1': 'n/a'}]
             assert list(iterator) == expected_dicts
-            headers, iterator = downloader.get_tabular_rows(fixtureprocessurl, dict_rows=True, headers=3)
+            headers, iterator = downloader.get_tabular_rows(fixtureprocessurl, headers=3, dict_form=True)
             assert headers == expected[2]
             expected_dicts = [{'coal': 'gas', '3': '2', '7.4': '6.5', 'needed': 'n/a'}]
             assert list(iterator) == expected_dicts
@@ -319,11 +319,14 @@ class TestDownloader:
                 return row
 
             insertions = {'headers': [(2, 'la')], 'function': testfn}
-            headers, iterator = downloader.get_tabular_rows(fixtureprocessurl, dict_rows=True, headers=3,
+            headers, iterator = downloader.get_tabular_rows(fixtureprocessurl, headers=3, dict_form=True,
                                                             insertions=insertions)
             assert headers == expected_headers_la
             expected_dicts[0]['la'] = 'lala'
             assert list(iterator) == expected_dicts
+
+            with pytest.raises(DownloadError):
+                downloader.get_tabular_rows(fixtureprocessurl, headers=None)
 
     def test_download_tabular_rows_as_dicts(self, fixtureprocessurl):
         with Download() as downloader:

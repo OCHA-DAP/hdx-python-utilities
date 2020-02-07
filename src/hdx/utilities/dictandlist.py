@@ -336,40 +336,42 @@ def avg_dicts(dictin1, dictin2, dropmissing=True):
     return dictout
 
 
-def read_list_from_csv(filepath, dict_form=False, headers=None, **kwargs):
-    # type: (str, bool, Union[int, List[int], List[str], None], Any) -> List[Union[Dict, List]]
-    """Read a list of rows in dict or list form from a csv. (The headers argument is either a row
+def read_list_from_csv(url, headers=None, dict_form=False, **kwargs):
+    # type: (str, Union[int, List[int], List[str], None], bool, Any) -> List[Union[Dict, List]]
+    """Read a list of rows in dict or list form from a csv. The headers argument is either a row
        number or list of row numbers (in case of multi-line headers) to be considered as headers
        (rows start counting at 1), or the actual headers defined a list of strings. If not set,
-       all rows will be treated as containing values.)
+       all rows will be treated as containing values.
 
     Args:
-        filepath (str): Path to read from
-        dict_form (bool): Return in dict form. Defaults to False.
+        url (str): URL or path to read from
         headers (Union[int, List[int], List[str], None]): Row number of headers. Defaults to None.
+        dict_form (bool): Return dict (requires headers parameter) or list for each row. Defaults to False (list)
         **kwargs: Other arguments to pass to Tabulator Stream
 
     Returns:
         List[Union[Dict, List]]: List of rows in dict or list form
 
     """
-    stream = Stream(filepath, headers=headers, **kwargs)
+    if dict_form and headers is None:
+        raise ValueError('If dict_form is True, headers must not be None!')
+    stream = Stream(url, headers=headers, **kwargs)
     stream.open()
     result = stream.read(keyed=dict_form)
     stream.close()
     return result
 
 
-def write_list_to_csv(list_of_rows, filepath, headers=None):
-    # type: (List[Union[DictUpperBound, List]], str, Union[int, List[int], List[str], None]) -> None
+def write_list_to_csv(filepath, list_of_rows, headers=None):
+    # type: (str, List[Union[DictUpperBound, List]], Union[int, List[int], List[str], None]) -> None
     """Write a list of rows in dict or list form to a csv. (The headers argument is either a row
        number or list of row numbers (in case of multi-line headers) to be considered as headers
        (rows start counting at 1), or the actual headers defined a list of strings. If not set,
        all rows will be treated as containing values.)
 
     Args:
-        list_of_rows (List[Union[DictUpperBound, List]]): List of rows in dict or list form
         filepath (str): Path to write to
+        list_of_rows (List[Union[DictUpperBound, List]]): List of rows in dict or list form
         headers (Union[int, List[int], List[str], None]): Headers to write. Defaults to None.
 
     Returns:

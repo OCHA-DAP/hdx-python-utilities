@@ -31,6 +31,9 @@ The code for the library is here: <https://github.com/ocha-dap/hdx-python-utili
 From 2.1.2, get_tabular_rows in the Download class returns headers, iterator and a new method get_tabular_rows_as_list 
 returns only the iterator.
 
+From 2.1.4, read_list_from_csv and write_list_to_csv change the order of their parameters to be more logical.
+Arguments about choosing between dict and list are all made consistent - dict_form.
+
 ## Overview of the Utilities
 
 ### Downloading files
@@ -75,7 +78,12 @@ if that library is included), then it can be configured once and used automatica
         response = downloader.download(url)  # get requests library response
 
 The get_tabular_rows method enables iteration through tabular data. It returns the header of tabular file pointed to by 
-the url and an iterator where each row is returned as a list or dictionary depending on the dict_rows argument. 
+the url and an iterator where each row is returned as a list or dictionary depending on the dict_rows argument.
+
+The headers argument is either a row number or list of row numbers (in case of multi-line headers) to be considered as 
+headers (rows start counting at 1), or the actual headers defined a list of strings. It defaults to 1 and cannot be 
+None. The dict_form arguments specifies if each row should be returned as a dictionary or a list, defaulting to a list.  
+
 Optionally, headers and values can be inserted at specific positions. This is achieved using the insertions argument. 
 If supplied, it must be a dictionary containing the keys "headers" and "function". "headers" contains a list of tuples 
 of the form (position, header) to be inserted and "function" is a function which takes in the arguments headers (prior 
@@ -94,7 +102,7 @@ Other useful functions:
     for row in downloader.get_tabular_rows_as_list(url):
         ...
     # Get hxl row
-    assert Download.hxl_row(['a', 'b', 'c'], {'b': '#b', 'c': '#c'}, as_dict=True)
+    assert Download.hxl_row(['a', 'b', 'c'], {'b': '#b', 'c': '#c'}, dict_form=True)
     # == {'a': '', 'b': '#b', 'c': '#c'}        
     # Build get url from url and dictionary of parameters
     Download.get_url_for_get('http://www.lala.com/hdfa?a=3&b=4',
@@ -240,9 +248,9 @@ Examples:
     l = [[1, 2, 3, 'a'],
          [4, 5, 6, 'b'],
          [7, 8, 9, 'c']]
-    write_list_to_csv(l, filepath, headers=['h1', 'h2', 'h3', 'h4'])
+    write_list_to_csv(filepath, l, headers=['h1', 'h2', 'h3', 'h4'])
     newll = read_list_from_csv(filepath)
-    newld = read_list_from_csv(filepath, dict_form=True, headers=1)
+    newld = read_list_from_csv(filepath, headers=1, dict_form=True)
     assert newll == [['h1', 'h2', 'h3', 'h4'], ['1', '2', '3', 'a'], ['4', '5', '6', 'b'], ['7', '8', '9', 'c']]
     assert newld == [{'h1': '1', 'h2': '2', 'h4': 'a', 'h3': '3'},
                     {'h1': '4', 'h2': '5', 'h4': 'b', 'h3': '6'},

@@ -141,14 +141,16 @@ class TestDictAndList:
         folder = gettempdir()
         filename = 'test_read_write_list_to_csv.csv'
         filepath = join(folder, filename)
-        write_list_to_csv(l, filepath, headers=['h1', 'h2', 'h3', 'h4'])
+        write_list_to_csv(filepath, l, headers=['h1', 'h2', 'h3', 'h4'])
         newll = read_list_from_csv(filepath)
-        newld = read_list_from_csv(filepath, dict_form=True, headers=1)
+        newld = read_list_from_csv(filepath, headers=1, dict_form=True)
         remove(filepath)
         assert newll == [['h1', 'h2', 'h3', 'h4'], ['1', '2', '3', 'a'], ['4', '5', '6', 'b'], ['7', '8', '9', 'c']]
         assert newld == [{'h1': '1', 'h2': '2', 'h4': 'a', 'h3': '3'},
-                        {'h1': '4', 'h2': '5', 'h4': 'b', 'h3': '6'},
-                        {'h1': '7', 'h2': '8', 'h4': 'c', 'h3': '9'}]
+                         {'h1': '4', 'h2': '5', 'h4': 'b', 'h3': '6'},
+                         {'h1': '7', 'h2': '8', 'h4': 'c', 'h3': '9'}]
+        with pytest.raises(ValueError):
+            read_list_from_csv(filepath, dict_form=True)
 
     def test_args_to_dict(self):
         args = 'a=1,big=hello,1=3'

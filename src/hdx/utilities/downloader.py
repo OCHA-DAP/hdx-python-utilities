@@ -183,20 +183,21 @@ class Download(object):
         return full_url, getparams
 
     @staticmethod
-    def hxl_row(headers, hxltags, as_dict=False):
+    def hxl_row(headers, hxltags, dict_form=False):
         # type: (List[str], Dict[str,str], bool) -> Union[List[str], Dict[str,str]]
         """Return HXL tag row for header row given list of headers and dictionary with header to HXL hashtag mappings.
-        Return list or dictionary depending upon teh as_dict argument.
+        Return list or dictionary depending upon the dict_form argument.
 
         Args:
             headers (List[str]): Headers for which to get HXL hashtags
             hxltags (Dict[str,str]): Header to HXL hashtag mapping
+            dict_form (bool): Return dict or list. Defaults to False (list)
 
         Returns:
             Union[List[str],Dict[str,str]]: Return either a list or dictionary conating HXL hashtags
 
         """
-        if as_dict:
+        if dict_form:
             return {header: hxltags.get(header, '') for header in headers}
         else:
             return [hxltags.get(header, '') for header in headers]
@@ -372,19 +373,24 @@ class Download(object):
         """
         return self.get_tabular_stream(url, **kwargs).iter(keyed=False)
 
-    def get_tabular_rows(self, url, headers=1, dict_rows=False, insertions=None, **kwargs):
+    def get_tabular_rows(self, url, headers=1, dict_form=False, insertions=None, **kwargs):
         # type: (str, Union[int, List[int], List[str]], bool, Optional[Dict], Any) -> Tuple[List[str],Iterator[Union[List,Dict]]]
         """Returns header of tabular file pointed to by url and an iterator where each row is returned as a list
-        or dictionary depending on the dict_rows argument. Optionally, headers and values can be inserted at specific
-        positions. This is achieved using the insertions argument. If supplied, it must be a dictionary containing
-        the keys "headers" and "function". "headers" contains a list of tuples of the form (position, header) to be
-        inserted and "function" is a function which takes in the arguments headers (prior to any insertions) and
-        row (which will be in dict or list form depending upon the dict_rows argument).
+        or dictionary depending on the dict_rows argument. The headers argument is either a row number or list of row
+        numbers (in case of multi-line headers) to be considered as headers (rows start counting at 1), or the actual
+        headers defined a list of strings. It defaults to 1 and cannot be None.  The dict_form arguments specifies if
+        each row should be returned as a dictionary or a list, defaulting to a list.
+
+        Optionally, headers and values can be inserted at specific positions. This  is achieved using the insertions
+        argument. If supplied, it must be a dictionary containing the keys "headers"  and "function". "headers"
+        contains a list of tuples of the form (position, header) to be inserted and  "function" is a function which
+        takes in the arguments headers (prior to any insertions) and row (which will be in dict or list form depending
+        upon the dict_rows argument).
 
         Args:
-            url (str): URL to download
+            url (str): URL or path to read from
             headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
-            dict_rows (bool): Return dict (requires headers parameter) or list for each row. Defaults to False (list)
+            dict_form (bool): Return dict or list for each row. Defaults to False (list)
             insertions (Optional[Dict]): Dictionary with additional headers and functions (see description).
             **kwargs:
             file_type (Optional[str]): Type of file. Defaults to inferring.
@@ -394,17 +400,19 @@ class Download(object):
             Tuple[List[str],Iterator[Union[List,Dict]]]: Tuple (headers, iterator where each row is a list or dictionary)
 
         """
+        if headers is None:
+            raise DownloadError('Argument headers cannot be None!')
         stream = self.get_tabular_stream(url, headers=headers, **kwargs)
         origheaders = stream.headers
         if insertions is None:
-            return origheaders, stream.iter(keyed=dict_rows)
+            return origheaders, stream.iter(keyed=dict_form)
         headers = copy.deepcopy(origheaders)
         if insertions is not None:
             for position, header in insertions['headers']:
                 headers.insert(position, header)
 
         def get_next():
-            for row in stream.iter(keyed=dict_rows):
+            for row in stream.iter(keyed=dict_form):
                 row = insertions['function'](origheaders, row)
                 yield row
 
