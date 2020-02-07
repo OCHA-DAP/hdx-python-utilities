@@ -277,49 +277,53 @@ class TestDownloader:
             expected = [['la1', 'ha1', 'ba1', 'ma1'], ['header1', 'header2', 'header3', 'header4'],
                         ['coal', '3', '7.4', 'needed'], ['gas', '2', '6.5', 'n/a']]
             expected_headers = expected[0]
-            headers, generator = downloader.get_tabular_rows(fixtureprocessurl)
+            headers, iterator = downloader.get_tabular_rows(fixtureprocessurl)
             assert headers == expected_headers
-            assert list(generator) == expected[1:]
-            headers, generator = downloader.get_tabular_rows(fixtureprocessurl, headers=1)
+            assert list(iterator) == expected[1:]
+            headers, iterator = downloader.get_tabular_rows(fixtureprocessurl, headers=1)
             assert headers == expected_headers
-            assert list(generator) == expected[1:]
-            headers, generator = downloader.get_tabular_rows(fixtureprocessurl, headers=2)
+            assert list(iterator) == expected[1:]
+            headers, iterator = downloader.get_tabular_rows(fixtureprocessurl, headers=2)
             assert headers == expected[1]
-            assert list(generator) == expected[2:]
-            headers, generator = downloader.get_tabular_rows(fixtureprocessurl, headers=[1, 2])
+            assert list(iterator) == expected[2:]
+            headers, iterator = downloader.get_tabular_rows(fixtureprocessurl, headers=[1, 2])
             assert headers == ['la1 header1', 'ha1 header2', 'ba1 header3', 'ma1 header4']
-            assert list(generator) == expected[2:]
+            assert list(iterator) == expected[2:]
             myheaders = ['a', 'b', 'c', 'd']
-            headers, generator = downloader.get_tabular_rows(fixtureprocessurl, headers=myheaders)
+            headers, iterator = downloader.get_tabular_rows(fixtureprocessurl, headers=myheaders)
             assert headers == myheaders
-            assert list(generator) == expected
-            headers, generator = downloader.get_tabular_rows(fixtureprocessurl, dict_rows=True, headers=1)
+            assert list(iterator) == expected
+            headers, iterator = downloader.get_tabular_rows(fixtureprocessurl, dict_rows=True, headers=1)
             assert headers == expected_headers
             expected_dicts = [{'la1': 'header1', 'ha1': 'header2', 'ba1': 'header3', 'ma1': 'header4'},
                               {'la1': 'coal', 'ha1': '3', 'ba1': '7.4', 'ma1': 'needed'},
                               {'la1': 'gas', 'ha1': '2', 'ba1': '6.5', 'ma1': 'n/a'}]
-            assert list(generator) == expected_dicts
-            headers, generator = downloader.get_tabular_rows(fixtureprocessurl, dict_rows=True, headers=3)
+            assert list(iterator) == expected_dicts
+            headers, iterator = downloader.get_tabular_rows(fixtureprocessurl, dict_rows=True, headers=3)
             assert headers == expected[2]
             expected_dicts = [{'coal': 'gas', '3': '2', '7.4': '6.5', 'needed': 'n/a'}]
-            assert list(generator) == expected_dicts
+            assert list(iterator) == expected_dicts
 
-            def testfn(extended_rows):
-                for row_number, headers, row in extended_rows:
-                    row.insert(2, 'lala')
-                    yield row_number, headers, row
+            def testfn(headers, row):
+                row.insert(2, 'lala')
+                return row
 
-            insertions = {'headers': [(2, 'la')], 'functions': [testfn]}
-            headers, generator = downloader.get_tabular_rows(fixtureprocessurl, headers=3, insertions=insertions)
+            insertions = {'headers': [(2, 'la')], 'function': testfn}
+            headers, iterator = downloader.get_tabular_rows(fixtureprocessurl, headers=3, insertions=insertions)
             expected_headers_la = ['coal', '3', 'la', '7.4', 'needed']
             assert headers == expected_headers_la
-            assert list(generator) == [['gas', '2', 'lala', '6.5', 'n/a']]
+            assert list(iterator) == [['gas', '2', 'lala', '6.5', 'n/a']]
 
-            headers, generator = downloader.get_tabular_rows(fixtureprocessurl, dict_rows=True, headers=3,
-                                                             insertions=insertions)
+            def testfn(headers, row):
+                row['la'] = 'lala'
+                return row
+
+            insertions = {'headers': [(2, 'la')], 'function': testfn}
+            headers, iterator = downloader.get_tabular_rows(fixtureprocessurl, dict_rows=True, headers=3,
+                                                            insertions=insertions)
             assert headers == expected_headers_la
             expected_dicts[0]['la'] = 'lala'
-            assert list(generator) == expected_dicts
+            assert list(iterator) == expected_dicts
 
     def test_download_tabular_rows_as_dicts(self, fixtureprocessurl):
         with Download() as downloader:

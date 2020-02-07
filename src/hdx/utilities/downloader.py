@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """Downloading utilities for urls"""
+import copy
 import hashlib
 import logging
 from collections import OrderedDict
@@ -376,9 +377,9 @@ class Download(object):
         """Returns header of tabular file pointed to by url and an iterator where each row is returned as a list
         or dictionary depending on the dict_rows argument. Optionally, headers and values can be inserted at specific
         positions. This is achieved using the insertions argument. If supplied, it must be a dictionary containing
-        the keys "headers" and "functions". "headers" contains a list of tuples of the form (position, header) to be
-        inserted and "functions" is a list of functions each of which takes a parameter extended_rows which contains
-        the row's number, file headers list and the row values list.
+        the keys "headers" and "function". "headers" contains a list of tuples of the form (position, header) to be
+        inserted and "function" is a function which takes in the arguments headers (prior to any insertions) and
+        row (which will be in dict or list form depending upon the dict_rows argument).
 
         Args:
             url (str): URL to download
@@ -393,14 +394,21 @@ class Download(object):
             Tuple[List[str],Iterator[Union[List,Dict]]]: Tuple (headers, iterator where each row is a list or dictionary)
 
         """
-        if insertions is not None:
-            kwargs['post_parse'] = insertions['functions']
         stream = self.get_tabular_stream(url, headers=headers, **kwargs)
-        headers = stream.headers
+        origheaders = stream.headers
+        if insertions is None:
+            return origheaders, stream.iter(keyed=dict_rows)
+        headers = copy.deepcopy(origheaders)
         if insertions is not None:
             for position, header in insertions['headers']:
                 headers.insert(position, header)
-        return headers, stream.iter(keyed=dict_rows)
+
+        def get_next():
+            for row in stream.iter(keyed=dict_rows):
+                row = insertions['function'](origheaders, row)
+                yield row
+
+        return headers, get_next()
 
     def download_tabular_key_value(self, url, **kwargs):
         # type: (str, Any) -> Dict
