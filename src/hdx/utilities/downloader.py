@@ -373,7 +373,7 @@ class Download(object):
         """
         return self.get_tabular_stream(url, **kwargs).iter(keyed=False)
 
-    def get_tabular_rows(self, url, headers=1, dict_form=False, ignore_blank_rows=True, header_insertions=None, row_function=lambda h,r: r, **kwargs):
+    def get_tabular_rows(self, url, headers=1, dict_form=False, ignore_blank_rows=True, header_insertions=None, row_function=None, **kwargs):
         # type: (str, Union[int, List[int], List[str]], bool, bool, Optional[List[Tuple[int,str]]], Optional[Callable[[List[str],Union[List,Dict]],Union[List,Dict]]], Any) -> Tuple[List[str],Iterator[Union[List,Dict]]]
         """Returns header of tabular file pointed to by url and an iterator where each row is returned as a list
         or dictionary depending on the dict_rows argument. The headers argument is either a row number or list of row
