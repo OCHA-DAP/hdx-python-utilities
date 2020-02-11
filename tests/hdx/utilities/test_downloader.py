@@ -47,6 +47,10 @@ class TestDownloader:
     def fixtureprocessurl(self):
         return 'https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/downloader/test_csv_processing.csv?a=1'
 
+    @pytest.fixture(scope='class')
+    def fixtureprocessurlblank(self):
+        return 'https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/downloader/test_csv_processing_blanks.csv?a=1'
+
     def test_get_path_for_url(self, tmpdir, fixtureurl, configfolder, downloaderfolder):
         tmpdir = str(tmpdir)
         filename = 'test_data.csv'
@@ -272,7 +276,7 @@ class TestDownloader:
             assert rows == [['la1', 'ha1', 'ba1', 'ma1'], ['header1', 'header2', 'header3', 'header4'],
                             ['coal', '3', '7.4', 'needed'], ['gas', '2', '6.5', 'n/a']]
 
-    def test_get_tabular_rows(self, fixtureprocessurl):
+    def test_get_tabular_rows(self, fixtureprocessurl, fixtureprocessurlblank):
         with Download() as downloader:
             expected = [['la1', 'ha1', 'ba1', 'ma1'], ['header1', 'header2', 'header3', 'header4'],
                         ['coal', '3', '7.4', 'needed'], ['gas', '2', '6.5', 'n/a']]
@@ -310,8 +314,8 @@ class TestDownloader:
 
             headers, iterator = downloader.get_tabular_rows(fixtureprocessurl, headers=3,
                                                             header_insertions=[(2, 'la')], row_function=testfn)
-            expected_headers_la = ['coal', '3', 'la', '7.4', 'needed']
-            assert headers == expected_headers_la
+            expected_headers = ['coal', '3', 'la', '7.4', 'needed']
+            assert headers == expected_headers
             assert list(iterator) == [['gas', '2', 'lala', '6.5', 'n/a']]
 
             def testfn(headers, row):
@@ -320,8 +324,26 @@ class TestDownloader:
 
             headers, iterator = downloader.get_tabular_rows(fixtureprocessurl, headers=3, dict_form=True,
                                                             header_insertions=[(2, 'la')], row_function=testfn)
-            assert headers == expected_headers_la
+            assert headers == expected_headers
             expected_dicts[0]['la'] = 'lala'
+            assert list(iterator) == expected_dicts
+
+            headers, iterator = downloader.get_tabular_rows(fixtureprocessurlblank, headers=1, dict_form=True, ignore_blank_rows=False,
+                                                            header_insertions=[(2, 'la')], row_function=testfn)
+            expected_headers = ['la1', 'ha1', 'la', 'ba1', 'ma1']
+            assert headers == expected_headers
+
+            expected_dicts = [{'la1': 'header1', 'ha1': 'header2', 'ba1': 'header3', 'ma1': 'header4', 'la': 'lala'},
+                              {'la': 'lala'},
+                              {'la1': 'coal', 'ha1': '3', 'ba1': '7.4', 'ma1': 'needed', 'la': 'lala'},
+                              {'la1': '', 'ha1': '2', 'ba1': '6.5', 'ma1': 'n/a', 'la': 'lala'},
+                              {'la': 'lala'}]
+            assert list(iterator) == expected_dicts
+            headers, iterator = downloader.get_tabular_rows(fixtureprocessurlblank, headers=1, dict_form=True,
+                                                            header_insertions=[(2, 'la')], row_function=testfn)
+            assert headers == expected_headers
+            del expected_dicts[4]
+            del expected_dicts[1]
             assert list(iterator) == expected_dicts
 
             with pytest.raises(DownloadError):

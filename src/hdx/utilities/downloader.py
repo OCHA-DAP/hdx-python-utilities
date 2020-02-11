@@ -373,8 +373,8 @@ class Download(object):
         """
         return self.get_tabular_stream(url, **kwargs).iter(keyed=False)
 
-    def get_tabular_rows(self, url, headers=1, dict_form=False, header_insertions=None, row_function=None, **kwargs):
-        # type: (str, Union[int, List[int], List[str]], bool, Optional[List[Tuple[int,str]]], Optional[Callable[[List[str],Union[List,Dict]],Union[List,Dict]]], Any) -> Tuple[List[str],Iterator[Union[List,Dict]]]
+    def get_tabular_rows(self, url, headers=1, dict_form=False, ignore_blank_rows=True, header_insertions=None, row_function=lambda h,r: r, **kwargs):
+        # type: (str, Union[int, List[int], List[str]], bool, bool, Optional[List[Tuple[int,str]]], Optional[Callable[[List[str],Union[List,Dict]],Union[List,Dict]]], Any) -> Tuple[List[str],Iterator[Union[List,Dict]]]
         """Returns header of tabular file pointed to by url and an iterator where each row is returned as a list
         or dictionary depending on the dict_rows argument. The headers argument is either a row number or list of row
         numbers (in case of multi-line headers) to be considered as headers (rows start counting at 1), or the actual
@@ -382,14 +382,15 @@ class Download(object):
         if each row should be returned as a dictionary or a list, defaulting to a list.
 
         Optionally, headers can be inserted at specific positions. This is achieved using the header_insertions
-        argument. If supplied, it is a list of tuples of the form (position, header) to be inserted. Optionally a
-        function can be called on each row. If supplied, it takes as arguments: headers (prior to any insertions) and
+        argument. If supplied, it is a list of tuples of the form (position, header) to be inserted. A function is
+        called for each row. If supplied, it takes as arguments: headers (prior to any insertions) and
         row (which will be in dict or list form depending upon the dict_rows argument) and outputs a modified row.
 
         Args:
             url (str): URL or path to read from
             headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             dict_form (bool): Return dict or list for each row. Defaults to False (list)
+            ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
             header_insertions (Optional[List[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
             row_function (Optional[Callable[[List[str],Union[List,Dict]],Union[List,Dict]]]): Function to call for each row. Defaults to None.
             **kwargs:
@@ -402,6 +403,11 @@ class Download(object):
         """
         if headers is None:
             raise DownloadError('Argument headers cannot be None!')
+        if ignore_blank_rows:
+            skip_rows = kwargs.get('skip_rows', list())
+            if '' not in skip_rows:
+                skip_rows.append('')
+            kwargs['skip_rows'] = skip_rows
         stream = self.get_tabular_stream(url, headers=headers, **kwargs)
         origheaders = stream.headers
         if header_insertions is None:
