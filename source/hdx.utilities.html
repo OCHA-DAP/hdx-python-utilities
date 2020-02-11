@@ -885,24 +885,24 @@ headers and values from columns beneath</p>
 
 <dl class="method">
 <dt id="hdx.utilities.downloader.Download.get_tabular_rows">
-<code class="sig-name descname">get_tabular_rows</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">headers=1</em>, <em class="sig-param">dict_form=False</em>, <em class="sig-param">insertions=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.downloader.Download.get_tabular_rows" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">get_tabular_rows</code><span class="sig-paren">(</span><em class="sig-param">url</em>, <em class="sig-param">headers=1</em>, <em class="sig-param">dict_form=False</em>, <em class="sig-param">header_insertions=None</em>, <em class="sig-param">row_function=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.downloader.Download.get_tabular_rows" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns header of tabular file pointed to by url and an iterator where each row is returned as a list
 or dictionary depending on the dict_rows argument. The headers argument is either a row number or list of row
 numbers (in case of multi-line headers) to be considered as headers (rows start counting at 1), or the actual
-headers defined a list of strings. It defaults to 1 and cannot be None.  The dict_form arguments specifies if
-each row should be returned as a dictionary or a list, defaulting to a list.</p>
-<p>Optionally, headers and values can be inserted at specific positions. This  is achieved using the insertions
-argument. If supplied, it must be a dictionary containing the keys “headers”  and “function”. “headers”
-contains a list of tuples of the form (position, header) to be inserted and  “function” is a function which
-takes in the arguments headers (prior to any insertions) and row (which will be in dict or list form depending
-upon the dict_rows argument).</p>
+headers defined as a list of strings. It defaults to 1 and cannot be None.  The dict_form arguments specifies
+if each row should be returned as a dictionary or a list, defaulting to a list.</p>
+<p>Optionally, headers can be inserted at specific positions. This is achieved using the header_insertions
+argument. If supplied, it is a list of tuples of the form (position, header) to be inserted. Optionally a
+function can be called on each row. If supplied, it takes as arguments: headers (prior to any insertions) and
+row (which will be in dict or list form depending upon the dict_rows argument) and outputs a modified row.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>url</strong> (<em>str</em>) – URL or path to read from</p></li>
 <li><p><strong>headers</strong> (<em>Union</em><em>[</em><em>int</em><em>, </em><em>List</em><em>[</em><em>int</em><em>]</em><em>, </em><em>List</em><em>[</em><em>str</em><em>]</em><em>]</em>) – Number of row(s) containing headers or list of headers. Defaults to 1.</p></li>
 <li><p><strong>dict_form</strong> (<em>bool</em>) – Return dict or list for each row. Defaults to False (list)</p></li>
-<li><p><strong>insertions</strong> (<em>Optional</em><em>[</em><em>Dict</em><em>]</em>) – Dictionary with additional headers and functions (see description).</p></li>
+<li><p><strong>header_insertions</strong> (<em>Optional</em><em>[</em><em>List</em><em>[</em><em>Tuple</em><em>[</em><em>int</em><em>,</em><em>str</em><em>]</em><em>]</em><em>]</em>) – List of (position, header) to insert. Defaults to None.</p></li>
+<li><p><strong>row_function</strong> (<em>Optional</em><em>[</em><em>Callable</em><em>[</em><em>[</em><em>List</em><em>[</em><em>str</em><em>]</em><em>,</em><em>Union</em><em>[</em><em>List</em><em>,</em><em>Dict</em><em>]</em><em>]</em><em>,</em><em>Union</em><em>[</em><em>List</em><em>,</em><em>Dict</em><em>]</em><em>]</em><em>]</em>) – Function to call for each row. Defaults to None.</p></li>
 <li><p><strong>**kwargs</strong> – </p></li>
 <li><p><strong>file_type</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Type of file. Defaults to inferring.</p></li>
 <li><p><strong>delimiter</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Delimiter used for values in each row. Defaults to inferring.</p></li>
