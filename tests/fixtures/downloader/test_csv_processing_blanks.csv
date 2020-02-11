@@ -1,6 +1,6 @@
-la1    ,ha1    ,ba1    ,ma1
+la1,ha1,ba1,ma1
 header1,header2,header3,header4
 
-coal   ,3      ,7.4    ,'needed'
-       ,2      ,6.5    ,'n/a'
+coal,3,7.4,'needed'
+,2,6.5,'n/a'
 
