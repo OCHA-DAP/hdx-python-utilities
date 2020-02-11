@@ -84,17 +84,18 @@ The headers argument is either a row number or list of row numbers (in case of m
 headers (rows start counting at 1), or the actual headers defined a list of strings. It defaults to 1 and cannot be 
 None. The dict_form arguments specifies if each row should be returned as a dictionary or a list, defaulting to a list.  
 
-Optionally, headers and values can be inserted at specific positions. This is achieved using the insertions argument. 
-If supplied, it must be a dictionary containing the keys "headers" and "function". "headers" contains a list of tuples 
-of the form (position, header) to be inserted and "function" is a function which takes in the arguments headers (prior 
-to any insertions) and row (which will be in dict or list form depending upon the dict_rows argument). Example:
+Optionally, headers can be inserted at specific positions. This is achieved using the header_insertions argument. If 
+supplied, it is a list of tuples of the form (position, header) to be inserted. Optionally a function can be called on 
+each row. If supplied, it takes as arguments: headers (prior to any insertions) and row (which will be in dict or list 
+form depending upon the dict_rows argument) and outputs a modified row. Example:
 
     def testfn(headers, row):
         row['la'] = 'lala'
         return row
 
     insertions = {'headers': [(2, 'la')], 'function': testfn}
-    headers, generator = downloader.get_tabular_rows(url, headers=3, insertions=insertions)
+    headers, generator = downloader.get_tabular_rows(url, headers=3, 
+                                                     header_insertions=[(2, 'la')], row_function=testfn)
 
 Other useful functions:
 

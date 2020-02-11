@@ -308,8 +308,8 @@ class TestDownloader:
                 row.insert(2, 'lala')
                 return row
 
-            insertions = {'headers': [(2, 'la')], 'function': testfn}
-            headers, iterator = downloader.get_tabular_rows(fixtureprocessurl, headers=3, insertions=insertions)
+            headers, iterator = downloader.get_tabular_rows(fixtureprocessurl, headers=3,
+                                                            header_insertions=[(2, 'la')], row_function=testfn)
             expected_headers_la = ['coal', '3', 'la', '7.4', 'needed']
             assert headers == expected_headers_la
             assert list(iterator) == [['gas', '2', 'lala', '6.5', 'n/a']]
@@ -318,9 +318,8 @@ class TestDownloader:
                 row['la'] = 'lala'
                 return row
 
-            insertions = {'headers': [(2, 'la')], 'function': testfn}
             headers, iterator = downloader.get_tabular_rows(fixtureprocessurl, headers=3, dict_form=True,
-                                                            insertions=insertions)
+                                                            header_insertions=[(2, 'la')], row_function=testfn)
             assert headers == expected_headers_la
             expected_dicts[0]['la'] = 'lala'
             assert list(iterator) == expected_dicts

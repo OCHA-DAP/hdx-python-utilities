@@ -7,7 +7,7 @@ from collections import OrderedDict
 from os import remove
 from os.path import splitext, join, exists
 from posixpath import basename
-from typing import Optional, Dict, Iterator, Union, List, Any, Tuple
+from typing import Optional, Dict, Iterator, Union, List, Any, Tuple, Callable
 
 import requests
 import tabulator
@@ -373,25 +373,25 @@ class Download(object):
         """
         return self.get_tabular_stream(url, **kwargs).iter(keyed=False)
 
-    def get_tabular_rows(self, url, headers=1, dict_form=False, insertions=None, **kwargs):
-        # type: (str, Union[int, List[int], List[str]], bool, Optional[Dict], Any) -> Tuple[List[str],Iterator[Union[List,Dict]]]
+    def get_tabular_rows(self, url, headers=1, dict_form=False, header_insertions=None, row_function=None, **kwargs):
+        # type: (str, Union[int, List[int], List[str]], bool, Optional[List[Tuple[int,str]]], Optional[Callable[[List[str],Union[List,Dict]],Union[List,Dict]]], Any) -> Tuple[List[str],Iterator[Union[List,Dict]]]
         """Returns header of tabular file pointed to by url and an iterator where each row is returned as a list
         or dictionary depending on the dict_rows argument. The headers argument is either a row number or list of row
         numbers (in case of multi-line headers) to be considered as headers (rows start counting at 1), or the actual
-        headers defined a list of strings. It defaults to 1 and cannot be None.  The dict_form arguments specifies if
-        each row should be returned as a dictionary or a list, defaulting to a list.
+        headers defined as a list of strings. It defaults to 1 and cannot be None.  The dict_form arguments specifies
+        if each row should be returned as a dictionary or a list, defaulting to a list.
 
-        Optionally, headers and values can be inserted at specific positions. This  is achieved using the insertions
-        argument. If supplied, it must be a dictionary containing the keys "headers"  and "function". "headers"
-        contains a list of tuples of the form (position, header) to be inserted and  "function" is a function which
-        takes in the arguments headers (prior to any insertions) and row (which will be in dict or list form depending
-        upon the dict_rows argument).
+        Optionally, headers can be inserted at specific positions. This is achieved using the header_insertions
+        argument. If supplied, it is a list of tuples of the form (position, header) to be inserted. Optionally a
+        function can be called on each row. If supplied, it takes as arguments: headers (prior to any insertions) and
+        row (which will be in dict or list form depending upon the dict_rows argument) and outputs a modified row.
 
         Args:
             url (str): URL or path to read from
             headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             dict_form (bool): Return dict or list for each row. Defaults to False (list)
-            insertions (Optional[Dict]): Dictionary with additional headers and functions (see description).
+            header_insertions (Optional[List[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
+            row_function (Optional[Callable[[List[str],Union[List,Dict]],Union[List,Dict]]]): Function to call for each row. Defaults to None.
             **kwargs:
             file_type (Optional[str]): Type of file. Defaults to inferring.
             delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
@@ -404,16 +404,18 @@ class Download(object):
             raise DownloadError('Argument headers cannot be None!')
         stream = self.get_tabular_stream(url, headers=headers, **kwargs)
         origheaders = stream.headers
-        if insertions is None:
-            return origheaders, stream.iter(keyed=dict_form)
-        headers = copy.deepcopy(origheaders)
-        if insertions is not None:
-            for position, header in insertions['headers']:
+        if header_insertions is None:
+            headers = origheaders
+        else:
+            headers = copy.deepcopy(origheaders)
+            for position, header in header_insertions:
                 headers.insert(position, header)
+        if row_function is None:
+            return headers, stream.iter(keyed=dict_form)
 
         def get_next():
             for row in stream.iter(keyed=dict_form):
-                row = insertions['function'](origheaders, row)
+                row = row_function(origheaders, row)
                 yield row
 
         return headers, get_next()
