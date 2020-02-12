@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """File compare utilities"""
 import difflib
+from os import linesep
 from typing import List
 
 
@@ -35,4 +36,4 @@ def assert_files_same(path1, path2):
 
     """
     difflines = compare_files(path1, path2)
-    assert len(difflines) == 0, ''.join(['\n'] + difflines)
+    assert len(difflines) == 0, linesep.join([linesep] + difflines)
