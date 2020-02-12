@@ -410,7 +410,7 @@ class Download(object):
             kwargs['skip_rows'] = skip_rows
         stream = self.get_tabular_stream(url, headers=headers, **kwargs)
         origheaders = stream.headers
-        if header_insertions is None:
+        if header_insertions is None or origheaders is None:
             headers = origheaders
         else:
             headers = copy.deepcopy(origheaders)
