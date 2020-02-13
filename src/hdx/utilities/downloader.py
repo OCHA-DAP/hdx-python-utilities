@@ -384,7 +384,8 @@ class Download(object):
         Optionally, headers can be inserted at specific positions. This is achieved using the header_insertions
         argument. If supplied, it is a list of tuples of the form (position, header) to be inserted. A function is
         called for each row. If supplied, it takes as arguments: headers (prior to any insertions) and
-        row (which will be in dict or list form depending upon the dict_rows argument) and outputs a modified row.
+        row (which will be in dict or list form depending upon the dict_rows argument) and outputs a modified row
+        or None to ignore the row.
 
         Args:
             url (str): URL or path to read from
@@ -421,8 +422,9 @@ class Download(object):
 
         def get_next():
             for row in stream.iter(keyed=dict_form):
-                row = row_function(origheaders, row)
-                yield row
+                processed_row = row_function(origheaders, row)
+                if processed_row is not None:
+                    yield processed_row
 
         return headers, get_next()
 

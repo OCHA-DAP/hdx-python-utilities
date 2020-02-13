@@ -346,6 +346,18 @@ class TestDownloader:
             del expected_dicts[1]
             assert list(iterator) == expected_dicts
 
+            def testfn(headers, row):
+                row['la'] = 'lala'
+                if row['ha1'] == '3':
+                    return None
+                return row
+
+            headers, iterator = downloader.get_tabular_rows(fixtureprocessurlblank, headers=1, dict_form=True,
+                                                            header_insertions=[(2, 'la')], row_function=testfn)
+            assert headers == expected_headers
+            del expected_dicts[1]
+            assert list(iterator) == expected_dicts
+
             with pytest.raises(DownloadError):
                 downloader.get_tabular_rows(fixtureprocessurl, headers=None)
 
