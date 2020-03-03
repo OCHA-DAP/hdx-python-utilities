@@ -51,15 +51,23 @@ def script_dir_plus_file(filename, pyobject, follow_symlinks=True):
     return join(script_dir(pyobject, follow_symlinks), filename)
 
 
-def get_temp_dir():
-    # type: () -> str
+def get_temp_dir(folder=None):
+    # type: (Optional[str]) -> str
     """Get a temporary directory. Looks for environment variable TEMP_DIR and falls
     back on os.gettempdir.
+
+    Args:
+        folder (Optional[str]): Folder to create in temporary folder. Defaults to None.
 
     Returns:
         str: A temporary directory
     """
-    return getenv('TEMP_DIR', gettempdir())
+    tempdir = getenv('TEMP_DIR', gettempdir())
+    if folder:
+        tempdir = join(tempdir, folder)
+        if not exists(tempdir):
+            makedirs(tempdir)
+    return tempdir
 
 
 @contextlib.contextmanager
@@ -75,11 +83,7 @@ def temp_dir(folder=None, delete_on_success=True, delete_on_failure=True):
     Returns:
         str: A temporary directory
     """
-    tempdir = get_temp_dir()
-    if folder:
-        tempdir = join(tempdir, folder)
-    if not exists(tempdir):
-        makedirs(tempdir)
+    tempdir = get_temp_dir(folder)
     try:
         yield tempdir
         if folder and delete_on_success:

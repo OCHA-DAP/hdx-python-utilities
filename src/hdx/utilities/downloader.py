@@ -404,11 +404,6 @@ class Download(object):
         """
         if headers is None:
             raise DownloadError('Argument headers cannot be None!')
-        if ignore_blank_rows:
-            skip_rows = kwargs.get('skip_rows', list())
-            if '' not in skip_rows:
-                skip_rows.append('')
-            kwargs['skip_rows'] = skip_rows
         stream = self.get_tabular_stream(url, headers=headers, **kwargs)
         origheaders = stream.headers
         if header_insertions is None or origheaders is None:
@@ -417,14 +412,19 @@ class Download(object):
             headers = copy.deepcopy(origheaders)
             for position, header in header_insertions:
                 headers.insert(position, header)
-        if row_function is None:
+        if row_function is None and ignore_blank_rows is False:
             return headers, stream.iter(keyed=dict_form)
 
         def get_next():
             for row in stream.iter(keyed=dict_form):
-                processed_row = row_function(origheaders, row)
-                if processed_row is not None:
-                    yield processed_row
+                if ignore_blank_rows is True and not row:
+                    continue
+                if row_function:
+                    processed_row = row_function(origheaders, row)
+                    if processed_row is not None:
+                        yield processed_row
+                else:
+                    yield row
 
         return headers, get_next()
 

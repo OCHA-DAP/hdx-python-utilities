@@ -16,6 +16,7 @@ class TestPath:
 
     def test_get_temp_dir(self, monkeypatch, mytestdir):
         assert get_temp_dir() == gettempdir()
+        assert get_temp_dir('TEST') == join(gettempdir(), 'TEST')
         monkeypatch.setenv('TEMP_DIR', mytestdir)
         assert get_temp_dir() == mytestdir
         monkeypatch.delenv('TEMP_DIR')
