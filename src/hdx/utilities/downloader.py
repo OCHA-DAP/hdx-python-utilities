@@ -417,8 +417,13 @@ class Download(object):
 
         def get_next():
             for row in stream.iter(keyed=dict_form):
-                if ignore_blank_rows is True and not row:
-                    continue
+                if ignore_blank_rows is True:
+                    if dict_form:
+                        if not any(row.values()):
+                            continue
+                    else:
+                        if not row:
+                            continue
                 if row_function:
                     processed_row = row_function(origheaders, row)
                     if processed_row is not None:

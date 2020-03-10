@@ -1,5 +1,6 @@
 # -*- coding: UTF-8 -*-
 """Downloader Tests"""
+import copy
 import re
 from collections import OrderedDict
 from os import remove
@@ -177,7 +178,7 @@ class TestDownloader:
         with Download() as downloader:
             downloader.setup(fixtureurl)
             headers = downloader.response.headers
-            assert headers['Content-Length'] == '728'
+            assert headers['Content-Length'] == '742'
         with Download() as downloader:
             downloader.setup(postfixtureurl, post=True)
             headers = downloader.response.headers
@@ -243,7 +244,7 @@ class TestDownloader:
             downloader.download(fixturenotexistsurl)
         with Download() as downloader:
             result = downloader.download(fixtureurl)
-            assert result.headers['Content-Length'] == '728'
+            assert result.headers['Content-Length'] == '742'
             downloader.download('%s?id=10&lala=a' % getfixtureurl, post=False,
                                 parameters=OrderedDict([('b', '4'), ('d', '3')]))
             assert downloader.get_json()['args'] == OrderedDict([('b', '4'), ('d', '3'), ('id', '10'), ('lala', 'a')])
@@ -284,6 +285,16 @@ class TestDownloader:
             headers, iterator = downloader.get_tabular_rows(fixtureprocessurl)
             assert headers == expected_headers
             assert list(iterator) == expected[1:]
+            headers, iterator = downloader.get_tabular_rows(fixtureprocessurlblank)
+            assert headers == expected_headers
+            blank_expected = copy.deepcopy(expected[1:])
+            blank_expected[2][0] = ''
+            assert list(iterator) == blank_expected
+            headers, iterator = downloader.get_tabular_rows(fixtureprocessurlblank, ignore_blank_rows=False)
+            assert headers == expected_headers
+            blank_expected.append(list())
+            blank_expected.insert(1, list())
+            assert list(iterator) == blank_expected
             headers, iterator = downloader.get_tabular_rows(fixtureprocessurl, headers=1)
             assert headers == expected_headers
             assert list(iterator) == expected[1:]
@@ -338,6 +349,11 @@ class TestDownloader:
                               {'la1': 'coal', 'ha1': '3', 'ba1': '7.4', 'ma1': 'needed', 'la': 'lala'},
                               {'la1': '', 'ha1': '2', 'ba1': '6.5', 'ma1': 'n/a', 'la': 'lala'},
                               {'la': 'lala'}]
+            assert list(iterator) == expected_dicts
+            headers, iterator = downloader.get_tabular_rows(fixtureprocessurlblank, headers=1, dict_form=True,
+                                                            ignore_blank_rows=False, header_insertions=[(2, 'la')],
+                                                            row_function=testfn)
+            assert headers == expected_headers
             assert list(iterator) == expected_dicts
             headers, iterator = downloader.get_tabular_rows(fixtureprocessurlblank, headers=1, dict_form=True,
                                                             header_insertions=[(2, 'la')], row_function=testfn)
