@@ -4,10 +4,12 @@ import contextlib
 import inspect
 import logging
 import sys
+import uuid
 from os import getenv, makedirs
 from os.path import abspath, realpath, dirname, join, exists
 from shutil import rmtree
 from tempfile import gettempdir
+
 from typing import Any, Optional, Iterable, Tuple, Dict
 
 from hdx.utilities.loader import load_file_to_str
@@ -94,21 +96,35 @@ def temp_dir(folder=None, delete_on_success=True, delete_on_failure=True):
         raise
 
 
-def progress_storing_tempdir(folder, iterator, key):
-    # type: (str, Iterable[Dict], str) -> Tuple[str,Dict]
-    """Yield a temporary directory optionally with folder appended (and created if it doesn't exist)
-    and the next dictionary in the iterator. The folder persists until the final iteration and which
-    iteration to start at is persisted between runs.
+def progress_storing_tempdir(folder, iterator, key, store_batch=True):
+    # type: (str, Iterable[Dict], str, bool) -> Tuple[Dict,Dict]
+    """Yields 2 dictionaries. The first contains key tempdir which is the temporary directory optionally with folder
+    appended (and created if it doesn't exist). It will also contain the key batch containing a batch code to be
+    passed as the batch parameter in create_in_hdx or update_in_hdx calls. The second dictionary is the next dictionary
+    in the iterator. The folder persists until the final iteration and which iteration to start at and the batch code
+    is persisted between runs.
 
     Args:
         folder (str): Folder to create in temporary folder
         iterator (Iterable[Dict]): Iterate over this object persisting progress
         key (str): Key to examine from dictionary from iterator
+        store_batch (bool): Whether to keep track of the batch in interrupted runs.
 
     Returns:
-        Tuple[str,Dict]: A tuple of the form (temporary directory, next object in iterator)
+        Tuple[Dict,Dict]: A tuple of the form (info directory, next object in iterator)
     """
     with temp_dir(folder, delete_on_success=True, delete_on_failure=False) as tempdir:
+        info = {'tempdir': tempdir}
+        if store_batch:
+            batch_file = join(tempdir, 'batch.txt')
+            if exists(batch_file):
+                batch = load_file_to_str(batch_file, strip=True)
+                logger.info('File BATCH = %s' % batch)
+            else:
+                batch = str(uuid.uuid1())
+                save_str_to_file(batch, batch_file)
+                logger.info('Generated BATCH = %s' % batch)
+            info['batch'] = batch
         progress_file = join(tempdir, 'progress.txt')
         wheretostart = getenv('WHERETOSTART')
         if wheretostart:
@@ -136,4 +152,4 @@ def progress_storing_tempdir(folder, iterator, key):
                                                                                                   wheretostart))
                     continue
             save_str_to_file(currentlocation, progress_file)
-            yield tempdir, nextdict
+            yield info, nextdict
