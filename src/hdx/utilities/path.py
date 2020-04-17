@@ -4,7 +4,6 @@ import contextlib
 import inspect
 import logging
 import sys
-import uuid
 from os import getenv, makedirs
 from os.path import abspath, realpath, dirname, join, exists
 from shutil import rmtree
@@ -12,10 +11,15 @@ from tempfile import gettempdir
 
 from typing import Any, Optional, Iterable, Tuple, Dict
 
+from hdx.utilities import get_uuid
 from hdx.utilities.loader import load_file_to_str
 from hdx.utilities.saver import save_str_to_file
 
 logger = logging.getLogger(__name__)
+
+
+class NotFoundError(Exception):
+    pass
 
 
 def script_dir(pyobject, follow_symlinks=True):
@@ -90,10 +94,11 @@ def temp_dir(folder=None, delete_on_success=True, delete_on_failure=True):
         yield tempdir
         if folder and delete_on_success:
             rmtree(tempdir)
-    except:
-        if folder and delete_on_failure:
-            rmtree(tempdir)
-        raise
+    except Exception as ex:
+        if not isinstance(ex, NotFoundError):
+            if folder and delete_on_failure:
+                rmtree(tempdir)
+            raise
 
 
 def progress_storing_tempdir(folder, iterator, key, store_batch=True, batch=None):
@@ -123,7 +128,7 @@ def progress_storing_tempdir(folder, iterator, key, store_batch=True, batch=None
                 logger.info('File BATCH = %s' % batch)
             else:
                 if not batch:
-                    batch = str(uuid.uuid1())
+                    batch = get_uuid()
                     logger.info('Generated BATCH = %s' % batch)
                 save_str_to_file(batch, batch_file)
             info['batch'] = batch
@@ -155,3 +160,5 @@ def progress_storing_tempdir(folder, iterator, key, store_batch=True, batch=None
                     continue
             save_str_to_file(currentlocation, progress_file)
             yield info, nextdict
+        if wheretostart and not found:
+            raise NotFoundError('WHERETOSTART (%s) not matched in iterator and no run started!' % wheretostart)

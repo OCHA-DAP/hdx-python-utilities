@@ -92,6 +92,7 @@ class TestPath:
     def test_progress_storing_tempdir(self, monkeypatch):
         tempfolder = 'papa'
         expected_dir = join(gettempdir(), tempfolder)
+        rmtree(expected_dir, ignore_errors=True)
         iterator = [{'iso3': 'AFG', 'name': 'Afghanistan'}, {'iso3': 'SDN', 'name': 'Sudan'},
                     {'iso3': 'YEM', 'name': 'Yemen'}, {'iso3': 'ZAM', 'name': 'Zambia'}]
         result = list()
@@ -172,3 +173,23 @@ class TestPath:
         assert result == iterator[1:]
         assert exists(expected_dir) is False
         monkeypatch.delenv('WHERETOSTART')
+
+        try:
+            for info, nextdict in progress_storing_tempdir(tempfolder, iterator, 'iso3', store_batch=True):
+                if nextdict['iso3'] == 'YEM':
+                    start_batch = info['batch']
+                    raise ValueError('Problem!')
+        except:
+            pass
+        monkeypatch.setenv('WHERETOSTART', 'NOTFOUND')
+        found = False
+        for _ in progress_storing_tempdir(tempfolder, iterator, 'iso3', store_batch=True):
+            found = True
+        assert found is False
+        assert exists(expected_dir) is True
+        batch = load_file_to_str(expected_batch_file, strip=True)
+        assert batch == start_batch
+        monkeypatch.delenv('WHERETOSTART')
+
+        rmtree(expected_dir, ignore_errors=True)
+

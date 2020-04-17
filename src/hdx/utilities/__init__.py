@@ -5,7 +5,7 @@ from distutils.command.clean import clean
 from os.path import exists
 from shutil import rmtree
 from typing import Any
-from uuid import UUID
+from uuid import UUID, uuid1
 
 import six
 from setuptools import Command
@@ -28,6 +28,17 @@ def raisefrom(exc_type, message, exc):
         six.raise_from(exc_type(message), exc)
     else:
         six.reraise(exc_type, '%s - %s' % (message, exc), sys.exc_info()[2])
+
+
+def get_uuid():
+    # type: () -> str
+    """
+    Get an UUID.
+
+    Returns:
+        str: A UUID
+    """
+    return str(uuid1())
 
 
 def is_valid_uuid(uuid_to_test, version=4):
