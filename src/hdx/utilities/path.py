@@ -96,8 +96,8 @@ def temp_dir(folder=None, delete_on_success=True, delete_on_failure=True):
         raise
 
 
-def progress_storing_tempdir(folder, iterator, key, store_batch=True):
-    # type: (str, Iterable[Dict], str, bool) -> Tuple[Dict,Dict]
+def progress_storing_tempdir(folder, iterator, key, store_batch=True, batch=None):
+    # type: (str, Iterable[Dict], str, bool, Optional[str]) -> Tuple[Dict,Dict]
     """Yields 2 dictionaries. The first contains key tempdir which is the temporary directory optionally with folder
     appended (and created if it doesn't exist). It will also contain the key batch containing a batch code to be
     passed as the batch parameter in create_in_hdx or update_in_hdx calls. The second dictionary is the next dictionary
@@ -109,6 +109,7 @@ def progress_storing_tempdir(folder, iterator, key, store_batch=True):
         iterator (Iterable[Dict]): Iterate over this object persisting progress
         key (str): Key to examine from dictionary from iterator
         store_batch (bool): Whether to keep track of the batch in interrupted runs.
+        batch (Optional[str]): Batch to use if there isn't one in a file already.
 
     Returns:
         Tuple[Dict,Dict]: A tuple of the form (info directory, next object in iterator)
@@ -121,9 +122,10 @@ def progress_storing_tempdir(folder, iterator, key, store_batch=True):
                 batch = load_file_to_str(batch_file, strip=True)
                 logger.info('File BATCH = %s' % batch)
             else:
-                batch = str(uuid.uuid1())
+                if not batch:
+                    batch = str(uuid.uuid1())
+                    logger.info('Generated BATCH = %s' % batch)
                 save_str_to_file(batch, batch_file)
-                logger.info('Generated BATCH = %s' % batch)
             info['batch'] = batch
         progress_file = join(tempdir, 'progress.txt')
         wheretostart = getenv('WHERETOSTART')

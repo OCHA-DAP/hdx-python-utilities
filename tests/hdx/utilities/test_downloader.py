@@ -244,7 +244,7 @@ class TestDownloader:
             downloader.download(fixturenotexistsurl)
         with Download() as downloader:
             result = downloader.download(fixtureurl)
-            assert result.headers['Content-Length'] == '728'
+            assert bool(re.match(r'7\d\d', result.headers['Content-Length'])) is True
             downloader.download('%s?id=10&lala=a' % getfixtureurl, post=False,
                                 parameters=OrderedDict([('b', '4'), ('d', '3')]))
             assert downloader.get_json()['args'] == OrderedDict([('b', '4'), ('d', '3'), ('id', '10'), ('lala', 'a')])
