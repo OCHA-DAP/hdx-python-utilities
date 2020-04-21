@@ -244,4 +244,46 @@ class TestPath:
         assert result == iterator2[2:]
         assert exists(expected_dir) is False
 
+        try:
+            for i, info, nextdict in multiple_progress_storing_tempdir(tempfolder, iterators, keys):
+                if 'iso3' in nextdict and nextdict['iso3'] == 'YEM':
+                    start_batch = info['batch']
+                    raise ValueError('Problem!')
+        except:
+            pass
+        for result in expected_results:
+            result[1]['batch'] = start_batch
+        assert exists(expected_dir) is True
+        monkeypatch.setenv('WHERETOSTART', 'RESET')
+        results = list()
+        for result in multiple_progress_storing_tempdir(tempfolder, iterators, keys, '1234'):
+            results.append(copy.deepcopy(result))
+        for result in expected_results:
+            result[1]['batch'] = '1234'
+        assert results == expected_results
+        assert exists(expected_dir) is False
+        monkeypatch.delenv('WHERETOSTART')
+
+        try:
+            for i, info, nextdict in multiple_progress_storing_tempdir(tempfolder, iterators, keys):
+                if 'iso3' in nextdict and nextdict['iso3'] == 'YEM':
+                    start_batch = info['batch']
+                    raise ValueError('Problem!')
+        except:
+            pass
+        for result in expected_results:
+            result[1]['batch'] = start_batch
+        assert exists(expected_dir) is True
+        monkeypatch.setenv('WHERETOSTART', 'iso3=SDN')
+        result = list()
+        for i, info, nextdict in multiple_progress_storing_tempdir(tempfolder, iterators, keys):
+            assert exists(info['folder']) is True
+            assert info['folder'] == join(expected_dir, '1')
+            assert info['batch'] == start_batch
+            result.append(nextdict)
+        assert result == iterator2[1:]
+        assert exists(expected_dir) is False
+        monkeypatch.delenv('WHERETOSTART')
+        results = list()
+
         rmtree(expected_dir, ignore_errors=True)

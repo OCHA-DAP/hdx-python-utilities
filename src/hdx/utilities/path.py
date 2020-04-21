@@ -170,8 +170,6 @@ def get_wheretostart(text, message, key):
     upper_text = text.upper()
     if upper_text == 'RESET':
         return None
-    if upper_text == 'IGNORE':
-        return 'IGNORE'
     w_key, wheretostart = text.split('=')
     if w_key == key:
         logger.info('%s WHERETOSTART = %s' % (message, wheretostart))
@@ -282,19 +280,19 @@ def multiple_progress_storing_tempdir(folder, iterators, keys, batch=None):
         Tuple[int, Dict,Dict]: A tuple of the form (iterator index, info dictionary, next object in iterator)
     """
     delete_if_exists = False
-    wheretostart = getenv('WHERETOSTART')
-    if wheretostart:
-        if wheretostart.upper() == 'RESET':
+    wheretostartenv = getenv('WHERETOSTART')
+    if wheretostartenv:
+        if wheretostartenv.upper() == 'RESET':
             delete_if_exists = True
             logger.info('Removing progress file and will start from beginning!')
     with temp_dir_batch(folder, delete_if_exists, delete_on_success=True, delete_on_failure=False, batch=batch) as info:
         tempdir = info['folder']
         batch = info['batch']
         for i, key in enumerate(keys):
-            if wheretostart:
-                wheretostart = get_wheretostart(contents, 'Environment variable', key)
+            progress_file = join(tempdir, 'progress.txt')
+            if wheretostartenv:
+                wheretostart = get_wheretostart(wheretostartenv, 'Environment variable', key)
             else:
-                progress_file = join(tempdir, 'progress.txt')
                 if exists(progress_file):
                     contents = load_file_to_str(progress_file, strip=True)
                     wheretostart = get_wheretostart(contents, 'File', key)
