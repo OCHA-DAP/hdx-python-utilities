@@ -5,7 +5,7 @@ from distutils.command.clean import clean
 from os.path import exists
 from shutil import rmtree
 from typing import Any
-from uuid import UUID, uuid1
+from uuid import UUID, uuid4
 
 import six
 from setuptools import Command
@@ -38,7 +38,7 @@ def get_uuid():
     Returns:
         str: A UUID
     """
-    return str(uuid1())
+    return str(uuid4())
 
 
 def is_valid_uuid(uuid_to_test, version=4):
