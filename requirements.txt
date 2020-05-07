@@ -9,6 +9,6 @@ python-dateutil==2.8.1
 ratelimit==2.2.1
 six==1.14.0
 sshtunnel==0.1.5
-tabulator[cchardet]==1.38.4
-typing==3.7.4.1
+tabulator[cchardet]==1.42.0
+typing==3.7.4.1;python_version<'3.5'
 yamlloader==0.5.5
