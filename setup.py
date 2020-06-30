@@ -17,9 +17,9 @@ requirements = ['basicauth',
                 'pyaml',
                 'python-dateutil==2.8.1',
                 'ratelimit',
-                'six>=1.14.0',
+                'six>=1.15.0',
                 'sshtunnel',
-                'tabulator[cchardet]>=1.42.0',
+                'tabulator[cchardet]>=1.52.3',
                 'typing;python_version<"3.5"',
                 'yamlloader'
                 ]
