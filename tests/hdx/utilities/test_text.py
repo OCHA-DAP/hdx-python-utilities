@@ -81,6 +81,7 @@ Contains data from IDMC's [data portal](https://github.com/idmc-labs/IDMC-Platfo
         assert number_format(1234.56789) == '1234.5679'
 
     def test_get_fraction_str(self):
+        assert get_fraction_str('abc', 345) == ''
         assert get_fraction_str(123, 345) == '0.3565'
 
     def test_only_allowed_in_str(self):

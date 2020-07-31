@@ -1,12 +1,12 @@
 # -*- coding: UTF-8 -*-
 """Date Parse Utility Tests"""
 from datetime import datetime
+from dateutil.tz import tzutc
 from parser import ParserError
 
 import pytest
-import pytz
 
-from hdx.utilities.dateparse import parse_date_range, parse_date, get_date_from_timestamp
+from hdx.utilities.dateparse import parse_date_range, parse_date, get_datetime_from_timestamp, get_timestamp_from_datetime
 
 
 class TestDateParse:
@@ -72,9 +72,16 @@ class TestDateParse:
         with pytest.raises(ParserError):
             parse_date('02/2013', '%m/%Y')
 
-    def test_get_date_from_timestamp(self):
-        expected_date = datetime(2020, 7, 31, 7, 33, 54, tzinfo=pytz.utc)
-        date = get_date_from_timestamp(1596180834, timezone=pytz.utc)
+    def test_get_datetime_from_timestamp(self):
+        expected_date = datetime(2020, 7, 31, 7, 33, 54)
+        expected_timestamp = 1596173634.0
+        timestamp = get_timestamp_from_datetime(expected_date)
+        assert timestamp == expected_timestamp
+        expected_timestamp = 1596180834.0
+        expected_date = datetime(2020, 7, 31, 7, 33, 54, tzinfo=tzutc())
+        timestamp = get_timestamp_from_datetime(expected_date)
+        assert timestamp == expected_timestamp
+        date = get_datetime_from_timestamp(expected_timestamp, timezone=tzutc())
         assert date == expected_date
-        date = get_date_from_timestamp(1596180834000, timezone=pytz.utc)
+        date = get_datetime_from_timestamp(expected_timestamp * 1000, timezone=tzutc())
         assert date == expected_date

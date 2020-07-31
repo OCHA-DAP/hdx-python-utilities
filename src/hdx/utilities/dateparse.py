@@ -1,13 +1,14 @@
 # -*- coding: utf-8 -*-
 """Date parsing utilities"""
+import time
 from calendar import monthrange
 from datetime import datetime
 from parser import ParserError
 from typing import Optional, Dict, Tuple
 
 import dateutil
-import pytz
 from dateutil.parser import _timelex, parserinfo
+from dateutil.tz import tzutc
 
 from hdx.utilities import raisefrom
 
@@ -614,7 +615,23 @@ def parse_date(string, date_format=None, fuzzy=None, zero_time=False):
     return startdate
 
 
-def get_date_from_timestamp(timestamp, timezone=pytz.utc, today=datetime.now()):
+def get_timestamp_from_datetime(date):
+    # type: (datetime) -> float
+    """Convert datetime to timestamp.
+
+    Args:
+        date (datetime): Date to convert
+
+    Returns:
+        float: Timestamp
+    """
+    if date.tzinfo is None:
+        return time.mktime((date.year, date.month, date.day, date.hour, date.minute, date.second, -1, -1, -1)) + date.microsecond / 1e6
+    else:
+        return (date - datetime(1970, 1, 1, tzinfo=tzutc())).total_seconds()
+
+
+def get_datetime_from_timestamp(timestamp, timezone=tzutc, today=datetime.now(tzutc())):
     # type: (float, datetime.tzinfo, datetime) -> datetime
     """Convert timestamp to datetime.
 
@@ -626,6 +643,6 @@ def get_date_from_timestamp(timestamp, timezone=pytz.utc, today=datetime.now()):
     Returns:
         datetime: Date of timestamp
     """
-    if timestamp > today.timestamp():
+    if timestamp > get_timestamp_from_datetime(today):
         timestamp = timestamp / 1000
     return datetime.fromtimestamp(timestamp, tz=timezone)
