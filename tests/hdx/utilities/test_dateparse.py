@@ -73,10 +73,6 @@ class TestDateParse:
             parse_date('02/2013', '%m/%Y')
 
     def test_get_datetime_from_timestamp(self):
-        expected_date = datetime(2020, 7, 31, 7, 33, 54)
-        expected_timestamp = 1596173634.0
-        timestamp = get_timestamp_from_datetime(expected_date)
-        assert timestamp == expected_timestamp
         expected_timestamp = 1596180834.0
         expected_date = datetime(2020, 7, 31, 7, 33, 54, tzinfo=tzutc())
         timestamp = get_timestamp_from_datetime(expected_date)
