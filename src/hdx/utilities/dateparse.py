@@ -6,6 +6,7 @@ from parser import ParserError
 from typing import Optional, Dict, Tuple
 
 import dateutil
+import pytz
 from dateutil.parser import _timelex, parserinfo
 
 from hdx.utilities import raisefrom
@@ -613,12 +614,13 @@ def parse_date(string, date_format=None, fuzzy=None, zero_time=False):
     return startdate
 
 
-def get_date_from_timestamp(timestamp, today=datetime.now()):
-    # type: (float, datetime) -> datetime
+def get_date_from_timestamp(timestamp, timezone=pytz.utc, today=datetime.now()):
+    # type: (float, datetime.tzinfo, datetime) -> datetime
     """Convert timestamp to datetime.
 
     Args:
         timestamp (float): Timestamp to convert
+        timezone (datetime.tzinfo): Timezone to use
         today (datetime): Today's date. Defaults to datetime.now().
 
     Returns:
@@ -626,4 +628,4 @@ def get_date_from_timestamp(timestamp, today=datetime.now()):
     """
     if timestamp > today.timestamp():
         timestamp = timestamp / 1000
-    return datetime.fromtimestamp(timestamp)
+    return datetime.fromtimestamp(timestamp, tz=timezone)
