@@ -2,6 +2,8 @@
 """Text Processing Tests"""
 from string import punctuation, whitespace
 
+from pytest import approx
+
 from hdx.utilities.text import get_matching_text_in_strs, get_matching_then_nonmatching_text, get_matching_text, \
     get_words_in_sentence, multiple_replace, remove_from_end, remove_end_characters, remove_string, \
     PUNCTUATION_MINUS_BRACKETS, get_fraction_str, number_format, only_allowed_in_str, get_numeric_if_possible
@@ -98,3 +100,6 @@ Contains data from IDMC's [data portal](https://github.com/idmc-labs/IDMC-Platfo
         assert get_numeric_if_possible('123.123.123,45') == 123123123.45
         assert get_numeric_if_possible('123,123,123') == 123123123
         assert get_numeric_if_possible('123.123.123') == 123123123
+        assert get_numeric_if_possible('12.3%') == approx(0.123)
+        assert get_numeric_if_possible('123,123.45%') == 1231.2345
+        assert get_numeric_if_possible('123.123,45%') == 1231.2345

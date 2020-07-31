@@ -294,21 +294,22 @@ def only_allowed_in_str(test_str, allowed_chars):
     return set(test_str) <= allowed_chars
 
 
-allowed_numeric = set(string.digits + '.' + ',')
+allowed_numeric = set(string.digits + '.' + ',' +'%')
 
 
-def get_numeric_if_possible(val):
+def get_numeric_if_possible(value):
     # type: (Any) -> Any
     """Return val if it is not a string, otherwise see if it can be cast to float or int,
     taking into account commas and periods.
 
     Args:
-        val (Any): Value
+        value (Any): Value
 
     Returns:
         Any: Value
     """
-    if isinstance(val, str):
+    if isinstance(value, str):
+        val = value.strip()
         if only_allowed_in_str(val, allowed_numeric):
             try:
                 commaindex = val.index(',')
@@ -318,22 +319,27 @@ def get_numeric_if_possible(val):
                 dotindex = val.index('.')
             except ValueError:
                 dotindex = None
+            if val[-1] == '%':
+                denominator = 100
+                val = val[:-1]
+            else:
+                denominator = 1
             if commaindex is None:
                 if dotindex is None:
-                    return int(val)
+                    return int(val) / denominator
                 else:
                     if val.count('.') == 1:
-                        return float(val)
+                        return float(val) / denominator
                     else:
-                        return int(val.replace('.', ''))
+                        return int(val.replace('.', '')) / denominator
             else:
                 if dotindex is None:
-                    return int(val.replace(',', ''))
+                    return int(val.replace(',', '')) / denominator
                 else:
                     if dotindex > commaindex:
                         val = val.replace(',', '')
                     else:
                         val = val.replace('.', '')
                         val = val.replace(',', '.')
-                    return float(val)
-    return val
+                    return float(val) / denominator
+    return value
