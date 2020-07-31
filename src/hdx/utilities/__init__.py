@@ -1,5 +1,6 @@
 import os
 import sys
+from setuptools import Command
 from distutils import log
 from distutils.command.clean import clean
 from os.path import exists
@@ -8,7 +9,6 @@ from typing import Any
 from uuid import UUID, uuid4
 
 import six
-from setuptools import Command
 
 
 def raisefrom(exc_type, message, exc):

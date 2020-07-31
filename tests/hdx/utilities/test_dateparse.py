@@ -5,7 +5,7 @@ from parser import ParserError
 
 import pytest
 
-from hdx.utilities.dateparse import parse_date_range, parse_date
+from hdx.utilities.dateparse import parse_date_range, parse_date, get_date_from_timestamp
 
 
 class TestDateParse:
@@ -70,3 +70,7 @@ class TestDateParse:
             parse_date('02/2013')
         with pytest.raises(ParserError):
             parse_date('02/2013', '%m/%Y')
+
+    def test_get_date_from_timestamp(self):
+        assert get_date_from_timestamp(1596180834) == datetime(2020, 7, 31, 9, 33, 54)
+        assert get_date_from_timestamp(1596180834000) == datetime(2020, 7, 31, 9, 33, 54)

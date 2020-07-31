@@ -4,7 +4,7 @@ from string import punctuation, whitespace
 
 from hdx.utilities.text import get_matching_text_in_strs, get_matching_then_nonmatching_text, get_matching_text, \
     get_words_in_sentence, multiple_replace, remove_from_end, remove_end_characters, remove_string, \
-    PUNCTUATION_MINUS_BRACKETS
+    PUNCTUATION_MINUS_BRACKETS, get_fraction_str, number_format, only_allowed_in_str, get_numeric_if_possible
 
 
 class TestText:
@@ -76,3 +76,24 @@ Contains data from IDMC's [data portal](https://github.com/idmc-labs/IDMC-Platfo
 "New Displacement" refers to the number of new cases or incidents of displacement recorded, rather than the number of people displaced. This is done because people may have been displaced more than once.
 
 Contains data from IDMC's [data portal](https://github.com/idmc-labs/IDMC-Platform-API/wiki).'''
+
+    def test_number_format(self):
+        assert number_format(1234.56789) == '1234.5679'
+
+    def test_get_fraction_str(self):
+        assert get_fraction_str(123, 345) == '0.3565'
+
+    def test_only_allowed_in_str(self):
+        assert only_allowed_in_str('1234a', {'1', '2', '3', 'a'}) is False
+        assert only_allowed_in_str('1234a', {'1', '2', '3', '4', 'a'}) is True
+
+    def test_get_numeric_if_possible(self):
+        assert get_numeric_if_possible(123) == 123
+        assert get_numeric_if_possible(123.45) == 123.45
+        assert get_numeric_if_possible('hello') == 'hello'
+        assert get_numeric_if_possible('123') == 123
+        assert get_numeric_if_possible('123.45') == 123.45
+        assert get_numeric_if_possible('123,123,123.45') == 123123123.45
+        assert get_numeric_if_possible('123.123.123,45') == 123123123.45
+        assert get_numeric_if_possible('123,123,123') == 123123123
+        assert get_numeric_if_possible('123.123.123') == 123123123

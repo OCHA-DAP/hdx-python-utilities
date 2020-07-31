@@ -3,8 +3,9 @@
 import difflib
 import logging
 import re
+import string
 from string import punctuation
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Set
 
 logger = logging.getLogger(__name__)
 
@@ -240,3 +241,99 @@ def get_matching_then_nonmatching_text(string_list, separator='', match_min_size
             output.append(text_2)
         a = ''.join(output)
     return a
+
+
+def number_format(val, format='%.4f'):
+    # type: (float, str) -> str
+    """Format number as string
+
+    Args:
+        val (float): Number to format
+        format (str): Format to use. Defaults to %.4f.
+
+    Returns:
+        str: Formatted number as string
+    """
+    return format % val
+
+
+def get_fraction_str(numerator, denominator=None, format='%.4f'):
+    # type: (float, Optional[float], str) -> str
+    """Given float numerator and optional float denominator, format as string, returning '' for invalid
+    numerator.
+
+    Args:
+        numerator (float): Numerator
+        denominator (Optional[float]): Denominator. Defaults to None.
+        format (str): Format to use. Defaults to %.4f.
+
+    Returns:
+        str: Formatted number as string
+    """
+    try:
+        numerator = float(numerator)
+        if denominator:
+            numerator /= float(denominator)
+        return number_format(numerator, format)
+    except ValueError:
+        pass
+    return ''
+
+
+def only_allowed_in_str(test_str, allowed_chars):
+    # type: (str, Set) -> bool
+    """Returns True if test string contains only allowed characters, False if not.
+
+    Args:
+        test_str (str): Test string
+        allowed_chars (Set): Set of allowed characters
+
+    Returns:
+        bool: True if test string contains only allowed characters, False if not
+    """
+    return set(test_str) <= allowed_chars
+
+
+allowed_numeric = set(string.digits + '.' + ',')
+
+
+def get_numeric_if_possible(val):
+    # type: (Any) -> Any
+    """Return val if it is not a string, otherwise see if it can be cast to float or int,
+    taking into account commas and periods.
+
+    Args:
+        val (Any): Value
+
+    Returns:
+        Any: Value
+    """
+    if isinstance(val, str):
+        if only_allowed_in_str(val, allowed_numeric):
+            try:
+                commaindex = val.index(',')
+            except ValueError:
+                commaindex = None
+            try:
+                dotindex = val.index('.')
+            except ValueError:
+                dotindex = None
+            if commaindex is None:
+                if dotindex is None:
+                    return int(val)
+                else:
+                    if val.count('.') == 1:
+                        return float(val)
+                    else:
+                        return int(val.replace('.', ''))
+            else:
+                if dotindex is None:
+                    return int(val.replace(',', ''))
+                else:
+                    if dotindex > commaindex:
+                        val = val.replace(',', '')
+                    else:
+                        val = val.replace('.', '')
+                        val = val.replace(',', '.')
+                    return float(val)
+    return val

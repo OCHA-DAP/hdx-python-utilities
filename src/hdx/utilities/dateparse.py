@@ -611,3 +611,19 @@ def parse_date(string, date_format=None, fuzzy=None, zero_time=False):
     if startdate != enddate:
         raise ParserError('date is not a specific day!')
     return startdate
+
+
+def get_date_from_timestamp(timestamp, today=datetime.now()):
+    # type: (float, datetime) -> datetime
+    """Convert timestamp to datetime.
+
+    Args:
+        timestamp (float): Timestamp to convert
+        today (datetime): Today's date. Defaults to datetime.now().
+
+    Returns:
+        datetime: Date of timestamp
+    """
+    if timestamp > today.timestamp():
+        timestamp = timestamp / 1000
+    return datetime.fromtimestamp(timestamp)
