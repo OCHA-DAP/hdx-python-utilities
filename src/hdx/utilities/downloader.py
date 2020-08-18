@@ -14,7 +14,6 @@ import tabulator
 from ratelimit import sleep_and_retry, RateLimitDecorator
 from requests import Request
 from six.moves.urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
-from tabulator.exceptions import TabulatorException
 
 from hdx.utilities import raisefrom
 from hdx.utilities.path import get_temp_dir
@@ -353,7 +352,7 @@ class Download(object):
             self.response = tabulator.Stream(url, **kwargs)
             self.response.open()
             return self.response
-        except TabulatorException as e:
+        except Exception as e:
             raisefrom(DownloadError, 'Getting tabular stream for %s failed!' % url, e)
 
     def get_tabular_rows_as_list(self, url, **kwargs):
