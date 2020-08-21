@@ -254,7 +254,7 @@ def number_format(val, format='%.4f'):
     Returns:
         str: Formatted number as string
     """
-    return format % val
+    return format % float(val)
 
 
 def get_fraction_str(numerator, denominator=None, format='%.4f'):
