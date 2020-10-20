@@ -93,6 +93,7 @@ Contains data from IDMC's [data portal](https://github.com/idmc-labs/IDMC-Platfo
     def test_get_numeric_if_possible(self):
         assert get_numeric_if_possible(123) == 123
         assert get_numeric_if_possible(123.45) == 123.45
+        assert get_numeric_if_possible('') == ''
         assert get_numeric_if_possible('hello') == 'hello'
         assert get_numeric_if_possible('123') == 123
         assert get_numeric_if_possible('123.45') == 123.45

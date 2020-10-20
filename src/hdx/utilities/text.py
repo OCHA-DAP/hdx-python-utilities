@@ -310,7 +310,7 @@ def get_numeric_if_possible(value):
     """
     if isinstance(value, str):
         val = value.strip()
-        if only_allowed_in_str(val, allowed_numeric):
+        if val != '' and only_allowed_in_str(val, allowed_numeric):
             try:
                 commaindex = val.index(',')
             except ValueError:

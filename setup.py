@@ -19,7 +19,7 @@ requirements = ['basicauth',
                 'ratelimit',
                 'six>=1.15.0',
                 'sshtunnel',
-                'tabulator[cchardet]>=1.52.3',
+                'tabulator[cchardet]>=1.52.4',
                 'typing;python_version<"3.5"',
                 'yamlloader'
                 ]
