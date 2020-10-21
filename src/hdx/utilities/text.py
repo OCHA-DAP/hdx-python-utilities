@@ -319,6 +319,12 @@ def get_numeric_if_possible(value):
         val = value.strip()
         if val != '' and only_allowed_in_str(val, allowed_numeric):
             try:
+                minusindex = val.index('-')
+                if minusindex != 0:
+                    return val
+            except ValueError:
+                pass
+            try:
                 commaindex = val.index(',')
             except ValueError:
                 commaindex = None

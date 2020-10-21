@@ -98,7 +98,9 @@ Contains data from IDMC's [data portal](https://github.com/idmc-labs/IDMC-Platfo
         assert get_numeric_if_possible('') == ''
         assert get_numeric_if_possible('hello') == 'hello'
         assert get_numeric_if_possible('123') == 123
+        assert get_numeric_if_possible('-123') == -123
         assert get_numeric_if_possible('123.45') == 123.45
+        assert get_numeric_if_possible('-123.45') == -123.45
         assert get_numeric_if_possible('123,123,123.45') == 123123123.45
         assert get_numeric_if_possible('123.123.123,45') == 123123123.45
         assert get_numeric_if_possible('123,123,123') == 123123123
@@ -106,6 +108,7 @@ Contains data from IDMC's [data portal](https://github.com/idmc-labs/IDMC-Platfo
         assert get_numeric_if_possible('12.3%') == approx(0.123)
         assert get_numeric_if_possible('10%') == 0.1
         assert get_numeric_if_possible('-10%') == -0.1
+        assert get_numeric_if_possible('10-') == '10-'
         assert get_numeric_if_possible('123,123.45%') == 1231.2345
         assert get_numeric_if_possible('-123,123.45%') == -1231.2345
         assert get_numeric_if_possible('123.123,45%') == 1231.2345
