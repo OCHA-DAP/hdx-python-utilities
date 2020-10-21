@@ -294,7 +294,7 @@ def only_allowed_in_str(test_str, allowed_chars):
     return set(test_str) <= allowed_chars
 
 
-allowed_numeric = set(string.digits + '.' + ',' +'%')
+allowed_numeric = set(string.digits + '.' + ',' + '%' + '-')
 
 
 def get_numeric_if_possible(value):
@@ -308,6 +308,13 @@ def get_numeric_if_possible(value):
     Returns:
         Any: Value
     """
+    def get_int_value(val, denominator):
+        val = int(val)
+        if denominator != 1:
+            return val / denominator
+        else:
+            return val
+
     if isinstance(value, str):
         val = value.strip()
         if val != '' and only_allowed_in_str(val, allowed_numeric):
@@ -326,15 +333,15 @@ def get_numeric_if_possible(value):
                 denominator = 1
             if commaindex is None:
                 if dotindex is None:
-                    return int(val) / denominator
+                    return get_int_value(val, denominator)
                 else:
                     if val.count('.') == 1:
                         return float(val) / denominator
                     else:
-                        return int(val.replace('.', '')) / denominator
+                        return get_int_value(val.replace('.', ''), denominator)
             else:
                 if dotindex is None:
-                    return int(val.replace(',', '')) / denominator
+                    return get_int_value(val.replace(',', ''), denominator)
                 else:
                     if dotindex > commaindex:
                         val = val.replace(',', '')
