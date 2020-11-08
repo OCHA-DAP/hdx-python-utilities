@@ -311,7 +311,7 @@ def get_numeric_if_possible(value):
     def get_int_value(val, denominator):
         val = int(val)
         if denominator != 1:
-            return val / denominator
+            return float(val) / denominator
         else:
             return val
 

@@ -1,6 +1,6 @@
 basicauth==0.4.1
 beautifulsoup4==4.9.3
-colorlog==4.4.0
+colorlog==4.5.0
 email_validator==1.0.5
 html5lib==1.1
 psycopg2-binary==2.8.6
@@ -8,7 +8,7 @@ pyaml==20.4.0
 python-dateutil==2.8.1
 ratelimit==2.2.1
 six==1.15.0
-sshtunnel==0.1.5
-tabulator[cchardet]==1.52.4
-typing==3.7.4.1;python_version<'3.5'
+sshtunnel==0.2.2
+tabulator[cchardet]==1.52.5
+typing==3.7.4.3;python_version<'3.5'
 yamlloader==0.5.5
