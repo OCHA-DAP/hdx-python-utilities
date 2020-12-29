@@ -204,6 +204,44 @@ from Base in hdx.utilities.database.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="hdx.utilities.dateparse.get_datetime_from_timestamp">
+<code class="sig-prename descclassname">hdx.utilities.dateparse.</code><code class="sig-name descname">get_datetime_from_timestamp</code><span class="sig-paren">(</span><em class="sig-param">timestamp</em>, <em class="sig-param">timezone=&lt;class 'dateutil.tz.tz.tzutc'&gt;</em>, <em class="sig-param">today=datetime.datetime(2020</em>, <em class="sig-param">12</em>, <em class="sig-param">29</em>, <em class="sig-param">17</em>, <em class="sig-param">26</em>, <em class="sig-param">57</em>, <em class="sig-param">111938</em>, <em class="sig-param">tzinfo=tzutc())</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.dateparse.get_datetime_from_timestamp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert timestamp to datetime.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>timestamp</strong> (<em>float</em>) – Timestamp to convert</p></li>
+<li><p><strong>timezone</strong> (<em>datetime.tzinfo</em>) – Timezone to use</p></li>
+<li><p><strong>today</strong> (<em>datetime</em>) – Today’s date. Defaults to datetime.now().</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Date of timestamp</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>datetime</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hdx.utilities.dateparse.get_timestamp_from_datetime">
+<code class="sig-prename descclassname">hdx.utilities.dateparse.</code><code class="sig-name descname">get_timestamp_from_datetime</code><span class="sig-paren">(</span><em class="sig-param">date</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.dateparse.get_timestamp_from_datetime" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert datetime to timestamp.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>date</strong> (<em>datetime</em>) – Date to convert</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Timestamp</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="hdx.utilities.dateparse.parse">
 <code class="sig-prename descclassname">hdx.utilities.dateparse.</code><code class="sig-name descname">parse</code><span class="sig-paren">(</span><em class="sig-param">timestr</em>, <em class="sig-param">default=None</em>, <em class="sig-param">ignoretz=False</em>, <em class="sig-param">tzinfos=None</em>, <em class="sig-param">**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.dateparse.parse" title="Permalink to this definition">¶</a></dt>
 <dd><p>Parse the date/time string into a <code class="xref py py-class docutils literal notranslate"><span class="pre">datetime.datetime</span></code> object.</p>
@@ -1496,40 +1534,155 @@ parameter(s) to be completed.</p>
 <div class="section" id="module-hdx.utilities.path">
 <span id="hdx-utilities-path-module"></span><h2>hdx.utilities.path module<a class="headerlink" href="#module-hdx.utilities.path" title="Permalink to this headline">¶</a></h2>
 <p>Directory Path Utilities</p>
+<dl class="exception">
+<dt id="hdx.utilities.path.NotFoundError">
+<em class="property">exception </em><code class="sig-prename descclassname">hdx.utilities.path.</code><code class="sig-name descname">NotFoundError</code><a class="headerlink" href="#hdx.utilities.path.NotFoundError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
 <dl class="function">
 <dt id="hdx.utilities.path.get_temp_dir">
-<code class="sig-prename descclassname">hdx.utilities.path.</code><code class="sig-name descname">get_temp_dir</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.path.get_temp_dir" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">hdx.utilities.path.</code><code class="sig-name descname">get_temp_dir</code><span class="sig-paren">(</span><em class="sig-param">folder=None</em>, <em class="sig-param">delete_if_exists=False</em>, <em class="sig-param">tempdir=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.path.get_temp_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a temporary directory. Looks for environment variable TEMP_DIR and falls
-back on os.gettempdir.</p>
+back on os.gettempdir if a root temporary directory is not supplied. If a folder is supplied, creates that folder</p>
+<blockquote>
+<div><p>within the temporary directory. Optionally deletes and recreates it if it already exists.</p>
+</div></blockquote>
 <dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p>A temporary directory</p>
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>folder</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Folder to create in temporary folder. Defaults to None.</p></li>
+<li><p><strong>delete_if_exists</strong> (<em>bool</em>) – Whether to delete the folder if it exists. Defaults to False.</p></li>
+<li><p><strong>tempdir</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Folder to use as temporary directory. Defaults to None (TEMP_DIR or os.gettempdir).</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type</dt>
-<dd class="field-even"><p>str</p>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A temporary directory</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hdx.utilities.path.get_wheretostart">
+<code class="sig-prename descclassname">hdx.utilities.path.</code><code class="sig-name descname">get_wheretostart</code><span class="sig-paren">(</span><em class="sig-param">text</em>, <em class="sig-param">message</em>, <em class="sig-param">key</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.path.get_wheretostart" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate WHERETOSTART.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>text</strong> (<em>str</em>) – String to process</p></li>
+<li><p><strong>message</strong> (<em>str</em>) – Text for logging</p></li>
+<li><p><strong>key</strong> (<em>str</em>) – Key to comapre with</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A string or None</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Optional[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hdx.utilities.path.multiple_progress_storing_tempdir">
+<code class="sig-prename descclassname">hdx.utilities.path.</code><code class="sig-name descname">multiple_progress_storing_tempdir</code><span class="sig-paren">(</span><em class="sig-param">folder</em>, <em class="sig-param">iterators</em>, <em class="sig-param">keys</em>, <em class="sig-param">batch=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.path.multiple_progress_storing_tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store progress in temporary directory. The folder persists until the final iteration of the last iterator
+allowing which iteration to start at and the batch code to be persisted between runs. Yields 2 dictionaries. The
+first contains key folder which is the temporary directory optionally with folder appended (and created if it
+doesn’t exist). In key progress is held the current position in the iterator. It also contains the key batch
+containing a batch code to be passed as the batch parameter in create_in_hdx or update_in_hdx calls. The second
+dictionary is the next dictionary in the iterator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>folder</strong> (<em>str</em>) – Folder to create in temporary folder</p></li>
+<li><p><strong>iterators</strong> (<em>List</em><em>[</em><em>Iterable</em><em>[</em><em>Dict</em><em>]</em>) – Iterate over each iterator in the list consecutively persisting progress</p></li>
+<li><p><strong>keys</strong> (<em>List</em><em>[</em><em>str</em><em>]</em>) – Key to examine from dictionary from each iterator in the above list</p></li>
+<li><p><strong>batch</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Batch to use if there isn’t one in a file already.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A tuple of the form (iterator index, info dictionary, next object in iterator)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[int, Dict,Dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hdx.utilities.path.progress_storing_folder">
+<code class="sig-prename descclassname">hdx.utilities.path.</code><code class="sig-name descname">progress_storing_folder</code><span class="sig-paren">(</span><em class="sig-param">info</em>, <em class="sig-param">iterator</em>, <em class="sig-param">key</em>, <em class="sig-param">wheretostart=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.path.progress_storing_folder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store progress in folder in key folder of info dictionary parameter. Yields 2 dictionaries. The first is the
+info dictionary. It contains in key folder the folder being used to store progress and in key progress the current
+position in the iterator. If store_batch is True, that dictionary will also contain the key batch containing a batch
+code to be passed as the batch parameter in create_in_hdx or update_in_hdx calls. The second dictionary is the next
+dictionary in the iterator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>info</strong> (<em>Dict</em>) – Dictionary containing folder and anything else to be yielded</p></li>
+<li><p><strong>iterator</strong> (<em>Iterable</em><em>[</em><em>Dict</em><em>]</em>) – Iterate over this object persisting progress</p></li>
+<li><p><strong>key</strong> (<em>str</em>) – Key to examine from dictionary from iterator</p></li>
+<li><p><strong>wheretostart</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Where in iterator to start</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A tuple of the form (info dictionary, next object in iterator)</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Tuple[Dict,Dict]</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="function">
 <dt id="hdx.utilities.path.progress_storing_tempdir">
-<code class="sig-prename descclassname">hdx.utilities.path.</code><code class="sig-name descname">progress_storing_tempdir</code><span class="sig-paren">(</span><em class="sig-param">folder</em>, <em class="sig-param">iterator</em>, <em class="sig-param">key</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.path.progress_storing_tempdir" title="Permalink to this definition">¶</a></dt>
-<dd><p>Yield a temporary directory optionally with folder appended (and created if it doesn’t exist)
-and the next dictionary in the iterator. The folder persists until the final iteration and which
-iteration to start at is persisted between runs.</p>
+<code class="sig-prename descclassname">hdx.utilities.path.</code><code class="sig-name descname">progress_storing_tempdir</code><span class="sig-paren">(</span><em class="sig-param">folder</em>, <em class="sig-param">iterator</em>, <em class="sig-param">key</em>, <em class="sig-param">batch=None</em>, <em class="sig-param">tempdir=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.path.progress_storing_tempdir" title="Permalink to this definition">¶</a></dt>
+<dd><p>Store progress in temporary directory. The folder persists until the final iteration allowing which iteration to
+start at and the batch code to be persisted between runs. Yields 2 dictionaries. The first contains key folder which
+is the temporary directory optionally with folder appended (and created if it doesn’t exist). In key progress is
+held the current position in the iterator. It also contains the key batch containing a batch code to be passed as
+the batch parameter in create_in_hdx or update_in_hdx calls. The second dictionary is the next dictionary in the
+iterator.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>folder</strong> (<em>str</em>) – Folder to create in temporary folder</p></li>
-<li><p><strong>iterator</strong> (<em>Iterable</em><em>[</em><em>Dict</em><em>]</em>) – Iterate over this object persisting progress</p></li>
+<li><p><strong>iterator</strong> (<em>Iterable</em><em>[</em><em>Dict</em><em>]</em>) – Iterate over the iterator persisting progress</p></li>
 <li><p><strong>key</strong> (<em>str</em>) – Key to examine from dictionary from iterator</p></li>
+<li><p><strong>batch</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Batch to use if there isn’t one in a file already.</p></li>
+<li><p><strong>tempdir</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Folder to use as temporary directory. Defaults to None (TEMP_DIR or os.gettempdir).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
-<dd class="field-even"><p>A tuple of the form (temporary directory, next object in iterator)</p>
+<dd class="field-even"><p>A tuple of the form (info dictionary, next object in iterator)</p>
 </dd>
 <dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p>Tuple[str,Dict]</p>
+<dd class="field-odd"><p>Tuple[Dict,Dict]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hdx.utilities.path.read_or_create_batch">
+<code class="sig-prename descclassname">hdx.utilities.path.</code><code class="sig-name descname">read_or_create_batch</code><span class="sig-paren">(</span><em class="sig-param">folder</em>, <em class="sig-param">batch=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.path.read_or_create_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get batch or create it if it doesn’t exist</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>folder</strong> (<em>str</em>) – Folder in which to look for or create batch file.</p></li>
+<li><p><strong>batch</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Batch to use if there isn’t one in a file already.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Batch</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1577,14 +1730,40 @@ iteration to start at is persisted between runs.</p>
 
 <dl class="function">
 <dt id="hdx.utilities.path.temp_dir">
-<code class="sig-prename descclassname">hdx.utilities.path.</code><code class="sig-name descname">temp_dir</code><span class="sig-paren">(</span><em class="sig-param">folder=None</em>, <em class="sig-param">delete_on_success=True</em>, <em class="sig-param">delete_on_failure=True</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.path.temp_dir" title="Permalink to this definition">¶</a></dt>
+<code class="sig-prename descclassname">hdx.utilities.path.</code><code class="sig-name descname">temp_dir</code><span class="sig-paren">(</span><em class="sig-param">folder=None</em>, <em class="sig-param">delete_if_exists=False</em>, <em class="sig-param">delete_on_success=True</em>, <em class="sig-param">delete_on_failure=True</em>, <em class="sig-param">tempdir=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.path.temp_dir" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get a temporary directory optionally with folder appended (and created if it doesn’t exist)</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>folder</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Folder to create in temporary folder. Defaults to None.</p></li>
+<li><p><strong>delete_if_exists</strong> (<em>bool</em>) – Whether to delete the folder if it exists. Defaults to False.</p></li>
 <li><p><strong>delete_on_success</strong> (<em>bool</em>) – Whether to delete folder (if folder supplied) on exiting with statement successfully. Defaults to True.</p></li>
 <li><p><strong>delete_on_failure</strong> (<em>bool</em>) – Whether to delete folder (if folder supplied) on exiting with statement unsuccessfully. Defaults to True.</p></li>
+<li><p><strong>tempdir</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Folder to use as temporary directory. Defaults to None (TEMP_DIR or os.gettempdir).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>A temporary directory</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hdx.utilities.path.temp_dir_batch">
+<code class="sig-prename descclassname">hdx.utilities.path.</code><code class="sig-name descname">temp_dir_batch</code><span class="sig-paren">(</span><em class="sig-param">folder=None</em>, <em class="sig-param">delete_if_exists=False</em>, <em class="sig-param">delete_on_success=True</em>, <em class="sig-param">delete_on_failure=True</em>, <em class="sig-param">batch=None</em>, <em class="sig-param">tempdir=None</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.path.temp_dir_batch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a temporary directory optionally with folder appended (and created if it doesn’t exist)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>folder</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Folder to create in temporary folder. Defaults to None.</p></li>
+<li><p><strong>delete_if_exists</strong> (<em>bool</em>) – Whether to delete the folder if it exists. Defaults to False.</p></li>
+<li><p><strong>delete_on_success</strong> (<em>bool</em>) – Whether to delete folder (if folder supplied) on exiting with statement successfully. Defaults to True.</p></li>
+<li><p><strong>delete_on_failure</strong> (<em>bool</em>) – Whether to delete folder (if folder supplied) on exiting with statement unsuccessfully. Defaults to True.</p></li>
+<li><p><strong>batch</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Batch to use if there isn’t one in a file already.</p></li>
+<li><p><strong>tempdir</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – Folder to use as temporary directory. Defaults to None (TEMP_DIR or os.gettempdir).</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns</dt>
@@ -1701,6 +1880,28 @@ supplied, the extra_params* parameters will be ignored.</p>
 <span id="hdx-utilities-text-module"></span><h2>hdx.utilities.text module<a class="headerlink" href="#module-hdx.utilities.text" title="Permalink to this headline">¶</a></h2>
 <p>Text processing utilities</p>
 <dl class="function">
+<dt id="hdx.utilities.text.get_fraction_str">
+<code class="sig-prename descclassname">hdx.utilities.text.</code><code class="sig-name descname">get_fraction_str</code><span class="sig-paren">(</span><em class="sig-param">numerator</em>, <em class="sig-param">denominator=None</em>, <em class="sig-param">format='%.4f'</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.text.get_fraction_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given float numerator and optional float denominator, format as string, returning ‘’ for invalid
+numerator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>numerator</strong> (<em>float</em>) – Numerator</p></li>
+<li><p><strong>denominator</strong> (<em>Optional</em><em>[</em><em>float</em><em>]</em>) – Denominator. Defaults to None.</p></li>
+<li><p><strong>format</strong> (<em>str</em>) – Format to use. Defaults to %.4f.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Formatted number as string</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="hdx.utilities.text.get_matching_text">
 <code class="sig-prename descclassname">hdx.utilities.text.</code><code class="sig-name descname">get_matching_text</code><span class="sig-paren">(</span><em class="sig-param">string_list</em>, <em class="sig-param">match_min_size=30</em>, <em class="sig-param">ignore=''</em>, <em class="sig-param">end_characters='.!\r\n'</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.text.get_matching_text" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a string containing matching blocks of text in a list of strings followed by non-matching.</p>
@@ -1769,6 +1970,24 @@ end_characters (str): End characters to look for. Defaults to ‘.</p>
 </dd></dl>
 
 <dl class="function">
+<dt id="hdx.utilities.text.get_numeric_if_possible">
+<code class="sig-prename descclassname">hdx.utilities.text.</code><code class="sig-name descname">get_numeric_if_possible</code><span class="sig-paren">(</span><em class="sig-param">value</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.text.get_numeric_if_possible" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return val if it is not a string, otherwise see if it can be cast to float or int,
+taking into account commas and periods.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>value</strong> (<em>Any</em>) – Value</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Value</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Any</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
 <dt id="hdx.utilities.text.get_words_in_sentence">
 <code class="sig-prename descclassname">hdx.utilities.text.</code><code class="sig-name descname">get_words_in_sentence</code><span class="sig-paren">(</span><em class="sig-param">sentence</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.text.get_words_in_sentence" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns list of words in a sentence</p>
@@ -1801,6 +2020,46 @@ end_characters (str): End characters to look for. Defaults to ‘.</p>
 </dd>
 <dt class="field-odd">Return type</dt>
 <dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hdx.utilities.text.number_format">
+<code class="sig-prename descclassname">hdx.utilities.text.</code><code class="sig-name descname">number_format</code><span class="sig-paren">(</span><em class="sig-param">val</em>, <em class="sig-param">format='%.4f'</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.text.number_format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Format number as string</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>val</strong> (<em>float</em>) – Number to format</p></li>
+<li><p><strong>format</strong> (<em>str</em>) – Format to use. Defaults to %.4f.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Formatted number as string</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="hdx.utilities.text.only_allowed_in_str">
+<code class="sig-prename descclassname">hdx.utilities.text.</code><code class="sig-name descname">only_allowed_in_str</code><span class="sig-paren">(</span><em class="sig-param">test_str</em>, <em class="sig-param">allowed_chars</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.text.only_allowed_in_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns True if test string contains only allowed characters, False if not.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>test_str</strong> (<em>str</em>) – Test string</p></li>
+<li><p><strong>allowed_chars</strong> (<em>Set</em>) – Set of allowed characters</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>True if test string contains only allowed characters, False if not</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>bool</p>
 </dd>
 </dl>
 </dd></dl>
@@ -1959,7 +2218,7 @@ and any whitespace following the punctuation</p>
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-hdx.utilities" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="hdx.utilities.CleanCommand">
-<em class="property">class </em><code class="sig-prename descclassname">hdx.utilities.</code><code class="sig-name descname">CleanCommand</code><span class="sig-paren">(</span><em class="sig-param">dist</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.CleanCommand" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">hdx.utilities.</code><code class="sig-name descname">CleanCommand</code><span class="sig-paren">(</span><em class="sig-param">dist</em>, <em class="sig-param">**kw</em><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.CleanCommand" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">distutils.command.clean.clean</span></code></p>
 <p>Custom implementation of <code class="docutils literal notranslate"><span class="pre">clean</span></code> setuptools command.</p>
 <dl class="method">
@@ -2083,6 +2342,20 @@ interaction should be done by ‘run()’.</p>
 <code class="sig-name descname">version</code><em class="property"> = None</em><a class="headerlink" href="#hdx.utilities.PublishCommand.version" title="Permalink to this definition">¶</a></dt>
 <dd></dd></dl>
 
+</dd></dl>
+
+<dl class="function">
+<dt id="hdx.utilities.get_uuid">
+<code class="sig-prename descclassname">hdx.utilities.</code><code class="sig-name descname">get_uuid</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#hdx.utilities.get_uuid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get an UUID.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>A UUID</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="function">
