@@ -93,6 +93,8 @@ def multiple_replace(string, replacements):
         str: String with replacements
 
     """
+    if not replacements:
+        return string
     pattern = re.compile("|".join([re.escape(k) for k in sorted(replacements, key=len, reverse=True)]), flags=re.DOTALL)
     return pattern.sub(lambda x: replacements[x.group(0)], string)
 
