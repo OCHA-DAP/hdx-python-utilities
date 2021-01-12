@@ -7,8 +7,7 @@ from io import open
 from os import linesep
 from typing import List, Dict, Optional
 
-import yaml
-import yamlloader
+from ruamel.yaml import YAML
 
 from hdx.utilities.dictandlist import merge_two_dictionaries, merge_dictionaries
 
@@ -93,7 +92,8 @@ def load_yaml(path, encoding='utf-8'):
         OrderedDict: Ordered dictionary containing loaded YAML file
     """
     with open(path, 'r', encoding=encoding) as f:
-        yamldict = yaml.load(f.read(), Loader=yamlloader.ordereddict.CSafeLoader)
+        yaml = YAML()
+        yamldict = yaml.load(f.read())
     if not yamldict:
         raise (LoadError('YAML file: %s is empty!' % path))
     return yamldict

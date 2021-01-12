@@ -14,14 +14,13 @@ requirements = ['basicauth',
                 'email_validator',
                 'html5lib',
                 'psycopg2-binary',
-                'pyaml',
                 'python-dateutil==2.8.1',
                 'ratelimit',
+                'ruamel.yaml',
                 'six>=1.15.0',
                 'sshtunnel',
                 'tabulator[cchardet]>=1.53.1',
                 'typing;python_version<"3.5"',
-                'yamlloader'
                 ]
 
 classifiers = [

@@ -110,6 +110,9 @@ class TestDownloader:
         with Download(basic_auth_file=basicauthfile, extra_params_dict={'key1': 'val1'}) as downloader:
             assert downloader.session.auth == ('testuser', 'testpass')
             assert downloader.get_full_url(test_url) == '%s?key1=val1' % test_url
+        headers = {'Authorization': 'lala'}
+        with Download(headers=headers) as downloader:
+            assert downloader.session.headers == headers
         with Download(extra_params_json=extraparamsjson) as downloader:
             full_url = downloader.get_full_url(test_url)
             assert 'param_1=value+1' in full_url

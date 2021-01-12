@@ -1,13 +1,17 @@
 # -*- coding: utf-8 -*-
 """Saving utilities for YAML, JSON etc."""
 import json
+from io import StringIO
+from collections import OrderedDict
 from io import open
 from typing import Dict
 
-import pyaml
 import six
-import yaml
-import yamlloader
+from ruamel.yaml import YAML, RoundTripRepresenter, add_representer, SafeRepresenter
+
+
+def represent_none(self, data):
+    return self.represent_scalar('tag:yaml.org,2002:null', 'null')
 
 
 def save_str_to_file(string, path, encoding='utf-8'):
@@ -42,13 +46,21 @@ def save_yaml(dictionary, path, encoding='utf-8', pretty=False, sortkeys=False):
     Returns:
         None
     """
-    if sortkeys:
-        dictionary = dict(dictionary)
     with open(path, 'w', encoding=encoding) as f:
-        if pretty:
-            pyaml.dump(dictionary, f)
+        yaml = YAML(typ='rt')
+        if sortkeys:
+            add_representer(OrderedDict, SafeRepresenter.represent_dict, representer=SafeRepresenter)
+            yaml.Representer = SafeRepresenter
         else:
-            yaml.dump(dictionary, f, default_flow_style=None, Dumper=yamlloader.ordereddict.CDumper)
+            add_representer(OrderedDict, RoundTripRepresenter.represent_dict, representer=RoundTripRepresenter)
+            yaml.Representer = RoundTripRepresenter
+        if pretty:
+            yaml.indent(offset=2)
+            yaml.representer.add_representer(type(None), RoundTripRepresenter.represent_none)
+        else:
+            yaml.default_flow_style = None
+            yaml.representer.add_representer(type(None), represent_none)
+        yaml.dump(dictionary, f)
 
 
 def save_json(dictionary, path, encoding='utf-8', pretty=False, sortkeys=False):
