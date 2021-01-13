@@ -5,7 +5,7 @@ import logging
 import re
 import string
 from string import punctuation
-from typing import List, Dict, Optional, Set
+from typing import List, Dict, Optional, Set, Any
 
 logger = logging.getLogger(__name__)
 

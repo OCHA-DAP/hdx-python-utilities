@@ -28,7 +28,7 @@ def save_str_to_file(string, path, encoding='utf-8'):
     """
     with open(path, 'w', encoding=encoding) as f:
         if six.PY2:
-            string = unicode(string)
+            string = unicode(string)  # noqa: F821
         f.write(string)
 
 
@@ -89,4 +89,4 @@ def save_json(dictionary, path, encoding='utf-8', pretty=False, sortkeys=False):
         else:
             string = json.dumps(dictionary, ensure_ascii=False, indent=indent,
                                 sort_keys=sortkeys, separators=separators)
-            f.write(unicode(string))
+            f.write(unicode(string))  # noqa: F821
