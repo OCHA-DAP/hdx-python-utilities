@@ -81,21 +81,25 @@ class TestDownloader:
         with Download(basic_auth_file=basicauthfile) as downloader:
             assert downloader.session.auth == ('testuser', 'testpass')
         extraparamsyamltree = join(downloaderfolder, 'extra_params_tree.yml')
-        with Download(basic_auth='Basic dXNlcjpwYXNz', extra_params_yaml=extraparamsyamltree,
-                      extra_params_lookup='mykey') as downloader:
-            assert downloader.session.auth == ('user', 'pass')
-        monkeypatch.setenv('BASIC_AUTH', basicauth)
-        with Download(basic_auth='12345') as downloader:
-            assert downloader.session.auth == ('user', 'pass')
         with Download(extra_params_yaml=extraparamsyamltree, extra_params_lookup='mykey') as downloader:
+            assert downloader.session.auth == ('testuser', 'testpass')
+        monkeypatch.setenv('BASIC_AUTH', basicauth)
+        with Download() as downloader:
             assert downloader.session.auth == ('user', 'pass')
+        with pytest.raises(SessionError):
+            Download(basic_auth='12345')
+        with pytest.raises(SessionError):
+            Download(extra_params_yaml=extraparamsyamltree, extra_params_lookup='mykey')
         monkeypatch.delenv('BASIC_AUTH')
         with pytest.raises(SessionError):
+            Download(basic_auth=basicauth, extra_params_yaml=extraparamsyamltree, extra_params_lookup='mykey')
+        with pytest.raises(SessionError):
             Download(auth=('u', 'p'), basic_auth='Basic xxxxxxxxxxxxxxxx')
+        extraparamsjson = join(downloaderfolder, 'extra_params.json')
         with pytest.raises(SessionError):
-            Download(auth=('u', 'p'), basic_auth_file=join('lala', 'lala.txt'))
+            Download(auth=('u', 'p'), basic_auth_file=extraparamsjson)
         with pytest.raises(SessionError):
-            Download(basic_auth='Basic dXNlcjpwYXNz', basic_auth_file=join('lala', 'lala.txt'))
+            Download(basic_auth='Basic dXNlcjpwYXNz', basic_auth_file=extraparamsjson)
         with pytest.raises(SessionError):
             Download(auth=('u', 'p'), extra_params_yaml=extraparamsyamltree, extra_params_lookup='mykey')
         with pytest.raises(SessionError):
@@ -104,15 +108,16 @@ class TestDownloader:
             Download(extra_params_yaml=extraparamsyamltree, extra_params_lookup='missingkey')
         with pytest.raises(IOError):
             Download(basic_auth_file='NOTEXIST')
-        extraparamsjson = join(downloaderfolder, 'extra_params.json')
         extraparamsyaml = join(downloaderfolder, 'extra_params.yml')
         test_url = 'http://www.lalala.com/lala'
         with Download(basic_auth_file=basicauthfile, extra_params_dict={'key1': 'val1'}) as downloader:
             assert downloader.session.auth == ('testuser', 'testpass')
             assert downloader.get_full_url(test_url) == '%s?key1=val1' % test_url
-        headers = {'Authorization': 'lala'}
-        with Download(headers=headers) as downloader:
-            assert downloader.session.headers == headers
+        key = 'Authorization'
+        value = 'lala'
+        with Download(headers={key: value}) as downloader:
+            assert key in downloader.session.headers
+            assert downloader.session.headers.get(key) == value
         with Download(extra_params_json=extraparamsjson) as downloader:
             full_url = downloader.get_full_url(test_url)
             assert 'param_1=value+1' in full_url

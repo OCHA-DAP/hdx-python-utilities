@@ -38,6 +38,7 @@ def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=
         extra_params_json (str): Path to JSON file containing extra parameters to put on end of url OR
         extra_params_yaml (str): Path to YAML file containing extra parameters to put on end of url
         extra_params_lookup (str): Lookup key for parameters. If not given assumes parameters are at root of the dict.
+        headers (Dict): Additional headers to add to request.
         status_forcelist (iterable): HTTP statuses for which to force retry. Defaults to [429, 500, 502, 503, 504].
         method_whitelist (iterable): HTTP methods for which to force retry. Defaults t0 frozenset(['GET']).
     """
@@ -48,15 +49,21 @@ def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=
         ua = UserAgent.get(user_agent, user_agent_config_yaml, user_agent_lookup, **kwargs)
     s.headers['User-Agent'] = ua
 
+    auths_found = list()
+    headers = kwargs.get('headers')
+    if headers is not None:
+        s.headers.update(headers)
+        if 'Authorization' in headers:
+            auths_found.append('headers')
+
     extra_params_found = False
     extra_params_dict = None
-    auth_found = False
     basic_auth = None
     if use_env:
-        basic_auth = os.getenv('BASIC_AUTH')
-        if basic_auth:
-            logger.info('Loading authorisation from basic_auth environment variable')
-            auth_found = True
+        basic_auth_env = os.getenv('BASIC_AUTH')
+        if basic_auth_env:
+            basic_auth = basic_auth_env
+            auths_found.append('basic_auth environment variable')
         extra_params = os.getenv('EXTRA_PARAMS')
         if extra_params:
             if '=' in extra_params:
@@ -66,8 +73,8 @@ def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=
                     key, value = extra_param.split('=')
                     extra_params_dict[key] = value
             extra_params_found = True
-    if not auth_found and not extra_params_found:
-        # only do this if basic authorisation and extra params env vars not supplied
+    if not extra_params_found:
+        # only do this if extra params env vars not supplied
         extra_params_dict = kwargs.get('extra_params_dict')
         if extra_params_dict:
             extra_params_found = True
@@ -92,36 +99,33 @@ def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=
             extra_params_dict = extra_params_dict.get(extra_params_lookup)
             if extra_params_dict is None:
                 raise SessionError('%s does not exist in extra_params!' % extra_params_lookup)
-
-    if not auth_found:
-        basic_auth = kwargs.get('basic_auth')
-        if basic_auth:
-            logger.info('Loading authorisation from basic_auth argument')
-            auth_found = True
-        elif extra_params_dict:
-            bauth = extra_params_dict.get('basic_auth')
-            if bauth:
-                basic_auth = bauth
-                logger.info('Loading authorisation from basic_auth parameter')
-                auth_found = True
-                del extra_params_dict['basic_auth']
+    if extra_params_dict:
+        basic_auth_param = extra_params_dict.get('basic_auth')
+        if basic_auth_param:
+            basic_auth = basic_auth_param
+            auths_found.append('basic_auth parameter')
+            del extra_params_dict['basic_auth']
 
     s.params = extra_params_dict
+
+    basic_auth_arg = kwargs.get('basic_auth')
+    if basic_auth_arg:
+        basic_auth = basic_auth_arg
+        auths_found.append('basic_auth argument')
+
     auth = kwargs.get('auth')
     if auth:
-        if auth_found:
-            raise SessionError('More than one authorisation given!')
-        logger.info('Loading authorisation from auth argument')
-        auth_found = True
+        auths_found.append('auth argument')
     basic_auth_file = kwargs.get('basic_auth_file')
     if basic_auth_file:
-        if auth_found:
-            raise SessionError('More than one authorisation given!')
-        logger.info('Loading authorisation from: %s' % basic_auth_file)
+        auths_found.append(f'file {basic_auth_file}')
         basic_auth = load_file_to_str(basic_auth_file, strip=True)
-    if basic_auth:
-        auth = decode(basic_auth)
-    s.auth = auth
+    if len(auths_found) > 1:
+        raise SessionError(f'More than one authorisation given! ({", ".join(auths_found)})')
+    if 'headers' not in auths_found:
+        if basic_auth:
+            auth = decode(basic_auth)
+        s.auth = auth
 
     status_forcelist = kwargs.get('status_forcelist', [429, 500, 502, 503, 504])
     method_whitelist = kwargs.get('method_whitelist', frozenset(['HEAD', 'TRACE', 'GET', 'PUT', 'OPTIONS', 'DELETE']))
