@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 """Saving utilities for YAML, JSON etc."""
 import json
-from io import StringIO
 from collections import OrderedDict
 from io import open
 from typing import Dict
@@ -10,8 +9,31 @@ import six
 from ruamel.yaml import YAML, RoundTripRepresenter, add_representer, SafeRepresenter
 
 
-def represent_none(self, data):
-    return self.represent_scalar('tag:yaml.org,2002:null', 'null')
+class UnPrettyRTRepresenter(RoundTripRepresenter):
+    def represent_none(self, data):
+        return self.represent_scalar(u'tag:yaml.org,2002:null', u'null')
+
+
+class UnPrettySafeRepresenter(SafeRepresenter):
+    def represent_none(self, data):
+        return self.represent_scalar(u'tag:yaml.org,2002:null', u'null')
+
+
+class PrettySafeRepresenter(SafeRepresenter):
+    def represent_none(self, data):
+        # type: (Any) -> Any
+        if len(self.represented_objects) == 0 and not self.serializer.use_explicit_start:
+            # this will be open ended (although it is not yet)
+            return self.represent_scalar(u'tag:yaml.org,2002:null', u'null')
+        return self.represent_scalar(u'tag:yaml.org,2002:null', "")
+
+
+UnPrettyRTRepresenter.add_representer(None, UnPrettyRTRepresenter.represent_none)
+UnPrettySafeRepresenter.add_representer(None, UnPrettySafeRepresenter.represent_none)
+PrettySafeRepresenter.add_representer(None, PrettySafeRepresenter.represent_none)
+
+
+representers = {False: {False: UnPrettyRTRepresenter, True: RoundTripRepresenter}, True: {False: UnPrettySafeRepresenter, True: PrettySafeRepresenter}}
 
 
 def save_str_to_file(string, path, encoding='utf-8'):
@@ -47,19 +69,15 @@ def save_yaml(dictionary, path, encoding='utf-8', pretty=False, sortkeys=False):
         None
     """
     with open(path, 'w', encoding=encoding) as f:
+        representer = representers[sortkeys][pretty]
         yaml = YAML(typ='rt')
-        if sortkeys:
-            add_representer(OrderedDict, SafeRepresenter.represent_dict, representer=SafeRepresenter)
-            yaml.Representer = SafeRepresenter
-        else:
-            add_representer(OrderedDict, RoundTripRepresenter.represent_dict, representer=RoundTripRepresenter)
-            yaml.Representer = RoundTripRepresenter
+        yaml.Representer = representer
+        add_representer(OrderedDict, representer.represent_dict, representer=representer)
         if pretty:
             yaml.indent(offset=2)
-            yaml.representer.add_representer(type(None), RoundTripRepresenter.represent_none)
         else:
             yaml.default_flow_style = None
-            yaml.representer.add_representer(type(None), represent_none)
+        yaml.representer.add_representer(type(None), representer.represent_none)
         yaml.dump(dictionary, f)
 
 
