@@ -118,10 +118,11 @@ def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=
         auths_found.append('auth argument')
     basic_auth_file = kwargs.get('basic_auth_file')
     if basic_auth_file:
-        auths_found.append(f'file {basic_auth_file}')
+        auths_found.append('file %s' % basic_auth_file)
         basic_auth = load_file_to_str(basic_auth_file, strip=True)
     if len(auths_found) > 1:
-        raise SessionError(f'More than one authorisation given! ({", ".join(auths_found)})')
+        auths_found_str = ', '.join(auths_found)
+        raise SessionError('More than one authorisation given! (%s)' % auths_found_str)
     if 'headers' not in auths_found:
         if basic_auth:
             auth = decode(basic_auth)

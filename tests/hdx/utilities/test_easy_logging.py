@@ -4,14 +4,16 @@ from logging.handlers import SMTPHandler
 from os.path import join
 
 import pytest
+import six
 from logging_tree import tree
 
 from hdx.utilities.easy_logging import setup_logging, LoggingError
 
-try:
-    FILENOTFOUND_EXCTYPE = FileNotFoundError
-except:
+if six.PY3:
+    FILENOTFOUND_EXCTYPE = FileNotFoundError  # noqa: F821
+else:
     FILENOTFOUND_EXCTYPE = IOError
+
 
 class TestLogging:
     @pytest.fixture(scope='class')
