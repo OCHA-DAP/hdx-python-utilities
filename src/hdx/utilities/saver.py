@@ -3,7 +3,7 @@
 import json
 from collections import OrderedDict
 from io import open
-from typing import Dict
+from typing import Dict, Any
 
 import six
 from ruamel.yaml import YAML, RoundTripRepresenter, add_representer, SafeRepresenter
@@ -11,11 +11,13 @@ from ruamel.yaml import YAML, RoundTripRepresenter, add_representer, SafeReprese
 
 class UnPrettyRTRepresenter(RoundTripRepresenter):
     def represent_none(self, data):
+        # type: (Any) -> Any
         return self.represent_scalar(u'tag:yaml.org,2002:null', u'null')
 
 
 class UnPrettySafeRepresenter(SafeRepresenter):
     def represent_none(self, data):
+        # type: (Any) -> Any
         return self.represent_scalar(u'tag:yaml.org,2002:null', u'null')
 
 
