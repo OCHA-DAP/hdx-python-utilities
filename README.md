@@ -4,7 +4,6 @@ The HDX Python Utilities Library provides a range of helpful utilities:
 
 1. [Easy downloading of files with support for authentication, streaming and hashing](#downloading-files)
 1. [Loading and saving JSON and YAML (inc. with OrderedDict)](#loading-and-saving-json-and-yaml)
-1. [Database utilities (inc. connecting through SSH and SQLAlchemy helpers)](#database-utilities)
 1. [Dictionary and list utilities](#dictionary-and-list-utilities)
 1. [HTML utilities (inc. BeautifulSoup helper)](#html-utilities)
 1. [Compare files (eg. for testing)](#compare-files)
@@ -150,36 +149,6 @@ Examples:
     # Save dictionary to JSON file in compact form
     # sorting the keys
     save_json(mydict, 'mypath.json', pretty=False, sortkeys=False)
-
-### Database utilities
-
-These are built on top of SQLAlchemy and simplify its setup.
-
-Your SQLAlchemy database tables must inherit from Base in
-hdx.utilities.database eg. :
-
-    from hdx.utilities.database import Base
-    class MyTable(Base):
-        my_col = Column(Integer, ForeignKey(MyTable2.col2), primary_key=True)
-
-Examples:
-
-    # Get SQLAlchemy session object given database parameters and
-    # if needed SSH parameters. If database is PostgreSQL, will poll
-    # till it is up.
-    with Database(database='db', host='1.2.3.4', username='user', password='pass',
-                  driver='driver', ssh_host='5.6.7.8', ssh_port=2222,
-                  ssh_username='sshuser', ssh_private_key='path_to_key') as session:
-        session.query(...)
-
-    # Extract dictionary of parameters from SQLAlchemy url
-    result = Database.get_params_from_sqlalchemy_url(TestDatabase.sqlalchemy_url)
-
-    # Build SQLAlchemy url from dictionary of parameters
-    result = Database.get_sqlalchemy_url(**TestDatabase.params)
-
-    # Wait util PostgreSQL is up
-    Database.wait_for_postgres('mydatabase', 'myserver', 5432, 'myuser', 'mypass')
 
 ### Dictionary and list utilities
 
