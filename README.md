@@ -27,6 +27,9 @@ The code for the library is here: <https://github.com/ocha-dap/hdx-python-utili
 
 ## Breaking Changes
 
+From 2.5.5, the Database class and all the libraries on which it depended have been moved to the new 
+[HDX Python Database library](https://github.com/OCHA-DAP/hdx-python-database).
+
 From 2.1.2, get_tabular_rows in the Download class returns headers, iterator and a new method get_tabular_rows_as_list 
 returns only the iterator.
 
