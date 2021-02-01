@@ -5,7 +5,8 @@ import hashlib
 import logging
 from collections import OrderedDict
 from os import remove
-from os.path import splitext, join, exists
+from os.path import splitext, join, exists, isfile
+from pathlib import Path
 from posixpath import basename
 from typing import Optional, Dict, Iterator, Union, List, Any, Tuple, Callable
 
@@ -13,6 +14,7 @@ import requests
 import tabulator
 from ratelimit import sleep_and_retry, RateLimitDecorator
 from requests import Request
+from ruamel.yaml import YAML
 from six.moves.urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
 
 from hdx.utilities import raisefrom
@@ -27,8 +29,8 @@ class DownloadError(Exception):
 
 
 class Download(object):
-    """Download class with various download operations. Currently only GET requests are used and supported.
-    Requires either global user agent to be set or appropriate user agent parameter(s) to be completed.
+    """Download class with various download operations. Requires either global user agent to be set or appropriate
+    user agent parameter(s) to be completed.
 
     Args:
         user_agent (Optional[str]): User agent string. HDXPythonUtilities/X.X.X- is prefixed.
@@ -202,17 +204,18 @@ class Download(object):
         else:
             return [hxltags.get(header, '') for header in headers]
 
-    def normal_setup(self, url, stream=True, post=False, parameters=None, timeout=None, headers=None):
-        # type: (str, bool, bool, Optional[Dict], Optional[float], Optional[Dict]) -> requests.Response
+    def normal_setup(self, url, stream=True, post=False, parameters=None, timeout=None, headers=None, encoding=None):
+        # type: (str, bool, bool, Optional[Dict], Optional[float], Optional[Dict], Optional[str]) -> requests.Response
         """Setup download from provided url returning the response
 
         Args:
-            url (str): URL to download
+            url (str): URL or path to download
             stream (bool): Whether to stream download. Defaults to True.
             post (bool): Whether to use POST instead of GET. Defaults to False.
             parameters (Optional[Dict]): Parameters to pass. Defaults to None.
             timeout (Optional[float]): Timeout for connecting to URL. Defaults to None (no timeout).
             headers (Optional[Dict]): Headers to pass. Defaults to None.
+            encoding (Optional[str]): Encoding to use for text response. Defaults to None (best guess).
 
         Returns:
             requests.Response: requests.Response object
@@ -221,12 +224,21 @@ class Download(object):
         self.close_response()
         self.response = None
         try:
+            spliturl = urlsplit(url)
+            if not spliturl.scheme:
+                if isfile(url):
+                    url = Path(url).resolve().as_uri()
+                else:
+                    spliturl = spliturl._replace(scheme='http')
+                    url = urlunsplit(spliturl)
             if post:
                 full_url, parameters = self.get_url_params_for_post(url, parameters)
                 self.response = self.session.post(full_url, data=parameters, stream=stream, timeout=timeout, headers=headers)
             else:
                 self.response = self.session.get(self.get_url_for_get(url, parameters), stream=stream, timeout=timeout, headers=headers)
             self.response.raise_for_status()
+            if encoding:
+                self.response.encoding = encoding
         except Exception as e:
             raisefrom(DownloadError, 'Setup of Streaming Download of %s failed!' % url, e)
         return self.response
@@ -236,7 +248,7 @@ class Download(object):
         """Stream file from url and hash it using MD5. Must call setup method first.
 
         Args:
-            url (str): URL to download
+            url (str): URL or path to download
 
         Returns:
             str: MD5 hash of file
@@ -257,7 +269,7 @@ class Download(object):
         Must call setup method first.
 
         Args:
-            url (str): URL to download
+            url (str): URL or path to download
             filename (Optional[str]): Filename to use for downloaded file. Defaults to None (derive from the url).
             folder (Optional[str]): Folder to download it to. Defaults to None (temporary folder).
             overwrite (bool): Whether to overwrite existing file. Defaults to False.
@@ -282,12 +294,12 @@ class Download(object):
                 f.close()
 
     def download_file(self, url, folder=None, filename=None, overwrite=False,
-                      post=False, parameters=None, timeout=None, headers=None):
-        # type: (str, Optional[str], Optional[str], bool, bool, Optional[Dict], Optional[float], Optional[Dict]) -> str
+                      post=False, parameters=None, timeout=None, headers=None, encoding=None):
+        # type: (str, Optional[str], Optional[str], bool, bool, Optional[Dict], Optional[float], Optional[Dict], Optional[str]) -> str
         """Download file from url and store in provided folder or temporary folder if no folder supplied
 
         Args:
-            url (str): URL to download
+            url (str): URL or path to download
             folder (Optional[str]): Folder to download it to. Defaults to None.
             filename (Optional[str]): Filename to use for downloaded file. Defaults to None (derive from the url).
             overwrite (bool): Whether to overwrite existing file. Defaults to False.
@@ -295,30 +307,43 @@ class Download(object):
             parameters (Optional[Dict]): Parameters to pass. Defaults to None.
             timeout (Optional[float]): Timeout for connecting to URL. Defaults to None (no timeout).
             headers (Optional[Dict]): Headers to pass. Defaults to None.
+            encoding (Optional[str]): Encoding to use for text response. Defaults to None (best guess).
 
         Returns:
             str: Path of downloaded file
 
         """
-        self.setup(url, stream=True, post=post, parameters=parameters, timeout=timeout, headers=headers)
+        self.setup(url, stream=True, post=post, parameters=parameters, timeout=timeout, headers=headers, encoding=encoding)
         return self.stream_file(url, folder, filename, overwrite)
 
-    def download(self, url, post=False, parameters=None, timeout=None, headers=None):
-        # type: (str, bool, Optional[Dict], Optional[float], Optional[Dict]) -> requests.Response
+    def download(self, url, post=False, parameters=None, timeout=None, headers=None, encoding=None):
+        # type: (str, bool, Optional[Dict], Optional[float], Optional[Dict], Optional[str]) -> requests.Response
         """Download url
 
         Args:
-            url (str): URL to download
+            url (str): URL or path to download
             post (bool): Whether to use POST instead of GET. Defaults to False.
             parameters (Optional[Dict]): Parameters to pass. Defaults to None.
             timeout (Optional[float]): Timeout for connecting to URL. Defaults to None (no timeout).
             headers (Optional[Dict]): Headers to pass. Defaults to None.
+            encoding (Optional[str]): Encoding to use for text response. Defaults to None (best guess).
 
         Returns:
             requests.Response: Response
 
         """
-        return self.setup(url, stream=False, post=post, parameters=parameters, timeout=timeout, headers=headers)
+        return self.setup(url, stream=False, post=post, parameters=parameters, timeout=timeout, headers=headers, encoding=encoding)
+
+    def get_yaml(self):
+        # type: () -> Any
+        """Get YAML content of download
+
+        Returns:
+            Any: YAML content of download
+
+        """
+        with YAML() as yaml:
+            return yaml.load(self.response.text)
 
     def get_json(self):
         # type: () -> Any
@@ -335,7 +360,7 @@ class Download(object):
         """Get Tabulator stream.
 
         Args:
-            url (str): URL to download
+            url (str): URL or path to download
             **kwargs:
             headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers
             file_type (Optional[str]): Type of file. Defaults to inferring.
@@ -364,7 +389,7 @@ class Download(object):
         """Get iterator for reading rows from tabular data. Each row is returned as a list.
 
         Args:
-            url (str): URL to download
+            url (str): URL or path to download
             **kwargs:
             headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers
             file_type (Optional[str]): Type of file. Defaults to inferring.
@@ -439,7 +464,7 @@ class Download(object):
         """Download 2 column csv from url and return a dictionary of keys (first column) and values (second column)
 
         Args:
-            url (str): URL to download
+            url (str): URL or path to download
             **kwargs:
             headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers
             file_type (Optional[str]): Type of file. Defaults to inferring.
@@ -462,7 +487,7 @@ class Download(object):
         dictionaries with keys from column headers and values from columns beneath
 
         Args:
-            url (str): URL to download
+            url (str): URL or path to download
             headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             keycolumn (int): Number of column to be used for key. Defaults to 1.
             **kwargs:
@@ -495,7 +520,7 @@ class Download(object):
         dictionaries with keys from first column and values from other columns
 
         Args:
-            url (str): URL to download
+            url (str): URL or path to download
             headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             keycolumn (int): Number of column to be used for key. Defaults to 1.
             **kwargs:

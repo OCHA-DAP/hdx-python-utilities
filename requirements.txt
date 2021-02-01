@@ -3,8 +3,10 @@ beautifulsoup4==4.9.3
 colorlog==4.7.2
 email_validator==1.1.2
 html5lib==1.1
+pathlib;python_version<'3.4'
 python-dateutil==2.8.1
 ratelimit==2.2.1
+requests-file==1.5.1
 ruamel.yaml==0.16.12
 six==1.15.0
 tabulator[cchardet]==1.53.1

@@ -7,6 +7,7 @@ from typing import Any, Optional
 import requests
 from basicauth import decode
 from requests.adapters import HTTPAdapter
+from requests_file import FileAdapter
 from urllib3.util import Retry
 
 from hdx.utilities.loader import load_file_to_str, load_json, load_yaml
@@ -134,6 +135,7 @@ def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=
     retries = Retry(total=5, backoff_factor=0.4, status_forcelist=status_forcelist, method_whitelist=method_whitelist,
                     raise_on_redirect=True,
                     raise_on_status=True)
+    s.mount('file://', FileAdapter())
     s.mount('http://', HTTPAdapter(max_retries=retries, pool_connections=100, pool_maxsize=100))
     s.mount('https://', HTTPAdapter(max_retries=retries, pool_connections=100, pool_maxsize=100))
     return s

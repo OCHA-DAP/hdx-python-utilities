@@ -29,6 +29,10 @@ class TestDownloader:
         return join(fixturesfolder, self.downloaderfoldername)
 
     @pytest.fixture(scope='class')
+    def fixturefile(self, downloaderfolder):
+        return join(downloaderfolder, 'extra_params_tree.yml')
+
+    @pytest.fixture(scope='class')
     def fixtureurl(self):
         return 'https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/test_data.csv'
 
@@ -204,13 +208,17 @@ class TestDownloader:
             md5hash = downloader.hash_stream(fixtureurl)
             assert md5hash == 'da9db35a396cca10c618f6795bdb9ff2'
 
-    def test_download_file(self, tmpdir, fixtureurl, fixturenotexistsurl, getfixtureurl, postfixtureurl):
+    def test_download_file(self, tmpdir, fixturefile, fixtureurl, fixturenotexistsurl, getfixtureurl, postfixtureurl):
         tmpdir = str(tmpdir)
         with pytest.raises(DownloadError), Download() as downloader:
             downloader.download_file('NOTEXIST://NOTEXIST.csv', tmpdir)
         with pytest.raises(DownloadError), Download() as downloader:
             downloader.download_file(fixturenotexistsurl)
         with Download() as downloader:
+            f = downloader.download_file(fixturefile, folder=tmpdir)
+            fpath = abspath(f)
+            remove(f)
+            assert fpath == abspath(join(tmpdir, 'extra_params_tree.yml'))
             f = downloader.download_file(fixtureurl, folder=tmpdir)
             fpath = abspath(f)
             remove(f)
@@ -245,7 +253,7 @@ class TestDownloader:
             remove(f)
             assert fpath == abspath(join(tmpdir, filename))
 
-    def test_download(self, fixtureurl, fixturenotexistsurl, getfixtureurl, postfixtureurl):
+    def test_download(self, fixturefile, fixtureurl, fixturenotexistsurl, getfixtureurl, postfixtureurl):
         with pytest.raises(DownloadError), Download() as downloader:
             downloader.download('NOTEXIST://NOTEXIST.csv')
         with pytest.raises(DownloadError), Download() as downloader:
@@ -263,6 +271,8 @@ class TestDownloader:
             downloader.download('%s?id=10&lala=a' % getfixtureurl, post=False,
                                 parameters=OrderedDict([('b', '4'), ('d', '3')]))
             assert downloader.get_json()['args'] == OrderedDict([('b', '4'), ('d', '3'), ('id', '10'), ('lala', 'a')])
+            downloader.download(fixturefile)
+            assert downloader.get_yaml()['mykey'] == OrderedDict([('param1', 'value 1'), ('param2', 'value2'), ('param3', 11), ('basic_auth', 'Basic dGVzdHVzZXI6dGVzdHBhc3M=')])
 
     def test_download_tabular_key_value(self, fixtureurl, fixtureprocessurl):
         with Download() as downloader:

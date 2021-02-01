@@ -16,6 +16,69 @@ class LoadError(Exception):
     pass
 
 
+def load_file_to_str(path, encoding='utf-8', strip=False, replace_newlines=None):
+    # type: (str, str, bool, Optional[str]) -> str
+    """
+    Load file into a string removing newlines
+
+    Args:
+        path (str): Path to file
+        encoding (str): Encoding of file. Defaults to utf-8.
+        strip (bool): Whether to strip whitespace from start and end. Defaults to False.
+        replace_newlines (Optional[str]): String with which tp replace newlines. Defaults to None (don't replace).
+
+    Returns:
+        str: String contents of file
+
+    """
+    with open(path, 'r', encoding=encoding) as f:
+        string = f.read()
+        if replace_newlines is not None:
+            string = string.replace(linesep, replace_newlines)
+        if strip:
+            string = string.strip()
+    if not string:
+        raise LoadError('%s file is empty!' % path)
+    return string
+
+
+def load_yaml(path, encoding='utf-8'):
+    # type: (str, str) -> OrderedDict
+    """Load YAML file into an ordered dictionary
+
+    Args:
+        path (str): Path to YAML file
+        encoding (str): Encoding of file. Defaults to utf-8.
+
+    Returns:
+        OrderedDict: Ordered dictionary containing loaded YAML file
+    """
+    with open(path, 'r', encoding=encoding) as f:
+        yaml = YAML()
+        yamldict = yaml.load(f.read())
+    if not yamldict:
+        raise (LoadError('YAML file: %s is empty!' % path))
+    return yamldict
+
+
+def load_json(path, encoding='utf-8'):
+    # type: (str, str) -> OrderedDict
+    """Load JSON file into an ordered dictionary
+
+    Args:
+        path (str): Path to JSON file
+        encoding (str): Encoding of file. Defaults to utf-8.
+
+    Returns:
+        OrderedDict: Ordered dictionary containing loaded JSON file
+    """
+    with open(path, 'r', encoding=encoding) as f:
+        jsondict = json.loads(f.read(), object_pairs_hook=OrderedDict)
+    if not jsondict:
+        raise (LoadError('JSON file: %s is empty!' % path))
+    return jsondict
+
+
 def load_and_merge_yaml(paths, encoding='utf-8'):
     # type: (List[str], str) -> Dict
     """Load multiple YAML files and merge into one dictionary
@@ -80,64 +143,3 @@ def load_json_into_existing_dict(data, path, encoding='utf-8'):
     return merge_two_dictionaries(data, jsondict)
 
 
-def load_yaml(path, encoding='utf-8'):
-    # type: (str, str) -> OrderedDict
-    """Load YAML file into an ordered dictionary
-
-    Args:
-        path (str): Path to YAML file
-        encoding (str): Encoding of file. Defaults to utf-8.
-
-    Returns:
-        OrderedDict: Ordered dictionary containing loaded YAML file
-    """
-    with open(path, 'r', encoding=encoding) as f:
-        yaml = YAML()
-        yamldict = yaml.load(f.read())
-    if not yamldict:
-        raise (LoadError('YAML file: %s is empty!' % path))
-    return yamldict
-
-
-def load_json(path, encoding='utf-8'):
-    # type: (str, str) -> OrderedDict
-    """Load JSON file into an ordered dictionary
-
-    Args:
-        path (str): Path to JSON file
-        encoding (str): Encoding of file. Defaults to utf-8.
-
-    Returns:
-        OrderedDict: Ordered dictionary containing loaded JSON file
-    """
-    with open(path, 'r', encoding=encoding) as f:
-        jsondict = json.loads(f.read(), object_pairs_hook=OrderedDict)
-    if not jsondict:
-        raise (LoadError('JSON file: %s is empty!' % path))
-    return jsondict
-
-
-def load_file_to_str(path, encoding='utf-8', strip=False, replace_newlines=None):
-    # type: (str, str, bool, Optional[str]) -> str
-    """
-    Load file into a string removing newlines
-
-    Args:
-        path (str): Path to file
-        encoding (str): Encoding of file. Defaults to utf-8.
-        strip (bool): Whether to strip whitespace from start and end. Defaults to False.
-        replace_newlines (Optional[str]): String with which tp replace newlines. Defaults to None (don't replace).
-
-    Returns:
-        str: String contents of file
-
-    """
-    with open(path, 'r', encoding=encoding) as f:
-        string = f.read()
-        if replace_newlines is not None:
-            string = string.replace(linesep, replace_newlines)
-        if strip:
-            string = string.strip()
-    if not string:
-        raise LoadError('%s file is empty!' % path)
-    return string
