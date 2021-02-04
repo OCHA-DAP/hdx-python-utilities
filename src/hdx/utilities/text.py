@@ -262,7 +262,7 @@ def number_format(val, format='%.4f'):
 def get_fraction_str(numerator, denominator=None, format='%.4f'):
     # type: (float, Optional[float], str) -> str
     """Given float numerator and optional float denominator, format as string, returning '' for invalid
-    numerator.
+    numerator or 0 denominator.
 
     Args:
         numerator (float): Numerator
@@ -276,6 +276,9 @@ def get_fraction_str(numerator, denominator=None, format='%.4f'):
         numerator = float(numerator)
         if denominator:
             numerator /= float(denominator)
+        else:
+            if denominator is not None:
+                return ''
         return number_format(numerator, format)
     except ValueError:
         pass
