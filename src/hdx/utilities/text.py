@@ -246,8 +246,8 @@ def get_matching_then_nonmatching_text(string_list, separator='', match_min_size
 
 
 def number_format(val, format='%.4f'):
-    # type: (float, str) -> str
-    """Format number as string
+    # type: (Any, str) -> str
+    """Format float-castable input as string
 
     Args:
         val (float): Number to format
@@ -256,13 +256,15 @@ def number_format(val, format='%.4f'):
     Returns:
         str: Formatted number as string
     """
+    if val == '' or val is None:
+        return ''
     return format % float(val)
 
 
 def get_fraction_str(numerator, denominator=None, format='%.4f'):
-    # type: (float, Optional[float], str) -> str
-    """Given float numerator and optional float denominator, format as string, returning '' for invalid
-    numerator or 0 denominator.
+    # type: (Any, Optional[Any], str) -> str
+    """Given float-castable numerator and optional float-castable denominator, format as string, returning '' for
+    invalid numerator or 0 denominator.
 
     Args:
         numerator (float): Numerator
