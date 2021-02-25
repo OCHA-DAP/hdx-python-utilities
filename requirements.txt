@@ -9,5 +9,5 @@ ratelimit==2.2.1
 requests-file==1.5.1
 ruamel.yaml==0.16.12
 six==1.15.0
-tabulator[cchardet]==1.53.2
+tabulator[cchardet]==1.53.4
 typing==3.7.4.3;python_version<'3.5'

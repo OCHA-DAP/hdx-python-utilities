@@ -37,6 +37,7 @@ class Download(object):
         user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.
         user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
         use_env (bool): Whether to read environment variables. Defaults to True.
+        fail_on_missing_file (bool): Raise an exception if any specified configuration files are missing. Defaults to True.
         rate_limit (Optional[Dict]): Rate limiting to use as a dict with calls and period. Defaults to None.
         **kwargs: See below
         auth (Tuple[str, str]): Authorisation information in tuple form (user, pass) OR
@@ -52,9 +53,9 @@ class Download(object):
     """
 
     def __init__(self, user_agent=None, user_agent_config_yaml=None, user_agent_lookup=None, use_env=True,
-                 rate_limit=None, **kwargs):
-        # type: (Optional[str], Optional[str], Optional[str], bool, Optional[Dict], Any) -> None
-        self.session = get_session(user_agent, user_agent_config_yaml, user_agent_lookup, use_env, **kwargs)
+                 fail_on_missing_file=True, rate_limit=None, **kwargs):
+        # type: (Optional[str], Optional[str], Optional[str], bool, bool, Optional[Dict], Any) -> None
+        self.session = get_session(user_agent, user_agent_config_yaml, user_agent_lookup, use_env, fail_on_missing_file, **kwargs)
         self.response = None
         if rate_limit is not None:
             self.setup = sleep_and_retry(

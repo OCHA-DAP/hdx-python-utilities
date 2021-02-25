@@ -19,7 +19,7 @@ requirements = ['basicauth',
                 'requests-file',
                 'ruamel.yaml',
                 'six>=1.15.0',
-                'tabulator[cchardet]>=1.53.2',
+                'tabulator[cchardet]>=1.53.4',
                 'typing;python_version<"3.5"',
                 ]
 

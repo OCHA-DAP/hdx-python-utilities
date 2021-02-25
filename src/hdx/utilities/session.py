@@ -20,8 +20,8 @@ class SessionError(Exception):
     pass
 
 
-def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=None, use_env=True, **kwargs):
-    # type: (Optional[str], Optional[str], Optional[str], bool, Any) -> requests.Session
+def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=None, use_env=True, fail_on_missing_file=True, **kwargs):
+    # type: (Optional[str], Optional[str], Optional[str], bool, bool, Any) -> requests.Session
     """Set up and return Session object that is set up with retrying. Requires either global user agent to be set or
     appropriate user agent parameter(s) to be completed. If the EXTRA_PARAMS or BASIC_AUTH environment variable is
     supplied, the extra_params* parameters will be ignored.
@@ -31,6 +31,7 @@ def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=
         user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.
         user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
         use_env (bool): Whether to read environment variables. Defaults to True.
+        fail_on_missing_file (bool): Raise an exception if any specified configuration files are missing. Defaults to True.
         **kwargs: See below
         auth (Tuple[str, str]): Authorisation information in tuple form (user, pass) OR
         basic_auth (str): Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
@@ -87,14 +88,21 @@ def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=
                 raise SessionError('More than one set of extra parameters given!')
             extra_params_found = True
             logger.info('Loading extra parameters from: %s' % extra_params_json)
-            extra_params_dict = load_json(extra_params_json)
-
+            try:
+                extra_params_dict = load_json(extra_params_json)
+            except IOError:
+                if fail_on_missing_file:
+                    raise
         extra_params_yaml = kwargs.get('extra_params_yaml', '')
         if extra_params_yaml:
             if extra_params_found:
                 raise SessionError('More than one set of extra parameters given!')
             logger.info('Loading extra parameters from: %s' % extra_params_yaml)
-            extra_params_dict = load_yaml(extra_params_yaml)
+            try:
+                extra_params_dict = load_yaml(extra_params_yaml)
+            except IOError:
+                if fail_on_missing_file:
+                    raise
         extra_params_lookup = kwargs.get('extra_params_lookup')
         if extra_params_lookup:
             extra_params_dict = extra_params_dict.get(extra_params_lookup)
@@ -119,8 +127,13 @@ def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=
         auths_found.append('auth argument')
     basic_auth_file = kwargs.get('basic_auth_file')
     if basic_auth_file:
-        auths_found.append('file %s' % basic_auth_file)
-        basic_auth = load_file_to_str(basic_auth_file, strip=True)
+        logger.info('Loading basic auth from: %s' % basic_auth_file)
+        try:
+            basic_auth = load_file_to_str(basic_auth_file, strip=True)
+            auths_found.append('file %s' % basic_auth_file)
+        except IOError:
+            if fail_on_missing_file:
+                raise
     if len(auths_found) > 1:
         auths_found_str = ', '.join(auths_found)
         raise SessionError('More than one authorisation given! (%s)' % auths_found_str)

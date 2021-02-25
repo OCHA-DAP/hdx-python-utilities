@@ -9,10 +9,22 @@ from shutil import rmtree, copytree
 from tempfile import gettempdir
 
 import pytest
+from contextlib import contextmanager
 
 from hdx.utilities.downloader import Download, DownloadError
 from hdx.utilities.session import SessionError
 from hdx.utilities.useragent import UserAgent
+
+
+@contextmanager
+def not_raises(ExpectedException):
+    try:
+        yield
+    except ExpectedException as error:
+        raise pytest.fail('Raised exception {0} when it should not!'.format(error))
+
+    except Exception as error:
+        raise pytest.fail('An unexpected exception {0} raised.'.format(error))
 
 
 class TestDownloader:
@@ -164,6 +176,10 @@ class TestDownloader:
                      extra_params_lookup='mykey')
         with pytest.raises(IOError):
             Download(extra_params_json='NOTEXIST')
+        with not_raises(IOError):
+            Download(extra_params_json='NOTEXIST', fail_on_missing_file=False)
+            Download(extra_params_yaml='NOTEXIST', fail_on_missing_file=False)
+            Download(basic_auth_file='NOTEXIST', fail_on_missing_file=False)
 
     def test_get_url_for_get(self):
         assert Download.get_url_for_get('http://www.lala.com/hdfa?a=3&b=4', OrderedDict(
