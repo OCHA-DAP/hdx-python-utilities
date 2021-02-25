@@ -176,6 +176,8 @@ class TestDownloader:
                      extra_params_lookup='mykey')
         with pytest.raises(IOError):
             Download(extra_params_json='NOTEXIST')
+        with pytest.raises(IOError):
+            Download(extra_params_yaml='NOTEXIST')
         with not_raises(IOError):
             Download(extra_params_json='NOTEXIST', fail_on_missing_file=False)
             Download(extra_params_yaml='NOTEXIST', fail_on_missing_file=False)
