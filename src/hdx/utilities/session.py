@@ -104,7 +104,7 @@ def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=
                 if fail_on_missing_file:
                     raise
         extra_params_lookup = kwargs.get('extra_params_lookup')
-        if extra_params_lookup:
+        if extra_params_lookup and extra_params_dict:
             extra_params_dict = extra_params_dict.get(extra_params_lookup)
             if extra_params_dict is None:
                 raise SessionError('%s does not exist in extra_params!' % extra_params_lookup)
