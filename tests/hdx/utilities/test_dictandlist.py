@@ -8,7 +8,8 @@ import pytest
 
 from hdx.utilities.dictandlist import merge_dictionaries, dict_diff, dict_of_lists_add, list_distribute_contents, \
     list_distribute_contents_simple, extract_list_from_list_of_dict, avg_dicts, key_value_convert, integer_key_convert, \
-    integer_value_convert, float_value_convert, write_list_to_csv, read_list_from_csv, dict_of_sets_add, args_to_dict
+    integer_value_convert, float_value_convert, write_list_to_csv, read_list_from_csv, dict_of_sets_add, args_to_dict, \
+    dict_of_dicts_add
 
 
 class TestDictAndList:
@@ -71,6 +72,19 @@ class TestDictAndList:
         assert d == {'a': {1, 2}, 2: {'b', 'c'}}
         dict_of_sets_add(d, 2, 'b')
         assert d == {'a': {1, 2}, 2: {'b', 'c'}}
+
+    def test_dict_of_dicts_add(self):
+        d = dict()
+        dict_of_dicts_add(d, 'a', 1, 3.0)
+        assert d == {'a': {1: 3.0}}
+        dict_of_dicts_add(d, 2, 'b', 5.0)
+        assert d == {'a': {1: 3.0}, 2: {'b': 5.0}}
+        dict_of_dicts_add(d, 'a', 2, 4.5)
+        assert d == {'a': {1: 3.0, 2: 4.5}, 2: {'b': 5.0}}
+        dict_of_dicts_add(d, 2, 'c', 9.3)
+        assert d == {'a': {1: 3.0, 2: 4.5}, 2: {'b': 5.0, 'c': 9.3}}
+        dict_of_dicts_add(d, 2, 'b', 'abc')
+        assert d == {'a': {1: 3.0, 2: 4.5}, 2: {'b': 'abc', 'c': 9.3}}
 
     def test_list_distribute_contents_simple(self):
         input_list = [3, 1, 1, 1, 2, 2]

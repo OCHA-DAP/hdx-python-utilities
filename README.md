@@ -181,6 +181,20 @@ Examples:
     dict_of_lists_add(d, 'a', 2)
     assert d == {'a': [1, 2], 2: ['b']}
 
+    # Add element to set in dict
+    d = dict()
+    dict_of_sets_add(d, 'a', 1)
+    assert d == {'a': {1}}
+    dict_of_sets_add(d, 2, 'b')
+    assert d == {'a': {1}, 2: {'b'}}
+
+    # Add element to dict in dict
+    d = dict()
+    dict_of_dicts_add(d, 'a', 1, 3.0)
+    assert d == {'a': {1: 3.0}}
+    dict_of_dicts_add(d, 2, 'b', 5.0)
+    assert d == {'a': {1: 3.0}, 2: {'b': 5.0}}
+
     # Spread items in list so similar items are further apart
     input_list = [3, 1, 1, 1, 2, 2]
     result = list_distribute_contents(input_list)

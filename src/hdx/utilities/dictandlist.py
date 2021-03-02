@@ -139,6 +139,25 @@ def dict_of_sets_add(dictionary, key, value):
     dictionary[key] = set_objs
 
 
+def dict_of_dicts_add(dictionary, parent_key, key, value):
+    # type: (DictUpperBound, Any, Any, Any) -> None
+    """Add key value pair to a dictionary within a dictionary by key
+
+    Args:
+        dictionary (DictUpperBound): Dictionary to which to add values
+        parent_key (Any): Key within parent dictionary
+        key (Any): Key within dictionary
+        value (Any): Value to add to set in dictionary
+
+    Returns:
+        None
+
+    """
+    dict_objs = dictionary.get(parent_key, dict())
+    dict_objs[key] = value
+    dictionary[parent_key] = dict_objs
+
+
 def list_distribute_contents_simple(input_list, function=lambda x: x):
     # type: (List, Callable[[Any], Any]) -> List
     """Distribute the contents of a list eg. [1, 1, 1, 2, 2, 3] -> [1, 2, 3, 1, 2, 1]. List can contain complex types
