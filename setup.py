@@ -17,9 +17,10 @@ requirements = ['basicauth',
                 'python-dateutil==2.8.1',
                 'ratelimit',
                 'requests-file',
-                'ruamel.yaml>=0.16.13',
+                'ruamel.yaml==0.16.13;python_version<"3"',
+                'ruamel.yaml>=0.17.0;python_version>="3"',
                 'six>=1.15.0',
-                'tabulator[cchardet]>=1.53.4',
+                'tabulator[cchardet]>=1.53.5',
                 'typing;python_version<"3.5"',
                 ]
 
