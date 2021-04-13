@@ -74,18 +74,18 @@ class Retrieve(object):
         output_path = join(folder, filename)
         saved_path = join(self.saved_dir, filename)
         if self.use_saved:
-            logger.info(f'Using saved {logstr} in {saved_path}')
+            logger.info('Using saved %s in %s' % (logstr, saved_path))
             return saved_path
         else:
             try:
-                logger.info(f'Downloading {logstr} from {self.get_url_logstr(url)} into {output_path}')
+                logger.info('Downloading %s from %s into %s' % (logstr, self.get_url_logstr(url), output_path))
                 self.downloader.download_file(url, folder, filename)
                 return output_path
             except DownloadError:
                 if not fallback:
                     raise
                 fallback_path = join(self.fallback_dir, filename)
-                logger.exception(f'{logstr} download failed, using static data {fallback_path}!')
+                logger.exception('%s download failed, using static data %s!' % (logstr, fallback_path))
                 return fallback_path
 
     def retrieve_text(self, url, filename, logstr=None, fallback=False):
@@ -105,21 +105,21 @@ class Retrieve(object):
             logstr = filename
         saved_path = join(self.saved_dir, filename)
         if self.use_saved:
-            logger.info(f'Using saved {logstr} in {saved_path}')
+            logger.info('Using saved %s in %s' % (logstr, saved_path))
             text = load_file_to_str(saved_path)
         else:
             try:
-                logger.info(f'Downloading {logstr} {self.get_url_logstr(url)}')
+                logger.info('Downloading %s from %s' % (logstr, self.get_url_logstr(url)))
                 response = self.downloader.download(url)
                 text = response.text
                 if self.save:
-                    logger.info(f'Saving {logstr} to {saved_path}')
+                    logger.info('Saving %s in %s' % (logstr, saved_path))
                     save_str_to_file(text, saved_path)
             except DownloadError:
                 if not fallback:
                     raise
                 fallback_path = join(self.fallback_dir, filename)
-                logger.exception(f'{logstr} download failed, using static data {fallback_path}!')
+                logger.exception('%s download failed, using static data %s!' % (logstr, fallback_path))
                 text = load_file_to_str(fallback_path)
         return text
 
@@ -140,21 +140,21 @@ class Retrieve(object):
             logstr = filename
         saved_path = join(self.saved_dir, filename)
         if self.use_saved:
-            logger.info(f'Using saved {logstr} in {saved_path}')
+            logger.info('Using saved %s in %s' % (logstr, saved_path))
             ryaml = load_yaml(saved_path)
         else:
             try:
-                logger.info(f'Downloading {logstr} from {self.get_url_logstr(url)}')
+                logger.info('Downloading %s from %s' % (logstr, self.get_url_logstr(url)))
                 self.downloader.download(url)
                 ryaml = self.downloader.get_yaml()
                 if self.save:
-                    logger.info(f'Saving {logstr} in {saved_path}')
+                    logger.info('Saving %s in %s' % (logstr, saved_path))
                     save_yaml(ryaml, saved_path)
             except DownloadError:
                 if not fallback:
                     raise
                 fallback_path = join(self.fallback_dir, filename)
-                logger.exception(f'{logstr} download failed, using static data {fallback_path}!')
+                logger.exception('%s download failed, using static data %s!' % (logstr, fallback_path))
                 ryaml = load_yaml(fallback_path)
         return ryaml
 
@@ -175,20 +175,20 @@ class Retrieve(object):
             logstr = filename
         saved_path = join(self.saved_dir, filename)
         if self.use_saved:
-            logger.info(f'Using saved {logstr} in {saved_path}')
+            logger.info('Using saved %s in %s' % (logstr, saved_path))
             rjson = load_json(saved_path)
         else:
             try:
-                logger.info(f'Downloading {logstr} from {self.get_url_logstr(url)}')
+                logger.info('Downloading %s from %s' % (logstr, self.get_url_logstr(url)))
                 self.downloader.download(url)
                 rjson = self.downloader.get_json()
                 if self.save:
-                    logger.info(f'Saving {logstr} in {saved_path}')
+                    logger.info('Saving %s in %s' % (logstr, saved_path))
                     save_json(rjson, saved_path)
             except DownloadError:
                 if not fallback:
                     raise
                 fallback_path = join(self.fallback_dir, filename)
-                logger.exception(f'{logstr} download failed, using static data {fallback_path}!')
+                logger.exception('%s download failed, using static data %s!' % (logstr, fallback_path))
                 rjson = load_json(fallback_path)
         return rjson
