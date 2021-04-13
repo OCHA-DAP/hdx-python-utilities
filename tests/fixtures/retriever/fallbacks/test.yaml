@@ -1,0 +1,23 @@
+dataset:
+  required_fields:
+    - name
+    - title
+    - dataset_date
+hdx_prod_site:
+  password:
+  url: https://data.humdata.org/
+  username:
+hdx_test_site:
+  password: lalala
+  url: https://test-data.humdata.org/
+  username: lala
+param_1: XYZ
+resource:
+  required_fields:
+    - package_id
+    - name
+    - description
+showcase:
+  required_fields:
+    - name
+    - title

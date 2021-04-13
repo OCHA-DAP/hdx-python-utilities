@@ -3,6 +3,7 @@
 The HDX Python Utilities Library provides a range of helpful utilities:
 
 1. [Easy downloading of files with support for authentication, streaming and hashing](#downloading-files)
+1. [Retrieval of data from url with saving to file or from data previously saved](#retrieving-files)
 1. [Loading and saving JSON and YAML (inc. with OrderedDict)](#loading-and-saving-json-and-yaml)
 1. [Dictionary and list utilities](#dictionary-and-list-utilities)
 1. [HTML utilities (inc. BeautifulSoup helper)](#html-utilities)
@@ -122,6 +123,29 @@ Other useful functions:
     # == {'a': 0, 'b': 1, 'c': 2}
 
 For more detail and additional functions, check the API docs mentioned earlier in the [usage section](#usage).
+
+### Retrieving files
+
+Downloading of files with the option of saving downloaded files or using previously downloaded files. 
+Includes the option of using a static fallback file if downloading fails.  
+
+    with Download() as downloader:
+        # Downloads file returning the path to the downloaded file and using a fallback file if the download 
+        # fails. Since saved is False, the file will be saved with name filename in temp_dir
+        retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save=False, use_saved=False) 
+        path = retriever.retrieve_file(url, filename, logstr='my file', fallback=True)
+
+        # Downloads text file saving it for future usage and returning the text data (with no fallback) 
+        # Since saved is True, the file will be saved with name filename in saved_dir
+        retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save=True, use_saved=False)
+        text = retriever.retrieve_text(url, filename, logstr='test text', fallback=False)
+        # Downloads YAML file saving it for future usage and returning the YAML data with fallback taken
+        # from fallback_dir if needed.
+        data = retriever.retrieve_yaml(url, filename, logstr='test yaml', fallback=True)
+
+        # Uses previously downloaded JSON file in saved_dir returning the JSON data (with no fallback) 
+        retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save=False, use_saved=True)
+        data = retriever.retrieve_json(url, filename, logstr='test json', fallback=False)
 
 ### Loading and Saving JSON and YAML
 

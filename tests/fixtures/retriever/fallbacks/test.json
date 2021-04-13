@@ -1,0 +1,30 @@
+{
+  "dataset": {
+    "required_fields": [
+      "name",
+      "dataset_date"
+    ]
+  },
+  "hdx_prod_site": {
+    "password": null,
+    "url": "https://data.humdata.org/",
+    "username": null
+  },
+  "hdx_test_site": {
+    "password": "tumteetumteetum",
+    "url": "https://test-data.humdata.org/",
+    "username": "tumteetum"
+  },
+  "my_param": "xyz",
+  "resource": {
+    "required_fields": [
+      "name",
+      "description"
+    ]
+  },
+  "showcase": {
+    "required_fields": [
+      "name"
+    ]
+  }
+}
