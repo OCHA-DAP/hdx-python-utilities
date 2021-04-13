@@ -12,14 +12,6 @@ hdx.utilities.compare module
    :undoc-members:
    :show-inheritance:
 
-hdx.utilities.database module
------------------------------
-
-.. automodule:: hdx.utilities.database
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
 hdx.utilities.dateparse module
 ------------------------------
 
@@ -92,6 +84,14 @@ hdx.utilities.path module
    :undoc-members:
    :show-inheritance:
 
+hdx.utilities.retriever module
+------------------------------
+
+.. automodule:: hdx.utilities.retriever
+   :members:
+   :undoc-members:
+   :show-inheritance:
+
 hdx.utilities.saver module
 --------------------------
 
@@ -131,7 +131,6 @@ hdx.utilities.version module
    :members:
    :undoc-members:
    :show-inheritance:
-
 
 Module contents
 ---------------

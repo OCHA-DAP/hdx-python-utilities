@@ -1,18 +1,17 @@
 
-
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Index &#8212; HDX Python Utilities 1.0 documentation</title>
-    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
-    <script type="text/javascript" src="_static/jquery.js"></script>
-    <script type="text/javascript" src="_static/underscore.js"></script>
-    <script type="text/javascript" src="_static/doctools.js"></script>
-    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" />
    
@@ -56,6 +55,7 @@
  | <a href="#U"><strong>U</strong></a>
  | <a href="#V"><strong>V</strong></a>
  | <a href="#W"><strong>W</strong></a>
+ | <a href="#Y"><strong>Y</strong></a>
  
 </div>
 <h2 id="A">A</h2>
@@ -107,8 +107,6 @@
 <h2 id="D">D</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/hdx.utilities.html#hdx.utilities.database.Database">Database (class in hdx.utilities.database)</a>
-</li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.dateparse.DateParser">DateParser (class in hdx.utilities.dateparse)</a>
 </li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.email.Email.default_email_config_yaml">default_email_config_yaml (hdx.utilities.email.Email attribute)</a>
@@ -122,6 +120,8 @@
 </li>
       </ul></li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.dictandlist.dict_diff">dict_diff() (in module hdx.utilities.dictandlist)</a>
+</li>
+      <li><a href="source/hdx.utilities.html#hdx.utilities.dictandlist.dict_of_dicts_add">dict_of_dicts_add() (in module hdx.utilities.dictandlist)</a>
 </li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.dictandlist.dict_of_lists_add">dict_of_lists_add() (in module hdx.utilities.dictandlist)</a>
 </li>
@@ -203,22 +203,14 @@
 </li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.text.get_numeric_if_possible">get_numeric_if_possible() (in module hdx.utilities.text)</a>
 </li>
-      <li><a href="source/hdx.utilities.html#hdx.utilities.database.Database.get_params_from_sqlalchemy_url">get_params_from_sqlalchemy_url() (hdx.utilities.database.Database static method)</a>
-</li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.downloader.Download.get_path_for_url">get_path_for_url() (hdx.utilities.downloader.Download static method)</a>
 </li>
-      <li><a href="source/hdx.utilities.html#hdx.utilities.database.Database.get_session">get_session() (hdx.utilities.database.Database static method)</a>
-
-      <ul>
-        <li><a href="source/hdx.utilities.html#hdx.utilities.session.get_session">(in module hdx.utilities.session)</a>
+      <li><a href="source/hdx.utilities.html#hdx.utilities.session.get_session">get_session() (in module hdx.utilities.session)</a>
 </li>
-      </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/hdx.utilities.html#hdx.utilities.html.get_soup">get_soup() (in module hdx.utilities.html)</a>
 </li>
-      <li><a href="source/hdx.utilities.html#hdx.utilities.database.Database.get_sqlalchemy_url">get_sqlalchemy_url() (hdx.utilities.database.Database static method)</a>
-</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/hdx.utilities.html#hdx.utilities.downloader.Download.get_tabular_rows">get_tabular_rows() (hdx.utilities.downloader.Download method)</a>
 </li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.downloader.Download.get_tabular_rows_as_list">get_tabular_rows_as_list() (hdx.utilities.downloader.Download method)</a>
@@ -233,6 +225,8 @@
 </li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.downloader.Download.get_url_for_get">get_url_for_get() (hdx.utilities.downloader.Download static method)</a>
 </li>
+      <li><a href="source/hdx.utilities.html#hdx.utilities.retriever.Retrieve.get_url_logstr">get_url_logstr() (hdx.utilities.retriever.Retrieve static method)</a>
+</li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.downloader.Download.get_url_params_for_post">get_url_params_for_post() (hdx.utilities.downloader.Download static method)</a>
 </li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.version.get_utils_version">get_utils_version() (in module hdx.utilities.version)</a>
@@ -243,6 +237,8 @@
 </li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.text.get_words_in_sentence">get_words_in_sentence() (in module hdx.utilities.text)</a>
 </li>
+      <li><a href="source/hdx.utilities.html#hdx.utilities.downloader.Download.get_yaml">get_yaml() (hdx.utilities.downloader.Download method)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -251,46 +247,134 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/hdx.utilities.html#hdx.utilities.downloader.Download.hash_stream">hash_stream() (hdx.utilities.downloader.Download method)</a>
 </li>
-      <li><a href="source/hdx.html#module-hdx">hdx (module)</a>
+      <li>
+    hdx
+
+      <ul>
+        <li><a href="source/hdx.html#module-hdx">module</a>
 </li>
-      <li><a href="source/hdx.utilities.html#module-hdx.utilities">hdx.utilities (module)</a>
+      </ul></li>
+      <li>
+    hdx.utilities
+
+      <ul>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities">module</a>
 </li>
-      <li><a href="source/hdx.utilities.html#module-hdx.utilities.compare">hdx.utilities.compare (module)</a>
+      </ul></li>
+      <li>
+    hdx.utilities.compare
+
+      <ul>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.compare">module</a>
 </li>
-      <li><a href="source/hdx.utilities.html#module-hdx.utilities.database">hdx.utilities.database (module)</a>
+      </ul></li>
+      <li>
+    hdx.utilities.dateparse
+
+      <ul>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.dateparse">module</a>
 </li>
-      <li><a href="source/hdx.utilities.html#module-hdx.utilities.dateparse">hdx.utilities.dateparse (module)</a>
+      </ul></li>
+      <li>
+    hdx.utilities.dictandlist
+
+      <ul>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.dictandlist">module</a>
 </li>
-      <li><a href="source/hdx.utilities.html#module-hdx.utilities.dictandlist">hdx.utilities.dictandlist (module)</a>
+      </ul></li>
+      <li>
+    hdx.utilities.downloader
+
+      <ul>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.downloader">module</a>
 </li>
-      <li><a href="source/hdx.utilities.html#module-hdx.utilities.downloader">hdx.utilities.downloader (module)</a>
+      </ul></li>
+      <li>
+    hdx.utilities.easy_logging
+
+      <ul>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.easy_logging">module</a>
 </li>
-      <li><a href="source/hdx.utilities.html#module-hdx.utilities.easy_logging">hdx.utilities.easy_logging (module)</a>
+      </ul></li>
+      <li>
+    hdx.utilities.email
+
+      <ul>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.email">module</a>
 </li>
-      <li><a href="source/hdx.utilities.html#module-hdx.utilities.email">hdx.utilities.email (module)</a>
+      </ul></li>
+      <li>
+    hdx.utilities.encoding
+
+      <ul>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.encoding">module</a>
 </li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/hdx.utilities.html#module-hdx.utilities.encoding">hdx.utilities.encoding (module)</a>
+      <li>
+    hdx.utilities.html
+
+      <ul>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.html">module</a>
 </li>
-      <li><a href="source/hdx.utilities.html#module-hdx.utilities.html">hdx.utilities.html (module)</a>
+      </ul></li>
+      <li>
+    hdx.utilities.loader
+
+      <ul>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.loader">module</a>
 </li>
-      <li><a href="source/hdx.utilities.html#module-hdx.utilities.loader">hdx.utilities.loader (module)</a>
+      </ul></li>
+      <li>
+    hdx.utilities.path
+
+      <ul>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.path">module</a>
 </li>
-      <li><a href="source/hdx.utilities.html#module-hdx.utilities.path">hdx.utilities.path (module)</a>
+      </ul></li>
+      <li>
+    hdx.utilities.retriever
+
+      <ul>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.retriever">module</a>
 </li>
-      <li><a href="source/hdx.utilities.html#module-hdx.utilities.saver">hdx.utilities.saver (module)</a>
+      </ul></li>
+      <li>
+    hdx.utilities.saver
+
+      <ul>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.saver">module</a>
 </li>
-      <li><a href="source/hdx.utilities.html#module-hdx.utilities.session">hdx.utilities.session (module)</a>
+      </ul></li>
+      <li>
+    hdx.utilities.session
+
+      <ul>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.session">module</a>
 </li>
-      <li><a href="source/hdx.utilities.html#module-hdx.utilities.text">hdx.utilities.text (module)</a>
+      </ul></li>
+      <li>
+    hdx.utilities.text
+
+      <ul>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.text">module</a>
 </li>
-      <li><a href="source/hdx.utilities.html#module-hdx.utilities.useragent">hdx.utilities.useragent (module)</a>
+      </ul></li>
+      <li>
+    hdx.utilities.useragent
+
+      <ul>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.useragent">module</a>
 </li>
-      <li><a href="source/hdx.utilities.html#module-hdx.utilities.version">hdx.utilities.version (module)</a>
+      </ul></li>
+      <li>
+    hdx.utilities.version
+
+      <ul>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.version">module</a>
 </li>
-      <li><a href="source/hdx.utilities.html#hdx.utilities.database.HDXBase">HDXBase (class in hdx.utilities.database)</a>
-</li>
+      </ul></li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.downloader.Download.hxl_row">hxl_row() (hdx.utilities.downloader.Download static method)</a>
 </li>
   </ul></td>
@@ -361,6 +445,47 @@
 </li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.dictandlist.merge_two_dictionaries">merge_two_dictionaries() (in module hdx.utilities.dictandlist)</a>
 </li>
+      <li>
+    module
+
+      <ul>
+        <li><a href="source/hdx.html#module-hdx">hdx</a>
+</li>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities">hdx.utilities</a>
+</li>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.compare">hdx.utilities.compare</a>
+</li>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.dateparse">hdx.utilities.dateparse</a>
+</li>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.dictandlist">hdx.utilities.dictandlist</a>
+</li>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.downloader">hdx.utilities.downloader</a>
+</li>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.easy_logging">hdx.utilities.easy_logging</a>
+</li>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.email">hdx.utilities.email</a>
+</li>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.encoding">hdx.utilities.encoding</a>
+</li>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.html">hdx.utilities.html</a>
+</li>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.loader">hdx.utilities.loader</a>
+</li>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.path">hdx.utilities.path</a>
+</li>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.retriever">hdx.utilities.retriever</a>
+</li>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.saver">hdx.utilities.saver</a>
+</li>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.session">hdx.utilities.session</a>
+</li>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.text">hdx.utilities.text</a>
+</li>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.useragent">hdx.utilities.useragent</a>
+</li>
+        <li><a href="source/hdx.utilities.html#module-hdx.utilities.version">hdx.utilities.version</a>
+</li>
+      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/hdx.utilities.html#hdx.utilities.path.multiple_progress_storing_tempdir">multiple_progress_storing_tempdir() (in module hdx.utilities.path)</a>
@@ -401,9 +526,11 @@
 </li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.dateparse.parse_date">parse_date() (in module hdx.utilities.dateparse)</a>
 </li>
+      <li><a href="source/hdx.utilities.html#hdx.utilities.dateparse.parse_date_range">parse_date_range() (in module hdx.utilities.dateparse)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/hdx.utilities.html#hdx.utilities.dateparse.parse_date_range">parse_date_range() (in module hdx.utilities.dateparse)</a>
+      <li><a href="source/hdx.utilities.html#hdx.utilities.saver.PrettySafeRepresenter">PrettySafeRepresenter (class in hdx.utilities.saver)</a>
 </li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.path.progress_storing_folder">progress_storing_folder() (in module hdx.utilities.path)</a>
 </li>
@@ -425,11 +552,29 @@
 </li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.text.remove_end_characters">remove_end_characters() (in module hdx.utilities.text)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/hdx.utilities.html#hdx.utilities.text.remove_from_end">remove_from_end() (in module hdx.utilities.text)</a>
 </li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.text.remove_string">remove_string() (in module hdx.utilities.text)</a>
+</li>
+      <li><a href="source/hdx.utilities.html#hdx.utilities.saver.PrettySafeRepresenter.represent_none">represent_none() (hdx.utilities.saver.PrettySafeRepresenter method)</a>
+
+      <ul>
+        <li><a href="source/hdx.utilities.html#hdx.utilities.saver.UnPrettyRTRepresenter.represent_none">(hdx.utilities.saver.UnPrettyRTRepresenter method)</a>
+</li>
+        <li><a href="source/hdx.utilities.html#hdx.utilities.saver.UnPrettySafeRepresenter.represent_none">(hdx.utilities.saver.UnPrettySafeRepresenter method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/hdx.utilities.html#hdx.utilities.retriever.Retrieve">Retrieve (class in hdx.utilities.retriever)</a>
+</li>
+      <li><a href="source/hdx.utilities.html#hdx.utilities.retriever.Retrieve.retrieve_file">retrieve_file() (hdx.utilities.retriever.Retrieve method)</a>
+</li>
+      <li><a href="source/hdx.utilities.html#hdx.utilities.retriever.Retrieve.retrieve_json">retrieve_json() (hdx.utilities.retriever.Retrieve method)</a>
+</li>
+      <li><a href="source/hdx.utilities.html#hdx.utilities.retriever.Retrieve.retrieve_text">retrieve_text() (hdx.utilities.retriever.Retrieve method)</a>
+</li>
+      <li><a href="source/hdx.utilities.html#hdx.utilities.retriever.Retrieve.retrieve_yaml">retrieve_yaml() (hdx.utilities.retriever.Retrieve method)</a>
 </li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.CleanCommand.run">run() (hdx.utilities.CleanCommand method)</a>
 
@@ -487,16 +632,20 @@
 <h2 id="U">U</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/hdx.utilities.html#hdx.utilities.saver.UnPrettyRTRepresenter">UnPrettyRTRepresenter (class in hdx.utilities.saver)</a>
+</li>
+      <li><a href="source/hdx.utilities.html#hdx.utilities.saver.UnPrettySafeRepresenter">UnPrettySafeRepresenter (class in hdx.utilities.saver)</a>
+</li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.useragent.UserAgent.user_agent">user_agent (hdx.utilities.useragent.UserAgent attribute)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/hdx.utilities.html#hdx.utilities.PackageCommand.user_options">user_options (hdx.utilities.PackageCommand attribute)</a>
 
       <ul>
         <li><a href="source/hdx.utilities.html#hdx.utilities.PublishCommand.user_options">(hdx.utilities.PublishCommand attribute)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/hdx.utilities.html#hdx.utilities.useragent.UserAgent">UserAgent (class in hdx.utilities.useragent)</a>
 </li>
       <li><a href="source/hdx.utilities.html#hdx.utilities.useragent.UserAgentError">UserAgentError</a>
@@ -515,12 +664,22 @@
 <h2 id="W">W</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="source/hdx.utilities.html#hdx.utilities.database.Database.wait_for_postgres">wait_for_postgres() (hdx.utilities.database.Database static method)</a>
-</li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="source/hdx.utilities.html#hdx.utilities.dictandlist.write_list_to_csv">write_list_to_csv() (in module hdx.utilities.dictandlist)</a>
 </li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Y">Y</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="source/hdx.utilities.html#hdx.utilities.saver.PrettySafeRepresenter.yaml_representers">yaml_representers (hdx.utilities.saver.PrettySafeRepresenter attribute)</a>
+
+      <ul>
+        <li><a href="source/hdx.utilities.html#hdx.utilities.saver.UnPrettyRTRepresenter.yaml_representers">(hdx.utilities.saver.UnPrettyRTRepresenter attribute)</a>
+</li>
+        <li><a href="source/hdx.utilities.html#hdx.utilities.saver.UnPrettySafeRepresenter.yaml_representers">(hdx.utilities.saver.UnPrettySafeRepresenter attribute)</a>
+</li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -562,7 +721,15 @@
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
@@ -571,8 +738,8 @@
       &copy;Michael Rans.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.3.1</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.11</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 3.5.4</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>
 
