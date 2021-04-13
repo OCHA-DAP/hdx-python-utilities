@@ -49,7 +49,7 @@ class Retrieve(object):
 
         """
         if len(url) > 100:
-            return f'{ url[:100]}...'
+            return '%s...' % url[:100]
         return url
 
     def retrieve_file(self, url, filename, logstr=None, fallback=False):
