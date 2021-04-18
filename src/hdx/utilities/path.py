@@ -61,7 +61,7 @@ def get_temp_dir(folder=None, delete_if_exists=False, tempdir=None):
     # type: (Optional[str], bool, Optional[str]) -> str
     """Get a temporary directory. Looks for environment variable TEMP_DIR and falls
     back on os.gettempdir if a root temporary directory is not supplied. If a folder is supplied, creates that folder
-     within the temporary directory. Optionally deletes and recreates it if it already exists.
+    within the temporary directory. Optionally deletes and recreates it if it already exists.
 
     Args:
         folder (Optional[str]): Folder to create in temporary folder. Defaults to None.
