@@ -126,8 +126,29 @@ For more detail and additional functions, check the API docs mentioned earlier i
 
 ### Retrieving files
 
-Downloading of files with the option of saving downloaded files or using previously downloaded files. 
-Includes the option of using a static fallback file if downloading fails.  
+When you download a file, you can opt to download from the web as usual or download from the web and and save for future
+reuse or use the previously downloaded file. The advantage is this is all handled in the class so you don't need to do 
+lots of if-else conditions for the different cases for each download in your code. This is helpful for example when 
+trying to generate test data. 
+
+All the downloads in your code can be switched between the different modes by setting the save and use_saved flags when 
+constructing the Retrieve object.
+
+    retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save, use_saved)
+
+- save=False, use_saved=False  - download from web as normal (files will go in temp_folder and be discarded)
+- save=True, use_saved=False - download from web as normal (files will go in saved_dir and will be kept)
+- save=False, use_saved=True - use files from saved_dir (don't download at all)
+
+fallback_dir is a folder containing static fallback files which can optionally be used if the download fails.
+
+Methods in the Retrieve class are: 
+- retrieve_file returns a path to a file
+- retrieve_text returns the text in a file
+- retrieve_json returns the JSON in a Python dict
+- retrieve_yaml returns the YAML in a Python dict.
+
+Examples:
 
     with Download() as downloader:
         # Downloads file returning the path to the downloaded file and using a fallback file if the download 
