@@ -232,6 +232,11 @@ class TestDownloader:
             downloader.download_file('NOTEXIST://NOTEXIST.csv', tmpdir)
         with pytest.raises(DownloadError), Download() as downloader:
             downloader.download_file(fixturenotexistsurl)
+        filename = 'myfilename.txt'
+        with pytest.raises(DownloadError), Download() as downloader:
+            downloader.download_file(fixturefile, folder=tmpdir, path=join(tmpdir, filename))
+        with pytest.raises(DownloadError), Download() as downloader:
+            downloader.download_file(fixturefile, filename=filename, path=join(tmpdir, filename))
         with Download() as downloader:
             f = downloader.download_file(fixturefile, folder=tmpdir)
             fpath = abspath(f)
@@ -241,8 +246,11 @@ class TestDownloader:
             fpath = abspath(f)
             remove(f)
             assert fpath == abspath(join(tmpdir, 'test_data.csv'))
-            filename = 'myfilename.txt'
             f = downloader.download_file(fixtureurl, folder=tmpdir, filename=filename)
+            fpath = abspath(f)
+            remove(f)
+            assert fpath == abspath(join(tmpdir, filename))
+            f = downloader.download_file(fixtureurl, path=join(tmpdir, filename))
             fpath = abspath(f)
             remove(f)
             assert fpath == abspath(join(tmpdir, filename))

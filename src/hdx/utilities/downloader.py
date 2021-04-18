@@ -5,7 +5,7 @@ import hashlib
 import logging
 from collections import OrderedDict
 from os import remove
-from os.path import splitext, join, exists, isfile
+from os.path import splitext, join, exists, isfile, split
 from pathlib import Path
 from posixpath import basename
 from typing import Optional, Dict, Iterator, Union, List, Any, Tuple, Callable
@@ -97,20 +97,25 @@ class Download(object):
         self.close()
 
     @staticmethod
-    def get_path_for_url(url, folder=None, filename=None, overwrite=False):
-        # type: (str, Optional[str], Optional[str], bool) -> str
+    def get_path_for_url(url, folder=None, filename=None, path=None, overwrite=False):
+        # type: (str, Optional[str], Optional[str], Optional[str], bool) -> str
         """Get filename from url and join to provided folder or temporary folder if no folder supplied, ensuring uniqueness
 
         Args:
             url (str): URL to download
             folder (Optional[str]): Folder to download it to. Defaults to None (temporary folder).
             filename (Optional[str]): Filename to use for downloaded file. Defaults to None (derive from the url).
+            path (Optional[str]): Full path to use for downloaded file. Defaults to None (use folder and filename).
             overwrite (bool): Whether to overwrite existing file. Defaults to False.
 
         Returns:
             str: Path of downloaded file
 
         """
+        if path:
+            if folder or filename:
+                raise DownloadError('Cannot use folder or filename and path arguments together!')
+            folder, filename = split(path)
         if not filename:
             urlpath = urlsplit(url).path
             filename = basename(urlpath)
@@ -264,22 +269,23 @@ class Download(object):
         except Exception as e:
             raisefrom(DownloadError, 'Download of %s failed in retrieval of stream!' % url, e)
 
-    def stream_file(self, url, folder=None, filename=None, overwrite=False):
-        # type: (str, Optional[str], Optional[str], bool) -> str
+    def stream_file(self, url, folder=None, filename=None, path=None, overwrite=False):
+        # type: (str, Optional[str], Optional[str], Optional[str], bool) -> str
         """Stream file from url and store in provided folder or temporary folder if no folder supplied.
         Must call setup method first.
 
         Args:
             url (str): URL or path to download
-            filename (Optional[str]): Filename to use for downloaded file. Defaults to None (derive from the url).
             folder (Optional[str]): Folder to download it to. Defaults to None (temporary folder).
+            filename (Optional[str]): Filename to use for downloaded file. Defaults to None (derive from the url).
+            path (Optional[str]): Full path to use for downloaded file. Defaults to None (use folder and filename).
             overwrite (bool): Whether to overwrite existing file. Defaults to False.
 
         Returns:
             str: Path of downloaded file
 
         """
-        path = self.get_path_for_url(url, folder, filename, overwrite)
+        path = self.get_path_for_url(url, folder, filename, path, overwrite)
         f = None
         try:
             f = open(path, 'wb')
@@ -294,15 +300,16 @@ class Download(object):
             if f:
                 f.close()
 
-    def download_file(self, url, folder=None, filename=None, overwrite=False,
+    def download_file(self, url, folder=None, filename=None, path=None, overwrite=False,
                       post=False, parameters=None, timeout=None, headers=None, encoding=None):
-        # type: (str, Optional[str], Optional[str], bool, bool, Optional[Dict], Optional[float], Optional[Dict], Optional[str]) -> str
+        # type: (str, Optional[str], Optional[str], Optional[str], bool, bool, Optional[Dict], Optional[float], Optional[Dict], Optional[str]) -> str
         """Download file from url and store in provided folder or temporary folder if no folder supplied
 
         Args:
             url (str): URL or path to download
             folder (Optional[str]): Folder to download it to. Defaults to None.
             filename (Optional[str]): Filename to use for downloaded file. Defaults to None (derive from the url).
+            path (Optional[str]): Full path to use for downloaded file. Defaults to None (use folder and filename).
             overwrite (bool): Whether to overwrite existing file. Defaults to False.
             post (bool): Whether to use POST instead of GET. Defaults to False.
             parameters (Optional[Dict]): Parameters to pass. Defaults to None.
@@ -315,7 +322,7 @@ class Download(object):
 
         """
         self.setup(url, stream=True, post=post, parameters=parameters, timeout=timeout, headers=headers, encoding=encoding)
-        return self.stream_file(url, folder, filename, overwrite)
+        return self.stream_file(url, folder, filename, path, overwrite)
 
     def download(self, url, post=False, parameters=None, timeout=None, headers=None, encoding=None):
         # type: (str, bool, Optional[Dict], Optional[float], Optional[Dict], Optional[str]) -> requests.Response

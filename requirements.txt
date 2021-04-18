@@ -1,6 +1,6 @@
 basicauth==0.4.1
 beautifulsoup4==4.9.3
-colorlog==4.8.0
+colorlog==5.0.1
 email_validator==1.1.2
 html5lib==1.1
 pathlib;python_version<'3.4'
