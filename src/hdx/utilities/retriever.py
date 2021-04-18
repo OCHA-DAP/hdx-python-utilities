@@ -79,8 +79,7 @@ class Retrieve(object):
         else:
             try:
                 logger.info('Downloading %s from %s into %s' % (logstr, self.get_url_logstr(url), output_path))
-                self.downloader.download_file(url, folder, filename)
-                return output_path
+                return self.downloader.download_file(url, path=output_path)
             except DownloadError:
                 if not fallback:
                     raise
