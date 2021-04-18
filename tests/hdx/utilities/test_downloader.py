@@ -250,7 +250,7 @@ class TestDownloader:
             fpath = abspath(f)
             remove(f)
             assert fpath == abspath(join(tmpdir, filename))
-            f = downloader.download_file(fixtureurl, path=join(tmpdir, filename))
+            f = downloader.download_file(fixtureurl, path=join(tmpdir, filename), overwrite=True)
             fpath = abspath(f)
             remove(f)
             assert fpath == abspath(join(tmpdir, filename))
