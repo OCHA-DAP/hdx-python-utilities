@@ -52,7 +52,7 @@ class Retrieve(object):
             return '%s...' % url[:100]
         return url
 
-    def retrieve_file(self, url, filename, logstr=None, fallback=False):
+    def retrieve_file(self, url, filename, logstr=None, fallback=False, **kwargs):
         """Retrieve file
 
         Args:
@@ -60,6 +60,7 @@ class Retrieve(object):
             filename (str): Filename to use for saved file
             logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
             fallback (bool): Whether to use static fallback if download fails. Defaults to False.
+            **kwargs: Parameters to pass to download_file call
 
         Returns:
             str: Path to downloaded file
@@ -79,7 +80,7 @@ class Retrieve(object):
         else:
             try:
                 logger.info('Downloading %s from %s into %s' % (logstr, self.get_url_logstr(url), output_path))
-                return self.downloader.download_file(url, path=output_path)
+                return self.downloader.download_file(url, path=output_path, **kwargs)
             except DownloadError:
                 if not fallback:
                     raise
@@ -87,7 +88,7 @@ class Retrieve(object):
                 logger.exception('%s download failed, using static data %s!' % (logstr, fallback_path))
                 return fallback_path
 
-    def retrieve_text(self, url, filename, logstr=None, fallback=False):
+    def retrieve_text(self, url, filename, logstr=None, fallback=False, **kwargs):
         """Retrieve text
 
         Args:
@@ -95,6 +96,7 @@ class Retrieve(object):
             filename (str): Filename to use for saved file
             logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
             fallback (bool): Whether to use static fallback if download fails. Defaults to False.
+            **kwargs: Parameters to pass to download call
 
         Returns:
             Union[Dict,List]: The text from the file
@@ -109,7 +111,7 @@ class Retrieve(object):
         else:
             try:
                 logger.info('Downloading %s from %s' % (logstr, self.get_url_logstr(url)))
-                response = self.downloader.download(url)
+                response = self.downloader.download(url, **kwargs)
                 text = response.text
                 if self.save:
                     logger.info('Saving %s in %s' % (logstr, saved_path))
@@ -122,7 +124,7 @@ class Retrieve(object):
                 text = load_file_to_str(fallback_path)
         return text
 
-    def retrieve_yaml(self, url, filename, logstr=None, fallback=False):
+    def retrieve_yaml(self, url, filename, logstr=None, fallback=False, **kwargs):
         """Retrieve YAML
 
         Args:
@@ -130,6 +132,7 @@ class Retrieve(object):
             filename (str): Filename to use for saved file
             logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
             fallback (bool): Whether to use static fallback if download fails. Defaults to False.
+            **kwargs: Parameters to pass to download call
 
         Returns:
             Union[Dict,List]: The data from the YAML file
@@ -144,7 +147,7 @@ class Retrieve(object):
         else:
             try:
                 logger.info('Downloading %s from %s' % (logstr, self.get_url_logstr(url)))
-                self.downloader.download(url)
+                self.downloader.download(url, **kwargs)
                 ryaml = self.downloader.get_yaml()
                 if self.save:
                     logger.info('Saving %s in %s' % (logstr, saved_path))
@@ -157,7 +160,7 @@ class Retrieve(object):
                 ryaml = load_yaml(fallback_path)
         return ryaml
 
-    def retrieve_json(self, url, filename, logstr=None, fallback=False):
+    def retrieve_json(self, url, filename, logstr=None, fallback=False, **kwargs):
         """Retrieve JSON
 
         Args:
@@ -165,6 +168,7 @@ class Retrieve(object):
             filename (str): Filename to use for saved file
             logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
             fallback (bool): Whether to use static fallback if download fails. Defaults to False.
+            **kwargs: Parameters to pass to download call
 
         Returns:
             Union[Dict,List]: The data from the JSON file
@@ -179,7 +183,7 @@ class Retrieve(object):
         else:
             try:
                 logger.info('Downloading %s from %s' % (logstr, self.get_url_logstr(url)))
-                self.downloader.download(url)
+                self.downloader.download(url, **kwargs)
                 rjson = self.downloader.get_json()
                 if self.save:
                     logger.info('Saving %s in %s' % (logstr, saved_path))
