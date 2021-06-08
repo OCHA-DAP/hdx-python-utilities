@@ -245,24 +245,28 @@ def get_matching_then_nonmatching_text(string_list, separator='', match_min_size
     return a
 
 
-def number_format(val, format='%.4f'):
-    # type: (Any, str) -> str
+def number_format(val, format='%.4f', trailing_zeros=True):
+    # type: (Any, str, bool) -> str
     """Format float-castable input as string
 
     Args:
         val (float): Number to format
         format (str): Format to use. Defaults to %.4f.
+        trailing_zeros (bool): Leave trailing zeros. Defaults to True.
 
     Returns:
         str: Formatted number as string
     """
     if val == '' or val is None:
         return ''
-    return format % float(val)
+    val = format % float(val)
+    if trailing_zeros:
+        return val
+    return val.rstrip('0').rstrip('.')
 
 
-def get_fraction_str(numerator, denominator=None, format='%.4f'):
-    # type: (Any, Optional[Any], str) -> str
+def get_fraction_str(numerator, denominator=None, format='%.4f', trailing_zeros=True):
+    # type: (Any, Optional[Any], str, bool) -> str
     """Given float-castable numerator and optional float-castable denominator, format as string, returning '' for
     invalid numerator or 0 denominator.
 
@@ -270,6 +274,7 @@ def get_fraction_str(numerator, denominator=None, format='%.4f'):
         numerator (float): Numerator
         denominator (Optional[float]): Denominator. Defaults to None.
         format (str): Format to use. Defaults to %.4f.
+        trailing_zeros (bool): Leave trailing zeros. Defaults to True.
 
     Returns:
         str: Formatted number as string
@@ -281,7 +286,7 @@ def get_fraction_str(numerator, denominator=None, format='%.4f'):
         else:
             if denominator is not None:
                 return ''
-        return number_format(numerator, format)
+        return number_format(numerator, format, trailing_zeros)
     except ValueError:
         pass
     return ''
