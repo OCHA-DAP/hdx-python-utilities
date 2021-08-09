@@ -49,7 +49,7 @@ class Download(object):
         extra_params_lookup (str): Lookup key for parameters. If not given assumes parameters are at root of the dict.
         headers (Dict): Additional headers to add to request.
         status_forcelist (List[int]): HTTP statuses for which to force retry
-        method_whitelist (iterable): HTTP methods for which to force retry. Defaults t0 frozenset(['GET']).
+        allowed_methods (iterable): HTTP methods for which to force retry. Defaults t0 frozenset(['GET']).
     """
 
     def __init__(self, user_agent=None, user_agent_config_yaml=None, user_agent_lookup=None, use_env=True,

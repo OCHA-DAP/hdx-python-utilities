@@ -42,7 +42,7 @@ def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=
         extra_params_lookup (str): Lookup key for parameters. If not given assumes parameters are at root of the dict.
         headers (Dict): Additional headers to add to request.
         status_forcelist (iterable): HTTP statuses for which to force retry. Defaults to [429, 500, 502, 503, 504].
-        method_whitelist (iterable): HTTP methods for which to force retry. Defaults t0 frozenset(['GET']).
+        allowed_methods (iterable): HTTP methods for which to force retry. Defaults t0 frozenset(['GET']).
     """
     s = requests.Session()
 
@@ -143,9 +143,9 @@ def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=
         s.auth = auth
 
     status_forcelist = kwargs.get('status_forcelist', [429, 500, 502, 503, 504])
-    method_whitelist = kwargs.get('method_whitelist', frozenset(['HEAD', 'TRACE', 'GET', 'PUT', 'OPTIONS', 'DELETE']))
+    allowed_methods = kwargs.get('allowed_methods', frozenset(['HEAD', 'TRACE', 'GET', 'PUT', 'OPTIONS', 'DELETE']))
 
-    retries = Retry(total=5, backoff_factor=0.4, status_forcelist=status_forcelist, method_whitelist=method_whitelist,
+    retries = Retry(total=5, backoff_factor=0.4, status_forcelist=status_forcelist, allowed_methods=allowed_methods,
                     raise_on_redirect=True,
                     raise_on_status=True)
     s.mount('file://', FileAdapter())
