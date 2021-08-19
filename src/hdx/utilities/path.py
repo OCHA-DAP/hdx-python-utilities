@@ -112,7 +112,7 @@ def temp_dir(folder=None, delete_if_exists=False, delete_on_success=True, delete
 
 
 def read_or_create_batch(folder, batch=None):
-    # type: (str, bool) -> str
+    # type: (str, Optional[str]) -> str
     """Get batch or create it if it doesn't exist
 
     Args:
@@ -137,8 +137,10 @@ def read_or_create_batch(folder, batch=None):
 @contextlib.contextmanager
 def temp_dir_batch(folder=None, delete_if_exists=False, delete_on_success=True, delete_on_failure=True,
                    batch=None, tempdir=None):
-    # type: (Optional[str], bool, bool, bool, Optional[str], Optional[str]) -> str
-    """Get a temporary directory optionally with folder appended (and created if it doesn't exist)
+    # type: (Optional[str], bool, bool, bool, Optional[str], Optional[str]) -> Dict
+    """Get a temporary directory and batch id. Yields a dictionary with key folder which is the temporary directory
+    optionally with folder appended (and created if it doesn't exist). In key batch is a batch code to be passed as
+    the batch parameter in create_in_hdx or update_in_hdx calls.
 
     Args:
         folder (Optional[str]): Folder to create in temporary folder. Defaults to None.
@@ -149,7 +151,7 @@ def temp_dir_batch(folder=None, delete_if_exists=False, delete_on_success=True, 
         tempdir (Optional[str]): Folder to use as temporary directory. Defaults to None (TEMP_DIR or os.gettempdir).
 
     Returns:
-        str: A temporary directory
+        Dict: Dictionary containing temporary directory in key folder and batch id in key batch
     """
     with temp_dir(folder, delete_if_exists, delete_on_success, delete_on_failure, tempdir=tempdir) as tempdir:
         yield {'folder': tempdir, 'batch': read_or_create_batch(tempdir, batch)}
@@ -230,6 +232,33 @@ def progress_storing_folder(info, iterator, key, wheretostart=None):
         raise NotFoundError('WHERETOSTART (%s) not matched in iterator with key %s and no run started!' % (wheretostart, key))
 
 
+@contextlib.contextmanager
+def wheretostart_tempdir_batch(folder, batch=None, tempdir=None):
+    # type: (str, Optional[str], Optional[str]) -> Dict
+    """Get a temporary directory and batch id. Deletes any existing folder if WHERETOSTART environment variable is set
+    to RESET. Yields a dictionary with key folder which is the temporary directory optionally with folder appended
+    (and created if it doesn't exist). In key batch is a batch code to be passed as the batch parameter in
+    create_in_hdx or update_in_hdx calls.
+
+    Args:
+        folder (str): Folder to create in temporary folder
+        batch (Optional[str]): Batch to use if there isn't one in a file already.
+        tempdir (Optional[str]): Folder to use as temporary directory. Defaults to None (TEMP_DIR or os.gettempdir).
+
+    Returns:
+        Dict: Dictionary containing temporary directory in key folder and batch id in key batch
+    """
+    delete_if_exists = False
+    wheretostart = getenv('WHERETOSTART')
+    if wheretostart:
+        if wheretostart.upper() == 'RESET':
+            delete_if_exists = True
+            logger.info('Removing progress file and will start from beginning!')
+    with temp_dir_batch(folder, delete_if_exists, delete_on_success=True, delete_on_failure=False,
+                        batch=batch, tempdir=tempdir) as info:
+        yield info
+
+
 def progress_storing_tempdir(folder, iterator, key, batch=None, tempdir=None):
     # type: (str, Iterable[Dict], str, Optional[str], Optional[str]) -> Tuple[Dict,Dict]
     """Store progress in temporary directory. The folder persists until the final iteration allowing which iteration to
@@ -237,7 +266,8 @@ def progress_storing_tempdir(folder, iterator, key, batch=None, tempdir=None):
     is the temporary directory optionally with folder appended (and created if it doesn't exist). In key progress is
     held the current position in the iterator. It also contains the key batch containing a batch code to be passed as
     the batch parameter in create_in_hdx or update_in_hdx calls. The second dictionary is the next dictionary in the
-    iterator.
+    iterator. The WHERETOSTART environment variable can be set to RESET to force the deletion and recreation of the
+    temporary directory or to a key value pair in the form key=value eg. iso3=PAK indicating where to start.
 
     Args:
         folder (str): Folder to create in temporary folder
@@ -249,14 +279,7 @@ def progress_storing_tempdir(folder, iterator, key, batch=None, tempdir=None):
     Returns:
         Tuple[Dict,Dict]: A tuple of the form (info dictionary, next object in iterator)
     """
-    delete_if_exists = False
-    wheretostart = getenv('WHERETOSTART')
-    if wheretostart:
-        if wheretostart.upper() == 'RESET':
-            delete_if_exists = True
-            logger.info('Removing progress file and will start from beginning!')
-    with temp_dir_batch(folder, delete_if_exists, delete_on_success=True, delete_on_failure=False,
-                        batch=batch, tempdir=tempdir) as info:
+    with wheretostart_tempdir_batch(folder, batch=batch, tempdir=tempdir) as info:
         for result in progress_storing_folder(info, iterator, key):
             yield result
 
@@ -268,7 +291,9 @@ def multiple_progress_storing_tempdir(folder, iterators, keys, batch=None):
     first contains key folder which is the temporary directory optionally with folder appended (and created if it
     doesn't exist). In key progress is held the current position in the iterator. It also contains the key batch
     containing a batch code to be passed as the batch parameter in create_in_hdx or update_in_hdx calls. The second
-    dictionary is the next dictionary in the iterator.
+    dictionary is the next dictionary in the iterator. The WHERETOSTART environment variable can be set to RESET to
+    force the deletion and recreation of the temporary directory or to a key value pair in the form key=value eg.
+    iso3=PAK indicating where to start.
 
     Args:
         folder (str): Folder to create in temporary folder

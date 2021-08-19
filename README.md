@@ -435,13 +435,20 @@ Examples:
     # folder. If the iteration were to fail, the temporary folder is not deleted and
     # on the next run, it will resume where it failed. Once the whole list is iterated
     # through, the temporary folder is deleted.
-    # The environment variable WHERETOSTART can be set to the starting value. If it is
+    # What is returned each iteration is a tuple with 2 dictionaries. The first contains 
+    # key folder which is the temporary directory optionally with folder appended (and 
+    # created if it doesn't exist). In key progress is held the current position in the 
+    # iterator. It also contains the key batch containing a batch code to be passed as
+    # the batch parameter in create_in_hdx or update_in_hdx calls. The second dictionary 
+    # is the next dictionary in the iterator.
+    # The environment variable WHERETOSTART can be set to the starting value for example
+    # iso3=SDN in the example below. If it is
     # set to RESET, then the temporary folder is deleted before the run starts to ensure
     # it starts from the beginning.    
     iterator = [{'iso3': 'AFG', 'name': 'Afghanistan'}, {'iso3': 'SDN', 'name': 'Sudan'},
                 {'iso3': 'YEM', 'name': 'Yemen'}, {'iso3': 'ZAM', 'name': 'Zambia'}]
     result = list()
-    for tempdir, nextdict in progress_storing_tempdir(tempfolder, iterator, 'iso3'):
+    for info, nextdict in progress_storing_tempdir(tempfolder, iterator, 'iso3'):
         ...
 
     # Get current directory of script
