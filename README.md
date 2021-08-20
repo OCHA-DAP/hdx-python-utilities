@@ -559,7 +559,8 @@ Examples:
 The **clean** command of setup.py has been extended to use the --all flag by default and to clean the **dist** folder. 
 Two new commands folder have been created. **package** calls the new clean command and also **sdist** and also 
 **bdist_wheel**. In other words, it cleans thoroughly and builds source and wheel distributions. **publish** publishes 
-to pypi and creates a git tag eg.
+to pypi and creates a git tag. It requires that the command line git tool be installed as well as the Python package 
+twine (which can be installed with pip).
 
     python setup.py clean
     python setup.py package
