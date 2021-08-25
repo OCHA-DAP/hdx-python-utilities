@@ -1,4 +1,4 @@
-[![Build Status](https://github.com/OCHA-DAP/hdx-python-utilities/workflows/build/badge.svg)](https://github.com/OCHA-DAP/hdx-python-utilities/actions?query=workflow%3Abuild) [![Coverage Status](https://coveralls.io/repos/github/OCHA-DAP/hdx-python-utilities/badge.svg?branch=master&ts=1)](https://coveralls.io/github/OCHA-DAP/hdx-python-utilities?branch=master)
+[![Build Status](https://github.com/OCHA-DAP/hdx-python-utilities/workflows/build/badge.svg)](https://github.com/OCHA-DAP/hdx-python-utilities/actions?query=workflow%3Abuild) [![Coverage Status](https://coveralls.io/repos/github/OCHA-DAP/hdx-python-utilities/badge.svg?branch=main&ts=1)](https://coveralls.io/github/OCHA-DAP/hdx-python-utilities?branch=main)
 
 The HDX Python Utilities Library provides a range of helpful utilities:
 
