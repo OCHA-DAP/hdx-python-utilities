@@ -8,13 +8,18 @@ from tempfile import gettempdir
 import pytest
 
 from hdx.utilities.loader import load_file_to_str
-from hdx.utilities.path import get_temp_dir, temp_dir, progress_storing_tempdir, multiple_progress_storing_tempdir
+from hdx.utilities.path import get_temp_dir, temp_dir, progress_storing_tempdir, multiple_progress_storing_tempdir, \
+    get_filename_from_url, get_filename_extension_from_url
 
 
 class TestPath:
     @pytest.fixture(scope='class')
     def mytestdir(self):
         return join('haha', 'lala')
+
+    @pytest.fixture(scope='class')
+    def fixtureurl(self):
+        return 'https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/test_data.csv'
 
     def test_get_temp_dir(self, monkeypatch, mytestdir):
         assert get_temp_dir() == gettempdir()
@@ -284,6 +289,12 @@ class TestPath:
         assert result == iterator2[1:]
         assert exists(expected_dir) is False
         monkeypatch.delenv('WHERETOSTART')
-        results = list()
-
         rmtree(expected_dir, ignore_errors=True)
+
+    def test_get_filename_extension_from_url(self, fixtureurl):
+        filename = get_filename_from_url(fixtureurl)
+        assert filename == 'test_data.csv'
+        filename, extension = get_filename_extension_from_url(fixtureurl)
+        assert filename == 'test_data'
+        assert extension == '.csv'
+

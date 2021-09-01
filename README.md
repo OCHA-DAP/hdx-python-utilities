@@ -457,6 +457,14 @@ Examples:
     # Get current directory of script with filename appended
     path = script_dir_plus_file('myfile.txt', ANY_PYTHON_OBJECT_IN_SCRIPT)
 
+    # Get filename or (filename, extension) from url
+    url = 'https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/test_data.csv'
+    filename = get_filename_from_url(fixtureurl)
+    assert filename == 'test_data.csv'
+    filename, extension = get_filename_extension_from_url(fixtureurl)
+    assert filename == 'test_data'
+    assert extension == '.csv'
+
 ### Date parsing utilities
 
 Ambiguous dates are parsed as day first D/M/Y where there are values in front of the year and day last Y/M/D

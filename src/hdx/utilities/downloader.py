@@ -7,8 +7,7 @@ from collections import OrderedDict
 from os import remove
 from os.path import splitext, join, exists, isfile, split
 from pathlib import Path
-from posixpath import basename
-from typing import Optional, Dict, Iterator, Union, List, Any, Tuple, Callable
+from typing import Optional, Dict, Iterator, Union, List, Any, Callable
 
 import requests
 import tabulator
@@ -18,7 +17,7 @@ from ruamel.yaml import YAML
 from six.moves.urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
 
 from hdx.utilities import raisefrom
-from hdx.utilities.path import get_temp_dir
+from hdx.utilities.path import get_temp_dir, get_filename_from_url
 from hdx.utilities.session import get_session
 
 logger = logging.getLogger(__name__)
@@ -117,8 +116,7 @@ class Download(object):
                 raise DownloadError('Cannot use folder or filename and path arguments together!')
             folder, filename = split(path)
         if not filename:
-            urlpath = urlsplit(url).path
-            filename = basename(urlpath)
+            filename = get_filename_from_url(url)
         filename, extension = splitext(filename)
         if not folder:
             folder = get_temp_dir()

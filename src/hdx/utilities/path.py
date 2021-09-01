@@ -5,11 +5,14 @@ import inspect
 import logging
 import sys
 from os import getenv, makedirs, remove
-from os.path import abspath, realpath, dirname, join, exists
+from os.path import abspath, realpath, dirname, join, exists, splitext
+from posixpath import basename
 from shutil import rmtree
 from tempfile import gettempdir
 
 from typing import Any, Optional, Iterable, Tuple, Dict, List
+
+from six.moves.urllib.parse import urlsplit
 
 from hdx.utilities import get_uuid
 from hdx.utilities.loader import load_file_to_str
@@ -330,3 +333,33 @@ def multiple_progress_storing_tempdir(folder, iterators, keys, batch=None):
                     yield i, info, nextdict
                 if exists(progress_file):
                     remove(progress_file)
+
+
+def get_filename_from_url(url):
+    # type: (str) -> str
+    """Get filename including extension from url
+
+    Args:
+        url (str): URL
+
+    Returns:
+        str: filename
+
+    """
+    urlpath = urlsplit(url).path
+    return basename(urlpath)
+
+
+def get_filename_extension_from_url(url):
+    # type: (str) -> Tuple[str,str]
+    """Get separately filename and extension from url
+
+    Args:
+        url (str): URL to download
+
+    Returns:
+        Tuple[str,str]: Tuple of (filename, extension)
+
+    """
+    return splitext(get_filename_from_url(url))
+
