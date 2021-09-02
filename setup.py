@@ -10,7 +10,8 @@ from hdx.utilities.loader import load_file_to_str
 
 requirements = ['basicauth',
                 'beautifulsoup4',
-                'colorlog',
+                'colorlog==5.0.1;python_version<"3"',
+                'colorlog>=6.4.1;python_version>="3"',
                 'email_validator',
                 'html5lib',
                 'pathlib;python_version<"3.4"',

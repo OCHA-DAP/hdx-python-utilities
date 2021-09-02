@@ -7,7 +7,7 @@ from collections import OrderedDict
 from os import remove
 from os.path import splitext, join, exists, isfile, split
 from pathlib import Path
-from typing import Optional, Dict, Iterator, Union, List, Any, Callable
+from typing import Optional, Dict, Iterator, Union, List, Any, Callable, Tuple
 
 import requests
 import tabulator
