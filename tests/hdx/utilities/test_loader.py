@@ -57,24 +57,24 @@ test'''
     def test_load_and_merge_yaml(self, configfolder):
         result = load_and_merge_yaml([join(configfolder, 'hdx_config.yml'),
                                       join(configfolder, 'project_configuration.yml')])
-        assert result == TestLoader.expected_yaml
+        assert list(result.items()) == list(TestLoader.expected_yaml.items())
 
     def test_load_and_merge_json(self, configfolder):
         result = load_and_merge_json([join(configfolder, 'hdx_config.json'),
                                       join(configfolder, 'project_configuration.json')])
-        assert result == TestLoader.expected_json
+        assert list(result.items()) == list(TestLoader.expected_json.items())
 
     def test_load_yaml_into_existing_dict(self, configfolder):
         existing_dict = load_yaml(join(configfolder, 'hdx_config.yml'))
         result = load_yaml_into_existing_dict(existing_dict,
                                               join(configfolder, 'project_configuration.yml'))
-        assert result == TestLoader.expected_yaml
+        assert list(result.items()) == list(TestLoader.expected_yaml.items())
 
     def test_load_json_into_existing_dict(self, configfolder):
         existing_dict = load_json(join(configfolder, 'hdx_config.json'))
         result = load_json_into_existing_dict(existing_dict,
                                               join(configfolder, 'project_configuration.json'))
-        assert result == TestLoader.expected_json
+        assert list(result.items()) == list(TestLoader.expected_json.items())
 
     def test_load_file_to_str(self):
         with temp_dir(folder='test_text') as tmpdir:

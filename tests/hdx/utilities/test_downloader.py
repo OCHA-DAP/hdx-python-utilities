@@ -2,6 +2,7 @@
 """Downloader Tests"""
 import copy
 import re
+import sys
 from collections import OrderedDict
 from os import remove
 from os.path import join, abspath
@@ -186,11 +187,18 @@ class TestDownloader:
     def test_get_url_for_get(self):
         assert Download.get_url_for_get('http://www.lala.com/hdfa?a=3&b=4', OrderedDict(
             [('c', 'e'), ('d', 'f')])) == 'http://www.lala.com/hdfa?a=3&b=4&c=e&d=f'
+        if sys.version_info[:2] >= (3, 7):
+            assert Download.get_url_for_get('http://www.lala.com/hdfa?a=3&b=4', {'c': 'e', 'd': 'f'}) == \
+                   'http://www.lala.com/hdfa?a=3&b=4&c=e&d=f'
 
     def test_get_url_params_for_post(self):
-        assert Download.get_url_params_for_post('http://www.lala.com/hdfa?a=3&b=4',
-                                                OrderedDict([('c', 'e'), ('d', 'f')])) == (
-                   'http://www.lala.com/hdfa', OrderedDict([('a', '3'), ('b', '4'), ('c', 'e'), ('d', 'f')]))
+        result = Download.get_url_params_for_post('http://www.lala.com/hdfa?a=3&b=4', OrderedDict([('c', 'e'), ('d', 'f')]))
+        assert result[0]  == 'http://www.lala.com/hdfa'
+        assert list(result[1].items())  == list(OrderedDict([('a', '3'), ('b', '4'), ('c', 'e'), ('d', 'f')]).items())
+        if sys.version_info[:2] >= (3, 7):
+            result = Download.get_url_params_for_post('http://www.lala.com/hdfa?a=3&b=4', {'c': 'e', 'd': 'f'})
+            assert result[0] == 'http://www.lala.com/hdfa'
+            assert list(result[1].items()) == list(OrderedDict([('a', '3'), ('b', '4'), ('c', 'e'), ('d', 'f')]).items())
 
     def test_hxl_row(self):
         headers = ['a', 'b', 'c']
@@ -215,10 +223,10 @@ class TestDownloader:
             assert bool(re.match(r'4\d\d', headers['Content-Length'])) is True
             downloader.setup('%s?id=10&lala=a' % getfixtureurl, post=False,
                              parameters=OrderedDict([('b', '4'), ('d', '3')]))
-            assert downloader.get_json()['args'] == OrderedDict([('b', '4'), ('d', '3'), ('id', '10'), ('lala', 'a')])
+            assert list(downloader.get_json()['args'].items()) == list(OrderedDict([('b', '4'), ('d', '3'), ('id', '10'), ('lala', 'a')]).items())
             downloader.setup('%s?id=3&lala=b' % postfixtureurl, post=True,
                              parameters=OrderedDict([('a', '3'), ('c', '2')]))
-            assert downloader.get_json()['form'] == OrderedDict([('a', '3'), ('c', '2'), ('id', '3'), ('lala', 'b')])
+            assert list(downloader.get_json()['form'].items()) == list(OrderedDict([('a', '3'), ('c', '2'), ('id', '3'), ('lala', 'b')]).items())
 
     def test_hash_stream(self, fixtureurl):
         with Download() as downloader:
@@ -289,16 +297,16 @@ class TestDownloader:
             assert bool(re.match(r'7\d\d', result.headers['Content-Length'])) is True
             downloader.download('%s?id=10&lala=a' % getfixtureurl, post=False,
                                 parameters=OrderedDict([('b', '4'), ('d', '3')]))
-            assert downloader.get_json()['args'] == OrderedDict([('b', '4'), ('d', '3'), ('id', '10'), ('lala', 'a')])
+            assert list(downloader.get_json()['args'].items()) == list(OrderedDict([('b', '4'), ('d', '3'), ('id', '10'), ('lala', 'a')]).items())
             downloader.download('%s?id=3&lala=b' % postfixtureurl, post=True,
                                 parameters=OrderedDict([('a', '3'), ('c', '2')]))
-            assert downloader.get_json()['form'] == OrderedDict([('a', '3'), ('c', '2'), ('id', '3'), ('lala', 'b')])
+            assert list(downloader.get_json()['form'].items()) == list(OrderedDict([('a', '3'), ('c', '2'), ('id', '3'), ('lala', 'b')]).items())
         with Download(rate_limit={'calls': 1, 'period': 0.1}) as downloader:
             downloader.download('%s?id=10&lala=a' % getfixtureurl, post=False,
                                 parameters=OrderedDict([('b', '4'), ('d', '3')]))
-            assert downloader.get_json()['args'] == OrderedDict([('b', '4'), ('d', '3'), ('id', '10'), ('lala', 'a')])
+            assert list(downloader.get_json()['args'].items()) == list(OrderedDict([('b', '4'), ('d', '3'), ('id', '10'), ('lala', 'a')]).items())
             downloader.download(fixturefile)
-            assert downloader.get_yaml()['mykey'] == OrderedDict([('param1', 'value 1'), ('param2', 'value2'), ('param3', 11), ('basic_auth', 'Basic dGVzdHVzZXI6dGVzdHBhc3M=')])
+            assert list(downloader.get_yaml()['mykey'].items()) == list(OrderedDict([('param1', 'value 1'), ('param2', 'value2'), ('param3', 11), ('basic_auth', 'Basic dGVzdHVzZXI6dGVzdHBhc3M=')]).items())
 
     def test_download_tabular_key_value(self, fixtureurl, fixtureprocessurl):
         with Download() as downloader:

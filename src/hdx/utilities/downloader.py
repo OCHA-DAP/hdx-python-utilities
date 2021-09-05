@@ -3,11 +3,16 @@
 import copy
 import hashlib
 import logging
-from collections import OrderedDict
+import sys
+
 from os import remove
 from os.path import splitext, join, exists, isfile, split
 from pathlib import Path
 from typing import Optional, Dict, Iterator, Union, List, Any, Callable, Tuple
+if sys.version_info[:2] >= (3, 7):
+    OrderedDict = dict
+else:
+    from collections import OrderedDict
 
 import requests
 import tabulator

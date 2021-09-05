@@ -1,5 +1,7 @@
 # -*- coding: UTF-8 -*-
 """Saver Tests"""
+import json
+import sys
 from collections import OrderedDict
 from os.path import join
 
@@ -45,6 +47,10 @@ class TestLoader:
         ref_path = join(saverfolder, filename)
         save_yaml(TestLoader.yaml_to_write, test_path, pretty=pretty, sortkeys=sortkeys)
         assert_files_same(ref_path, test_path)
+        if sys.version_info[:2] >= (3, 7):
+            dct = json.loads(json.dumps(TestLoader.yaml_to_write))
+            save_yaml(dct, test_path, pretty=pretty, sortkeys=sortkeys)
+            assert_files_same(ref_path, test_path)
 
     @pytest.mark.parametrize('filename,pretty,sortkeys', [
         ('pretty-false_sortkeys-false.json', False, False),
@@ -57,3 +63,7 @@ class TestLoader:
         ref_path = join(saverfolder, filename)
         save_json(TestLoader.json_to_write, test_path, pretty=pretty, sortkeys=sortkeys)
         assert_files_same(ref_path, test_path)
+        if sys.version_info[:2] >= (3, 7):
+            dct = json.loads(json.dumps(TestLoader.json_to_write))
+            save_json(dct, test_path, pretty=pretty, sortkeys=sortkeys)
+            assert_files_same(ref_path, test_path)

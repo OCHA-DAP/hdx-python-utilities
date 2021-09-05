@@ -2,7 +2,14 @@
 """Loading utilities for YAML, JSON etc."""
 
 import json
-from collections import OrderedDict
+
+import sys
+
+if sys.version_info[:2] >= (3, 7):
+    OrderedDict = dict
+else:
+    from collections import OrderedDict
+
 from io import open
 from os import linesep
 from typing import List, Dict, Optional
@@ -43,7 +50,7 @@ def load_file_to_str(path, encoding='utf-8', strip=False, replace_newlines=None)
 
 
 def load_yaml(path, encoding='utf-8'):
-    # type: (str, str) -> OrderedDict
+    # type: (str, str) -> Dict
     """Load YAML file into an ordered dictionary
 
     Args:
@@ -51,7 +58,7 @@ def load_yaml(path, encoding='utf-8'):
         encoding (str): Encoding of file. Defaults to utf-8.
 
     Returns:
-        OrderedDict: Ordered dictionary containing loaded YAML file
+        Dict: Ordered dictionary containing loaded YAML file
     """
     with open(path, 'r', encoding=encoding) as f:
         yaml = YAML()
@@ -62,15 +69,15 @@ def load_yaml(path, encoding='utf-8'):
 
 
 def load_json(path, encoding='utf-8'):
-    # type: (str, str) -> OrderedDict
-    """Load JSON file into an ordered dictionary
+    # type: (str, str) -> Dict
+    """Load JSON file into an ordered dictionary (dict for Python 3.7+)
 
     Args:
         path (str): Path to JSON file
         encoding (str): Encoding of file. Defaults to utf-8.
 
     Returns:
-        OrderedDict: Ordered dictionary containing loaded JSON file
+        Dict: Ordered dictionary containing loaded JSON file
     """
     with open(path, 'r', encoding=encoding) as f:
         jsondict = json.loads(f.read(), object_pairs_hook=OrderedDict)

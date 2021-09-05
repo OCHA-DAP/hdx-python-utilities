@@ -1,12 +1,9 @@
 # -*- coding: UTF-8 -*-
 """Retriever Tests"""
-import copy
 import random
-import re
 import string
-from collections import OrderedDict
-from os import remove, mkdir
-from os.path import join, abspath
+from os import mkdir
+from os.path import join
 from shutil import rmtree
 
 import pytest
