@@ -2,20 +2,19 @@
 import copy
 import hashlib
 import logging
-
 from os import remove
-from os.path import splitext, join, exists, isfile, split
+from os.path import exists, isfile, join, split, splitext
 from pathlib import Path
-from typing import Optional, Dict, Iterator, Union, List, Any, Callable, Tuple
-from urllib.parse import urlsplit, urlunsplit, urlencode, parse_qsl
+from typing import Any, Callable, Dict, Iterator, List, Optional, Tuple, Union
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import requests
 import tabulator
-from ratelimit import sleep_and_retry, RateLimitDecorator
+from ratelimit import RateLimitDecorator, sleep_and_retry
 from requests import Request
 from ruamel.yaml import YAML
 
-from hdx.utilities.path import get_temp_dir, get_filename_from_url
+from hdx.utilities.path import get_filename_from_url, get_temp_dir
 from hdx.utilities.session import get_session
 
 logger = logging.getLogger(__name__)
@@ -49,13 +48,31 @@ class Download:
         allowed_methods (iterable): HTTP methods for which to force retry. Defaults t0 frozenset(['GET']).
     """
 
-    def __init__(self, user_agent: Optional[str] = None, user_agent_config_yaml: Optional[str] = None, user_agent_lookup: Optional[str] = None, use_env: bool = True,
-                 fail_on_missing_file: bool = True, rate_limit: Optional[Dict] = None, **kwargs: Any) -> None:
-        self.session = get_session(user_agent, user_agent_config_yaml, user_agent_lookup, use_env, fail_on_missing_file, **kwargs)
+    def __init__(
+        self,
+        user_agent: Optional[str] = None,
+        user_agent_config_yaml: Optional[str] = None,
+        user_agent_lookup: Optional[str] = None,
+        use_env: bool = True,
+        fail_on_missing_file: bool = True,
+        rate_limit: Optional[Dict] = None,
+        **kwargs: Any,
+    ) -> None:
+        self.session = get_session(
+            user_agent,
+            user_agent_config_yaml,
+            user_agent_lookup,
+            use_env,
+            fail_on_missing_file,
+            **kwargs,
+        )
         self.response = None
         if rate_limit is not None:
             self.setup = sleep_and_retry(
-                RateLimitDecorator(calls=rate_limit['calls'], period=rate_limit['period']).__call__(self.normal_setup))
+                RateLimitDecorator(
+                    calls=rate_limit["calls"], period=rate_limit["period"]
+                ).__call__(self.normal_setup)
+            )
         else:
             self.setup = self.normal_setup
 
@@ -82,14 +99,20 @@ class Download:
         self.close_response()
         self.session.close()
 
-    def __enter__(self) -> 'Download':
+    def __enter__(self) -> "Download":
         return self
 
     def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
         self.close()
 
     @staticmethod
-    def get_path_for_url(url: str, folder: Optional[str] = None, filename: Optional[str] = None, path: Optional[str] = None, overwrite: bool = False) -> str:
+    def get_path_for_url(
+        url: str,
+        folder: Optional[str] = None,
+        filename: Optional[str] = None,
+        path: Optional[str] = None,
+        overwrite: bool = False,
+    ) -> str:
         """Get filename from url and join to provided folder or temporary folder if no folder supplied, ensuring uniqueness
 
         Args:
@@ -105,14 +128,16 @@ class Download:
         """
         if path:
             if folder or filename:
-                raise DownloadError('Cannot use folder or filename and path arguments together!')
+                raise DownloadError(
+                    "Cannot use folder or filename and path arguments together!"
+                )
             folder, filename = split(path)
         if not filename:
             filename = get_filename_from_url(url)
         filename, extension = splitext(filename)
         if not folder:
             folder = get_temp_dir()
-        path = join(folder, f'{filename}{extension}')
+        path = join(folder, f"{filename}{extension}")
         if overwrite:
             try:
                 remove(path)
@@ -122,7 +147,7 @@ class Download:
             count = 0
             while exists(path):
                 count += 1
-                path = join(folder, '%s%d%s' % (filename, count, extension))
+                path = join(folder, "%s%d%s" % (filename, count, extension))
         return path
 
     def get_full_url(self, url: str) -> str:
@@ -134,7 +159,7 @@ class Download:
         Returns:
             str: Full url including any additional parameters
         """
-        request = Request('GET', url)
+        request = Request("GET", url)
         preparedrequest = self.session.prepare_request(request)
         return preparedrequest.url
 
@@ -158,7 +183,9 @@ class Download:
         return urlunsplit(spliturl)
 
     @staticmethod
-    def get_url_params_for_post(url: str, parameters: Optional[Dict] = None) -> Tuple[str, Dict]:
+    def get_url_params_for_post(
+        url: str, parameters: Optional[Dict] = None
+    ) -> Tuple[str, Dict]:
         """Get full url for POST request and all parameters including any in the url
 
         Args:
@@ -173,12 +200,14 @@ class Download:
         getparams = dict(parse_qsl(spliturl.query))
         if parameters is not None:
             getparams.update(parameters)
-        spliturl = spliturl._replace(query='')
+        spliturl = spliturl._replace(query="")
         full_url = urlunsplit(spliturl)
         return full_url, getparams
 
     @staticmethod
-    def hxl_row(headers: List[str], hxltags: Dict[str,str], dict_form: bool = False) -> Union[List[str], Dict[str,str]]:
+    def hxl_row(
+        headers: List[str], hxltags: Dict[str, str], dict_form: bool = False
+    ) -> Union[List[str], Dict[str, str]]:
         """Return HXL tag row for header row given list of headers and dictionary with header to HXL hashtag mappings.
         Return list or dictionary depending upon the dict_form argument.
 
@@ -192,11 +221,20 @@ class Download:
 
         """
         if dict_form:
-            return {header: hxltags.get(header, '') for header in headers}
+            return {header: hxltags.get(header, "") for header in headers}
         else:
-            return [hxltags.get(header, '') for header in headers]
+            return [hxltags.get(header, "") for header in headers]
 
-    def normal_setup(self, url: str, stream: bool = True, post: bool = False, parameters: Optional[Dict] = None, timeout: Optional[float] = None, headers: Optional[Dict] = None, encoding: Optional[str] = None) -> requests.Response:
+    def normal_setup(
+        self,
+        url: str,
+        stream: bool = True,
+        post: bool = False,
+        parameters: Optional[Dict] = None,
+        timeout: Optional[float] = None,
+        headers: Optional[Dict] = None,
+        encoding: Optional[str] = None,
+    ) -> requests.Response:
         """Setup download from provided url returning the response
 
         Args:
@@ -220,18 +258,29 @@ class Download:
                 if isfile(url):
                     url = Path(url).resolve().as_uri()
                 else:
-                    spliturl = spliturl._replace(scheme='http')
+                    spliturl = spliturl._replace(scheme="http")
                     url = urlunsplit(spliturl)
             if post:
                 full_url, parameters = self.get_url_params_for_post(url, parameters)
-                self.response = self.session.post(full_url, data=parameters, stream=stream, timeout=timeout, headers=headers)
+                self.response = self.session.post(
+                    full_url,
+                    data=parameters,
+                    stream=stream,
+                    timeout=timeout,
+                    headers=headers,
+                )
             else:
-                self.response = self.session.get(self.get_url_for_get(url, parameters), stream=stream, timeout=timeout, headers=headers)
+                self.response = self.session.get(
+                    self.get_url_for_get(url, parameters),
+                    stream=stream,
+                    timeout=timeout,
+                    headers=headers,
+                )
             self.response.raise_for_status()
             if encoding:
                 self.response.encoding = encoding
         except Exception as e:
-            raise DownloadError(f'Setup of Streaming Download of {url} failed!') from e
+            raise DownloadError(f"Setup of Streaming Download of {url} failed!") from e
         return self.response
 
     def hash_stream(self, url: str) -> str:
@@ -250,10 +299,19 @@ class Download:
                 if chunk:  # filter out keep-alive new chunks
                     md5hash.update(chunk)
             return md5hash.hexdigest()
-        except Exception as e:
-            raise DownloadError(f'Download of {url} failed in retrieval of stream!' % url)
+        except Exception:
+            raise DownloadError(
+                f"Download of {url} failed in retrieval of stream!" % url
+            )
 
-    def stream_file(self, url: str, folder: Optional[str] = None, filename: Optional[str] = None, path: Optional[str] = None, overwrite: bool = False) -> str:
+    def stream_file(
+        self,
+        url: str,
+        folder: Optional[str] = None,
+        filename: Optional[str] = None,
+        path: Optional[str] = None,
+        overwrite: bool = False,
+    ) -> str:
         """Stream file from url and store in provided folder or temporary folder if no folder supplied.
         Must call setup method first.
 
@@ -271,20 +329,33 @@ class Download:
         path = self.get_path_for_url(url, folder, filename, path, overwrite)
         f = None
         try:
-            f = open(path, 'wb')
+            f = open(path, "wb")
             for chunk in self.response.iter_content(chunk_size=10240):
                 if chunk:  # filter out keep-alive new chunks
                     f.write(chunk)
                     f.flush()
             return f.name
         except Exception as e:
-            raise DownloadError(f'Download of {url} failed in retrieval of stream!') from e
+            raise DownloadError(
+                f"Download of {url} failed in retrieval of stream!"
+            ) from e
         finally:
             if f:
                 f.close()
 
-    def download_file(self, url: str, folder: Optional[str] = None, filename: Optional[str] = None, path: Optional[str] = None, overwrite: bool = False,
-                      post: bool = False, parameters: Optional[Dict] = None, timeout: Optional[float] = None, headers: Optional[Dict] = None, encoding: Optional[str] = None) -> str:
+    def download_file(
+        self,
+        url: str,
+        folder: Optional[str] = None,
+        filename: Optional[str] = None,
+        path: Optional[str] = None,
+        overwrite: bool = False,
+        post: bool = False,
+        parameters: Optional[Dict] = None,
+        timeout: Optional[float] = None,
+        headers: Optional[Dict] = None,
+        encoding: Optional[str] = None,
+    ) -> str:
         """Download file from url and store in provided folder or temporary folder if no folder supplied
 
         Args:
@@ -303,10 +374,26 @@ class Download:
             str: Path of downloaded file
 
         """
-        self.setup(url, stream=True, post=post, parameters=parameters, timeout=timeout, headers=headers, encoding=encoding)
+        self.setup(
+            url,
+            stream=True,
+            post=post,
+            parameters=parameters,
+            timeout=timeout,
+            headers=headers,
+            encoding=encoding,
+        )
         return self.stream_file(url, folder, filename, path, overwrite)
 
-    def download(self, url: str, post: bool = False, parameters: Optional[Dict] = None, timeout: Optional[float] = None, headers: Optional[Dict] = None, encoding: Optional[str] = None) -> requests.Response:
+    def download(
+        self,
+        url: str,
+        post: bool = False,
+        parameters: Optional[Dict] = None,
+        timeout: Optional[float] = None,
+        headers: Optional[Dict] = None,
+        encoding: Optional[str] = None,
+    ) -> requests.Response:
         """Download url
 
         Args:
@@ -321,7 +408,15 @@ class Download:
             requests.Response: Response
 
         """
-        return self.setup(url, stream=False, post=post, parameters=parameters, timeout=timeout, headers=headers, encoding=encoding)
+        return self.setup(
+            url,
+            stream=False,
+            post=post,
+            parameters=parameters,
+            timeout=timeout,
+            headers=headers,
+            encoding=encoding,
+        )
 
     def get_header(self, header: str) -> Any:
         """Get a particular response header of download
@@ -396,18 +491,18 @@ class Download:
 
         """
         self.close_response()
-        file_type = kwargs.get('file_type')
+        file_type = kwargs.get("file_type")
         if file_type is not None:
-            kwargs['format'] = file_type
-            del kwargs['file_type']
-        if 'http_session' not in kwargs:
-            kwargs['http_session'] = self.session
+            kwargs["format"] = file_type
+            del kwargs["file_type"]
+        if "http_session" not in kwargs:
+            kwargs["http_session"] = self.session
         try:
             self.response = tabulator.Stream(url, **kwargs)
             self.response.open()
             return self.response
         except Exception as e:
-            raise DownloadError(f'Getting tabular stream for {url} failed!') from e
+            raise DownloadError(f"Getting tabular stream for {url} failed!") from e
 
     def get_tabular_rows_as_list(self, url: str, **kwargs: Any) -> Iterator[List]:
         """Get iterator for reading rows from tabular data. Each row is returned as a list.
@@ -425,7 +520,18 @@ class Download:
         """
         return self.get_tabular_stream(url, **kwargs).iter(keyed=False)
 
-    def get_tabular_rows(self, url: str, headers: Union[int, List[int], List[str]] = 1, dict_form: bool = False, ignore_blank_rows: bool = True, header_insertions: Optional[List[Tuple[int,str]]] = None, row_function: Optional[Callable[[List[str],Union[List,Dict]],Union[List,Dict]]] = None, **kwargs: Any) -> Tuple[List[str],Iterator[Union[List,Dict]]]:
+    def get_tabular_rows(
+        self,
+        url: str,
+        headers: Union[int, List[int], List[str]] = 1,
+        dict_form: bool = False,
+        ignore_blank_rows: bool = True,
+        header_insertions: Optional[List[Tuple[int, str]]] = None,
+        row_function: Optional[
+            Callable[[List[str], Union[List, Dict]], Union[List, Dict]]
+        ] = None,
+        **kwargs: Any,
+    ) -> Tuple[List[str], Iterator[Union[List, Dict]]]:
         """Returns header of tabular file pointed to by url and an iterator where each row is returned as a list
         or dictionary depending on the dict_rows argument. The headers argument is either a row number or list of row
         numbers (in case of multi-line headers) to be considered as headers (rows start counting at 1), or the actual
@@ -454,12 +560,12 @@ class Download:
 
         """
         if headers is None:
-            raise DownloadError('Argument headers cannot be None!')
+            raise DownloadError("Argument headers cannot be None!")
         if ignore_blank_rows:
-            skip_rows = kwargs.get('skip_rows', list())
-            if {'type': 'preset', 'value': 'blank'} not in skip_rows:
-                skip_rows.append({'type': 'preset', 'value': 'blank'})
-            kwargs['skip_rows'] = skip_rows
+            skip_rows = kwargs.get("skip_rows", list())
+            if {"type": "preset", "value": "blank"} not in skip_rows:
+                skip_rows.append({"type": "preset", "value": "blank"})
+            kwargs["skip_rows"] = skip_rows
         stream = self.get_tabular_stream(url, headers=headers, **kwargs)
         origheaders = stream.headers
         if header_insertions is None or origheaders is None:
@@ -503,7 +609,13 @@ class Download:
             output_dict[row[0]] = row[1]
         return output_dict
 
-    def download_tabular_rows_as_dicts(self, url: str, headers: Union[int, List[int], List[str]] = 1, keycolumn: int = 1, **kwargs: Any) -> Dict[str,Dict]:
+    def download_tabular_rows_as_dicts(
+        self,
+        url: str,
+        headers: Union[int, List[int], List[str]] = 1,
+        keycolumn: int = 1,
+        **kwargs: Any,
+    ) -> Dict[str, Dict]:
         """Download multicolumn csv from url and return dictionary where keys are first column and values are
         dictionaries with keys from column headers and values from columns beneath
 
@@ -520,7 +632,7 @@ class Download:
             headers and values from columns beneath
 
         """
-        kwargs['headers'] = headers
+        kwargs["headers"] = headers
         stream = self.get_tabular_stream(url, **kwargs)
         output_dict = dict()
         headers = stream.headers
@@ -535,7 +647,13 @@ class Download:
                     output_dict[first_val][header] = row[header]
         return output_dict
 
-    def download_tabular_cols_as_dicts(self, url: str, headers: Union[int, List[int], List[str]] = 1, keycolumn: int = 1, **kwargs: Any) -> Dict[str,Dict]:
+    def download_tabular_cols_as_dicts(
+        self,
+        url: str,
+        headers: Union[int, List[int], List[str]] = 1,
+        keycolumn: int = 1,
+        **kwargs: Any,
+    ) -> Dict[str, Dict]:
         """Download multicolumn csv from url and return dictionary where keys are header names and values are
         dictionaries with keys from first column and values from other columns
 
@@ -552,7 +670,7 @@ class Download:
             and values from other columns
 
         """
-        kwargs['headers'] = headers
+        kwargs["headers"] = headers
         stream = self.get_tabular_stream(url, **kwargs)
         output_dict = dict()
         headers = stream.headers
@@ -569,7 +687,7 @@ class Download:
         return output_dict
 
     @staticmethod
-    def get_column_positions(headers: List[str]) -> Dict[str,int]:
+    def get_column_positions(headers: List[str]) -> Dict[str, int]:
         """Get mapping of headers to column positions
 
         Args:

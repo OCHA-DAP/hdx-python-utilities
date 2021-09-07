@@ -1,27 +1,30 @@
 """Saving utilities for YAML, JSON etc."""
 import json
 from collections import OrderedDict
-from typing import Dict, Any
+from typing import Any, Dict
 
-from ruamel.yaml import YAML, RoundTripRepresenter, add_representer, SafeRepresenter
+from ruamel.yaml import YAML, RoundTripRepresenter, SafeRepresenter, add_representer
 
 
 class UnPrettyRTRepresenter(RoundTripRepresenter):
     def represent_none(self, data: Any) -> Any:
-        return self.represent_scalar('tag:yaml.org,2002:null', 'null')
+        return self.represent_scalar("tag:yaml.org,2002:null", "null")
 
 
 class UnPrettySafeRepresenter(SafeRepresenter):
     def represent_none(self, data: Any) -> Any:
-        return self.represent_scalar('tag:yaml.org,2002:null', 'null')
+        return self.represent_scalar("tag:yaml.org,2002:null", "null")
 
 
 class PrettySafeRepresenter(SafeRepresenter):
     def represent_none(self, data: Any) -> Any:
-        if len(self.represented_objects) == 0 and not self.serializer.use_explicit_start:
+        if (
+            len(self.represented_objects) == 0
+            and not self.serializer.use_explicit_start
+        ):
             # this will be open ended (although it is not yet)
-            return self.represent_scalar('tag:yaml.org,2002:null', 'null')
-        return self.represent_scalar('tag:yaml.org,2002:null', "")
+            return self.represent_scalar("tag:yaml.org,2002:null", "null")
+        return self.represent_scalar("tag:yaml.org,2002:null", "")
 
 
 UnPrettyRTRepresenter.add_representer(None, UnPrettyRTRepresenter.represent_none)
@@ -29,10 +32,13 @@ UnPrettySafeRepresenter.add_representer(None, UnPrettySafeRepresenter.represent_
 PrettySafeRepresenter.add_representer(None, PrettySafeRepresenter.represent_none)
 
 
-representers = {False: {False: UnPrettyRTRepresenter, True: RoundTripRepresenter}, True: {False: UnPrettySafeRepresenter, True: PrettySafeRepresenter}}
+representers = {
+    False: {False: UnPrettyRTRepresenter, True: RoundTripRepresenter},
+    True: {False: UnPrettySafeRepresenter, True: PrettySafeRepresenter},
+}
 
 
-def save_str_to_file(string: str, path: str, encoding: str = 'utf-8') -> None:
+def save_str_to_file(string: str, path: str, encoding: str = "utf-8") -> None:
     """Save string to file
 
     Args:
@@ -43,11 +49,17 @@ def save_str_to_file(string: str, path: str, encoding: str = 'utf-8') -> None:
     Returns:
         None
     """
-    with open(path, 'w', encoding=encoding) as f:
+    with open(path, "w", encoding=encoding) as f:
         f.write(string)
 
 
-def save_yaml(dictionary: Dict, path: str, encoding: str = 'utf-8', pretty: bool = False, sortkeys: bool = False) -> None:
+def save_yaml(
+    dictionary: Dict,
+    path: str,
+    encoding: str = "utf-8",
+    pretty: bool = False,
+    sortkeys: bool = False,
+) -> None:
     """Save dictionary to YAML file preserving order if it is an OrderedDict
 
     Args:
@@ -60,11 +72,13 @@ def save_yaml(dictionary: Dict, path: str, encoding: str = 'utf-8', pretty: bool
     Returns:
         None
     """
-    with open(path, 'w', encoding=encoding) as f:
+    with open(path, "w", encoding=encoding) as f:
         representer = representers[sortkeys][pretty]
-        yaml = YAML(typ='rt')
+        yaml = YAML(typ="rt")
         yaml.Representer = representer
-        add_representer(OrderedDict, representer.represent_dict, representer=representer)
+        add_representer(
+            OrderedDict, representer.represent_dict, representer=representer
+        )
         if pretty:
             yaml.indent(offset=2)
         else:
@@ -73,7 +87,13 @@ def save_yaml(dictionary: Dict, path: str, encoding: str = 'utf-8', pretty: bool
         yaml.dump(dictionary, f)
 
 
-def save_json(dictionary: Dict, path: str, encoding: str = 'utf-8', pretty: bool = False, sortkeys: bool = False) -> None:
+def save_json(
+    dictionary: Dict,
+    path: str,
+    encoding: str = "utf-8",
+    pretty: bool = False,
+    sortkeys: bool = False,
+) -> None:
     """Save dictionary to JSON file preserving order if it is an OrderedDict
 
     Args:
@@ -86,11 +106,13 @@ def save_json(dictionary: Dict, path: str, encoding: str = 'utf-8', pretty: bool
     Returns:
         None
     """
-    with open(path, 'w', encoding=encoding) as f:
+    with open(path, "w", encoding=encoding) as f:
         if pretty:
             indent = 2
-            separators = (',', ': ')
+            separators = (",", ": ")
         else:
             indent = None
-            separators = (', ', ': ')
-        json.dump(dictionary, f, indent=indent, sort_keys=sortkeys, separators=separators)
+            separators = (", ", ": ")
+        json.dump(
+            dictionary, f, indent=indent, sort_keys=sortkeys, separators=separators
+        )

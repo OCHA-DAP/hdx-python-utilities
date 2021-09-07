@@ -4,12 +4,12 @@ import logging
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from os.path import join, expanduser
-from typing import Optional, Any, List
+from os.path import expanduser, join
+from typing import Any, List, Optional
 
 from email_validator import validate_email
 
-from hdx.utilities.loader import load_yaml, load_json
+from hdx.utilities.loader import load_json, load_yaml
 
 logger = logging.getLogger(__name__)
 
@@ -37,46 +37,52 @@ class Email:
         email_config_yaml (str): Path to YAML HDX configuration. Defaults to ~/hdx_email_configuration.yml.
     """
 
-    default_email_config_yaml = join(expanduser('~'), 'hdx_email_configuration.yml')
+    default_email_config_yaml = join(expanduser("~"), "hdx_email_configuration.yml")
 
     def __init__(self, **kwargs: Any) -> None:
         email_config_found = False
-        email_config_dict = kwargs.get('email_config_dict', None)
+        email_config_dict = kwargs.get("email_config_dict", None)
         if email_config_dict:
             email_config_found = True
-            logger.info('Loading email configuration from dictionary')
+            logger.info("Loading email configuration from dictionary")
 
-        email_config_json = kwargs.get('email_config_json', '')
+        email_config_json = kwargs.get("email_config_json", "")
         if email_config_json:
             if email_config_found:
-                raise EmailConfigurationError('More than one email configuration file given!')
+                raise EmailConfigurationError(
+                    "More than one email configuration file given!"
+                )
             email_config_found = True
-            logger.info(f'Loading email configuration from: {email_config_json}')
+            logger.info(f"Loading email configuration from: {email_config_json}")
             email_config_dict = load_json(email_config_json)
 
-        email_config_yaml = kwargs.get('email_config_yaml', None)
+        email_config_yaml = kwargs.get("email_config_yaml", None)
         if email_config_found:
             if email_config_yaml:
-                raise EmailConfigurationError('More than one email configuration file given!')
+                raise EmailConfigurationError(
+                    "More than one email configuration file given!"
+                )
         else:
             if not email_config_yaml:
-                logger.info('No email configuration parameter. Using default email configuration path.')
+                logger.info(
+                    "No email configuration parameter. Using default email configuration path."
+                )
                 email_config_yaml = Email.default_email_config_yaml
-            logger.info(f'Loading email configuration from: {email_config_yaml}')
+            logger.info(f"Loading email configuration from: {email_config_yaml}")
             email_config_dict = load_yaml(email_config_yaml)
 
-        self.connection_type = email_config_dict.get('connection_type', 'smtp')
-        self.host = email_config_dict.get('host', '')
-        self.port = email_config_dict.get('port', 0)
-        self.local_hostname = email_config_dict.get('local_hostname')
-        self.timeout = email_config_dict.get('timeout')
-        self.source_address = email_config_dict.get('source_address')
-        self.username = email_config_dict.get('username')
-        self.password = email_config_dict.get('password')
-        self.sender = email_config_dict.get('sender', self.username)
+        self.connection_type = email_config_dict.get("connection_type", "smtp")
+        self.host = email_config_dict.get("host", "")
+        self.port = email_config_dict.get("port", 0)
+        self.local_hostname = email_config_dict.get("local_hostname")
+        self.timeout = email_config_dict.get("timeout")
+        self.source_address = email_config_dict.get("source_address")
+        self.username = email_config_dict.get("username")
+        self.password = email_config_dict.get("password")
+        self.sender = email_config_dict.get("sender", self.username)
         self.server = None
 
-    def __enter__(self) -> 'Email':
+    def __enter__(self) -> "Email":
         """
         Return Email object for with statement
 
@@ -97,7 +103,6 @@ class Email:
             None
 
         """
-        pass
 
     def connect(self) -> None:
         """
@@ -107,15 +112,29 @@ class Email:
             None
 
         """
-        if self.connection_type.lower() == 'ssl':
-            self.server = smtplib.SMTP_SSL(host=self.host, port=self.port, local_hostname=self.local_hostname,
-                                           timeout=self.timeout, source_address=self.source_address)
-        elif self.connection_type.lower() == 'lmtp':
-            self.server = smtplib.LMTP(host=self.host, port=self.port, local_hostname=self.local_hostname,
-                                       source_address=self.source_address)
+        if self.connection_type.lower() == "ssl":
+            self.server = smtplib.SMTP_SSL(
+                host=self.host,
+                port=self.port,
+                local_hostname=self.local_hostname,
+                timeout=self.timeout,
+                source_address=self.source_address,
+            )
+        elif self.connection_type.lower() == "lmtp":
+            self.server = smtplib.LMTP(
+                host=self.host,
+                port=self.port,
+                local_hostname=self.local_hostname,
+                source_address=self.source_address,
+            )
         else:
-            self.server = smtplib.SMTP(host=self.host, port=self.port, local_hostname=self.local_hostname,
-                                       timeout=self.timeout, source_address=self.source_address)
+            self.server = smtplib.SMTP(
+                host=self.host,
+                port=self.port,
+                local_hostname=self.local_hostname,
+                timeout=self.timeout,
+                source_address=self.source_address,
+            )
         self.server.login(self.username, self.password)
 
     def close(self) -> None:
@@ -142,11 +161,23 @@ class Email:
         """
         normalised_recipients = list()
         for recipient in recipients:
-            v = validate_email(recipient, check_deliverability=True)  # validate and get info
-            normalised_recipients.append(v['email'])  # replace with normalized form
+            v = validate_email(
+                recipient, check_deliverability=True
+            )  # validate and get info
+            normalised_recipients.append(v["email"])  # replace with normalized form
         return normalised_recipients
 
-    def send(self, recipients: List[str], subject: str, text_body: str, html_body: Optional[str] = None, sender: Optional[str] = None, cc: Optional[List[str]] = None, bcc: Optional[List[str]] = None, **kwargs: Any) -> None:
+    def send(
+        self,
+        recipients: List[str],
+        subject: str,
+        text_body: str,
+        html_body: Optional[str] = None,
+        sender: Optional[str] = None,
+        cc: Optional[List[str]] = None,
+        bcc: Optional[List[str]] = None,
+        **kwargs: Any,
+    ) -> None:
         """
         Send email
 
@@ -169,25 +200,25 @@ class Email:
         if sender is None:
             sender = self.sender
         v = validate_email(sender, check_deliverability=False)  # validate and get info
-        sender = v['email']  # replace with normalized form
+        sender = v["email"]  # replace with normalized form
 
         if html_body is not None:
-            msg = MIMEMultipart('alternative')
-            part1 = MIMEText(text_body, 'plain')
-            part2 = MIMEText(html_body, 'html')
+            msg = MIMEMultipart("alternative")
+            part1 = MIMEText(text_body, "plain")
+            part2 = MIMEText(html_body, "html")
             msg.attach(part1)
             msg.attach(part2)
         else:
             msg = MIMEText(text_body)
-        msg['Subject'] = subject
-        msg['From'] = sender
+        msg["Subject"] = subject
+        msg["From"] = sender
 
         normalised_recipients = self.get_normalised_emails(recipients)
-        msg['To'] = ', '.join(normalised_recipients)
+        msg["To"] = ", ".join(normalised_recipients)
 
         if cc is not None:
             normalised_cc = self.get_normalised_emails(cc)
-            msg['Cc'] = ', '.join(normalised_cc)
+            msg["Cc"] = ", ".join(normalised_cc)
             normalised_recipients.extend(normalised_cc)
 
         if bcc is not None:

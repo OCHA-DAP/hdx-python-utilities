@@ -19,7 +19,14 @@ class SessionError(Exception):
     pass
 
 
-def get_session(user_agent: Optional[str] = None, user_agent_config_yaml: Optional[str] = None, user_agent_lookup: Optional[str] = None, use_env: bool = True, fail_on_missing_file: bool = True, **kwargs: Any) -> requests.Session:
+def get_session(
+    user_agent: Optional[str] = None,
+    user_agent_config_yaml: Optional[str] = None,
+    user_agent_lookup: Optional[str] = None,
+    use_env: bool = True,
+    fail_on_missing_file: bool = True,
+    **kwargs: Any,
+) -> requests.Session:
     """Set up and return Session object that is set up with retrying. Requires either global user agent to be set or
     appropriate user agent parameter(s) to be completed. If the EXTRA_PARAMS or BASIC_AUTH environment variable is
     supplied, the extra_params* parameters will be ignored.
@@ -44,109 +51,127 @@ def get_session(user_agent: Optional[str] = None, user_agent_config_yaml: Option
     """
     s = requests.Session()
 
-    ua = kwargs.get('full_agent')
+    ua = kwargs.get("full_agent")
     if not ua:
-        ua = UserAgent.get(user_agent, user_agent_config_yaml, user_agent_lookup, **kwargs)
-    s.headers['User-Agent'] = ua
+        ua = UserAgent.get(
+            user_agent, user_agent_config_yaml, user_agent_lookup, **kwargs
+        )
+    s.headers["User-Agent"] = ua
 
     auths_found = list()
-    headers = kwargs.get('headers')
+    headers = kwargs.get("headers")
     if headers is not None:
         s.headers.update(headers)
-        if 'Authorization' in headers:
-            auths_found.append('headers')
+        if "Authorization" in headers:
+            auths_found.append("headers")
 
     extra_params_found = False
     extra_params_dict = None
     basic_auth = None
     if use_env:
-        basic_auth_env = os.getenv('BASIC_AUTH')
+        basic_auth_env = os.getenv("BASIC_AUTH")
         if basic_auth_env:
             basic_auth = basic_auth_env
-            auths_found.append('basic_auth environment variable')
-        extra_params = os.getenv('EXTRA_PARAMS')
+            auths_found.append("basic_auth environment variable")
+        extra_params = os.getenv("EXTRA_PARAMS")
         if extra_params:
-            if '=' in extra_params:
+            if "=" in extra_params:
                 extra_params_dict = dict()
-                logger.info('Loading extra parameters from environment variable')
-                for extra_param in extra_params.split(','):
-                    key, value = extra_param.split('=')
+                logger.info("Loading extra parameters from environment variable")
+                for extra_param in extra_params.split(","):
+                    key, value = extra_param.split("=")
                     extra_params_dict[key] = value
             extra_params_found = True
     if not extra_params_found:
         # only do this if extra params env vars not supplied
-        extra_params_dict = kwargs.get('extra_params_dict')
+        extra_params_dict = kwargs.get("extra_params_dict")
         if extra_params_dict:
             extra_params_found = True
-            logger.info('Loading extra parameters from dictionary')
+            logger.info("Loading extra parameters from dictionary")
 
-        extra_params_json = kwargs.get('extra_params_json', '')
+        extra_params_json = kwargs.get("extra_params_json", "")
         if extra_params_json:
             if extra_params_found:
-                raise SessionError('More than one set of extra parameters given!')
+                raise SessionError("More than one set of extra parameters given!")
             extra_params_found = True
-            logger.info(f'Loading extra parameters from: {extra_params_json}')
+            logger.info(f"Loading extra parameters from: {extra_params_json}")
             try:
                 extra_params_dict = load_json(extra_params_json)
             except OSError:
                 if fail_on_missing_file:
                     raise
-        extra_params_yaml = kwargs.get('extra_params_yaml', '')
+        extra_params_yaml = kwargs.get("extra_params_yaml", "")
         if extra_params_yaml:
             if extra_params_found:
-                raise SessionError('More than one set of extra parameters given!')
-            logger.info(f'Loading extra parameters from: {extra_params_yaml}')
+                raise SessionError("More than one set of extra parameters given!")
+            logger.info(f"Loading extra parameters from: {extra_params_yaml}")
             try:
                 extra_params_dict = load_yaml(extra_params_yaml)
             except OSError:
                 if fail_on_missing_file:
                     raise
-        extra_params_lookup = kwargs.get('extra_params_lookup')
+        extra_params_lookup = kwargs.get("extra_params_lookup")
         if extra_params_lookup and extra_params_dict:
             extra_params_dict = extra_params_dict.get(extra_params_lookup)
             if extra_params_dict is None:
-                raise SessionError(f'{extra_params_lookup} does not exist in extra_params!')
+                raise SessionError(
+                    f"{extra_params_lookup} does not exist in extra_params!"
+                )
     if extra_params_dict:
-        basic_auth_param = extra_params_dict.get('basic_auth')
+        basic_auth_param = extra_params_dict.get("basic_auth")
         if basic_auth_param:
             basic_auth = basic_auth_param
-            auths_found.append('basic_auth parameter')
-            del extra_params_dict['basic_auth']
+            auths_found.append("basic_auth parameter")
+            del extra_params_dict["basic_auth"]
 
     s.params = extra_params_dict
 
-    basic_auth_arg = kwargs.get('basic_auth')
+    basic_auth_arg = kwargs.get("basic_auth")
     if basic_auth_arg:
         basic_auth = basic_auth_arg
-        auths_found.append('basic_auth argument')
+        auths_found.append("basic_auth argument")
 
-    auth = kwargs.get('auth')
+    auth = kwargs.get("auth")
     if auth:
-        auths_found.append('auth argument')
-    basic_auth_file = kwargs.get('basic_auth_file')
+        auths_found.append("auth argument")
+    basic_auth_file = kwargs.get("basic_auth_file")
     if basic_auth_file:
-        logger.info(f'Loading basic auth from: {basic_auth_file}')
+        logger.info(f"Loading basic auth from: {basic_auth_file}")
         try:
             basic_auth = load_file_to_str(basic_auth_file, strip=True)
-            auths_found.append(f'file {basic_auth_file}')
+            auths_found.append(f"file {basic_auth_file}")
         except OSError:
             if fail_on_missing_file:
                 raise
     if len(auths_found) > 1:
-        auths_found_str = ', '.join(auths_found)
-        raise SessionError(f'More than one authorisation given! ({auths_found_str})')
-    if 'headers' not in auths_found:
+        auths_found_str = ", ".join(auths_found)
+        raise SessionError(f"More than one authorisation given! ({auths_found_str})")
+    if "headers" not in auths_found:
         if basic_auth:
             auth = decode(basic_auth)
         s.auth = auth
 
-    status_forcelist = kwargs.get('status_forcelist', [429, 500, 502, 503, 504])
-    allowed_methods = kwargs.get('allowed_methods', frozenset(['HEAD', 'TRACE', 'GET', 'PUT', 'OPTIONS', 'DELETE']))
+    status_forcelist = kwargs.get("status_forcelist", [429, 500, 502, 503, 504])
+    allowed_methods = kwargs.get(
+        "allowed_methods",
+        frozenset(["HEAD", "TRACE", "GET", "PUT", "OPTIONS", "DELETE"]),
+    )
 
-    retries = Retry(total=5, backoff_factor=0.4, status_forcelist=status_forcelist, allowed_methods=allowed_methods,
-                    raise_on_redirect=True,
-                    raise_on_status=True)
-    s.mount('file://', FileAdapter())
-    s.mount('http://', HTTPAdapter(max_retries=retries, pool_connections=100, pool_maxsize=100))
-    s.mount('https://', HTTPAdapter(max_retries=retries, pool_connections=100, pool_maxsize=100))
+    retries = Retry(
+        total=5,
+        backoff_factor=0.4,
+        status_forcelist=status_forcelist,
+        allowed_methods=allowed_methods,
+        raise_on_redirect=True,
+        raise_on_status=True,
+    )
+    s.mount("file://", FileAdapter())
+    s.mount(
+        "http://",
+        HTTPAdapter(max_retries=retries, pool_connections=100, pool_maxsize=100),
+    )
+    s.mount(
+        "https://",
+        HTTPAdapter(max_retries=retries, pool_connections=100, pool_maxsize=100),
+    )
     return s

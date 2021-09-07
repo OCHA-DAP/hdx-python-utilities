@@ -16,8 +16,10 @@ def compare_files(path1: str, path2: str) -> List[str]:
         List[str]: Delta between the two files
 
     """
-    diff = difflib.ndiff(open(path1).read().splitlines(), open(path2).read().splitlines())
-    return [x for x in diff if x[0] in ['-', '+', '?']]
+    diff = difflib.ndiff(
+        open(path1).read().splitlines(), open(path2).read().splitlines()
+    )
+    return [x for x in diff if x[0] in ["-", "+", "?"]]
 
 
 def assert_files_same(path1: str, path2: str) -> None:

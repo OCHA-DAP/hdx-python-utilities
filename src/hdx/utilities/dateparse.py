@@ -3,16 +3,20 @@ import time
 from calendar import monthrange
 from datetime import datetime
 from parser import ParserError
-from typing import Optional, Dict, Tuple
+from typing import Dict, Optional, Tuple
 
 import dateutil
 from dateutil.parser import _timelex, parserinfo
 from dateutil.tz import tzutc
 
 default_sd_year = 1
-default_date = datetime(year=default_sd_year, month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
+default_date = datetime(
+    year=default_sd_year, month=1, day=1, hour=0, minute=0, second=0, microsecond=0
+)
 default_ed_year = 9990
-default_enddate = datetime(year=default_ed_year, month=12, day=31, hour=0, minute=0, second=0, microsecond=0)
+default_enddate = datetime(
+    year=default_ed_year, month=12, day=31, hour=0, minute=0, second=0, microsecond=0
+)
 
 
 # Ugly copy and paste from dateutil.parser._parser._ymd with dayfirst modified to mean day is outer value
@@ -52,31 +56,31 @@ class _ymd(list):  # pragma: no cover
             return 1 <= value <= monthrange(year, month)[1]
 
     def append(self, val, label=None):
-        if hasattr(val, '__len__'):
+        if hasattr(val, "__len__"):
             if val.isdigit() and len(val) > 2:
                 self.century_specified = True
-                if label not in [None, 'Y']:  # pragma: no cover
+                if label not in [None, "Y"]:  # pragma: no cover
                     raise ValueError(label)
-                label = 'Y'
+                label = "Y"
         elif val > 100:
             self.century_specified = True
-            if label not in [None, 'Y']:  # pragma: no cover
+            if label not in [None, "Y"]:  # pragma: no cover
                 raise ValueError(label)
-            label = 'Y'
+            label = "Y"
 
         super(self.__class__, self).append(int(val))
 
-        if label == 'M':
+        if label == "M":
             if self.has_month:
-                raise ValueError('Month is already set')
+                raise ValueError("Month is already set")
             self.mstridx = len(self) - 1
-        elif label == 'D':
+        elif label == "D":
             if self.has_day:
-                raise ValueError('Day is already set')
+                raise ValueError("Day is already set")
             self.dstridx = len(self) - 1
-        elif label == 'Y':
+        elif label == "Y":
             if self.has_year:
-                raise ValueError('Year is already set')
+                raise ValueError("Year is already set")
             self.ystridx = len(self) - 1
 
     def _resolve_from_stridxs(self, strids):
@@ -87,7 +91,7 @@ class _ymd(list):  # pragma: no cover
         if len(self) == 3 and len(strids) == 2:
             # we can back out the remaining stridx value
             missing = [x for x in range(3) if x not in strids.values()]
-            key = [x for x in ['y', 'm', 'd'] if x not in strids]
+            key = [x for x in ["y", "m", "d"] if x not in strids]
             assert len(missing) == len(key) == 1
             key = key[0]
             val = missing[0]
@@ -95,19 +99,16 @@ class _ymd(list):  # pragma: no cover
 
         assert len(self) == len(strids)  # otherwise this should not be called
         out = {key: self[strids[key]] for key in strids}
-        return (out.get('y'), out.get('m'), out.get('d'))
+        return (out.get("y"), out.get("m"), out.get("d"))
 
     def resolve_ymd(self, yearfirst, dayfirst):
         len_ymd = len(self)
         year, month, day = (None, None, None)
 
-        strids = (('y', self.ystridx),
-                  ('m', self.mstridx),
-                  ('d', self.dstridx))
+        strids = (("y", self.ystridx), ("m", self.mstridx), ("d", self.dstridx))
 
         strids = {key: val for key, val in strids if val is not None}
-        if (len(self) == len(strids) > 0 or
-                (len(self) == 3 and len(strids) == 2)):
+        if len(self) == len(strids) > 0 or (len(self) == 3 and len(strids) == 2):
             return self._resolve_from_stridxs(strids)
 
         mstridx = self.mstridx
@@ -173,9 +174,11 @@ class _ymd(list):  # pragma: no cover
                     year, day, month = self
 
             else:
-                if (self[0] > 31 or
-                        self.ystridx == 0 or
-                        (yearfirst and self[1] <= 12 and self[2] <= 31)):
+                if (
+                    self[0] > 31
+                    or self.ystridx == 0
+                    or (yearfirst and self[1] <= 12 and self[2] <= 31)
+                ):
                     # 99-01-01
                     if dayfirst and self[1] <= 12:  # CHANGED
                         year, month, day = self
@@ -193,8 +196,14 @@ class _ymd(list):  # pragma: no cover
 
 # Ugly copy and paste from dateutil.dateparser with minor changes
 class DateParser(dateutil.parser.parser):  # pragma: no cover
-    def _parse(self, timestr, dayfirst=None, yearfirst=None, fuzzy=False,
-               fuzzy_with_tokens=False):
+    def _parse(
+        self,
+        timestr,
+        dayfirst=None,
+        yearfirst=None,
+        fuzzy=False,
+        fuzzy_with_tokens=False,
+    ):
         """
         Private method which performs the heavy lifting of parsing, called from
         ``parse()``, which passes on its ``kwargs`` to this function.
@@ -277,10 +286,10 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
                 # Check month name
                 elif info.month(l[i]) is not None:
                     value = info.month(l[i])
-                    ymd.append(value, 'M')
+                    ymd.append(value, "M")
 
                     if i + 1 < len_l:
-                        if l[i + 1] in ('-', '/'):
+                        if l[i + 1] in ("-", "/"):
                             # Jan-01[-99]
                             sep = l[i + 1]
                             ymd.append(l[i + 2])
@@ -292,15 +301,18 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
 
                             i += 2
 
-                        elif (i + 4 < len_l and l[i + 1] == l[i + 3] == ' ' and
-                              info.pertain(l[i + 2])):
+                        elif (
+                            i + 4 < len_l
+                            and l[i + 1] == l[i + 3] == " "
+                            and info.pertain(l[i + 2])
+                        ):
                             # Jan of 01
                             # In this case, 01 is clearly year
                             if l[i + 4].isdigit():
                                 # Convert it here to become unambiguous
                                 value = int(l[i + 4])
                                 year = str(info.convertyear(value))
-                                ymd.append(year, 'Y')
+                                ymd.append(year, "Y")
                             else:
                                 # Wrong guess
                                 pass
@@ -329,8 +341,8 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
                     # "my time +3 is GMT". If found, we reverse the
                     # logic so that timezone parsing code will get it
                     # right.
-                    if i + 1 < len_l and l[i + 1] in ('+', '-'):
-                        l[i + 1] = ('+', '-')[l[i + 1] == '+']
+                    if i + 1 < len_l and l[i + 1] in ("+", "-"):
+                        l[i + 1] = ("+", "-")[l[i + 1] == "+"]
                         res.tzoffset = None
                         if info.utczone(res.tzname):
                             # With something like GMT+3, the timezone
@@ -338,8 +350,8 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
                             res.tzname = None
 
                 # Check for a numbered timezone
-                elif res.hour is not None and l[i] in ('+', '-'):
-                    signal = (-1, 1)[l[i] == '+']
+                elif res.hour is not None and l[i] in ("+", "-"):
+                    signal = (-1, 1)[l[i] == "+"]
                     len_li = len(l[i + 1])
 
                     # TODO: check that l[i + 1] is integer?
@@ -347,10 +359,12 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
                         # -0300
                         hour_offset = int(l[i + 1][:2])
                         min_offset = int(l[i + 1][2:])
-                    elif i + 2 < len_l and l[i + 2] == ':':
+                    elif i + 2 < len_l and l[i + 2] == ":":
                         # -03:00
                         hour_offset = int(l[i + 1])
-                        min_offset = int(l[i + 3])  # TODO: Check that l[i+3] is minute-like?
+                        min_offset = int(
+                            l[i + 3]
+                        )  # TODO: Check that l[i+3] is minute-like?
                         i += 2
                     elif len_li <= 2:
                         # -[0]3
@@ -362,12 +376,14 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
                     res.tzoffset = signal * (hour_offset * 3600 + min_offset * 60)
 
                     # Look for a timezone name between parenthesis
-                    if (i + 5 < len_l and
-                            info.jump(l[i + 2]) and l[i + 3] == '(' and
-                            l[i + 5] == ')' and
-                            3 <= len(l[i + 4]) and
-                            self._could_be_tzname(res.hour, res.tzname,
-                                                  None, l[i + 4])):
+                    if (
+                        i + 5 < len_l
+                        and info.jump(l[i + 2])
+                        and l[i + 3] == "("
+                        and l[i + 5] == ")"
+                        and 3 <= len(l[i + 4])
+                        and self._could_be_tzname(res.hour, res.tzname, None, l[i + 4])
+                    ):
                         # -0300 (BRST)
                         res.tzname = l[i + 4]
                         i += 4
@@ -414,17 +430,17 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
         prev = None
         for idx, token in enumerate(tokens):
             if idx in skipped_idxs:
-                if prev is None or prev == 'date':
+                if prev is None or prev == "date":
                     skipped_tokens.append(token)
                 else:
                     skipped_tokens[-1] = skipped_tokens[-1] + token
-                prev = 'skipped'
+                prev = "skipped"
             else:
-                if prev is None or prev == 'skipped':
+                if prev is None or prev == "skipped":
                     date_tokens.append(token)
                 else:
                     date_tokens[-1] = date_tokens[-1] + token
-                prev = 'date'
+                prev = "date"
 
         return skipped_tokens, date_tokens
 
@@ -432,8 +448,9 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
 DEFAULTPARSER = DateParser(parserinfo(dayfirst=True))
 
 
-def parse(timestr, default=None,
-          ignoretz=False, tzinfos=None, **kwargs):  # pragma: no cover
+def parse(
+    timestr, default=None, ignoretz=False, tzinfos=None, **kwargs
+):  # pragma: no cover
     """
     Parse the date/time string into a :class:`datetime.datetime` object.
 
@@ -497,8 +514,7 @@ def parse(timestr, default=None,
     """
 
     if default is None:
-        default = datetime.now().replace(hour=0, minute=0,
-                                         second=0, microsecond=0)
+        default = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
 
     res, skipped_tokens, date_tokens = DEFAULTPARSER._parse(timestr, **kwargs)
 
@@ -516,13 +532,18 @@ def parse(timestr, default=None,
     if not ignoretz:
         ret = DEFAULTPARSER._build_tzaware(ret, res, tzinfos)
 
-    if kwargs.get('fuzzy_with_tokens', False):
+    if kwargs.get("fuzzy_with_tokens", False):
         return ret, skipped_tokens, date_tokens
     else:
         return ret
 
 
-def parse_date_range(string: str, date_format: Optional[str] = None, fuzzy: Optional[Dict] = None, zero_time: bool = False) -> Tuple[datetime,datetime]:
+def parse_date_range(
+    string: str,
+    date_format: Optional[str] = None,
+    fuzzy: Optional[Dict] = None,
+    zero_time: bool = False,
+) -> Tuple[datetime, datetime]:
     """Parse date from string using specified format (setting any time elements to 0 if zero_time is True).
     If no format is supplied, the function will guess. For unambiguous formats, this should be fine.
     Returns date range in dictionary keys startdate and enddate. If a dictionary is supplied in the fuzzy parameter,
@@ -541,29 +562,33 @@ def parse_date_range(string: str, date_format: Optional[str] = None, fuzzy: Opti
     if date_format is None or fuzzy is not None:
         if fuzzy is not None:
             parsed_string1 = parse(string, fuzzy_with_tokens=True, default=default_date)
-            parsed_string2 = parse(string, fuzzy_with_tokens=True, default=default_enddate)
+            parsed_string2 = parse(
+                string, fuzzy_with_tokens=True, default=default_enddate
+            )
             startdate = parsed_string1[0]
             enddate = parsed_string2[0]
             nondate = parsed_string1[1]
             if nondate:
-                fuzzy['nondate'] = nondate
+                fuzzy["nondate"] = nondate
             else:
-                fuzzy['nondate'] = None
-            fuzzy['date'] = parsed_string1[2]
+                fuzzy["nondate"] = None
+            fuzzy["date"] = parsed_string1[2]
         else:
             startdate = parse(string, default=default_date)
             enddate = parse(string, default=default_enddate)
         if startdate.year == default_sd_year and enddate.year == default_ed_year:
-            raise ParserError('No year in date!')
+            raise ParserError("No year in date!")
     else:
         try:
             startdate = datetime.strptime(string, date_format)
         except ValueError as e:
             raise ParserError(str(e)) from e
-        if startdate.year == 1900 and '%Y' not in date_format:  # 1900 is default when no year supplied
-            raise ParserError('No year in date!')
+        if (
+            startdate.year == 1900 and "%Y" not in date_format
+        ):  # 1900 is default when no year supplied
+            raise ParserError("No year in date!")
         enddate = startdate
-        if not any(x in date_format for x in ['%d', '%j']):
+        if not any(x in date_format for x in ["%d", "%j"]):
             startdate = startdate.replace(day=default_date.day)
             endday = default_enddate.day
             not_set = True
@@ -574,20 +599,27 @@ def parse_date_range(string: str, date_format: Optional[str] = None, fuzzy: Opti
                 except ValueError as e:
                     endday -= 1
                     if endday == 0:
-                        raise ParserError(f'No end day of month found for {str(enddate)}!') from e
-        if not any(str in date_format for str in ['%b', '%B', '%m', '%j']):
+                        raise ParserError(
+                            f"No end day of month found for {str(enddate)}!"
+                        ) from e
+        if not any(str in date_format for str in ["%b", "%B", "%m", "%j"]):
             startdate = startdate.replace(month=default_date.month)
             enddate = enddate.replace(month=default_enddate.month)
     if zero_time:
         startdate = startdate.replace(hour=0, minute=0, second=0, microsecond=0)
         enddate = enddate.replace(hour=0, minute=0, second=0, microsecond=0)
     if fuzzy is not None:
-        fuzzy['startdate'] = startdate
-        fuzzy['enddate'] = enddate
+        fuzzy["startdate"] = startdate
+        fuzzy["enddate"] = enddate
     return startdate, enddate
 
 
-def parse_date(string: str, date_format: Optional[str] = None, fuzzy: Optional[Dict] = None, zero_time: bool = False) -> datetime:
+def parse_date(
+    string: str,
+    date_format: Optional[str] = None,
+    fuzzy: Optional[Dict] = None,
+    zero_time: bool = False,
+) -> datetime:
     """Parse date from string using specified format (setting any time elements to 0 if zero_time is True).
     If no format is supplied, the function will guess. For unambiguous formats, this should be fine.
     Returns a datetime object. Raises exception for dates that are missing year, month or day.
@@ -604,9 +636,11 @@ def parse_date(string: str, date_format: Optional[str] = None, fuzzy: Optional[D
     Returns:
         datetime: The parsed date
     """
-    startdate, enddate = parse_date_range(string, date_format=date_format, fuzzy=fuzzy, zero_time=zero_time)
+    startdate, enddate = parse_date_range(
+        string, date_format=date_format, fuzzy=fuzzy, zero_time=zero_time
+    )
     if startdate != enddate:
-        raise ParserError('date is not a specific day!')
+        raise ParserError("date is not a specific day!")
     return startdate
 
 
@@ -620,12 +654,31 @@ def get_timestamp_from_datetime(date: datetime) -> float:
         float: Timestamp
     """
     if date.tzinfo is None:
-        return time.mktime((date.year, date.month, date.day, date.hour, date.minute, date.second, -1, -1, -1)) + date.microsecond / 1e6
+        return (
+            time.mktime(
+                (
+                    date.year,
+                    date.month,
+                    date.day,
+                    date.hour,
+                    date.minute,
+                    date.second,
+                    -1,
+                    -1,
+                    -1,
+                )
+            )
+            + date.microsecond / 1e6
+        )
     else:
         return (date - datetime(1970, 1, 1, tzinfo=tzutc())).total_seconds()
 
 
-def get_datetime_from_timestamp(timestamp: float, timezone: datetime.tzinfo = tzutc, today: datetime = datetime.now(tzutc())) -> datetime:
+def get_datetime_from_timestamp(
+    timestamp: float,
+    timezone: datetime.tzinfo = tzutc,
+    today: datetime = datetime.now(tzutc()),
+) -> datetime:
     """Convert timestamp to datetime.
 
     Args:

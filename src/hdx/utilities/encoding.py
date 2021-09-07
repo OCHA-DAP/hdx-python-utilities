@@ -14,7 +14,7 @@ def str_to_base64(string: str) -> str:
         str: Base 64 encoded string
 
     """
-    return base64.urlsafe_b64encode(string.encode('utf-8')).decode('utf-8')
+    return base64.urlsafe_b64encode(string.encode("utf-8")).decode("utf-8")
 
 
 def base64_to_str(bstring: str) -> str:
@@ -28,4 +28,4 @@ def base64_to_str(bstring: str) -> str:
         str: Decoded string
 
     """
-    return base64.urlsafe_b64decode(bstring.encode('utf-8')).decode('utf-8')
+    return base64.urlsafe_b64decode(bstring.encode("utf-8")).decode("utf-8")

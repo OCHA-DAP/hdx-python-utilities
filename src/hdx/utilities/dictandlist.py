@@ -2,15 +2,17 @@
 
 import itertools
 from collections import UserDict
-from typing import List, TypeVar, Callable, Dict, Any, Union
+from typing import Any, Callable, Dict, List, TypeVar, Union
 
 from tabulator import Stream
 
-DictUpperBound = TypeVar('DictUpperBound', bound='dict')
-ExceptionUpperBound = TypeVar('ExceptionUpperBound', bound='Exception')
+DictUpperBound = TypeVar("DictUpperBound", bound="dict")
+ExceptionUpperBound = TypeVar("ExceptionUpperBound", bound="Exception")
 
 
-def merge_two_dictionaries(a: DictUpperBound, b: DictUpperBound, merge_lists: bool = False) -> DictUpperBound:
+def merge_two_dictionaries(
+    a: DictUpperBound, b: DictUpperBound, merge_lists: bool = False
+) -> DictUpperBound:
     """Merges b into a and returns merged result
 
     NOTE: tuples and arbitrary objects are not handled as it is totally ambiguous what should happen
@@ -47,7 +49,9 @@ def merge_two_dictionaries(a: DictUpperBound, b: DictUpperBound, merge_lists: bo
             if isinstance(b, (dict, UserDict)):
                 for key in b:
                     if key in a:
-                        a[key] = merge_two_dictionaries(a[key], b[key], merge_lists=merge_lists)
+                        a[key] = merge_two_dictionaries(
+                            a[key], b[key], merge_lists=merge_lists
+                        )
                     else:
                         a[key] = b[key]
             else:
@@ -55,11 +59,15 @@ def merge_two_dictionaries(a: DictUpperBound, b: DictUpperBound, merge_lists: bo
         else:
             raise ValueError(f'NOT IMPLEMENTED "{b}" into "{a}"')
     except TypeError as e:
-        raise ValueError(f'TypeError "{e}" in key "{key}" when merging "{b}" into "{a}"')
+        raise ValueError(
+            f'TypeError "{e}" in key "{key}" when merging "{b}" into "{a}"'
+        )
     return a
 
 
-def merge_dictionaries(dicts: List[DictUpperBound], merge_lists: bool = False) -> DictUpperBound:
+def merge_dictionaries(
+    dicts: List[DictUpperBound], merge_lists: bool = False
+) -> DictUpperBound:
     """Merges all dictionaries in dicts into a single dictionary and returns result
 
     Args:
@@ -76,7 +84,9 @@ def merge_dictionaries(dicts: List[DictUpperBound], merge_lists: bool = False) -
     return dict1
 
 
-def dict_diff(d1: DictUpperBound, d2: DictUpperBound, no_key: str = '<KEYNOTFOUND>') -> Dict:
+def dict_diff(
+    d1: DictUpperBound, d2: DictUpperBound, no_key: str = "<KEYNOTFOUND>"
+) -> Dict:
     """Compares two dictionaries
 
     Args:
@@ -131,7 +141,9 @@ def dict_of_sets_add(dictionary: DictUpperBound, key: Any, value: Any) -> None:
     dictionary[key] = set_objs
 
 
-def dict_of_dicts_add(dictionary: DictUpperBound, parent_key: Any, key: Any, value: Any) -> None:
+def dict_of_dicts_add(
+    dictionary: DictUpperBound, parent_key: Any, key: Any, value: Any
+) -> None:
     """Add key value pair to a dictionary within a dictionary by key
 
     Args:
@@ -149,7 +161,9 @@ def dict_of_dicts_add(dictionary: DictUpperBound, parent_key: Any, key: Any, val
     dictionary[parent_key] = dict_objs
 
 
-def list_distribute_contents_simple(input_list: List, function: Callable[[Any], Any] = lambda x: x) -> List:
+def list_distribute_contents_simple(
+    input_list: List, function: Callable[[Any], Any] = lambda x: x
+) -> List:
     """Distribute the contents of a list eg. [1, 1, 1, 2, 2, 3] -> [1, 2, 3, 1, 2, 1]. List can contain complex types
     like dictionaries in which case the function can return the appropriate value eg.  lambda x: x[KEY]
 
@@ -180,7 +194,9 @@ def list_distribute_contents_simple(input_list: List, function: Callable[[Any], 
     return output_list
 
 
-def list_distribute_contents(input_list: List, function: Callable[[Any], Any] = lambda x: x) -> List:
+def list_distribute_contents(
+    input_list: List, function: Callable[[Any], Any] = lambda x: x
+) -> List:
     """Distribute the contents of a list eg. [1, 1, 1, 2, 2, 3] -> [1, 2, 1, 2, 1, 3]. List can contain complex types
     like dictionaries in which case the function can return the appropriate value eg.  lambda x: x[KEY]
 
@@ -203,11 +219,16 @@ def list_distribute_contents(input_list: List, function: Callable[[Any], Any] = 
         piles_list.sort(key=len, reverse=True)
         width = len(piles_list[0])
         pile_iters_list = [iter(pile) for pile in piles_list]
-        pile_sizes_list = [[pile_position] * len(pile) for pile_position, pile in enumerate(piles_list)]
+        pile_sizes_list = [
+            [pile_position] * len(pile) for pile_position, pile in enumerate(piles_list)
+        ]
         grouped_rows = grouper(width, itertools.chain.from_iterable(pile_sizes_list))
         grouped_columns = itertools.zip_longest(*grouped_rows)
-        shuffled_pile = [next(pile_iters_list[position]) for position in itertools.chain.from_iterable(grouped_columns)
-                         if position is not None]
+        shuffled_pile = [
+            next(pile_iters_list[position])
+            for position in itertools.chain.from_iterable(grouped_columns)
+            if position is not None
+        ]
         return shuffled_pile
 
     dictionary = dict()
@@ -219,7 +240,9 @@ def list_distribute_contents(input_list: List, function: Callable[[Any], Any] = 
     return riffle_shuffle(intermediate_list)
 
 
-def extract_list_from_list_of_dict(list_of_dict: List[DictUpperBound], key: Any) -> List:
+def extract_list_from_list_of_dict(
+    list_of_dict: List[DictUpperBound], key: Any
+) -> List:
     """Extract a list by looking up key in each member of a list of dictionaries
 
     Args:
@@ -236,8 +259,14 @@ def extract_list_from_list_of_dict(list_of_dict: List[DictUpperBound], key: Any)
     return result
 
 
-def key_value_convert(dictin: DictUpperBound, keyfn: Callable[[Any], Any] = lambda x: x, valuefn: Callable[[Any], Any] = lambda x: x, dropfailedkeys: bool = False, dropfailedvalues: bool = False,
-                      exception: ExceptionUpperBound = ValueError) -> Dict:
+def key_value_convert(
+    dictin: DictUpperBound,
+    keyfn: Callable[[Any], Any] = lambda x: x,
+    valuefn: Callable[[Any], Any] = lambda x: x,
+    dropfailedkeys: bool = False,
+    dropfailedvalues: bool = False,
+    exception: ExceptionUpperBound = ValueError,
+) -> Dict:
     """Convert keys and/or values of dictionary using functions passed in as parameters
 
     Args:
@@ -285,7 +314,9 @@ def integer_key_convert(dictin: DictUpperBound, dropfailedkeys: bool = False) ->
     return key_value_convert(dictin, keyfn=int, dropfailedkeys=dropfailedkeys)
 
 
-def integer_value_convert(dictin: DictUpperBound, dropfailedvalues: bool = False) -> Dict:
+def integer_value_convert(
+    dictin: DictUpperBound, dropfailedvalues: bool = False
+) -> Dict:
     """Convert values of dictionary to integers
 
     Args:
@@ -313,7 +344,9 @@ def float_value_convert(dictin: DictUpperBound, dropfailedvalues: bool = False) 
     return key_value_convert(dictin, valuefn=float, dropfailedvalues=dropfailedvalues)
 
 
-def avg_dicts(dictin1: DictUpperBound, dictin2: DictUpperBound, dropmissing: bool = True) -> Dict:
+def avg_dicts(
+    dictin1: DictUpperBound, dictin2: DictUpperBound, dropmissing: bool = True
+) -> Dict:
     """Create a new dictionary from two dictionaries by averaging values
 
     Args:
@@ -338,7 +371,12 @@ def avg_dicts(dictin1: DictUpperBound, dictin2: DictUpperBound, dropmissing: boo
     return dictout
 
 
-def read_list_from_csv(url: str, headers: Union[int, List[int], List[str], None] = None, dict_form: bool = False, **kwargs: Any) -> List[Union[Dict, List]]:
+def read_list_from_csv(
+    url: str,
+    headers: Union[int, List[int], List[str], None] = None,
+    dict_form: bool = False,
+    **kwargs: Any,
+) -> List[Union[Dict, List]]:
     """Read a list of rows in dict or list form from a csv. The headers argument is either a row
        number or list of row numbers (in case of multi-line headers) to be considered as headers
        (rows start counting at 1), or the actual headers defined a list of strings. If not set,
@@ -355,7 +393,7 @@ def read_list_from_csv(url: str, headers: Union[int, List[int], List[str], None]
 
     """
     if dict_form and headers is None:
-        raise ValueError('If dict_form is True, headers must not be None!')
+        raise ValueError("If dict_form is True, headers must not be None!")
     stream = Stream(url, headers=headers, **kwargs)
     stream.open()
     result = stream.read(keyed=dict_form)
@@ -363,7 +401,11 @@ def read_list_from_csv(url: str, headers: Union[int, List[int], List[str], None]
     return result
 
 
-def write_list_to_csv(filepath: str, list_of_rows: List[Union[DictUpperBound, List]], headers: Union[int, List[int], List[str], None] = None) -> None:
+def write_list_to_csv(
+    filepath: str,
+    list_of_rows: List[Union[DictUpperBound, List]],
+    headers: Union[int, List[int], List[str], None] = None,
+) -> None:
     """Write a list of rows in dict or list form to a csv. (The headers argument is either a row
        number or list of row numbers (in case of multi-line headers) to be considered as headers
        (rows start counting at 1), or the actual headers defined a list of strings. If not set,
@@ -380,7 +422,7 @@ def write_list_to_csv(filepath: str, list_of_rows: List[Union[DictUpperBound, Li
     """
     stream = Stream(list_of_rows, headers=headers)
     stream.open()
-    stream.save(filepath, format='csv')
+    stream.save(filepath, format="csv")
     stream.close()
 
 
@@ -395,7 +437,7 @@ def args_to_dict(args: str) -> DictUpperBound:
 
     """
     arguments = dict()
-    for arg in args.split(','):
-        key, value = arg.split('=')
+    for arg in args.split(","):
+        key, value = arg.split("=")
         arguments[key] = value
     return arguments

@@ -1,11 +1,12 @@
 import os
 import sys
-from setuptools import Command
 from distutils import log
 from distutils.command.clean import clean
 from os.path import exists
 from shutil import rmtree
 from uuid import UUID, uuid4
+
+from setuptools import Command
 
 
 def get_uuid() -> str:
@@ -45,7 +46,7 @@ class CleanCommand(clean):
         the dist directory if it exists."""
         self.all = True  # --all by default when cleaning
         super().run()
-        dir_ = 'dist'
+        dir_ = "dist"
         if exists(dir_):
             log.info("removing '%s' (and everything under it)", dir_)
             rmtree(dir_)
@@ -56,7 +57,7 @@ class CleanCommand(clean):
 class PackageCommand(Command):
     """Package command for setup.py that creates source and wheel packages."""
 
-    description = 'Build the packages.'
+    description = "Build the packages."
     user_options = []
 
     def initialize_options(self):
@@ -66,8 +67,8 @@ class PackageCommand(Command):
         pass
 
     def run(self):
-        log.info('Building Source and Wheel (universal) Packages...')
-        os.system(f'{sys.executable} setup.py clean sdist bdist_wheel --universal')
+        log.info("Building Source and Wheel (universal) Packages...")
+        os.system(f"{sys.executable} setup.py clean sdist bdist_wheel --universal")
         sys.exit()
 
 
@@ -76,7 +77,7 @@ class PublishCommand(Command):
     Requires that twine and git be installed."""
 
     version = None
-    description = 'Publish the packages.'
+    description = "Publish the packages."
     user_options = []
 
     def initialize_options(self):
@@ -86,12 +87,12 @@ class PublishCommand(Command):
         pass
 
     def run(self):
-        log.info('Uploading the package to PyPI using twine...')
-        os.system('twine upload dist/*')
+        log.info("Uploading the package to PyPI using twine...")
+        os.system("twine upload dist/*")
 
         if PublishCommand.version:
-            log.info('Pushing git tags...')
-            os.system(f'git tag v{PublishCommand.version}')
-            os.system('git push --tags')
+            log.info("Pushing git tags...")
+            os.system(f"git tag v{PublishCommand.version}")
+            os.system("git push --tags")
 
         sys.exit()

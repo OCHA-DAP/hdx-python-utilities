@@ -8,4 +8,6 @@ logger = logging.getLogger(__name__)
 
 
 def get_utils_version():
-    return load_file_to_str(script_dir_plus_file('version.txt', get_utils_version), strip=True)
+    return load_file_to_str(
+        script_dir_plus_file("version.txt", get_utils_version), strip=True
+    )

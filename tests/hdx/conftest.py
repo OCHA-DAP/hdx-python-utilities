@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 """Global fixtures"""
 import smtplib
 from os.path import join
@@ -6,19 +5,19 @@ from os.path import join
 import pytest
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def fixturesfolder():
-    return join('tests', 'fixtures')
+    return join("tests", "fixtures")
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def configfolder(fixturesfolder):
-        return join(fixturesfolder, 'config')
+    return join(fixturesfolder, "config")
 
 
-@pytest.fixture(scope='function')
+@pytest.fixture(scope="function")
 def mocksmtp(monkeypatch):
-    class MockSMTPBase(object):
+    class MockSMTPBase:
         type = None
 
         def __init__(self, **kwargs):
@@ -39,13 +38,14 @@ def mocksmtp(monkeypatch):
             pass
 
     class MockSMTPSSL(MockSMTPBase):
-        type = 'smtpssl'
+        type = "smtpssl"
 
     class MockLMTP(MockSMTPBase):
-        type = 'lmtp'
+        type = "lmtp"
 
     class MockSMTP(MockSMTPBase):
-        type = 'smtp'
-    monkeypatch.setattr(smtplib, 'SMTP_SSL', MockSMTPSSL)
-    monkeypatch.setattr(smtplib, 'LMTP', MockLMTP)
-    monkeypatch.setattr(smtplib, 'SMTP', MockSMTP)
+        type = "smtp"
+
+    monkeypatch.setattr(smtplib, "SMTP_SSL", MockSMTPSSL)
+    monkeypatch.setattr(smtplib, "LMTP", MockLMTP)
+    monkeypatch.setattr(smtplib, "SMTP", MockSMTP)

@@ -1,7 +1,7 @@
 """User agent utilities"""
 import logging
 import os
-from os.path import join, expanduser, isfile
+from os.path import expanduser, isfile, join
 from typing import Any, Dict, Optional
 
 from hdx.utilities.loader import load_yaml
@@ -15,7 +15,7 @@ class UserAgentError(Exception):
 
 
 class UserAgent:
-    default_user_agent_config_yaml = join(expanduser('~'), '.useragent.yml')
+    default_user_agent_config_yaml = join(expanduser("~"), ".useragent.yml")
     user_agent = None
 
     @staticmethod
@@ -31,12 +31,12 @@ class UserAgent:
             kwargs: Changed keyword arguments
 
         """
-        user_agent = os.getenv('USER_AGENT')
+        user_agent = os.getenv("USER_AGENT")
         if user_agent is not None:
-            kwargs['user_agent'] = user_agent
-        preprefix = os.getenv('PREPREFIX')
+            kwargs["user_agent"] = user_agent
+        preprefix = os.getenv("PREPREFIX")
         if preprefix is not None:
-            kwargs['preprefix'] = preprefix
+            kwargs["preprefix"] = preprefix
         return kwargs
 
     @staticmethod
@@ -54,19 +54,26 @@ class UserAgent:
 
         """
         if not ua:
-            raise UserAgentError("User_agent parameter missing. It can be your project's name for example.")
-        preprefix = configdict.get('preprefix')
+            raise UserAgentError(
+                "User_agent parameter missing. It can be your project's name for example."
+            )
+        preprefix = configdict.get("preprefix")
         if preprefix:
-            user_agent = f'{preprefix}:'
+            user_agent = f"{preprefix}:"
         else:
-            user_agent = ''
+            user_agent = ""
         if prefix:
-            user_agent = f'{user_agent}{prefix}-'
-        user_agent = f'{user_agent}{ua}'
+            user_agent = f"{user_agent}{prefix}-"
+        user_agent = f"{user_agent}{ua}"
         return user_agent
 
     @classmethod
-    def _load(cls, prefix: str, user_agent_config_yaml: str, user_agent_lookup: Optional[str] = None) -> str:
+    def _load(
+        cls,
+        prefix: str,
+        user_agent_config_yaml: str,
+        user_agent_lookup: Optional[str] = None,
+    ) -> str:
         """
         Load user agent YAML file
 
@@ -82,22 +89,31 @@ class UserAgent:
         if not user_agent_config_yaml:
             user_agent_config_yaml = cls.default_user_agent_config_yaml
             logger.info(
-                f'No user agent or user agent config file given. Using default user agent config file: {user_agent_config_yaml}.')
+                f"No user agent or user agent config file given. Using default user agent config file: {user_agent_config_yaml}."
+            )
         if not isfile(user_agent_config_yaml):
             raise UserAgentError(
-                "User_agent should be supplied in a YAML config file. It can be your project's name for example.")
-        logger.info(f'Loading user agent config from: {user_agent_config_yaml}')
+                "User_agent should be supplied in a YAML config file. It can be your project's name for example."
+            )
+        logger.info(f"Loading user agent config from: {user_agent_config_yaml}")
         user_agent_config_dict = load_yaml(user_agent_config_yaml)
         if user_agent_lookup:
             user_agent_config_dict = user_agent_config_dict.get(user_agent_lookup)
         if not user_agent_config_dict:
-            raise UserAgentError(f"No user agent information read from: {user_agent_config_yaml}")
-        ua = user_agent_config_dict.get('user_agent')
+            raise UserAgentError(
+                f"No user agent information read from: {user_agent_config_yaml}"
+            )
+        ua = user_agent_config_dict.get("user_agent")
         return cls._construct(user_agent_config_dict, prefix, ua)
 
     @classmethod
-    def _create(cls, user_agent: Optional[str] = None, user_agent_config_yaml: Optional[str] = None,
-                user_agent_lookup: Optional[str] = None, **kwargs: Any) -> str:
+    def _create(
+        cls,
+        user_agent: Optional[str] = None,
+        user_agent_config_yaml: Optional[str] = None,
+        user_agent_lookup: Optional[str] = None,
+        **kwargs: Any,
+    ) -> str:
         """
         Get full user agent string
 
@@ -111,14 +127,14 @@ class UserAgent:
 
         """
         kwargs = UserAgent._environment_variables(**kwargs)
-        if 'user_agent' in kwargs:
-            user_agent = kwargs['user_agent']
-            del kwargs['user_agent']
-        prefix = kwargs.get('prefix')
+        if "user_agent" in kwargs:
+            user_agent = kwargs["user_agent"]
+            del kwargs["user_agent"]
+        prefix = kwargs.get("prefix")
         if prefix:
-            del kwargs['prefix']
+            del kwargs["prefix"]
         else:
-            prefix = f'HDXPythonUtilities/{get_utils_version()}'
+            prefix = f"HDXPythonUtilities/{get_utils_version()}"
         if not user_agent:
             ua = cls._load(prefix, user_agent_config_yaml, user_agent_lookup)
         else:
@@ -137,8 +153,13 @@ class UserAgent:
         cls.user_agent = None
 
     @classmethod
-    def set_global(cls, user_agent: Optional[str] = None, user_agent_config_yaml: Optional[str] = None,
-                   user_agent_lookup: Optional[str] = None, **kwargs: Any) -> None:
+    def set_global(
+        cls,
+        user_agent: Optional[str] = None,
+        user_agent_config_yaml: Optional[str] = None,
+        user_agent_lookup: Optional[str] = None,
+        **kwargs: Any,
+    ) -> None:
         """
         Set global user agent string
 
@@ -150,10 +171,18 @@ class UserAgent:
         Returns:
             None
         """
-        cls.user_agent = cls._create(user_agent, user_agent_config_yaml, user_agent_lookup, **kwargs)
+        cls.user_agent = cls._create(
+            user_agent, user_agent_config_yaml, user_agent_lookup, **kwargs
+        )
 
     @classmethod
-    def get(cls, user_agent: Optional[str] = None, user_agent_config_yaml: Optional[str] = None, user_agent_lookup: Optional[str] = None, **kwargs: Any) -> str:
+    def get(
+        cls,
+        user_agent: Optional[str] = None,
+        user_agent_config_yaml: Optional[str] = None,
+        user_agent_lookup: Optional[str] = None,
+        **kwargs: Any,
+    ) -> str:
         """
         Get full user agent string from parameters if supplied falling back on global user agent if set.
 
@@ -166,10 +195,17 @@ class UserAgent:
             str: Full user agent string
 
         """
-        if user_agent or user_agent_config_yaml or 'user_agent' in UserAgent._environment_variables(**kwargs):
-            return UserAgent._create(user_agent, user_agent_config_yaml, user_agent_lookup, **kwargs)
+        if (
+            user_agent
+            or user_agent_config_yaml
+            or "user_agent" in UserAgent._environment_variables(**kwargs)
+        ):
+            return UserAgent._create(
+                user_agent, user_agent_config_yaml, user_agent_lookup, **kwargs
+            )
         if cls.user_agent:
             return cls.user_agent
         else:
             raise UserAgentError(
-                'You must either set the global user agent: UserAgent.set_global(...) or pass in user agent parameters!')
+                "You must either set the global user agent: UserAgent.set_global(...) or pass in user agent parameters!"
+            )

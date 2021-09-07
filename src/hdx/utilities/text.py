@@ -4,7 +4,7 @@ import logging
 import re
 import string
 from string import punctuation
-from typing import List, Dict, Optional, Set, Any
+from typing import Any, Dict, List, Optional, Set
 
 logger = logging.getLogger(__name__)
 
@@ -27,7 +27,12 @@ def remove_end_characters(string: str, characters_to_remove: str = punctuation) 
     return string
 
 
-def remove_from_end(string: str, things_to_remove: List[str], logging_text: Optional[str] = None, whole_words: bool = True) -> str:
+def remove_from_end(
+    string: str,
+    things_to_remove: List[str],
+    logging_text: Optional[str] = None,
+    whole_words: bool = True,
+) -> str:
     """Remove list of items from end of string, stripping any whitespace
 
     Args:
@@ -57,7 +62,9 @@ def remove_from_end(string: str, things_to_remove: List[str], logging_text: Opti
     return string
 
 
-def remove_string(string: str, toremove: str, end_characters_to_remove: str = punctuation) -> str:
+def remove_string(
+    string: str, toremove: str, end_characters_to_remove: str = punctuation
+) -> str:
     """
     Remove string from another string and delete any preceding end characters - by default punctuation (eg. comma)
     and any whitespace following the punctuation
@@ -73,11 +80,13 @@ def remove_string(string: str, toremove: str, end_characters_to_remove: str = pu
     """
     index = string.find(toremove)
     newstring = string[:index].strip()
-    newstring = remove_end_characters(newstring, characters_to_remove=end_characters_to_remove)
-    return f'{newstring}{string[index + len(toremove):]}'
+    newstring = remove_end_characters(
+        newstring, characters_to_remove=end_characters_to_remove
+    )
+    return f"{newstring}{string[index + len(toremove):]}"
 
 
-def multiple_replace(string: str, replacements: Dict[str,str]) -> str:
+def multiple_replace(string: str, replacements: Dict[str, str]) -> str:
     """Simultaneously replace multiple strings in a string
 
     Args:
@@ -90,7 +99,10 @@ def multiple_replace(string: str, replacements: Dict[str,str]) -> str:
     """
     if not replacements:
         return string
-    pattern = re.compile("|".join([re.escape(k) for k in sorted(replacements, key=len, reverse=True)]), flags=re.DOTALL)
+    pattern = re.compile(
+        "|".join([re.escape(k) for k in sorted(replacements, key=len, reverse=True)]),
+        flags=re.DOTALL,
+    )
     return pattern.sub(lambda x: replacements[x.group(0)], string)
 
 
@@ -104,10 +116,12 @@ def get_words_in_sentence(sentence: str) -> List[str]:
         List[str]: List of words in sentence
 
     """
-    return re.sub('[' + punctuation.replace("'", "") + ']', ' ', sentence).split()
+    return re.sub("[" + punctuation.replace("'", "") + "]", " ", sentence).split()
 
 
-def get_matching_text_in_strs(a: str, b: str, match_min_size: int = 30, ignore: str = '', end_characters: str = '') -> List[str]:
+def get_matching_text_in_strs(
+    a: str, b: str, match_min_size: int = 30, ignore: str = "", end_characters: str = ""
+) -> List[str]:
     """Returns a list of matching blocks of text in a and b
 
     Args:
@@ -127,7 +141,7 @@ def get_matching_text_in_strs(a: str, b: str, match_min_size: int = 30, ignore: 
 
     for match in compare.get_matching_blocks():
         start = match.a
-        text = a[start: start+match.size]
+        text = a[start : start + match.size]
         if end_characters:
             prev_text = text
             while len(text) != 0 and text[0] in end_characters:
@@ -141,7 +155,12 @@ def get_matching_text_in_strs(a: str, b: str, match_min_size: int = 30, ignore: 
     return matching_text
 
 
-def get_matching_text(string_list: List[str], match_min_size: int = 30, ignore: str = '', end_characters: str = '.!\r\n') -> str:
+def get_matching_text(
+    string_list: List[str],
+    match_min_size: int = 30,
+    ignore: str = "",
+    end_characters: str = ".!\r\n",
+) -> str:
     """Returns a string containing matching blocks of text in a list of strings followed by non-matching.
 
     Args:
@@ -157,14 +176,24 @@ def get_matching_text(string_list: List[str], match_min_size: int = 30, ignore: 
     a = string_list[0]
     for i in range(1, len(string_list)):
         b = string_list[i]
-        result = get_matching_text_in_strs(a, b, match_min_size=match_min_size, ignore=ignore,
-                                           end_characters=end_characters)
-        a = ''.join(result)
+        result = get_matching_text_in_strs(
+            a,
+            b,
+            match_min_size=match_min_size,
+            ignore=ignore,
+            end_characters=end_characters,
+        )
+        a = "".join(result)
     return a
 
 
-def get_matching_then_nonmatching_text(string_list: List[str], separator: str = '', match_min_size: int = 30, ignore: str = '',
-                                       end_characters: str = '.!\r\n') -> str:
+def get_matching_then_nonmatching_text(
+    string_list: List[str],
+    separator: str = "",
+    match_min_size: int = 30,
+    ignore: str = "",
+    end_characters: str = ".!\r\n",
+) -> str:
     """Returns a string containing matching blocks of text in a list of strings followed by non-matching.
 
     Args:
@@ -178,21 +207,31 @@ def get_matching_then_nonmatching_text(string_list: List[str], separator: str = 
         str: String containing matching blocks of text followed by non-matching
 
     """
+
     def add_separator_if_needed(text_list):
-        if separator and len(text_list) > 0 and text_list[-1][-len(separator):] != separator:
+        if (
+            separator
+            and len(text_list) > 0
+            and text_list[-1][-len(separator) :] != separator
+        ):
             text_list.append(separator)
 
     a = string_list[0]
     for i in range(1, len(string_list)):
         b = string_list[i]
         combined_len = len(a) + len(b)
-        result = get_matching_text_in_strs(a, b, match_min_size=match_min_size, ignore=ignore,
-                                           end_characters=end_characters)
+        result = get_matching_text_in_strs(
+            a,
+            b,
+            match_min_size=match_min_size,
+            ignore=ignore,
+            end_characters=end_characters,
+        )
         new_a = a
         new_b = b
         for text in result:
-            new_a = new_a.replace(text, '')
-            new_b = new_b.replace(text, '')
+            new_a = new_a.replace(text, "")
+            new_b = new_b.replace(text, "")
         if new_a and new_a in a:
             pos_a = a.index(new_a)
         else:
@@ -232,11 +271,11 @@ def get_matching_then_nonmatching_text(string_list: List[str], separator: str = 
         if text_2 and pos_2 == combined_len:
             add_separator_if_needed(output)
             output.append(text_2)
-        a = ''.join(output)
+        a = "".join(output)
     return a
 
 
-def number_format(val: Any, format: str = '%.4f', trailing_zeros: bool = True) -> str:
+def number_format(val: Any, format: str = "%.4f", trailing_zeros: bool = True) -> str:
     """Format float-castable input as string
 
     Args:
@@ -247,15 +286,20 @@ def number_format(val: Any, format: str = '%.4f', trailing_zeros: bool = True) -
     Returns:
         str: Formatted number as string
     """
-    if val == '' or val is None:
-        return ''
+    if val == "" or val is None:
+        return ""
     val = format % float(val)
     if trailing_zeros:
         return val
-    return val.rstrip('0').rstrip('.')
+    return val.rstrip("0").rstrip(".")
 
 
-def get_fraction_str(numerator: Any, denominator: Optional[Any] = None, format: str = '%.4f', trailing_zeros: bool = True) -> str:
+def get_fraction_str(
+    numerator: Any,
+    denominator: Optional[Any] = None,
+    format: str = "%.4f",
+    trailing_zeros: bool = True,
+) -> str:
     """Given float-castable numerator and optional float-castable denominator, format as string, returning '' for
     invalid numerator or 0 denominator.
 
@@ -274,11 +318,11 @@ def get_fraction_str(numerator: Any, denominator: Optional[Any] = None, format: 
             numerator /= float(denominator)
         else:
             if denominator is not None:
-                return ''
+                return ""
         return number_format(numerator, format, trailing_zeros)
     except ValueError:
         pass
-    return ''
+    return ""
 
 
 def only_allowed_in_str(test_str: str, allowed_chars: Set) -> bool:
@@ -294,7 +338,7 @@ def only_allowed_in_str(test_str: str, allowed_chars: Set) -> bool:
     return set(test_str) <= allowed_chars
 
 
-allowed_numeric = set(string.digits + '.' + ',' + '%' + '-')
+allowed_numeric = set(string.digits + "." + "," + "%" + "-")
 
 
 def get_numeric_if_possible(value: Any) -> Any:
@@ -307,6 +351,7 @@ def get_numeric_if_possible(value: Any) -> Any:
     Returns:
         Any: Value
     """
+
     def get_int_value(val, denominator):
         val = int(val)
         if denominator != 1:
@@ -316,22 +361,22 @@ def get_numeric_if_possible(value: Any) -> Any:
 
     if isinstance(value, str):
         val = value.strip()
-        if val != '' and only_allowed_in_str(val, allowed_numeric):
+        if val != "" and only_allowed_in_str(val, allowed_numeric):
             try:
-                minusindex = val.index('-')
+                minusindex = val.index("-")
                 if minusindex != 0:
                     return val
             except ValueError:
                 pass
             try:
-                commaindex = val.index(',')
+                commaindex = val.index(",")
             except ValueError:
                 commaindex = None
             try:
-                dotindex = val.index('.')
+                dotindex = val.index(".")
             except ValueError:
                 dotindex = None
-            if val[-1] == '%':
+            if val[-1] == "%":
                 denominator = 100
                 val = val[:-1]
             else:
@@ -340,18 +385,18 @@ def get_numeric_if_possible(value: Any) -> Any:
                 if dotindex is None:
                     return get_int_value(val, denominator)
                 else:
-                    if val.count('.') == 1:
+                    if val.count(".") == 1:
                         return float(val) / denominator
                     else:
-                        return get_int_value(val.replace('.', ''), denominator)
+                        return get_int_value(val.replace(".", ""), denominator)
             else:
                 if dotindex is None:
-                    return get_int_value(val.replace(',', ''), denominator)
+                    return get_int_value(val.replace(",", ""), denominator)
                 else:
                     if dotindex > commaindex:
-                        val = val.replace(',', '')
+                        val = val.replace(",", "")
                     else:
-                        val = val.replace('.', '')
-                        val = val.replace(',', '.')
+                        val = val.replace(".", "")
+                        val = val.replace(",", ".")
                     return float(val) / denominator
     return value

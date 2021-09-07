@@ -1,7 +1,7 @@
 """HTML parsing utilities"""
 
 import logging
-from typing import List, Dict, Optional, Any
+from typing import Any, Dict, List, Optional
 
 from bs4 import BeautifulSoup, Tag
 
@@ -10,7 +10,14 @@ from hdx.utilities.downloader import Download
 logger = logging.getLogger(__name__)
 
 
-def get_soup(url: str, downloader: Download = None, user_agent: Optional[str] = None, user_agent_config_yaml: Optional[str] = None, user_agent_lookup: Optional[str] = None, **kwargs: Any) -> BeautifulSoup:
+def get_soup(
+    url: str,
+    downloader: Download = None,
+    user_agent: Optional[str] = None,
+    user_agent_config_yaml: Optional[str] = None,
+    user_agent_lookup: Optional[str] = None,
+    **kwargs: Any,
+) -> BeautifulSoup:
     """
     Get BeautifulSoup object for a url. Requires either global user agent to be set or appropriate user agent
     parameter(s) to be completed.
@@ -27,9 +34,11 @@ def get_soup(url: str, downloader: Download = None, user_agent: Optional[str] = 
 
     """
     if not downloader:
-        downloader = Download(user_agent, user_agent_config_yaml, user_agent_lookup, **kwargs)
+        downloader = Download(
+            user_agent, user_agent_config_yaml, user_agent_lookup, **kwargs
+        )
     response = downloader.download(url)
-    return BeautifulSoup(response.text, 'html.parser')
+    return BeautifulSoup(response.text, "html.parser")
 
 
 def get_text(tag: Tag) -> str:
@@ -43,7 +52,7 @@ def get_text(tag: Tag) -> str:
         str: Text of tag stripped of leading and trailing whitespace and newlines and with &nbsp replaced with space
 
     """
-    return tag.get_text().strip(' \t\n\r').replace('\xa0', ' ')
+    return tag.get_text().strip(" \t\n\r").replace("\xa0", " ")
 
 
 def extract_table(tabletag: Tag) -> List[Dict]:
@@ -57,24 +66,23 @@ def extract_table(tabletag: Tag) -> List[Dict]:
         str: Text of tag stripped of leading and trailing whitespace and newlines and with &nbsp replaced with space
 
     """
-    theadtag = tabletag.find_next('thead')
+    theadtag = tabletag.find_next("thead")
 
-    headertags = theadtag.find_all('th')
+    headertags = theadtag.find_all("th")
     if len(headertags) == 0:
-        headertags = theadtag.find_all('td')
+        headertags = theadtag.find_all("td")
     headers = []
     for tag in headertags:
         headers.append(get_text(tag))
 
-    tbodytag = tabletag.find_next('tbody')
-    trtags = tbodytag.find_all('tr')
+    tbodytag = tabletag.find_next("tbody")
+    trtags = tbodytag.find_all("tr")
 
     table = list()
     for trtag in trtags:
         row = dict()
-        tdtags = trtag.find_all('td')
+        tdtags = trtag.find_all("td")
         for i, tag in enumerate(tdtags):
             row[headers[i]] = get_text(tag)
         table.append(row)
     return table
-

@@ -1,20 +1,24 @@
 """Loading utilities for YAML, JSON etc."""
 
 import json
-
 from os import linesep
-from typing import List, Dict, Optional
+from typing import Dict, List, Optional
 
 from ruamel.yaml import YAML
 
-from hdx.utilities.dictandlist import merge_two_dictionaries, merge_dictionaries
+from hdx.utilities.dictandlist import merge_dictionaries, merge_two_dictionaries
 
 
 class LoadError(Exception):
     pass
 
 
-def load_file_to_str(path: str, encoding: str = 'utf-8', strip: bool = False, replace_newlines: Optional[str] = None) -> str:
+def load_file_to_str(
+    path: str,
+    encoding: str = "utf-8",
+    strip: bool = False,
+    replace_newlines: Optional[str] = None,
+) -> str:
     """
     Load file into a string removing newlines
 
@@ -35,11 +39,11 @@ def load_file_to_str(path: str, encoding: str = 'utf-8', strip: bool = False, re
         if strip:
             string = string.strip()
     if not string:
-        raise LoadError(f'{path} file is empty!')
+        raise LoadError(f"{path} file is empty!")
     return string
 
 
-def load_yaml(path: str, encoding: str = 'utf-8') -> Dict:
+def load_yaml(path: str, encoding: str = "utf-8") -> Dict:
     """Load YAML file into an ordered dictionary
 
     Args:
@@ -53,11 +57,11 @@ def load_yaml(path: str, encoding: str = 'utf-8') -> Dict:
         yaml = YAML()
         yamldict = yaml.load(f.read())
     if not yamldict:
-        raise (LoadError(f'YAML file: {path} is empty!'))
+        raise (LoadError(f"YAML file: {path} is empty!"))
     return yamldict
 
 
-def load_json(path: str, encoding: str = 'utf-8') -> Dict:
+def load_json(path: str, encoding: str = "utf-8") -> Dict:
     """Load JSON file into an ordered dictionary (dict for Python 3.7+)
 
     Args:
@@ -70,11 +74,11 @@ def load_json(path: str, encoding: str = 'utf-8') -> Dict:
     with open(path, encoding=encoding) as f:
         jsondict = json.loads(f.read())
     if not jsondict:
-        raise (LoadError(f'JSON file: {path} is empty!'))
+        raise (LoadError(f"JSON file: {path} is empty!"))
     return jsondict
 
 
-def load_and_merge_yaml(paths: List[str], encoding: str = 'utf-8') -> Dict:
+def load_and_merge_yaml(paths: List[str], encoding: str = "utf-8") -> Dict:
     """Load multiple YAML files and merge into one dictionary
 
     Args:
@@ -89,7 +93,7 @@ def load_and_merge_yaml(paths: List[str], encoding: str = 'utf-8') -> Dict:
     return merge_dictionaries(configs)
 
 
-def load_and_merge_json(paths: List[str], encoding: str = 'utf-8') -> Dict:
+def load_and_merge_json(paths: List[str], encoding: str = "utf-8") -> Dict:
     """Load multiple JSON files and merge into one dictionary
 
     Args:
@@ -104,7 +108,9 @@ def load_and_merge_json(paths: List[str], encoding: str = 'utf-8') -> Dict:
     return merge_dictionaries(configs)
 
 
-def load_yaml_into_existing_dict(data: dict, path: str, encoding: str = 'utf-8') -> Dict:
+def load_yaml_into_existing_dict(
+    data: dict, path: str, encoding: str = "utf-8"
+) -> Dict:
     """Merge YAML file into existing dictionary
 
     Args:
@@ -119,7 +125,9 @@ def load_yaml_into_existing_dict(data: dict, path: str, encoding: str = 'utf-8')
     return merge_two_dictionaries(data, yamldict)
 
 
-def load_json_into_existing_dict(data: dict, path: str, encoding: str = 'utf-8') -> Dict:
+def load_json_into_existing_dict(
+    data: dict, path: str, encoding: str = "utf-8"
+) -> Dict:
     """Merge JSON file into existing dictionary
 
     Args:
@@ -132,5 +140,3 @@ def load_json_into_existing_dict(data: dict, path: str, encoding: str = 'utf-8')
     """
     jsondict = load_json(path, encoding=encoding)
     return merge_two_dictionaries(data, jsondict)
-
-
