@@ -16,8 +16,7 @@ class LoadError(Exception):
     pass
 
 
-def load_file_to_str(path, encoding='utf-8', strip=False, replace_newlines=None):
-    # type: (str, str, bool, Optional[str]) -> str
+def load_file_to_str(path: str, encoding: str = 'utf-8', strip: bool = False, replace_newlines: Optional[str] = None) -> str:
     """
     Load file into a string removing newlines
 
@@ -42,8 +41,7 @@ def load_file_to_str(path, encoding='utf-8', strip=False, replace_newlines=None)
     return string
 
 
-def load_yaml(path, encoding='utf-8'):
-    # type: (str, str) -> Dict
+def load_yaml(path: str, encoding: str = 'utf-8') -> Dict:
     """Load YAML file into an ordered dictionary
 
     Args:
@@ -61,8 +59,7 @@ def load_yaml(path, encoding='utf-8'):
     return yamldict
 
 
-def load_json(path, encoding='utf-8'):
-    # type: (str, str) -> Dict
+def load_json(path: str, encoding: str = 'utf-8') -> Dict:
     """Load JSON file into an ordered dictionary (dict for Python 3.7+)
 
     Args:
@@ -79,8 +76,7 @@ def load_json(path, encoding='utf-8'):
     return jsondict
 
 
-def load_and_merge_yaml(paths, encoding='utf-8'):
-    # type: (List[str], str) -> Dict
+def load_and_merge_yaml(paths: List[str], encoding: str = 'utf-8') -> Dict:
     """Load multiple YAML files and merge into one dictionary
 
     Args:
@@ -95,8 +91,7 @@ def load_and_merge_yaml(paths, encoding='utf-8'):
     return merge_dictionaries(configs)
 
 
-def load_and_merge_json(paths, encoding='utf-8'):
-    # type: (List[str], str) -> Dict
+def load_and_merge_json(paths: List[str], encoding: str = 'utf-8') -> Dict:
     """Load multiple JSON files and merge into one dictionary
 
     Args:
@@ -111,8 +106,7 @@ def load_and_merge_json(paths, encoding='utf-8'):
     return merge_dictionaries(configs)
 
 
-def load_yaml_into_existing_dict(data, path, encoding='utf-8'):
-    # type: (dict, str, str) -> Dict
+def load_yaml_into_existing_dict(data: dict, path: str, encoding: str = 'utf-8') -> Dict:
     """Merge YAML file into existing dictionary
 
     Args:
@@ -127,8 +121,7 @@ def load_yaml_into_existing_dict(data, path, encoding='utf-8'):
     return merge_two_dictionaries(data, yamldict)
 
 
-def load_json_into_existing_dict(data, path, encoding='utf-8'):
-    # type: (dict, str, str) -> Dict
+def load_json_into_existing_dict(data: dict, path: str, encoding: str = 'utf-8') -> Dict:
     """Merge JSON file into existing dictionary
 
     Args:

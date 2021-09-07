@@ -8,8 +8,7 @@ from shutil import rmtree
 from uuid import UUID, uuid4
 
 
-def get_uuid():
-    # type: () -> str
+def get_uuid() -> str:
     """
     Get an UUID.
 
@@ -19,8 +18,7 @@ def get_uuid():
     return str(uuid4())
 
 
-def is_valid_uuid(uuid_to_test, version=4):
-    # type: (str, int) -> bool
+def is_valid_uuid(uuid_to_test: str, version: int = 4) -> bool:
     """
     Check if uuid_to_test is a valid UUID.
 

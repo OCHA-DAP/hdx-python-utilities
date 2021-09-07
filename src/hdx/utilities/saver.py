@@ -9,20 +9,17 @@ from ruamel.yaml import YAML, RoundTripRepresenter, add_representer, SafeReprese
 
 
 class UnPrettyRTRepresenter(RoundTripRepresenter):
-    def represent_none(self, data):
-        # type: (Any) -> Any
+    def represent_none(self, data: Any) -> Any:
         return self.represent_scalar(u'tag:yaml.org,2002:null', u'null')
 
 
 class UnPrettySafeRepresenter(SafeRepresenter):
-    def represent_none(self, data):
-        # type: (Any) -> Any
+    def represent_none(self, data: Any) -> Any:
         return self.represent_scalar(u'tag:yaml.org,2002:null', u'null')
 
 
 class PrettySafeRepresenter(SafeRepresenter):
-    def represent_none(self, data):
-        # type: (Any) -> Any
+    def represent_none(self, data: Any) -> Any:
         if len(self.represented_objects) == 0 and not self.serializer.use_explicit_start:
             # this will be open ended (although it is not yet)
             return self.represent_scalar(u'tag:yaml.org,2002:null', u'null')
@@ -37,8 +34,7 @@ PrettySafeRepresenter.add_representer(None, PrettySafeRepresenter.represent_none
 representers = {False: {False: UnPrettyRTRepresenter, True: RoundTripRepresenter}, True: {False: UnPrettySafeRepresenter, True: PrettySafeRepresenter}}
 
 
-def save_str_to_file(string, path, encoding='utf-8'):
-    # type: (str, str, str) -> None
+def save_str_to_file(string: str, path: str, encoding: str = 'utf-8') -> None:
     """Save string to file
 
     Args:
@@ -53,8 +49,7 @@ def save_str_to_file(string, path, encoding='utf-8'):
         f.write(string)
 
 
-def save_yaml(dictionary, path, encoding='utf-8', pretty=False, sortkeys=False):
-    # type: (Dict, str, str, bool, bool) -> None
+def save_yaml(dictionary: Dict, path: str, encoding: str = 'utf-8', pretty: bool = False, sortkeys: bool = False) -> None:
     """Save dictionary to YAML file preserving order if it is an OrderedDict
 
     Args:
@@ -80,8 +75,7 @@ def save_yaml(dictionary, path, encoding='utf-8', pretty=False, sortkeys=False):
         yaml.dump(dictionary, f)
 
 
-def save_json(dictionary, path, encoding='utf-8', pretty=False, sortkeys=False):
-    # type: (Dict, str, str, bool, bool) -> None
+def save_json(dictionary: Dict, path: str, encoding: str = 'utf-8', pretty: bool = False, sortkeys: bool = False) -> None:
     """Save dictionary to JSON file preserving order if it is an OrderedDict
 
     Args:

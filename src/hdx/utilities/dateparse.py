@@ -523,8 +523,7 @@ def parse(timestr, default=None,
         return ret
 
 
-def parse_date_range(string, date_format=None, fuzzy=None, zero_time=False):
-    # type: (str, Optional[str], Optional[Dict], bool) -> Tuple[datetime,datetime]
+def parse_date_range(string: str, date_format: Optional[str] = None, fuzzy: Optional[Dict] = None, zero_time: bool = False) -> Tuple[datetime,datetime]:
     """Parse date from string using specified format (setting any time elements to 0 if zero_time is True).
     If no format is supplied, the function will guess. For unambiguous formats, this should be fine.
     Returns date range in dictionary keys startdate and enddate. If a dictionary is supplied in the fuzzy parameter,
@@ -589,8 +588,7 @@ def parse_date_range(string, date_format=None, fuzzy=None, zero_time=False):
     return startdate, enddate
 
 
-def parse_date(string, date_format=None, fuzzy=None, zero_time=False):
-    # type: (str, Optional[str], Optional[Dict], bool) -> datetime
+def parse_date(string: str, date_format: Optional[str] = None, fuzzy: Optional[Dict] = None, zero_time: bool = False) -> datetime:
     """Parse date from string using specified format (setting any time elements to 0 if zero_time is True).
     If no format is supplied, the function will guess. For unambiguous formats, this should be fine.
     Returns a datetime object. Raises exception for dates that are missing year, month or day.
@@ -613,8 +611,7 @@ def parse_date(string, date_format=None, fuzzy=None, zero_time=False):
     return startdate
 
 
-def get_timestamp_from_datetime(date):
-    # type: (datetime) -> float
+def get_timestamp_from_datetime(date: datetime) -> float:
     """Convert datetime to timestamp.
 
     Args:
@@ -629,8 +626,7 @@ def get_timestamp_from_datetime(date):
         return (date - datetime(1970, 1, 1, tzinfo=tzutc())).total_seconds()
 
 
-def get_datetime_from_timestamp(timestamp, timezone=tzutc, today=datetime.now(tzutc())):
-    # type: (float, datetime.tzinfo, datetime) -> datetime
+def get_datetime_from_timestamp(timestamp: float, timezone: datetime.tzinfo = tzutc, today: datetime = datetime.now(tzutc())) -> datetime:
     """Convert timestamp to datetime.
 
     Args:

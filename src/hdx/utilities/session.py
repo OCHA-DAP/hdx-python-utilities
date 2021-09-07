@@ -20,8 +20,7 @@ class SessionError(Exception):
     pass
 
 
-def get_session(user_agent=None, user_agent_config_yaml=None, user_agent_lookup=None, use_env=True, fail_on_missing_file=True, **kwargs):
-    # type: (Optional[str], Optional[str], Optional[str], bool, bool, Any) -> requests.Session
+def get_session(user_agent: Optional[str] = None, user_agent_config_yaml: Optional[str] = None, user_agent_lookup: Optional[str] = None, use_env: bool = True, fail_on_missing_file: bool = True, **kwargs: Any) -> requests.Session:
     """Set up and return Session object that is set up with retrying. Requires either global user agent to be set or
     appropriate user agent parameter(s) to be completed. If the EXTRA_PARAMS or BASIC_AUTH environment variable is
     supplied, the extra_params* parameters will be ignored.

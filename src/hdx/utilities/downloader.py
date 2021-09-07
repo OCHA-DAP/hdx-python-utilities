@@ -50,9 +50,8 @@ class Download(object):
         allowed_methods (iterable): HTTP methods for which to force retry. Defaults t0 frozenset(['GET']).
     """
 
-    def __init__(self, user_agent=None, user_agent_config_yaml=None, user_agent_lookup=None, use_env=True,
-                 fail_on_missing_file=True, rate_limit=None, **kwargs):
-        # type: (Optional[str], Optional[str], Optional[str], bool, bool, Optional[Dict], Any) -> None
+    def __init__(self, user_agent: Optional[str] = None, user_agent_config_yaml: Optional[str] = None, user_agent_lookup: Optional[str] = None, use_env: bool = True,
+                 fail_on_missing_file: bool = True, rate_limit: Optional[Dict] = None, **kwargs: Any) -> None:
         self.session = get_session(user_agent, user_agent_config_yaml, user_agent_lookup, use_env, fail_on_missing_file, **kwargs)
         self.response = None
         if rate_limit is not None:
@@ -61,8 +60,7 @@ class Download(object):
         else:
             self.setup = self.normal_setup
 
-    def close_response(self):
-        # type: () -> None
+    def close_response(self) -> None:
         """Close response
 
         Returns:
@@ -75,8 +73,7 @@ class Download(object):
             except Exception:
                 pass
 
-    def close(self):
-        # type: () -> None
+    def close(self) -> None:
         """Close response and session
 
         Returns:
@@ -86,17 +83,14 @@ class Download(object):
         self.close_response()
         self.session.close()
 
-    def __enter__(self):
-        # type: () -> 'Download'
+    def __enter__(self) -> 'Download':
         return self
 
-    def __exit__(self, exc_type, exc_value, traceback):
-        # type: (Any, Any, Any) -> None
+    def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
         self.close()
 
     @staticmethod
-    def get_path_for_url(url, folder=None, filename=None, path=None, overwrite=False):
-        # type: (str, Optional[str], Optional[str], Optional[str], bool) -> str
+    def get_path_for_url(url: str, folder: Optional[str] = None, filename: Optional[str] = None, path: Optional[str] = None, overwrite: bool = False) -> str:
         """Get filename from url and join to provided folder or temporary folder if no folder supplied, ensuring uniqueness
 
         Args:
@@ -132,8 +126,7 @@ class Download(object):
                 path = join(folder, '%s%d%s' % (filename, count, extension))
         return path
 
-    def get_full_url(self, url):
-        # type: (str) -> str
+    def get_full_url(self, url: str) -> str:
         """Get full url including any additional parameters
 
         Args:
@@ -147,8 +140,7 @@ class Download(object):
         return preparedrequest.url
 
     @staticmethod
-    def get_url_for_get(url, parameters=None):
-        # type: (str, Optional[Dict]) -> str
+    def get_url_for_get(url: str, parameters: Optional[Dict] = None) -> str:
         """Get full url for GET request including parameters
 
         Args:
@@ -167,8 +159,7 @@ class Download(object):
         return urlunsplit(spliturl)
 
     @staticmethod
-    def get_url_params_for_post(url, parameters=None):
-        # type: (str, Optional[Dict]) -> Tuple[str, Dict]
+    def get_url_params_for_post(url: str, parameters: Optional[Dict] = None) -> Tuple[str, Dict]:
         """Get full url for POST request and all parameters including any in the url
 
         Args:
@@ -188,8 +179,7 @@ class Download(object):
         return full_url, getparams
 
     @staticmethod
-    def hxl_row(headers, hxltags, dict_form=False):
-        # type: (List[str], Dict[str,str], bool) -> Union[List[str], Dict[str,str]]
+    def hxl_row(headers: List[str], hxltags: Dict[str,str], dict_form: bool = False) -> Union[List[str], Dict[str,str]]:
         """Return HXL tag row for header row given list of headers and dictionary with header to HXL hashtag mappings.
         Return list or dictionary depending upon the dict_form argument.
 
@@ -207,8 +197,7 @@ class Download(object):
         else:
             return [hxltags.get(header, '') for header in headers]
 
-    def normal_setup(self, url, stream=True, post=False, parameters=None, timeout=None, headers=None, encoding=None):
-        # type: (str, bool, bool, Optional[Dict], Optional[float], Optional[Dict], Optional[str]) -> requests.Response
+    def normal_setup(self, url: str, stream: bool = True, post: bool = False, parameters: Optional[Dict] = None, timeout: Optional[float] = None, headers: Optional[Dict] = None, encoding: Optional[str] = None) -> requests.Response:
         """Setup download from provided url returning the response
 
         Args:
@@ -246,8 +235,7 @@ class Download(object):
             raise DownloadError(f'Setup of Streaming Download of {url} failed!') from e
         return self.response
 
-    def hash_stream(self, url):
-        # type: (str) -> str
+    def hash_stream(self, url: str) -> str:
         """Stream file from url and hash it using MD5. Must call setup method first.
 
         Args:
@@ -266,8 +254,7 @@ class Download(object):
         except Exception as e:
             raise DownloadError(f'Download of {url} failed in retrieval of stream!' % url)
 
-    def stream_file(self, url, folder=None, filename=None, path=None, overwrite=False):
-        # type: (str, Optional[str], Optional[str], Optional[str], bool) -> str
+    def stream_file(self, url: str, folder: Optional[str] = None, filename: Optional[str] = None, path: Optional[str] = None, overwrite: bool = False) -> str:
         """Stream file from url and store in provided folder or temporary folder if no folder supplied.
         Must call setup method first.
 
@@ -297,9 +284,8 @@ class Download(object):
             if f:
                 f.close()
 
-    def download_file(self, url, folder=None, filename=None, path=None, overwrite=False,
-                      post=False, parameters=None, timeout=None, headers=None, encoding=None):
-        # type: (str, Optional[str], Optional[str], Optional[str], bool, bool, Optional[Dict], Optional[float], Optional[Dict], Optional[str]) -> str
+    def download_file(self, url: str, folder: Optional[str] = None, filename: Optional[str] = None, path: Optional[str] = None, overwrite: bool = False,
+                      post: bool = False, parameters: Optional[Dict] = None, timeout: Optional[float] = None, headers: Optional[Dict] = None, encoding: Optional[str] = None) -> str:
         """Download file from url and store in provided folder or temporary folder if no folder supplied
 
         Args:
@@ -321,8 +307,7 @@ class Download(object):
         self.setup(url, stream=True, post=post, parameters=parameters, timeout=timeout, headers=headers, encoding=encoding)
         return self.stream_file(url, folder, filename, path, overwrite)
 
-    def download(self, url, post=False, parameters=None, timeout=None, headers=None, encoding=None):
-        # type: (str, bool, Optional[Dict], Optional[float], Optional[Dict], Optional[str]) -> requests.Response
+    def download(self, url: str, post: bool = False, parameters: Optional[Dict] = None, timeout: Optional[float] = None, headers: Optional[Dict] = None, encoding: Optional[str] = None) -> requests.Response:
         """Download url
 
         Args:
@@ -339,8 +324,7 @@ class Download(object):
         """
         return self.setup(url, stream=False, post=post, parameters=parameters, timeout=timeout, headers=headers, encoding=encoding)
 
-    def get_header(self, header):
-        # type: (str) -> Any
+    def get_header(self, header: str) -> Any:
         """Get a particular response header of download
 
         Args:
@@ -352,8 +336,7 @@ class Download(object):
         """
         return self.response.headers.get(header)
 
-    def get_headers(self):
-        # type: () -> Any
+    def get_headers(self) -> Any:
         """Get response headers of download
 
         Returns:
@@ -362,8 +345,7 @@ class Download(object):
         """
         return self.response.headers
 
-    def get_status(self):
-        # type: () -> int
+    def get_status(self) -> int:
         """Get response status code
 
         Returns:
@@ -372,8 +354,7 @@ class Download(object):
         """
         return self.response.status_code
 
-    def get_text(self):
-        # type: () -> str
+    def get_text(self) -> str:
         """Get text content of download
 
         Returns:
@@ -382,8 +363,7 @@ class Download(object):
         """
         return self.response.text
 
-    def get_yaml(self):
-        # type: () -> Any
+    def get_yaml(self) -> Any:
         """Get YAML content of download
 
         Returns:
@@ -393,8 +373,7 @@ class Download(object):
         with YAML() as yaml:
             return yaml.load(self.response.text)
 
-    def get_json(self):
-        # type: () -> Any
+    def get_json(self) -> Any:
         """Get JSON content of download
 
         Returns:
@@ -403,8 +382,7 @@ class Download(object):
         """
         return self.response.json()
 
-    def get_tabular_stream(self, url, **kwargs):
-        # type: (str, Any) -> tabulator.Stream
+    def get_tabular_stream(self, url: str, **kwargs: Any) -> tabulator.Stream:
         """Get Tabulator stream.
 
         Args:
@@ -432,8 +410,7 @@ class Download(object):
         except Exception as e:
             raise DownloadError(f'Getting tabular stream for {url} failed!') from e
 
-    def get_tabular_rows_as_list(self, url, **kwargs):
-        # type: (str, Any) -> Iterator[List]
+    def get_tabular_rows_as_list(self, url: str, **kwargs: Any) -> Iterator[List]:
         """Get iterator for reading rows from tabular data. Each row is returned as a list.
 
         Args:
@@ -449,8 +426,7 @@ class Download(object):
         """
         return self.get_tabular_stream(url, **kwargs).iter(keyed=False)
 
-    def get_tabular_rows(self, url, headers=1, dict_form=False, ignore_blank_rows=True, header_insertions=None, row_function=None, **kwargs):
-        # type: (str, Union[int, List[int], List[str]], bool, bool, Optional[List[Tuple[int,str]]], Optional[Callable[[List[str],Union[List,Dict]],Union[List,Dict]]], Any) -> Tuple[List[str],Iterator[Union[List,Dict]]]
+    def get_tabular_rows(self, url: str, headers: Union[int, List[int], List[str]] = 1, dict_form: bool = False, ignore_blank_rows: bool = True, header_insertions: Optional[List[Tuple[int,str]]] = None, row_function: Optional[Callable[[List[str],Union[List,Dict]],Union[List,Dict]]] = None, **kwargs: Any) -> Tuple[List[str],Iterator[Union[List,Dict]]]:
         """Returns header of tabular file pointed to by url and an iterator where each row is returned as a list
         or dictionary depending on the dict_rows argument. The headers argument is either a row number or list of row
         numbers (in case of multi-line headers) to be considered as headers (rows start counting at 1), or the actual
@@ -507,8 +483,7 @@ class Download(object):
 
         return headers, get_next()
 
-    def download_tabular_key_value(self, url, **kwargs):
-        # type: (str, Any) -> Dict
+    def download_tabular_key_value(self, url: str, **kwargs: Any) -> Dict:
         """Download 2 column csv from url and return a dictionary of keys (first column) and values (second column)
 
         Args:
@@ -529,8 +504,7 @@ class Download(object):
             output_dict[row[0]] = row[1]
         return output_dict
 
-    def download_tabular_rows_as_dicts(self, url, headers=1, keycolumn=1, **kwargs):
-        # type: (str, Union[int, List[int], List[str]], int, Any) -> Dict[Dict]
+    def download_tabular_rows_as_dicts(self, url: str, headers: Union[int, List[int], List[str]] = 1, keycolumn: int = 1, **kwargs: Any) -> Dict[str,Dict]:
         """Download multicolumn csv from url and return dictionary where keys are first column and values are
         dictionaries with keys from column headers and values from columns beneath
 
@@ -543,7 +517,7 @@ class Download(object):
             delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
 
         Returns:
-            Dict[Dict]: Dictionary where keys are first column and values are dictionaries with keys from column
+            Dict[str,Dict]: Dictionary where keys are first column and values are dictionaries with keys from column
             headers and values from columns beneath
 
         """
@@ -562,8 +536,7 @@ class Download(object):
                     output_dict[first_val][header] = row[header]
         return output_dict
 
-    def download_tabular_cols_as_dicts(self, url, headers=1, keycolumn=1, **kwargs):
-        # type: (str, Union[int, List[int], List[str]], int, Any) -> Dict[Dict]
+    def download_tabular_cols_as_dicts(self, url: str, headers: Union[int, List[int], List[str]] = 1, keycolumn: int = 1, **kwargs: Any) -> Dict[str,Dict]:
         """Download multicolumn csv from url and return dictionary where keys are header names and values are
         dictionaries with keys from first column and values from other columns
 
@@ -576,7 +549,7 @@ class Download(object):
             delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
 
         Returns:
-            Dict[Dict]: Dictionary where keys are header names and values are dictionaries with keys from first column
+            Dict[str,Dict]: Dictionary where keys are header names and values are dictionaries with keys from first column
             and values from other columns
 
         """
@@ -597,8 +570,7 @@ class Download(object):
         return output_dict
 
     @staticmethod
-    def get_column_positions(headers):
-        # type: (List[str]) -> Dict[str,int]
+    def get_column_positions(headers: List[str]) -> Dict[str,int]:
         """Get mapping of headers to column positions
 
         Args:

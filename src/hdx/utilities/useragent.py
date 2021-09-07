@@ -20,8 +20,7 @@ class UserAgent(object):
     user_agent = None
 
     @staticmethod
-    def _environment_variables(**kwargs):
-        # type: (Any) -> Any
+    def _environment_variables(**kwargs: Any) -> Any:
         """
         Overwrite keyword arguments with environment variables
 
@@ -42,8 +41,7 @@ class UserAgent(object):
         return kwargs
 
     @staticmethod
-    def _construct(configdict, prefix, ua):
-        # type: (Dict, str, str) -> str
+    def _construct(configdict: Dict, prefix: str, ua: str) -> str:
         """
         Construct user agent
 
@@ -69,8 +67,7 @@ class UserAgent(object):
         return user_agent
 
     @classmethod
-    def _load(cls, prefix, user_agent_config_yaml, user_agent_lookup=None):
-        # type: (str, str, Optional[str]) -> str
+    def _load(cls, prefix: str, user_agent_config_yaml: str, user_agent_lookup: Optional[str] = None) -> str:
         """
         Load user agent YAML file
 
@@ -100,9 +97,8 @@ class UserAgent(object):
         return cls._construct(user_agent_config_dict, prefix, ua)
 
     @classmethod
-    def _create(cls, user_agent=None, user_agent_config_yaml=None,
-                user_agent_lookup=None, **kwargs):
-        # type: (Optional[str], Optional[str], Optional[str], Any) -> str
+    def _create(cls, user_agent: Optional[str] = None, user_agent_config_yaml: Optional[str] = None,
+                user_agent_lookup: Optional[str] = None, **kwargs: Any) -> str:
         """
         Get full user agent string
 
@@ -131,8 +127,7 @@ class UserAgent(object):
         return ua
 
     @classmethod
-    def clear_global(cls):
-        # type: () -> None
+    def clear_global(cls) -> None:
         """
         Clear stored user agent string
 
@@ -143,9 +138,8 @@ class UserAgent(object):
         cls.user_agent = None
 
     @classmethod
-    def set_global(cls, user_agent=None, user_agent_config_yaml=None,
-                   user_agent_lookup=None, **kwargs):
-        # type: (Optional[str], Optional[str], Optional[str], Any) -> None
+    def set_global(cls, user_agent: Optional[str] = None, user_agent_config_yaml: Optional[str] = None,
+                   user_agent_lookup: Optional[str] = None, **kwargs: Any) -> None:
         """
         Set global user agent string
 
@@ -160,8 +154,7 @@ class UserAgent(object):
         cls.user_agent = cls._create(user_agent, user_agent_config_yaml, user_agent_lookup, **kwargs)
 
     @classmethod
-    def get(cls, user_agent=None, user_agent_config_yaml=None, user_agent_lookup=None, **kwargs):
-        # type: (Optional[str], Optional[str], Optional[str], Any) -> str
+    def get(cls, user_agent: Optional[str] = None, user_agent_config_yaml: Optional[str] = None, user_agent_lookup: Optional[str] = None, **kwargs: Any) -> str:
         """
         Get full user agent string from parameters if supplied falling back on global user agent if set.
 

@@ -40,8 +40,7 @@ class Email:
 
     default_email_config_yaml = join(expanduser('~'), 'hdx_email_configuration.yml')
 
-    def __init__(self, **kwargs):
-        # type: (Any) -> None
+    def __init__(self, **kwargs: Any) -> None:
         email_config_found = False
         email_config_dict = kwargs.get('email_config_dict', None)
         if email_config_dict:
@@ -78,8 +77,7 @@ class Email:
         self.sender = email_config_dict.get('sender', self.username)
         self.server = None
 
-    def __enter__(self):
-        # type: () -> 'Email'
+    def __enter__(self) -> 'Email':
         """
         Return Email object for with statement
 
@@ -89,8 +87,7 @@ class Email:
         """
         return self
 
-    def __exit__(self, *args):
-        # type: (Any) -> None
+    def __exit__(self, *args: Any) -> None:
         """
         Close Email object for end of with statement
 
@@ -103,8 +100,7 @@ class Email:
         """
         pass
 
-    def connect(self):
-        # type: () -> None
+    def connect(self) -> None:
         """
         Connect to server
 
@@ -123,8 +119,7 @@ class Email:
                                        timeout=self.timeout, source_address=self.source_address)
         self.server.login(self.username, self.password)
 
-    def close(self):
-        # type: () -> None
+    def close(self) -> None:
         """
         Close connection to email server
 
@@ -135,8 +130,7 @@ class Email:
         self.server.quit()
 
     @staticmethod
-    def get_normalised_emails(recipients):
-        # type: (List[str]) -> List[str]
+    def get_normalised_emails(recipients: List[str]) -> List[str]:
         """
         Get list of normalised emails
 
@@ -153,8 +147,7 @@ class Email:
             normalised_recipients.append(v['email'])  # replace with normalized form
         return normalised_recipients
 
-    def send(self, recipients, subject, text_body, html_body=None, sender=None, cc=None, bcc=None, **kwargs):
-        # type: (List[str], str, str, Optional[str], Optional[str], Optional[List[str]], Optional[List[str]], Any) -> None
+    def send(self, recipients: List[str], subject: str, text_body: str, html_body: Optional[str] = None, sender: Optional[str] = None, cc: Optional[List[str]] = None, bcc: Optional[List[str]] = None, **kwargs: Any) -> None:
         """
         Send email
 

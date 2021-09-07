@@ -37,8 +37,7 @@ class Retrieve(object):
             mkdir(saved_dir)
 
     @staticmethod
-    def get_url_logstr(url):
-        # type: (str) -> str
+    def get_url_logstr(url: str) -> str:
         """Url string that will be logged. It is limited to 100 characters if necessary.
 
         Args:

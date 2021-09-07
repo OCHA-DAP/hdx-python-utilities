@@ -24,8 +24,7 @@ class NotFoundError(Exception):
     pass
 
 
-def script_dir(pyobject, follow_symlinks=True):
-    # type: (Any, bool) -> str
+def script_dir(pyobject: Any, follow_symlinks: bool = True) -> str:
     """Get current script's directory
 
     Args:
@@ -44,8 +43,7 @@ def script_dir(pyobject, follow_symlinks=True):
     return dirname(path)
 
 
-def script_dir_plus_file(filename, pyobject, follow_symlinks=True):
-    # type: (str, Any, bool) -> str
+def script_dir_plus_file(filename: str, pyobject: Any, follow_symlinks: bool = True) -> str:
     """Get current script's directory and then append a filename
 
     Args:
@@ -59,8 +57,7 @@ def script_dir_plus_file(filename, pyobject, follow_symlinks=True):
     return join(script_dir(pyobject, follow_symlinks), filename)
 
 
-def get_temp_dir(folder=None, delete_if_exists=False, tempdir=None):
-    # type: (Optional[str], bool, Optional[str]) -> str
+def get_temp_dir(folder: Optional[str] = None, delete_if_exists: bool = False, tempdir: Optional[str] = None) -> str:
     """Get a temporary directory. Looks for environment variable TEMP_DIR and falls
     back on os.gettempdir if a root temporary directory is not supplied. If a folder is supplied, creates that folder
     within the temporary directory. Optionally deletes and recreates it if it already exists.
@@ -87,8 +84,7 @@ def get_temp_dir(folder=None, delete_if_exists=False, tempdir=None):
 
 
 @contextlib.contextmanager
-def temp_dir(folder=None, delete_if_exists=False, delete_on_success=True, delete_on_failure=True, tempdir=None):
-    # type: (Optional[str], bool, bool, bool, Optional[str]) -> str
+def temp_dir(folder: Optional[str] = None, delete_if_exists: bool = False, delete_on_success: bool = True, delete_on_failure: bool = True, tempdir: Optional[str] = None) -> str:
     """Get a temporary directory optionally with folder appended (and created if it doesn't exist)
 
     Args:
@@ -113,8 +109,7 @@ def temp_dir(folder=None, delete_if_exists=False, delete_on_success=True, delete
             raise
 
 
-def read_or_create_batch(folder, batch=None):
-    # type: (str, Optional[str]) -> str
+def read_or_create_batch(folder: str, batch: Optional[str] = None) -> str:
     """Get batch or create it if it doesn't exist
 
     Args:
@@ -137,9 +132,8 @@ def read_or_create_batch(folder, batch=None):
 
 
 @contextlib.contextmanager
-def temp_dir_batch(folder=None, delete_if_exists=False, delete_on_success=True, delete_on_failure=True,
-                   batch=None, tempdir=None):
-    # type: (Optional[str], bool, bool, bool, Optional[str], Optional[str]) -> Dict
+def temp_dir_batch(folder: Optional[str] = None, delete_if_exists: bool = False, delete_on_success: bool = True, delete_on_failure: bool = True,
+                   batch: Optional[str] = None, tempdir: Optional[str] = None) -> Dict:
     """Get a temporary directory and batch id. Yields a dictionary with key folder which is the temporary directory
     optionally with folder appended (and created if it doesn't exist). In key batch is a batch code to be passed as
     the batch parameter in create_in_hdx or update_in_hdx calls.
@@ -159,8 +153,7 @@ def temp_dir_batch(folder=None, delete_if_exists=False, delete_on_success=True, 
         yield {'folder': tempdir, 'batch': read_or_create_batch(tempdir, batch)}
 
 
-def get_wheretostart(text, message, key):
-    # type: (str, str, str) -> Optional[str]
+def get_wheretostart(text: str, message: str, key: str) -> Optional[str]:
     """Evaluate WHERETOSTART.
 
     Args:
@@ -182,8 +175,7 @@ def get_wheretostart(text, message, key):
         return 'IGNORE'
 
 
-def progress_storing_folder(info, iterator, key, wheretostart=None):
-    # type: (Dict, Iterable[Dict], str, Optional[str]) -> Tuple[Dict,Dict]
+def progress_storing_folder(info: Dict, iterator: Iterable[Dict], key: str, wheretostart: Optional[str] = None) -> Tuple[Dict,Dict]:
     """Store progress in folder in key folder of info dictionary parameter. Yields 2 dictionaries. The first is the
     info dictionary. It contains in key folder the folder being used to store progress and in key progress the current
     position in the iterator. If store_batch is True, that dictionary will also contain the key batch containing a batch
@@ -235,8 +227,7 @@ def progress_storing_folder(info, iterator, key, wheretostart=None):
 
 
 @contextlib.contextmanager
-def wheretostart_tempdir_batch(folder, batch=None, tempdir=None):
-    # type: (str, Optional[str], Optional[str]) -> Dict
+def wheretostart_tempdir_batch(folder: str, batch: Optional[str] = None, tempdir: Optional[str] = None) -> Dict:
     """Get a temporary directory and batch id. Deletes any existing folder if WHERETOSTART environment variable is set
     to RESET. Yields a dictionary with key folder which is the temporary directory optionally with folder appended
     (and created if it doesn't exist). In key batch is a batch code to be passed as the batch parameter in
@@ -261,8 +252,7 @@ def wheretostart_tempdir_batch(folder, batch=None, tempdir=None):
         yield info
 
 
-def progress_storing_tempdir(folder, iterator, key, batch=None, tempdir=None):
-    # type: (str, Iterable[Dict], str, Optional[str], Optional[str]) -> Tuple[Dict,Dict]
+def progress_storing_tempdir(folder: str, iterator: Iterable[Dict], key: str, batch: Optional[str] = None, tempdir: Optional[str] = None) -> Tuple[Dict,Dict]:
     """Store progress in temporary directory. The folder persists until the final iteration allowing which iteration to
     start at and the batch code to be persisted between runs. Yields 2 dictionaries. The first contains key folder which
     is the temporary directory optionally with folder appended (and created if it doesn't exist). In key progress is
@@ -286,8 +276,7 @@ def progress_storing_tempdir(folder, iterator, key, batch=None, tempdir=None):
             yield result
 
 
-def multiple_progress_storing_tempdir(folder, iterators, keys, batch=None):
-    # type: (str, List[Iterable[Dict]], List[str], Optional[str]) -> Tuple[Dict,Dict]
+def multiple_progress_storing_tempdir(folder: str, iterators: List[Iterable[Dict]], keys: List[str], batch: Optional[str] = None) -> Tuple[Dict,Dict]:
     """Store progress in temporary directory. The folder persists until the final iteration of the last iterator
     allowing which iteration to start at and the batch code to be persisted between runs. Yields 2 dictionaries. The
     first contains key folder which is the temporary directory optionally with folder appended (and created if it
@@ -334,8 +323,7 @@ def multiple_progress_storing_tempdir(folder, iterators, keys, batch=None):
                     remove(progress_file)
 
 
-def get_filename_from_url(url):
-    # type: (str) -> str
+def get_filename_from_url(url: str) -> str:
     """Get filename including extension from url
 
     Args:
@@ -349,8 +337,7 @@ def get_filename_from_url(url):
     return basename(urlpath)
 
 
-def get_filename_extension_from_url(url):
-    # type: (str) -> Tuple[str,str]
+def get_filename_extension_from_url(url: str) -> Tuple[str,str]:
     """Get separately filename and extension from url
 
     Args:

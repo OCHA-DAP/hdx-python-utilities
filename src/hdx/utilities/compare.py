@@ -5,8 +5,7 @@ from os import linesep
 from typing import List
 
 
-def compare_files(path1, path2):
-    # type: (str, str) -> List[str]
+def compare_files(path1: str, path2: str) -> List[str]:
     """Returns the delta between two files using -, ?, + format excluding
     lines that are the same
 
@@ -22,8 +21,7 @@ def compare_files(path1, path2):
     return [x for x in diff if x[0] in ['-', '+', '?']]
 
 
-def assert_files_same(path1, path2):
-    # type: (str, str) -> None
+def assert_files_same(path1: str, path2: str) -> None:
     """Asserts that two files are the same and returns delta using
     -, ?, + format if not
 

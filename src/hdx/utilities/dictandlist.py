@@ -12,8 +12,7 @@ DictUpperBound = TypeVar('DictUpperBound', bound='dict')
 ExceptionUpperBound = TypeVar('ExceptionUpperBound', bound='Exception')
 
 
-def merge_two_dictionaries(a, b, merge_lists=False):
-    # type: (DictUpperBound, DictUpperBound, bool) -> DictUpperBound
+def merge_two_dictionaries(a: DictUpperBound, b: DictUpperBound, merge_lists: bool = False) -> DictUpperBound:
     """Merges b into a and returns merged result
 
     NOTE: tuples and arbitrary objects are not handled as it is totally ambiguous what should happen
@@ -62,8 +61,7 @@ def merge_two_dictionaries(a, b, merge_lists=False):
     return a
 
 
-def merge_dictionaries(dicts, merge_lists=False):
-    # type: (List[DictUpperBound], bool) -> DictUpperBound
+def merge_dictionaries(dicts: List[DictUpperBound], merge_lists: bool = False) -> DictUpperBound:
     """Merges all dictionaries in dicts into a single dictionary and returns result
 
     Args:
@@ -80,8 +78,7 @@ def merge_dictionaries(dicts, merge_lists=False):
     return dict1
 
 
-def dict_diff(d1, d2, no_key='<KEYNOTFOUND>'):
-    # type: (DictUpperBound, DictUpperBound, str) -> Dict
+def dict_diff(d1: DictUpperBound, d2: DictUpperBound, no_key: str = '<KEYNOTFOUND>') -> Dict:
     """Compares two dictionaries
 
     Args:
@@ -102,8 +99,7 @@ def dict_diff(d1, d2, no_key='<KEYNOTFOUND>'):
     return diff
 
 
-def dict_of_lists_add(dictionary, key, value):
-    # type: (DictUpperBound, Any, Any) -> None
+def dict_of_lists_add(dictionary: DictUpperBound, key: Any, value: Any) -> None:
     """Add value to a list in a dictionary by key
 
     Args:
@@ -120,8 +116,7 @@ def dict_of_lists_add(dictionary, key, value):
     dictionary[key] = list_objs
 
 
-def dict_of_sets_add(dictionary, key, value):
-    # type: (DictUpperBound, Any, Any) -> None
+def dict_of_sets_add(dictionary: DictUpperBound, key: Any, value: Any) -> None:
     """Add value to a set in a dictionary by key
 
     Args:
@@ -138,8 +133,7 @@ def dict_of_sets_add(dictionary, key, value):
     dictionary[key] = set_objs
 
 
-def dict_of_dicts_add(dictionary, parent_key, key, value):
-    # type: (DictUpperBound, Any, Any, Any) -> None
+def dict_of_dicts_add(dictionary: DictUpperBound, parent_key: Any, key: Any, value: Any) -> None:
     """Add key value pair to a dictionary within a dictionary by key
 
     Args:
@@ -157,8 +151,7 @@ def dict_of_dicts_add(dictionary, parent_key, key, value):
     dictionary[parent_key] = dict_objs
 
 
-def list_distribute_contents_simple(input_list, function=lambda x: x):
-    # type: (List, Callable[[Any], Any]) -> List
+def list_distribute_contents_simple(input_list: List, function: Callable[[Any], Any] = lambda x: x) -> List:
     """Distribute the contents of a list eg. [1, 1, 1, 2, 2, 3] -> [1, 2, 3, 1, 2, 1]. List can contain complex types
     like dictionaries in which case the function can return the appropriate value eg.  lambda x: x[KEY]
 
@@ -189,8 +182,7 @@ def list_distribute_contents_simple(input_list, function=lambda x: x):
     return output_list
 
 
-def list_distribute_contents(input_list, function=lambda x: x):
-    # type: (List, Callable[[Any], Any]) -> List
+def list_distribute_contents(input_list: List, function: Callable[[Any], Any] = lambda x: x) -> List:
     """Distribute the contents of a list eg. [1, 1, 1, 2, 2, 3] -> [1, 2, 1, 2, 1, 3]. List can contain complex types
     like dictionaries in which case the function can return the appropriate value eg.  lambda x: x[KEY]
 
@@ -229,8 +221,7 @@ def list_distribute_contents(input_list, function=lambda x: x):
     return riffle_shuffle(intermediate_list)
 
 
-def extract_list_from_list_of_dict(list_of_dict, key):
-    # type: (List[DictUpperBound], Any) -> List
+def extract_list_from_list_of_dict(list_of_dict: List[DictUpperBound], key: Any) -> List:
     """Extract a list by looking up key in each member of a list of dictionaries
 
     Args:
@@ -247,9 +238,8 @@ def extract_list_from_list_of_dict(list_of_dict, key):
     return result
 
 
-def key_value_convert(dictin, keyfn=lambda x: x, valuefn=lambda x: x, dropfailedkeys=False, dropfailedvalues=False,
-                      exception=ValueError):
-    # type: (DictUpperBound, Callable[[Any], Any], Callable[[Any], Any], bool, bool, ExceptionUpperBound) -> Dict
+def key_value_convert(dictin: DictUpperBound, keyfn: Callable[[Any], Any] = lambda x: x, valuefn: Callable[[Any], Any] = lambda x: x, dropfailedkeys: bool = False, dropfailedvalues: bool = False,
+                      exception: ExceptionUpperBound = ValueError) -> Dict:
     """Convert keys and/or values of dictionary using functions passed in as parameters
 
     Args:
@@ -283,8 +273,7 @@ def key_value_convert(dictin, keyfn=lambda x: x, valuefn=lambda x: x, dropfailed
     return dictout
 
 
-def integer_key_convert(dictin, dropfailedkeys=False):
-    # type: (DictUpperBound, bool) -> Dict
+def integer_key_convert(dictin: DictUpperBound, dropfailedkeys: bool = False) -> Dict:
     """Convert keys of dictionary to integers
 
     Args:
@@ -298,8 +287,7 @@ def integer_key_convert(dictin, dropfailedkeys=False):
     return key_value_convert(dictin, keyfn=int, dropfailedkeys=dropfailedkeys)
 
 
-def integer_value_convert(dictin, dropfailedvalues=False):
-    # type: (DictUpperBound, bool) -> Dict
+def integer_value_convert(dictin: DictUpperBound, dropfailedvalues: bool = False) -> Dict:
     """Convert values of dictionary to integers
 
     Args:
@@ -313,8 +301,7 @@ def integer_value_convert(dictin, dropfailedvalues=False):
     return key_value_convert(dictin, valuefn=int, dropfailedvalues=dropfailedvalues)
 
 
-def float_value_convert(dictin, dropfailedvalues=False):
-    # type: (DictUpperBound, bool) -> Dict
+def float_value_convert(dictin: DictUpperBound, dropfailedvalues: bool = False) -> Dict:
     """Convert values of dictionary to floats
 
     Args:
@@ -328,8 +315,7 @@ def float_value_convert(dictin, dropfailedvalues=False):
     return key_value_convert(dictin, valuefn=float, dropfailedvalues=dropfailedvalues)
 
 
-def avg_dicts(dictin1, dictin2, dropmissing=True):
-    # type: (DictUpperBound, DictUpperBound, bool) -> Dict
+def avg_dicts(dictin1: DictUpperBound, dictin2: DictUpperBound, dropmissing: bool = True) -> Dict:
     """Create a new dictionary from two dictionaries by averaging values
 
     Args:
@@ -354,8 +340,7 @@ def avg_dicts(dictin1, dictin2, dropmissing=True):
     return dictout
 
 
-def read_list_from_csv(url, headers=None, dict_form=False, **kwargs):
-    # type: (str, Union[int, List[int], List[str], None], bool, Any) -> List[Union[Dict, List]]
+def read_list_from_csv(url: str, headers: Union[int, List[int], List[str], None] = None, dict_form: bool = False, **kwargs: Any) -> List[Union[Dict, List]]:
     """Read a list of rows in dict or list form from a csv. The headers argument is either a row
        number or list of row numbers (in case of multi-line headers) to be considered as headers
        (rows start counting at 1), or the actual headers defined a list of strings. If not set,
@@ -380,8 +365,7 @@ def read_list_from_csv(url, headers=None, dict_form=False, **kwargs):
     return result
 
 
-def write_list_to_csv(filepath, list_of_rows, headers=None):
-    # type: (str, List[Union[DictUpperBound, List]], Union[int, List[int], List[str], None]) -> None
+def write_list_to_csv(filepath: str, list_of_rows: List[Union[DictUpperBound, List]], headers: Union[int, List[int], List[str], None] = None) -> None:
     """Write a list of rows in dict or list form to a csv. (The headers argument is either a row
        number or list of row numbers (in case of multi-line headers) to be considered as headers
        (rows start counting at 1), or the actual headers defined a list of strings. If not set,
@@ -402,15 +386,14 @@ def write_list_to_csv(filepath, list_of_rows, headers=None):
     stream.close()
 
 
-def args_to_dict(args):
-    # type: (str) -> DictUpperBound[str,str]
+def args_to_dict(args: str) -> DictUpperBound:
     """Convert command line arguments in a comma separated string to a dictionary
 
     Args:
         args (str): Command line arguments
 
     Returns:
-        DictUpperBound[str,str]: Dictionary of arguments
+        DictUpperBound: Dictionary of arguments
 
     """
     arguments = dict()

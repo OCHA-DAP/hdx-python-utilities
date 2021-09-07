@@ -12,8 +12,7 @@ logger = logging.getLogger(__name__)
 PUNCTUATION_MINUS_BRACKETS = r"""!"#$%&'*+,-./:;<=>?@\^_`|~"""
 
 
-def remove_end_characters(string, characters_to_remove=punctuation):
-    # type: (str, str) -> str
+def remove_end_characters(string: str, characters_to_remove: str = punctuation) -> str:
     """Remove any characters at end of string that are in characters_to_remove
 
     Args:
@@ -29,8 +28,7 @@ def remove_end_characters(string, characters_to_remove=punctuation):
     return string
 
 
-def remove_from_end(string, things_to_remove, logging_text=None, whole_words=True):
-    # type: (str, List[str], Optional[str], bool) -> str
+def remove_from_end(string: str, things_to_remove: List[str], logging_text: Optional[str] = None, whole_words: bool = True) -> str:
     """Remove list of items from end of string, stripping any whitespace
 
     Args:
@@ -60,8 +58,7 @@ def remove_from_end(string, things_to_remove, logging_text=None, whole_words=Tru
     return string
 
 
-def remove_string(string, toremove, end_characters_to_remove=punctuation):
-    # type: (str, str, str) -> str
+def remove_string(string: str, toremove: str, end_characters_to_remove: str = punctuation) -> str:
     """
     Remove string from another string and delete any preceding end characters - by default punctuation (eg. comma)
     and any whitespace following the punctuation
@@ -81,8 +78,7 @@ def remove_string(string, toremove, end_characters_to_remove=punctuation):
     return '%s%s' % (newstring, string[index + len(toremove):])
 
 
-def multiple_replace(string, replacements):
-    # type: (str, Dict[str,str]) -> str
+def multiple_replace(string: str, replacements: Dict[str,str]) -> str:
     """Simultaneously replace multiple strings in a string
 
     Args:
@@ -99,8 +95,7 @@ def multiple_replace(string, replacements):
     return pattern.sub(lambda x: replacements[x.group(0)], string)
 
 
-def get_words_in_sentence(sentence):
-    # type: (str) -> List[str]
+def get_words_in_sentence(sentence: str) -> List[str]:
     """Returns list of words in a sentence
 
     Args:
@@ -113,8 +108,7 @@ def get_words_in_sentence(sentence):
     return re.sub('[' + punctuation.replace("'", "") + ']', ' ', sentence).split()
 
 
-def get_matching_text_in_strs(a, b, match_min_size=30, ignore='', end_characters=''):
-    # type: (str, str, int, str, str) -> List[str]
+def get_matching_text_in_strs(a: str, b: str, match_min_size: int = 30, ignore: str = '', end_characters: str = '') -> List[str]:
     """Returns a list of matching blocks of text in a and b
 
     Args:
@@ -148,8 +142,7 @@ def get_matching_text_in_strs(a, b, match_min_size=30, ignore='', end_characters
     return matching_text
 
 
-def get_matching_text(string_list, match_min_size=30, ignore='', end_characters='.!\r\n'):
-    # type: (List[str], int, str, str) -> str
+def get_matching_text(string_list: List[str], match_min_size: int = 30, ignore: str = '', end_characters: str = '.!\r\n') -> str:
     """Returns a string containing matching blocks of text in a list of strings followed by non-matching.
 
     Args:
@@ -171,9 +164,8 @@ def get_matching_text(string_list, match_min_size=30, ignore='', end_characters=
     return a
 
 
-def get_matching_then_nonmatching_text(string_list, separator='', match_min_size=30, ignore='',
-                                       end_characters='.!\r\n'):
-    # type: (List[str], str, int, str, str) -> str
+def get_matching_then_nonmatching_text(string_list: List[str], separator: str = '', match_min_size: int = 30, ignore: str = '',
+                                       end_characters: str = '.!\r\n') -> str:
     """Returns a string containing matching blocks of text in a list of strings followed by non-matching.
 
     Args:
@@ -245,8 +237,7 @@ def get_matching_then_nonmatching_text(string_list, separator='', match_min_size
     return a
 
 
-def number_format(val, format='%.4f', trailing_zeros=True):
-    # type: (Any, str, bool) -> str
+def number_format(val: Any, format: str = '%.4f', trailing_zeros: bool = True) -> str:
     """Format float-castable input as string
 
     Args:
@@ -265,8 +256,7 @@ def number_format(val, format='%.4f', trailing_zeros=True):
     return val.rstrip('0').rstrip('.')
 
 
-def get_fraction_str(numerator, denominator=None, format='%.4f', trailing_zeros=True):
-    # type: (Any, Optional[Any], str, bool) -> str
+def get_fraction_str(numerator: Any, denominator: Optional[Any] = None, format: str = '%.4f', trailing_zeros: bool = True) -> str:
     """Given float-castable numerator and optional float-castable denominator, format as string, returning '' for
     invalid numerator or 0 denominator.
 
@@ -292,8 +282,7 @@ def get_fraction_str(numerator, denominator=None, format='%.4f', trailing_zeros=
     return ''
 
 
-def only_allowed_in_str(test_str, allowed_chars):
-    # type: (str, Set) -> bool
+def only_allowed_in_str(test_str: str, allowed_chars: Set) -> bool:
     """Returns True if test string contains only allowed characters, False if not.
 
     Args:
@@ -309,8 +298,7 @@ def only_allowed_in_str(test_str, allowed_chars):
 allowed_numeric = set(string.digits + '.' + ',' + '%' + '-')
 
 
-def get_numeric_if_possible(value):
-    # type: (Any) -> Any
+def get_numeric_if_possible(value: Any) -> Any:
     """Return val if it is not a string, otherwise see if it can be cast to float or int,
     taking into account commas and periods.
 

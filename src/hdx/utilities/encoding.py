@@ -4,8 +4,7 @@
 import base64
 
 
-def str_to_base64(string):
-    # type: (str) -> str
+def str_to_base64(string: str) -> str:
     """
     Base 64 encode string
 
@@ -19,8 +18,7 @@ def str_to_base64(string):
     return base64.urlsafe_b64encode(string.encode('utf-8')).decode('utf-8')
 
 
-def base64_to_str(bstring):
-    # type: (str) -> str
+def base64_to_str(bstring: str) -> str:
     """
     Base 64 decode string
 

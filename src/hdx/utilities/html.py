@@ -11,8 +11,7 @@ from hdx.utilities.downloader import Download
 logger = logging.getLogger(__name__)
 
 
-def get_soup(url, downloader=None, user_agent=None, user_agent_config_yaml=None, user_agent_lookup=None, **kwargs):
-    # type: (str, Download, Optional[str], Optional[str], Optional[str], Any) -> BeautifulSoup
+def get_soup(url: str, downloader: Download = None, user_agent: Optional[str] = None, user_agent_config_yaml: Optional[str] = None, user_agent_lookup: Optional[str] = None, **kwargs: Any) -> BeautifulSoup:
     """
     Get BeautifulSoup object for a url. Requires either global user agent to be set or appropriate user agent
     parameter(s) to be completed.
@@ -34,8 +33,7 @@ def get_soup(url, downloader=None, user_agent=None, user_agent_config_yaml=None,
     return BeautifulSoup(response.text, 'html.parser')
 
 
-def get_text(tag):
-    # type: (Tag) -> str
+def get_text(tag: Tag) -> str:
     """
     Get text of tag stripped of leading and trailing whitespace and newlines and with &nbsp replaced with space
 
@@ -49,8 +47,7 @@ def get_text(tag):
     return tag.get_text().strip(' \t\n\r').replace(u'\xa0', u' ')
 
 
-def extract_table(tabletag):
-    # type: (Tag) -> List[Dict]
+def extract_table(tabletag: Tag) -> List[Dict]:
     """
     Extract HTML table as list of dictionaries
 
