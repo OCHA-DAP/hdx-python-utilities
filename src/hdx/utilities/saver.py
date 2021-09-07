@@ -5,7 +5,6 @@ from collections import OrderedDict
 from io import open
 from typing import Dict, Any
 
-import six
 from ruamel.yaml import YAML, RoundTripRepresenter, add_representer, SafeRepresenter
 
 
@@ -51,8 +50,6 @@ def save_str_to_file(string, path, encoding='utf-8'):
         None
     """
     with open(path, 'w', encoding=encoding) as f:
-        if six.PY2:
-            string = unicode(string)  # noqa: F821
         f.write(string)
 
 
@@ -104,9 +101,4 @@ def save_json(dictionary, path, encoding='utf-8', pretty=False, sortkeys=False):
         else:
             indent = None
             separators = (', ', ': ')
-        if six.PY3:
-            json.dump(dictionary, f, indent=indent, sort_keys=sortkeys, separators=separators)
-        else:
-            string = json.dumps(dictionary, ensure_ascii=False, indent=indent,
-                                sort_keys=sortkeys, separators=separators)
-            f.write(unicode(string))  # noqa: F821
+        json.dump(dictionary, f, indent=indent, sort_keys=sortkeys, separators=separators)

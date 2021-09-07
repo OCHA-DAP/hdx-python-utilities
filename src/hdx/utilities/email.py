@@ -3,12 +3,12 @@
 
 import logging
 import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
 from os.path import join, expanduser
 from typing import Optional, Any, List
 
 from email_validator import validate_email
-from six.moves.email_mime_multipart import MIMEMultipart
-from six.moves.email_mime_text import MIMEText
 
 from hdx.utilities.loader import load_yaml, load_json
 

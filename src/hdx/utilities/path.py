@@ -11,8 +11,7 @@ from shutil import rmtree
 from tempfile import gettempdir
 
 from typing import Any, Optional, Iterable, Tuple, Dict, List
-
-from six.moves.urllib.parse import urlsplit
+from urllib.parse import urlsplit
 
 from hdx.utilities import get_uuid
 from hdx.utilities.loader import load_file_to_str

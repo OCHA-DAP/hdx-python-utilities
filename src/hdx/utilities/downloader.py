@@ -3,25 +3,19 @@
 import copy
 import hashlib
 import logging
-import sys
 
 from os import remove
 from os.path import splitext, join, exists, isfile, split
 from pathlib import Path
 from typing import Optional, Dict, Iterator, Union, List, Any, Callable, Tuple
-if sys.version_info[:2] >= (3, 7):
-    OrderedDict = dict
-else:
-    from collections import OrderedDict
+from urllib.parse import urlsplit, urlunsplit, urlencode, parse_qsl
 
 import requests
 import tabulator
 from ratelimit import sleep_and_retry, RateLimitDecorator
 from requests import Request
 from ruamel.yaml import YAML
-from six.moves.urllib.parse import urlsplit, urlunsplit, parse_qsl, urlencode
 
-from hdx.utilities import raisefrom
 from hdx.utilities.path import get_temp_dir, get_filename_from_url
 from hdx.utilities.session import get_session
 
@@ -166,7 +160,7 @@ class Download(object):
 
         """
         spliturl = urlsplit(url)
-        getparams = OrderedDict(parse_qsl(spliturl.query))
+        getparams = dict(parse_qsl(spliturl.query))
         if parameters is not None:
             getparams.update(parameters)
         spliturl = spliturl._replace(query=urlencode(getparams))
@@ -186,7 +180,7 @@ class Download(object):
 
         """
         spliturl = urlsplit(url)
-        getparams = OrderedDict(parse_qsl(spliturl.query))
+        getparams = dict(parse_qsl(spliturl.query))
         if parameters is not None:
             getparams.update(parameters)
         spliturl = spliturl._replace(query='')
@@ -249,7 +243,7 @@ class Download(object):
             if encoding:
                 self.response.encoding = encoding
         except Exception as e:
-            raisefrom(DownloadError, 'Setup of Streaming Download of %s failed!' % url, e)
+            raise DownloadError(f'Setup of Streaming Download of {url} failed!') from e
         return self.response
 
     def hash_stream(self, url):
@@ -270,7 +264,7 @@ class Download(object):
                     md5hash.update(chunk)
             return md5hash.hexdigest()
         except Exception as e:
-            raisefrom(DownloadError, 'Download of %s failed in retrieval of stream!' % url, e)
+            raise DownloadError(f'Download of {url} failed in retrieval of stream!' % url)
 
     def stream_file(self, url, folder=None, filename=None, path=None, overwrite=False):
         # type: (str, Optional[str], Optional[str], Optional[str], bool) -> str
@@ -298,7 +292,7 @@ class Download(object):
                     f.flush()
             return f.name
         except Exception as e:
-            raisefrom(DownloadError, 'Download of %s failed in retrieval of stream!' % url, e)
+            raise DownloadError(f'Download of {url} failed in retrieval of stream!') from e
         finally:
             if f:
                 f.close()
@@ -407,7 +401,7 @@ class Download(object):
             Any: JSON content of download
 
         """
-        return self.response.json(object_pairs_hook=OrderedDict)
+        return self.response.json()
 
     def get_tabular_stream(self, url, **kwargs):
         # type: (str, Any) -> tabulator.Stream
@@ -436,7 +430,7 @@ class Download(object):
             self.response.open()
             return self.response
         except Exception as e:
-            raisefrom(DownloadError, 'Getting tabular stream for %s failed!' % url, e)
+            raise DownloadError(f'Getting tabular stream for {url} failed!') from e
 
     def get_tabular_rows_as_list(self, url, **kwargs):
         # type: (str, Any) -> Iterator[List]

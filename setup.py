@@ -17,7 +17,6 @@ requirements = ['basicauth',
                 'ratelimit',
                 'requests-file',
                 'ruamel.yaml',
-                'six>=1.16.0',
                 'tabulator[cchardet]>=1.53.5',
                 ]
 

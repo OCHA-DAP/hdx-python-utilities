@@ -28,6 +28,8 @@ The code for the library is here: <https://github.com/ocha-dap/hdx-python-utili
 
 ## Breaking Changes
 
+From 3.0.1, removed raisefrom function
+
 From 3.0.0, only supports Python >= 3.6
 
 From 2.6.9, the Download class and get_session have optional allowed_methods instead of optional method_whitelist

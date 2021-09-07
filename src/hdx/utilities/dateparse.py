@@ -10,8 +10,6 @@ import dateutil
 from dateutil.parser import _timelex, parserinfo
 from dateutil.tz import tzutc
 
-from hdx.utilities import raisefrom
-
 default_sd_year = 1
 default_date = datetime(year=default_sd_year, month=1, day=1, hour=0, minute=0, second=0, microsecond=0)
 default_ed_year = 9990
@@ -514,7 +512,7 @@ def parse(timestr, default=None,
     try:
         ret = DEFAULTPARSER._build_naive(res, default)
     except ValueError as e:
-        raisefrom(ParserError, str(e) + ": %s" % timestr, e)
+        raise ParserError(str(e) + ": %s" % timestr) from e
 
     if not ignoretz:
         ret = DEFAULTPARSER._build_tzaware(ret, res, tzinfos)
@@ -563,11 +561,11 @@ def parse_date_range(string, date_format=None, fuzzy=None, zero_time=False):
         try:
             startdate = datetime.strptime(string, date_format)
         except ValueError as e:
-            raisefrom(ParserError, str(e), e)
+            raise ParserError(str(e)) from e
         if startdate.year == 1900 and '%Y' not in date_format:  # 1900 is default when no year supplied
             raise ParserError('No year in date!')
         enddate = startdate
-        if not any(str in date_format for str in ['%d', '%j']):
+        if not any(x in date_format for x in ['%d', '%j']):
             startdate = startdate.replace(day=default_date.day)
             endday = default_enddate.day
             not_set = True
@@ -578,7 +576,7 @@ def parse_date_range(string, date_format=None, fuzzy=None, zero_time=False):
                 except ValueError as e:
                     endday -= 1
                     if endday == 0:
-                        raisefrom(ParserError, 'No end day of month found for %s!' % str(enddate), e)
+                        raise ParserError(f'No end day of month found for {str(enddate)}!') from e
         if not any(str in date_format for str in ['%b', '%B', '%m', '%j']):
             startdate = startdate.replace(month=default_date.month)
             enddate = enddate.replace(month=default_enddate.month)

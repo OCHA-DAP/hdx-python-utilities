@@ -3,10 +3,9 @@
 from __future__ import division
 
 import itertools
+from collections import UserDict
 from typing import List, TypeVar, Callable, Dict, Any, Union
 
-import six
-from six.moves import UserDict, zip_longest
 from tabulator import Stream
 
 DictUpperBound = TypeVar('DictUpperBound', bound='dict')
@@ -31,7 +30,7 @@ def merge_two_dictionaries(a, b, merge_lists=False):
     # ## debug output
     # sys.stderr.write('DEBUG: %s to %s\n' %(b,a))
     try:
-        if a is None or isinstance(a, (six.string_types, six.text_type, six.integer_types, float)):
+        if a is None or isinstance(a, (str, int, float)):
             # border case for first run or if a is a primitive
             a = b
         elif isinstance(a, list):
@@ -207,7 +206,7 @@ def list_distribute_contents(input_list, function=lambda x: x):
     def riffle_shuffle(piles_list):
         def grouper(n, iterable, fillvalue=None):
             args = [iter(iterable)] * n
-            return zip_longest(fillvalue=fillvalue, *args)
+            return itertools.zip_longest(fillvalue=fillvalue, *args)
 
         if not piles_list:
             return []
@@ -216,7 +215,7 @@ def list_distribute_contents(input_list, function=lambda x: x):
         pile_iters_list = [iter(pile) for pile in piles_list]
         pile_sizes_list = [[pile_position] * len(pile) for pile_position, pile in enumerate(piles_list)]
         grouped_rows = grouper(width, itertools.chain.from_iterable(pile_sizes_list))
-        grouped_columns = zip_longest(*grouped_rows)
+        grouped_columns = itertools.zip_longest(*grouped_rows)
         shuffled_pile = [next(pile_iters_list[position]) for position in itertools.chain.from_iterable(grouped_columns)
                          if position is not None]
         return shuffled_pile

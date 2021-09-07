@@ -2,7 +2,6 @@
 """Downloader Tests"""
 import copy
 import re
-import sys
 from collections import OrderedDict
 from os import remove
 from os.path import join, abspath
@@ -187,18 +186,16 @@ class TestDownloader:
     def test_get_url_for_get(self):
         assert Download.get_url_for_get('http://www.lala.com/hdfa?a=3&b=4', OrderedDict(
             [('c', 'e'), ('d', 'f')])) == 'http://www.lala.com/hdfa?a=3&b=4&c=e&d=f'
-        if sys.version_info[:2] >= (3, 7):
-            assert Download.get_url_for_get('http://www.lala.com/hdfa?a=3&b=4', {'c': 'e', 'd': 'f'}) == \
-                   'http://www.lala.com/hdfa?a=3&b=4&c=e&d=f'
+        assert Download.get_url_for_get('http://www.lala.com/hdfa?a=3&b=4', {'c': 'e', 'd': 'f'}) == \
+               'http://www.lala.com/hdfa?a=3&b=4&c=e&d=f'
 
     def test_get_url_params_for_post(self):
         result = Download.get_url_params_for_post('http://www.lala.com/hdfa?a=3&b=4', OrderedDict([('c', 'e'), ('d', 'f')]))
         assert result[0]  == 'http://www.lala.com/hdfa'
         assert list(result[1].items())  == list(OrderedDict([('a', '3'), ('b', '4'), ('c', 'e'), ('d', 'f')]).items())
-        if sys.version_info[:2] >= (3, 7):
-            result = Download.get_url_params_for_post('http://www.lala.com/hdfa?a=3&b=4', {'c': 'e', 'd': 'f'})
-            assert result[0] == 'http://www.lala.com/hdfa'
-            assert list(result[1].items()) == list(OrderedDict([('a', '3'), ('b', '4'), ('c', 'e'), ('d', 'f')]).items())
+        result = Download.get_url_params_for_post('http://www.lala.com/hdfa?a=3&b=4', {'c': 'e', 'd': 'f'})
+        assert result[0] == 'http://www.lala.com/hdfa'
+        assert list(result[1].items()) == list(OrderedDict([('a', '3'), ('b', '4'), ('c', 'e'), ('d', 'f')]).items())
 
     def test_hxl_row(self):
         headers = ['a', 'b', 'c']

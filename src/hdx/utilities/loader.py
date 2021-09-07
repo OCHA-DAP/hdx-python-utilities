@@ -3,13 +3,6 @@
 
 import json
 
-import sys
-
-if sys.version_info[:2] >= (3, 7):
-    OrderedDict = dict
-else:
-    from collections import OrderedDict
-
 from io import open
 from os import linesep
 from typing import List, Dict, Optional
@@ -80,7 +73,7 @@ def load_json(path, encoding='utf-8'):
         Dict: Ordered dictionary containing loaded JSON file
     """
     with open(path, 'r', encoding=encoding) as f:
-        jsondict = json.loads(f.read(), object_pairs_hook=OrderedDict)
+        jsondict = json.loads(f.read())
     if not jsondict:
         raise (LoadError('JSON file: %s is empty!' % path))
     return jsondict
