@@ -10,19 +10,15 @@ from hdx.utilities.loader import load_file_to_str
 
 requirements = ['basicauth',
                 'beautifulsoup4',
-                'colorlog==5.0.1;python_version<"3"',
-                'colorlog>=6.4.1;python_version>="3"',
+                'colorlog',
                 'email_validator',
                 'html5lib',
-                'pathlib;python_version<"3.4"',
                 'python-dateutil==2.8.2',
                 'ratelimit',
                 'requests-file',
-                'ruamel.yaml==0.16.13;python_version<"3"',
-                'ruamel.yaml>=0.17.16;python_version>="3"',
+                'ruamel.yaml',
                 'six>=1.16.0',
                 'tabulator[cchardet]>=1.53.5',
-                'typing;python_version<"3.5"',
                 ]
 
 classifiers = [
@@ -32,7 +28,6 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
     "Programming Language :: Python",
-    "Programming Language :: Python :: 2.7",
     "Programming Language :: Python :: 3",
     "Topic :: Software Development :: Libraries :: Python Modules",
 ]
