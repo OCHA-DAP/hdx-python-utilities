@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """User agent utilities"""
 import logging
 import os
@@ -15,7 +14,7 @@ class UserAgentError(Exception):
     pass
 
 
-class UserAgent(object):
+class UserAgent:
     default_user_agent_config_yaml = join(expanduser('~'), '.useragent.yml')
     user_agent = None
 

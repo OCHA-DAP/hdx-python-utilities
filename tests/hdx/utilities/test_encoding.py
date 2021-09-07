@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 """Encoding Utility Tests"""
 from hdx.utilities.encoding import str_to_base64, base64_to_str
 

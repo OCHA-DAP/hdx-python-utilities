@@ -10,7 +10,7 @@ from hdx.utilities.saver import save_json, save_str_to_file, save_yaml
 logger = logging.getLogger(__name__)
 
 
-class Retrieve(object):
+class Retrieve:
     """Retrieve class which takes in a Download object and can either download, download and save or use previously
     downloaded and saved data. It also allows the use of a static fallback when downloading fails.
 

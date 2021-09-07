@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Encoding utilities"""
 
 import base64

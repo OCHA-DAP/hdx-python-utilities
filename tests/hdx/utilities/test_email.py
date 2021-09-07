@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 """Email Tests"""
 from os.path import join
 

@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 """Downloader Tests"""
 import copy
 import re
@@ -263,7 +262,7 @@ class TestDownloader:
                                          parameters=OrderedDict([('b', '4'), ('d', '3')]), folder=tmpdir,
                                          filename=filename)
             fpath = abspath(f)
-            with open(fpath, 'rt') as fi:
+            with open(fpath) as fi:
                 text = fi.read()
                 assert '"id": "10"' in text
                 assert '"lala": "a"' in text
@@ -275,7 +274,7 @@ class TestDownloader:
                                          parameters=OrderedDict([('a', '3'), ('c', '2')]), folder=tmpdir,
                                          filename=filename)
             fpath = abspath(f)
-            with open(fpath, 'rt') as fi:
+            with open(fpath) as fi:
                 text = fi.read()
                 assert '"id": "3"' in text
                 assert '"lala": "b"' in text

@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 """Logging Tests"""
 from logging.handlers import SMTPHandler
 from os.path import join
@@ -9,10 +8,7 @@ from logging_tree import tree
 
 from hdx.utilities.easy_logging import setup_logging, LoggingError
 
-if six.PY3:
-    FILENOTFOUND_EXCTYPE = FileNotFoundError  # noqa: F821
-else:
-    FILENOTFOUND_EXCTYPE = IOError
+FILENOTFOUND_EXCTYPE = FileNotFoundError  # noqa: F821
 
 
 class TestLogging:

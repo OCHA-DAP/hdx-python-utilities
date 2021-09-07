@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Date parsing utilities"""
 import time
 from calendar import monthrange

@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 """Path Utility Tests"""
 import copy
 from os.path import join, exists

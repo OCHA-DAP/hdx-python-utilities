@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """File compare utilities"""
 import difflib
 from os import linesep

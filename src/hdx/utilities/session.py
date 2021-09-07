@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Session utilities for urls"""
 import logging
 import os
@@ -89,7 +88,7 @@ def get_session(user_agent: Optional[str] = None, user_agent_config_yaml: Option
             logger.info(f'Loading extra parameters from: {extra_params_json}')
             try:
                 extra_params_dict = load_json(extra_params_json)
-            except IOError:
+            except OSError:
                 if fail_on_missing_file:
                     raise
         extra_params_yaml = kwargs.get('extra_params_yaml', '')
@@ -99,7 +98,7 @@ def get_session(user_agent: Optional[str] = None, user_agent_config_yaml: Option
             logger.info(f'Loading extra parameters from: {extra_params_yaml}')
             try:
                 extra_params_dict = load_yaml(extra_params_yaml)
-            except IOError:
+            except OSError:
                 if fail_on_missing_file:
                     raise
         extra_params_lookup = kwargs.get('extra_params_lookup')
@@ -130,7 +129,7 @@ def get_session(user_agent: Optional[str] = None, user_agent_config_yaml: Option
         try:
             basic_auth = load_file_to_str(basic_auth_file, strip=True)
             auths_found.append(f'file {basic_auth_file}')
-        except IOError:
+        except OSError:
             if fail_on_missing_file:
                 raise
     if len(auths_found) > 1:

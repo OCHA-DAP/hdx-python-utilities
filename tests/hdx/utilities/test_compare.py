@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 """Compare Utility Tests"""
 from os.path import join
 

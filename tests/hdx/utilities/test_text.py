@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 """Text Processing Tests"""
 from string import punctuation, whitespace
 

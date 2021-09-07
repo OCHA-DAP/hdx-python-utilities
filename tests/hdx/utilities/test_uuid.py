@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 """UUID Tests"""
 
 from hdx.utilities import is_valid_uuid

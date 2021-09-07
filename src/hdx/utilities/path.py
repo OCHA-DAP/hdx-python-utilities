@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Directory Path Utilities"""
 import contextlib
 import inspect
@@ -215,7 +214,7 @@ def progress_storing_folder(info: Dict, iterator: Iterable[Dict], key: str, wher
                     found = True
                     logger.info(f'Starting run from WHERETOSTART {wheretostart}')
                 else:
-                    logger.info('Run not started. Ignoring %s. WHERETOSTART (%s) not matched.' % (current,
+                    logger.info('Run not started. Ignoring {}. WHERETOSTART ({}) not matched.'.format(current,
                                                                                                   wheretostart))
                     continue
         output = f'{key}={current}'
@@ -272,8 +271,7 @@ def progress_storing_tempdir(folder: str, iterator: Iterable[Dict], key: str, ba
         Tuple[Dict,Dict]: A tuple of the form (info dictionary, next object in iterator)
     """
     with wheretostart_tempdir_batch(folder, batch=batch, tempdir=tempdir) as info:
-        for result in progress_storing_folder(info, iterator, key):
-            yield result
+        yield from progress_storing_folder(info, iterator, key)
 
 
 def multiple_progress_storing_tempdir(folder: str, iterators: List[Iterable[Dict]], keys: List[str], batch: Optional[str] = None) -> Tuple[Dict,Dict]:

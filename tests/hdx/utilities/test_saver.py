@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 """Saver Tests"""
 import json
 from collections import OrderedDict

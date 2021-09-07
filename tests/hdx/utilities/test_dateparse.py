@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 """Date Parse Utility Tests"""
 from datetime import datetime
 from dateutil.tz import tzutc

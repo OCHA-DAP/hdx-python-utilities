@@ -44,7 +44,7 @@ class CleanCommand(clean):
         """After calling the super class implementation, this function removes
         the dist directory if it exists."""
         self.all = True  # --all by default when cleaning
-        super(CleanCommand, self).run()
+        super().run()
         dir_ = 'dist'
         if exists(dir_):
             log.info("removing '%s' (and everything under it)", dir_)

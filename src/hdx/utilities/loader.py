@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
 """Loading utilities for YAML, JSON etc."""
 
 import json
 
-from io import open
 from os import linesep
 from typing import List, Dict, Optional
 
@@ -30,7 +28,7 @@ def load_file_to_str(path: str, encoding: str = 'utf-8', strip: bool = False, re
         str: String contents of file
 
     """
-    with open(path, 'r', encoding=encoding) as f:
+    with open(path, encoding=encoding) as f:
         string = f.read()
         if replace_newlines is not None:
             string = string.replace(linesep, replace_newlines)
@@ -51,7 +49,7 @@ def load_yaml(path: str, encoding: str = 'utf-8') -> Dict:
     Returns:
         Dict: Ordered dictionary containing loaded YAML file
     """
-    with open(path, 'r', encoding=encoding) as f:
+    with open(path, encoding=encoding) as f:
         yaml = YAML()
         yamldict = yaml.load(f.read())
     if not yamldict:
@@ -69,7 +67,7 @@ def load_json(path: str, encoding: str = 'utf-8') -> Dict:
     Returns:
         Dict: Ordered dictionary containing loaded JSON file
     """
-    with open(path, 'r', encoding=encoding) as f:
+    with open(path, encoding=encoding) as f:
         jsondict = json.loads(f.read())
     if not jsondict:
         raise (LoadError(f'JSON file: {path} is empty!'))

@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
 """Dict and List utilities"""
-from __future__ import division
 
 import itertools
 from collections import UserDict

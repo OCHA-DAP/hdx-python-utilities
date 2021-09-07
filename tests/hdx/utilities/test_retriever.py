@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 """Retriever Tests"""
 import random
 import string

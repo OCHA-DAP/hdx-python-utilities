@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
 """Saving utilities for YAML, JSON etc."""
 import json
 from collections import OrderedDict
-from io import open
 from typing import Dict, Any
 
 from ruamel.yaml import YAML, RoundTripRepresenter, add_representer, SafeRepresenter
@@ -10,20 +8,20 @@ from ruamel.yaml import YAML, RoundTripRepresenter, add_representer, SafeReprese
 
 class UnPrettyRTRepresenter(RoundTripRepresenter):
     def represent_none(self, data: Any) -> Any:
-        return self.represent_scalar(u'tag:yaml.org,2002:null', u'null')
+        return self.represent_scalar('tag:yaml.org,2002:null', 'null')
 
 
 class UnPrettySafeRepresenter(SafeRepresenter):
     def represent_none(self, data: Any) -> Any:
-        return self.represent_scalar(u'tag:yaml.org,2002:null', u'null')
+        return self.represent_scalar('tag:yaml.org,2002:null', 'null')
 
 
 class PrettySafeRepresenter(SafeRepresenter):
     def represent_none(self, data: Any) -> Any:
         if len(self.represented_objects) == 0 and not self.serializer.use_explicit_start:
             # this will be open ended (although it is not yet)
-            return self.represent_scalar(u'tag:yaml.org,2002:null', u'null')
-        return self.represent_scalar(u'tag:yaml.org,2002:null', "")
+            return self.represent_scalar('tag:yaml.org,2002:null', 'null')
+        return self.represent_scalar('tag:yaml.org,2002:null', "")
 
 
 UnPrettyRTRepresenter.add_representer(None, UnPrettyRTRepresenter.represent_none)

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Utility class to simplify sending emails"""
 
 import logging

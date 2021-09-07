@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Downloading utilities for urls"""
 import copy
 import hashlib
@@ -26,7 +25,7 @@ class DownloadError(Exception):
     pass
 
 
-class Download(object):
+class Download:
     """Download class with various download operations. Requires either global user agent to be set or appropriate
     user agent parameter(s) to be completed.
 

@@ -1,4 +1,3 @@
-# -*- coding: UTF-8 -*-
 """Configuration of logging"""
 import logging.config
 import os
