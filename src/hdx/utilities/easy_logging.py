@@ -39,7 +39,7 @@ def setup_logging(**kwargs: Any) -> None:
         if smtp_config_found:
             raise LoggingError('More than one smtp configuration file given!')
         smtp_config_found = True
-        print('Loading smtp configuration customisations from: %s' % smtp_config_json)
+        print(f'Loading smtp configuration customisations from: {smtp_config_json}')
         smtp_config_dict = load_json(smtp_config_json)
 
     smtp_config_yaml = kwargs.get('smtp_config_yaml', '')
@@ -47,7 +47,7 @@ def setup_logging(**kwargs: Any) -> None:
         if smtp_config_found:
             raise LoggingError('More than one smtp configuration file given!')
         smtp_config_found = True
-        print('Loading smtp configuration customisations from: %s' % smtp_config_yaml)
+        print(f'Loading smtp configuration customisations from: {smtp_config_yaml}')
         smtp_config_dict = load_yaml(smtp_config_yaml)
 
     logging_smtp_config_dict = None
@@ -62,7 +62,7 @@ def setup_logging(**kwargs: Any) -> None:
         if logging_config_found:
             raise LoggingError('More than one logging configuration file given!')
         logging_config_found = True
-        print('Loading logging configuration from: %s' % logging_config_json)
+        print(f'Loading logging configuration from: {logging_config_json}')
         logging_config_dict = load_json(logging_config_json)
 
     logging_config_yaml = kwargs.get('logging_config_yaml', '')
@@ -75,9 +75,9 @@ def setup_logging(**kwargs: Any) -> None:
             logging_config_yaml = script_dir_plus_file('logging_configuration.yml', setup_logging)
             if smtp_config_found:
                 logging_smtp_config_yaml = script_dir_plus_file('logging_smtp_configuration.yml', setup_logging)
-                print('Loading base SMTP logging configuration from: %s' % logging_smtp_config_yaml)
+                print(f'Loading base SMTP logging configuration from: {logging_smtp_config_yaml}')
                 logging_smtp_config_dict = load_yaml(logging_smtp_config_yaml)
-        print('Loading logging configuration from: %s' % logging_config_yaml)
+        print(f'Loading logging configuration from: {logging_config_yaml}')
         logging_config_dict = load_yaml(logging_config_yaml)
 
     if smtp_config_found:

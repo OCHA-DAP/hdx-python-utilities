@@ -58,12 +58,12 @@ class UserAgent(object):
             raise UserAgentError("User_agent parameter missing. It can be your project's name for example.")
         preprefix = configdict.get('preprefix')
         if preprefix:
-            user_agent = '%s:' % preprefix
+            user_agent = f'{preprefix}:'
         else:
             user_agent = ''
         if prefix:
-            user_agent = '%s%s-' % (user_agent, prefix)
-        user_agent = '%s%s' % (user_agent, ua)
+            user_agent = f'{user_agent}{prefix}-'
+        user_agent = f'{user_agent}{ua}'
         return user_agent
 
     @classmethod
@@ -83,16 +83,16 @@ class UserAgent(object):
         if not user_agent_config_yaml:
             user_agent_config_yaml = cls.default_user_agent_config_yaml
             logger.info(
-                'No user agent or user agent config file given. Using default user agent config file: %s.' % user_agent_config_yaml)
+                f'No user agent or user agent config file given. Using default user agent config file: {user_agent_config_yaml}.')
         if not isfile(user_agent_config_yaml):
             raise UserAgentError(
                 "User_agent should be supplied in a YAML config file. It can be your project's name for example.")
-        logger.info('Loading user agent config from: %s' % user_agent_config_yaml)
+        logger.info(f'Loading user agent config from: {user_agent_config_yaml}')
         user_agent_config_dict = load_yaml(user_agent_config_yaml)
         if user_agent_lookup:
             user_agent_config_dict = user_agent_config_dict.get(user_agent_lookup)
         if not user_agent_config_dict:
-            raise UserAgentError("No user agent information read from: %s" % user_agent_config_yaml)
+            raise UserAgentError(f"No user agent information read from: {user_agent_config_yaml}")
         ua = user_agent_config_dict.get('user_agent')
         return cls._construct(user_agent_config_dict, prefix, ua)
 
@@ -119,7 +119,7 @@ class UserAgent(object):
         if prefix:
             del kwargs['prefix']
         else:
-            prefix = 'HDXPythonUtilities/%s' % get_utils_version()
+            prefix = f'HDXPythonUtilities/{get_utils_version()}'
         if not user_agent:
             ua = cls._load(prefix, user_agent_config_yaml, user_agent_lookup)
         else:

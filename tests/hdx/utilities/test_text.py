@@ -16,7 +16,7 @@ class TestText:
 
     def test_remove_end_characters(self):
         assert remove_end_characters('lalala,.,"') == 'lalala'
-        assert remove_end_characters('lalala, .\t/,"', '%s%s' % (punctuation, whitespace)) == 'lalala'
+        assert remove_end_characters('lalala, .\t/,"', f'{punctuation}{whitespace}') == 'lalala'
 
     def test_remove_from_end(self):
         result = remove_from_end(TestText.a, ['fast!', 'so', 'hello', 'as'], 'Transforming %s -> %s')

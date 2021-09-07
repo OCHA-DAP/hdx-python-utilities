@@ -122,11 +122,11 @@ def read_or_create_batch(folder: str, batch: Optional[str] = None) -> str:
     batch_file = join(folder, 'batch.txt')
     if exists(batch_file):
         batch = load_file_to_str(batch_file, strip=True)
-        logger.info('File BATCH = %s' % batch)
+        logger.info(f'File BATCH = {batch}')
     else:
         if not batch:
             batch = get_uuid()
-            logger.info('Generated BATCH = %s' % batch)
+            logger.info(f'Generated BATCH = {batch}')
         save_str_to_file(batch, batch_file)
     return batch
 
@@ -169,7 +169,7 @@ def get_wheretostart(text: str, message: str, key: str) -> Optional[str]:
         return None
     w_key, wheretostart = text.split('=')
     if w_key == key:
-        logger.info('%s WHERETOSTART = %s' % (message, wheretostart))
+        logger.info(f'{message} WHERETOSTART = {wheretostart}')
         return wheretostart
     else:
         return 'IGNORE'
@@ -213,17 +213,17 @@ def progress_storing_folder(info: Dict, iterator: Iterable[Dict], key: str, wher
             if not found:
                 if current == wheretostart:
                     found = True
-                    logger.info('Starting run from WHERETOSTART %s' % wheretostart)
+                    logger.info(f'Starting run from WHERETOSTART {wheretostart}')
                 else:
                     logger.info('Run not started. Ignoring %s. WHERETOSTART (%s) not matched.' % (current,
                                                                                                   wheretostart))
                     continue
-        output = '%s=%s' % (key, current)
+        output = f'{key}={current}'
         info['progress'] = output
         save_str_to_file(output, progress_file)
         yield info, nextdict
     if wheretostart and not found:
-        raise NotFoundError('WHERETOSTART (%s) not matched in iterator with key %s and no run started!' % (wheretostart, key))
+        raise NotFoundError(f'WHERETOSTART ({wheretostart}) not matched in iterator with key {key} and no run started!')
 
 
 @contextlib.contextmanager

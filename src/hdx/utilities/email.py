@@ -52,7 +52,7 @@ class Email:
             if email_config_found:
                 raise EmailConfigurationError('More than one email configuration file given!')
             email_config_found = True
-            logger.info('Loading email configuration from: %s' % email_config_json)
+            logger.info(f'Loading email configuration from: {email_config_json}')
             email_config_dict = load_json(email_config_json)
 
         email_config_yaml = kwargs.get('email_config_yaml', None)
@@ -63,7 +63,7 @@ class Email:
             if not email_config_yaml:
                 logger.info('No email configuration parameter. Using default email configuration path.')
                 email_config_yaml = Email.default_email_config_yaml
-            logger.info('Loading email configuration from: %s' % email_config_yaml)
+            logger.info(f'Loading email configuration from: {email_config_yaml}')
             email_config_dict = load_yaml(email_config_yaml)
 
         self.connection_type = email_config_dict.get('connection_type', 'smtp')

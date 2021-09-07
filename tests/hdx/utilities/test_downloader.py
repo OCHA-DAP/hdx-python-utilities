@@ -21,10 +21,10 @@ def not_raises(ExpectedException):
     try:
         yield
     except ExpectedException as error:
-        raise pytest.fail('Raised exception {0} when it should not!'.format(error))
+        raise pytest.fail(f'Raised exception {error} when it should not!')
 
     except Exception as error:
-        raise pytest.fail('An unexpected exception {0} raised.'.format(error))
+        raise pytest.fail(f'An unexpected exception {error} raised.')
 
 
 class TestDownloader:
@@ -128,7 +128,7 @@ class TestDownloader:
         test_url = 'http://www.lalala.com/lala'
         with Download(basic_auth_file=basicauthfile, extra_params_dict={'key1': 'val1'}) as downloader:
             assert downloader.session.auth == ('testuser', 'testpass')
-            assert downloader.get_full_url(test_url) == '%s?key1=val1' % test_url
+            assert downloader.get_full_url(test_url) == f'{test_url}?key1=val1'
         key = 'Authorization'
         value = 'lala'
         with Download(headers={key: value}) as downloader:
@@ -218,10 +218,10 @@ class TestDownloader:
             downloader.setup(postfixtureurl, post=True)
             headers = downloader.response.headers
             assert bool(re.match(r'4\d\d', headers['Content-Length'])) is True
-            downloader.setup('%s?id=10&lala=a' % getfixtureurl, post=False,
+            downloader.setup(f'{getfixtureurl}?id=10&lala=a', post=False,
                              parameters=OrderedDict([('b', '4'), ('d', '3')]))
             assert list(downloader.get_json()['args'].items()) == list(OrderedDict([('b', '4'), ('d', '3'), ('id', '10'), ('lala', 'a')]).items())
-            downloader.setup('%s?id=3&lala=b' % postfixtureurl, post=True,
+            downloader.setup(f'{postfixtureurl}?id=3&lala=b', post=True,
                              parameters=OrderedDict([('a', '3'), ('c', '2')]))
             assert list(downloader.get_json()['form'].items()) == list(OrderedDict([('a', '3'), ('c', '2'), ('id', '3'), ('lala', 'b')]).items())
 
@@ -259,7 +259,7 @@ class TestDownloader:
             fpath = abspath(f)
             remove(f)
             assert fpath == abspath(join(tmpdir, filename))
-            f = downloader.download_file('%s?id=10&lala=a' % getfixtureurl, post=False,
+            f = downloader.download_file(f'{getfixtureurl}?id=10&lala=a', post=False,
                                          parameters=OrderedDict([('b', '4'), ('d', '3')]), folder=tmpdir,
                                          filename=filename)
             fpath = abspath(f)
@@ -271,7 +271,7 @@ class TestDownloader:
                 assert '"d": "3"' in text
             remove(f)
             assert fpath == abspath(join(tmpdir, filename))
-            f = downloader.download_file('%s?id=3&lala=b' % postfixtureurl, post=True,
+            f = downloader.download_file(f'{postfixtureurl}?id=3&lala=b', post=True,
                                          parameters=OrderedDict([('a', '3'), ('c', '2')]), folder=tmpdir,
                                          filename=filename)
             fpath = abspath(f)
@@ -301,14 +301,14 @@ class TestDownloader:
 615,2231RTA,,21/04/2001,2001,1,Riots/Protests,Rioters (Algeria),Berber Ethnic Group (Algeria),5,Police Forces of Algeria (1999-),,1,15,Algeria,Bejaia,Amizour,,Amizour,36.64022,4.90131,1,Kabylie report,"Rioters threw molotov cocktails, rocks and burning tires at gendarmerie stations in Beni Douala, El-Kseur and Amizour.",0
 
 '''
-            downloader.download('%s?id=10&lala=a' % getfixtureurl, post=False,
+            downloader.download(f'{getfixtureurl}?id=10&lala=a', post=False,
                                 parameters=OrderedDict([('b', '4'), ('d', '3')]))
             assert list(downloader.get_json()['args'].items()) == list(OrderedDict([('b', '4'), ('d', '3'), ('id', '10'), ('lala', 'a')]).items())
-            downloader.download('%s?id=3&lala=b' % postfixtureurl, post=True,
+            downloader.download(f'{postfixtureurl}?id=3&lala=b', post=True,
                                 parameters=OrderedDict([('a', '3'), ('c', '2')]))
             assert list(downloader.get_json()['form'].items()) == list(OrderedDict([('a', '3'), ('c', '2'), ('id', '3'), ('lala', 'b')]).items())
         with Download(rate_limit={'calls': 1, 'period': 0.1}) as downloader:
-            downloader.download('%s?id=10&lala=a' % getfixtureurl, post=False,
+            downloader.download(f'{getfixtureurl}?id=10&lala=a', post=False,
                                 parameters=OrderedDict([('b', '4'), ('d', '3')]))
             assert list(downloader.get_json()['args'].items()) == list(OrderedDict([('b', '4'), ('d', '3'), ('id', '10'), ('lala', 'a')]).items())
             downloader.download(fixturefile)

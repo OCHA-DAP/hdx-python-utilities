@@ -34,14 +34,14 @@ class TestUserAgent:
                         empty_yaml, user_agent_config_wrong_yaml):
         version = get_utils_version()
         assert UserAgent.get(
-            user_agent_config_yaml=user_agent_config_yaml) == 'lala:HDXPythonUtilities/%s-myua' % version
+            user_agent_config_yaml=user_agent_config_yaml) == f'lala:HDXPythonUtilities/{version}-myua'
         assert UserAgent.get(
-            user_agent_config_yaml=user_agent_config2_yaml) == 'HDXPythonUtilities/%s-myuseragent' % version
+            user_agent_config_yaml=user_agent_config2_yaml) == f'HDXPythonUtilities/{version}-myuseragent'
         assert UserAgent.get(user_agent_config_yaml=user_agent_config3_yaml,
-                             user_agent_lookup='lookup') == 'HDXPythonUtilities/%s-mylookupagent' % version
-        assert UserAgent.get(user_agent='my_ua', preprefix='papa') == 'papa:HDXPythonUtilities/%s-my_ua' % version
+                             user_agent_lookup='lookup') == f'HDXPythonUtilities/{version}-mylookupagent'
+        assert UserAgent.get(user_agent='my_ua', preprefix='papa') == f'papa:HDXPythonUtilities/{version}-my_ua'
         UserAgent.set_global(user_agent_config_yaml=user_agent_config3_yaml, user_agent_lookup='lookup2')
-        assert UserAgent.get() == 'HDXPythonUtilities/%s-mylookupagent2' % version
+        assert UserAgent.get() == f'HDXPythonUtilities/{version}-mylookupagent2'
         UserAgent.clear_global()
         with pytest.raises(UserAgentError):
             UserAgent.get(user_agent_config_yaml=user_agent_config3_yaml, user_agent_lookup='fail')
@@ -57,10 +57,10 @@ class TestUserAgent:
             UserAgent._load(prefix='', user_agent_config_yaml='')
         my_user_agent = 'lala'
         monkeypatch.setenv('USER_AGENT', my_user_agent)
-        assert UserAgent.get() == 'HDXPythonUtilities/%s-%s' % (version, my_user_agent)
+        assert UserAgent.get() == f'HDXPythonUtilities/{version}-{my_user_agent}'
         my_preprefix = 'haha'
         monkeypatch.setenv('PREPREFIX', my_preprefix)
-        assert UserAgent.get() == '%s:HDXPythonUtilities/%s-%s' % (my_preprefix, version, my_user_agent)
-        my_prefix = 'HDXPythonLibrary/%s' % version
-        assert UserAgent.get(prefix=my_prefix) == '%s:%s-%s' % (my_preprefix, my_prefix, my_user_agent)
+        assert UserAgent.get() == f'{my_preprefix}:HDXPythonUtilities/{version}-{my_user_agent}'
+        my_prefix = f'HDXPythonLibrary/{version}'
+        assert UserAgent.get(prefix=my_prefix) == f'{my_preprefix}:{my_prefix}-{my_user_agent}'
         UserAgent.clear_global()

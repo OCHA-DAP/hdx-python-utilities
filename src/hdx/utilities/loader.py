@@ -37,7 +37,7 @@ def load_file_to_str(path: str, encoding: str = 'utf-8', strip: bool = False, re
         if strip:
             string = string.strip()
     if not string:
-        raise LoadError('%s file is empty!' % path)
+        raise LoadError(f'{path} file is empty!')
     return string
 
 
@@ -55,7 +55,7 @@ def load_yaml(path: str, encoding: str = 'utf-8') -> Dict:
         yaml = YAML()
         yamldict = yaml.load(f.read())
     if not yamldict:
-        raise (LoadError('YAML file: %s is empty!' % path))
+        raise (LoadError(f'YAML file: {path} is empty!'))
     return yamldict
 
 
@@ -72,7 +72,7 @@ def load_json(path: str, encoding: str = 'utf-8') -> Dict:
     with open(path, 'r', encoding=encoding) as f:
         jsondict = json.loads(f.read())
     if not jsondict:
-        raise (LoadError('JSON file: %s is empty!' % path))
+        raise (LoadError(f'JSON file: {path} is empty!'))
     return jsondict
 
 

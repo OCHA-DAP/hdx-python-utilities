@@ -512,7 +512,7 @@ def parse(timestr, default=None,
     try:
         ret = DEFAULTPARSER._build_naive(res, default)
     except ValueError as e:
-        raise ParserError(str(e) + ": %s" % timestr) from e
+        raise ParserError(str(e) + f": {timestr}") from e
 
     if not ignoretz:
         ret = DEFAULTPARSER._build_tzaware(ret, res, tzinfos)

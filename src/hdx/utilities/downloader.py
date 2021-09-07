@@ -113,7 +113,7 @@ class Download(object):
         filename, extension = splitext(filename)
         if not folder:
             folder = get_temp_dir()
-        path = join(folder, '%s%s' % (filename, extension))
+        path = join(folder, f'{filename}{extension}')
         if overwrite:
             try:
                 remove(path)

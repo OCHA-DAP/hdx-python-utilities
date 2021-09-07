@@ -53,11 +53,11 @@ def merge_two_dictionaries(a: DictUpperBound, b: DictUpperBound, merge_lists: bo
                     else:
                         a[key] = b[key]
             else:
-                raise ValueError('Cannot merge non-dict "%s" into dict "%s"' % (b, a))
+                raise ValueError(f'Cannot merge non-dict "{b}" into dict "{a}"')
         else:
-            raise ValueError('NOT IMPLEMENTED "%s" into "%s"' % (b, a))
+            raise ValueError(f'NOT IMPLEMENTED "{b}" into "{a}"')
     except TypeError as e:
-        raise ValueError('TypeError "%s" in key "%s" when merging "%s" into "%s"' % (e, key, b, a))
+        raise ValueError(f'TypeError "{e}" in key "{key}" when merging "{b}" into "{a}"')
     return a
 
 

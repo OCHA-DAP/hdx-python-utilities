@@ -86,7 +86,7 @@ def get_session(user_agent: Optional[str] = None, user_agent_config_yaml: Option
             if extra_params_found:
                 raise SessionError('More than one set of extra parameters given!')
             extra_params_found = True
-            logger.info('Loading extra parameters from: %s' % extra_params_json)
+            logger.info(f'Loading extra parameters from: {extra_params_json}')
             try:
                 extra_params_dict = load_json(extra_params_json)
             except IOError:
@@ -96,7 +96,7 @@ def get_session(user_agent: Optional[str] = None, user_agent_config_yaml: Option
         if extra_params_yaml:
             if extra_params_found:
                 raise SessionError('More than one set of extra parameters given!')
-            logger.info('Loading extra parameters from: %s' % extra_params_yaml)
+            logger.info(f'Loading extra parameters from: {extra_params_yaml}')
             try:
                 extra_params_dict = load_yaml(extra_params_yaml)
             except IOError:
@@ -106,7 +106,7 @@ def get_session(user_agent: Optional[str] = None, user_agent_config_yaml: Option
         if extra_params_lookup and extra_params_dict:
             extra_params_dict = extra_params_dict.get(extra_params_lookup)
             if extra_params_dict is None:
-                raise SessionError('%s does not exist in extra_params!' % extra_params_lookup)
+                raise SessionError(f'{extra_params_lookup} does not exist in extra_params!')
     if extra_params_dict:
         basic_auth_param = extra_params_dict.get('basic_auth')
         if basic_auth_param:
@@ -126,16 +126,16 @@ def get_session(user_agent: Optional[str] = None, user_agent_config_yaml: Option
         auths_found.append('auth argument')
     basic_auth_file = kwargs.get('basic_auth_file')
     if basic_auth_file:
-        logger.info('Loading basic auth from: %s' % basic_auth_file)
+        logger.info(f'Loading basic auth from: {basic_auth_file}')
         try:
             basic_auth = load_file_to_str(basic_auth_file, strip=True)
-            auths_found.append('file %s' % basic_auth_file)
+            auths_found.append(f'file {basic_auth_file}')
         except IOError:
             if fail_on_missing_file:
                 raise
     if len(auths_found) > 1:
         auths_found_str = ', '.join(auths_found)
-        raise SessionError('More than one authorisation given! (%s)' % auths_found_str)
+        raise SessionError(f'More than one authorisation given! ({auths_found_str})')
     if 'headers' not in auths_found:
         if basic_auth:
             auth = decode(basic_auth)

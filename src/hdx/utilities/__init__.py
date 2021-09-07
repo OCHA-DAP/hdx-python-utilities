@@ -67,7 +67,7 @@ class PackageCommand(Command):
 
     def run(self):
         log.info('Building Source and Wheel (universal) Packages...')
-        os.system('{0} setup.py clean sdist bdist_wheel --universal'.format(sys.executable))
+        os.system(f'{sys.executable} setup.py clean sdist bdist_wheel --universal')
         sys.exit()
 
 
@@ -91,7 +91,7 @@ class PublishCommand(Command):
 
         if PublishCommand.version:
             log.info('Pushing git tags...')
-            os.system('git tag v{0}'.format(PublishCommand.version))
+            os.system(f'git tag v{PublishCommand.version}')
             os.system('git push --tags')
 
         sys.exit()

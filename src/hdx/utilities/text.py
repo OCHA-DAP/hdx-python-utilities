@@ -75,7 +75,7 @@ def remove_string(string: str, toremove: str, end_characters_to_remove: str = pu
     index = string.find(toremove)
     newstring = string[:index].strip()
     newstring = remove_end_characters(newstring, characters_to_remove=end_characters_to_remove)
-    return '%s%s' % (newstring, string[index + len(toremove):])
+    return f'{newstring}{string[index + len(toremove):]}'
 
 
 def multiple_replace(string: str, replacements: Dict[str,str]) -> str:
