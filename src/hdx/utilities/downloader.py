@@ -345,6 +345,49 @@ class Download(object):
         """
         return self.setup(url, stream=False, post=post, parameters=parameters, timeout=timeout, headers=headers, encoding=encoding)
 
+    def get_header(self, header):
+        # type: (str) -> Any
+        """Get a particular response header of download
+
+        Args:
+            header (str): Header for which to get value
+
+        Returns:
+            Any: Response header's value
+
+        """
+        return self.response.headers.get(header)
+
+    def get_headers(self):
+        # type: () -> Any
+        """Get response headers of download
+
+        Returns:
+            Any: Response headers
+
+        """
+        return self.response.headers
+
+    def get_status(self):
+        # type: () -> int
+        """Get response status code
+
+        Returns:
+            int: Response status code
+
+        """
+        return self.response.status_code
+
+    def get_text(self):
+        # type: () -> str
+        """Get text content of download
+
+        Returns:
+            str: Text content of download
+
+        """
+        return self.response.text
+
     def get_yaml(self):
         # type: () -> Any
         """Get YAML content of download

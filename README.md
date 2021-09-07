@@ -82,6 +82,16 @@ if that library is included), then it can be configured once and used automatica
     with Download() as downloader:
         response = downloader.download(url)  # get requests library response
 
+The response is of the form produced by teh requests library. It may not be needed as there are functions directly on 
+the Download object eg.
+
+    assert downloader.get_status() == 200
+    assert len(downloader.get_headers()) == 24
+    assert bool(re.match(r'7\d\d', downloader.get_header('Content-Length'))) is True
+    assert downloader.get_text() == 'XXX'
+    assert downloader.get_json() == {...}
+    assert downloader.get_yaml() == {...}
+
 The get_tabular_rows method enables iteration through tabular data. It returns the header of tabular file pointed to by 
 the url and an iterator where each row is returned as a list or dictionary depending on the dict_rows argument.
 
