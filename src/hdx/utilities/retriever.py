@@ -111,8 +111,8 @@ class Retrieve(object):
         else:
             try:
                 logger.info('Downloading %s from %s' % (logstr, self.get_url_logstr(url)))
-                response = self.downloader.download(url, **kwargs)
-                text = response.text
+                self.downloader.download(url, **kwargs)
+                text = self.downloader.get_text()
                 if self.save:
                     logger.info('Saving %s in %s' % (logstr, saved_path))
                     save_str_to_file(text, saved_path)
