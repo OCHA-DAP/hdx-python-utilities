@@ -147,7 +147,7 @@ class Download:
             count = 0
             while exists(path):
                 count += 1
-                path = join(folder, "%s%d%s" % (filename, count, extension))
+                path = join(folder, f"{filename}{count}{extension}")
         return path
 
     def get_full_url(self, url: str) -> str:
