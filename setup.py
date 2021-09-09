@@ -1,7 +1,7 @@
 import sys
 from os.path import join
 
-from setuptools import find_packages, setup
+from setuptools import find_namespace_packages, setup
 
 sys.path.append("src")  # Only needed for this project
 from hdx.utilities import CleanCommand, PackageCommand, PublishCommand
@@ -46,7 +46,7 @@ setup(
     keywords=["HDX", "utilities", "library", "country", "iso 3166"],
     long_description=load_file_to_str("README.md"),
     long_description_content_type="text/markdown",
-    packages=find_packages(where="src"),
+    packages=find_namespace_packages(where="src"),
     package_dir={"": "src"},
     include_package_data=True,
     setup_requires=["pytest-runner"],
