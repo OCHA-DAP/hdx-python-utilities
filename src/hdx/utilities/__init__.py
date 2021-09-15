@@ -46,12 +46,9 @@ class CleanCommand(clean):
         the dist directory if it exists."""
         self.all = True  # --all by default when cleaning
         super().run()
-        dir_ = "dist"
-        if exists(dir_):
-            log.info("removing '%s' (and everything under it)", dir_)
-            rmtree(dir_)
-        else:
-            log.info("'%s' does not exist -- can't clean it", dir_)
+        if exists("dist"):
+            log.info("removing dist folder (and everything under it)")
+            rmtree("dist")
 
 
 class PackageCommand(Command):
