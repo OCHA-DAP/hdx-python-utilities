@@ -439,7 +439,7 @@ Examples:
     # TEMP_DIR and falls back to os function,
     # optionally appends the given folder, creates the
     # folder and deletes the folder if exiting 
-    # successfully else keeps the folder if tehre was
+    # successfully else keeps the folder if there was
     # an exception
     with temp_dir('papa', delete_on_success=True, delete_on_failure=False) as tempdir:
         ...
