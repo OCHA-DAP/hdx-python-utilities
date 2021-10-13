@@ -32,7 +32,7 @@ def is_valid_uuid(uuid_to_test: str, version: int = 4) -> bool:
     """
     try:
         uuid_obj = UUID(uuid_to_test, version=version)
-    except:
+    except Exception:
         return False
     return str(uuid_obj) == uuid_to_test
 

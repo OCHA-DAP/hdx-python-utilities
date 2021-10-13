@@ -246,11 +246,11 @@ class TestDictAndList:
         }
 
     def test_read_write_list_to_csv(self):
-        l = [[1, 2, 3, "a"], [4, 5, 6, "b"], [7, 8, 9, "c"]]
+        list_of_lists = [[1, 2, 3, "a"], [4, 5, 6, "b"], [7, 8, 9, "c"]]
         folder = gettempdir()
         filename = "test_read_write_list_to_csv.csv"
         filepath = join(folder, filename)
-        write_list_to_csv(filepath, l, headers=["h1", "h2", "h3", "h4"])
+        write_list_to_csv(filepath, list_of_lists, headers=["h1", "h2", "h3", "h4"])
         newll = read_list_from_csv(filepath)
         newld = read_list_from_csv(filepath, headers=1, dict_form=True)
         remove(filepath)

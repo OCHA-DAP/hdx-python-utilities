@@ -90,7 +90,7 @@ is
 a
 test  
 
-"""
+"""  # noqa: W291
     expected_text_strip = """hello
 this
 is

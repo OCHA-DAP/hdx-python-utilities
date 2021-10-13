@@ -155,16 +155,16 @@ Content-Transfer-Encoding: 7bit
         default_email_config_yaml = Email.default_email_config_yaml
         Email.default_email_config_yaml = "NOT EXIST"
         with pytest.raises(IOError):
-            with Email() as email:
+            with Email() as _:
                 pass
         Email.default_email_config_yaml = default_email_config_yaml
         with pytest.raises(EmailConfigurationError):
             with Email(
                 email_config_dict=email_config_dict, email_config_json=email_json
-            ) as email:
+            ) as _:
                 pass
         with pytest.raises(EmailConfigurationError):
             with Email(
                 email_config_dict=email_config_dict, email_config_yaml=email_yaml
-            ) as email:
+            ) as _:
                 pass

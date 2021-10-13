@@ -255,7 +255,7 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
             yearfirst = info.yearfirst
 
         res = self._result()
-        l = _timelex.split(timestr)  # Splits the timestr into tokens
+        l = _timelex.split(timestr)  # noqa: E741
 
         skipped_idxs = []
 
@@ -405,7 +405,7 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
             res.year = year
             res.month = month
             res.day = day
-        ### CHANGES FROM HERE DOWN TO 3 VALUES IN TUPLE
+        # *** CHANGES FROM HERE DOWN TO 3 VALUES IN TUPLE ***
         except (IndexError, ValueError):
             return None, None, None
 

@@ -49,7 +49,7 @@ class TestPath:
             with temp_dir(tempfolder) as tempdir:
                 assert tempdir == expected_dir
                 raise ValueError("Fail!")
-        except:
+        except ValueError:
             pass
         assert exists(tempdir) is False
 
@@ -64,7 +64,7 @@ class TestPath:
             ) as tempdir:
                 assert tempdir == expected_dir
                 raise ValueError("Fail!")
-        except:
+        except ValueError:
             pass
         assert exists(tempdir) is False
 
@@ -80,7 +80,7 @@ class TestPath:
             ) as tempdir:
                 assert tempdir == expected_dir
                 raise ValueError("Fail!")
-        except:
+        except ValueError:
             pass
         assert exists(tempdir) is True
 
@@ -95,7 +95,7 @@ class TestPath:
             ) as tempdir:
                 assert tempdir == expected_dir
                 raise ValueError("Fail!")
-        except:
+        except ValueError:
             pass
         assert exists(tempdir) is True
         rmtree(tempdir)
@@ -112,7 +112,7 @@ class TestPath:
             ) as tempdir:
                 assert tempdir == expected_dir
                 raise ValueError("Fail!")
-        except:
+        except ValueError:
             pass
         assert exists(tempdir) is False
 
@@ -155,7 +155,7 @@ class TestPath:
                 if nextdict["iso3"] == "YEM":
                     start_batch = info["batch"]
                     raise ValueError("Problem!")
-        except:
+        except ValueError:
             pass
         assert exists(expected_dir) is True
         result = list()
@@ -174,7 +174,7 @@ class TestPath:
                 if nextdict["iso3"] == "YEM":
                     start_batch = info["batch"]
                     raise ValueError("Problem!")
-        except:
+        except ValueError:
             pass
         assert exists(expected_dir) is True
         monkeypatch.setenv("WHERETOSTART", "RESET")
@@ -195,7 +195,7 @@ class TestPath:
                 if nextdict["iso3"] == "YEM":
                     start_batch = info["batch"]
                     raise ValueError("Problem!")
-        except:
+        except ValueError:
             pass
         assert exists(expected_dir) is True
         monkeypatch.setenv("WHERETOSTART", "iso3=SDN")
@@ -216,7 +216,7 @@ class TestPath:
                 if nextdict["iso3"] == "YEM":
                     start_batch = info["batch"]
                     raise ValueError("Problem!")
-        except:
+        except ValueError:
             pass
         monkeypatch.setenv("WHERETOSTART", "iso3=NOTFOUND")
         found = False
@@ -301,14 +301,14 @@ class TestPath:
                 if "iso3" in nextdict and nextdict["iso3"] == "YEM":
                     start_batch = info["batch"]
                     raise ValueError("Problem!")
-        except:
+        except ValueError:
             pass
         for result in expected_results:
             result[1]["batch"] = start_batch
         assert results == expected_results[:4]
         assert exists(expected_dir) is True
         result = list()
-        for i, info, nextdict in multiple_progress_storing_tempdir(
+        for _, info, nextdict in multiple_progress_storing_tempdir(
             tempfolder, iterators, keys
         ):
             assert exists(info["folder"]) is True
@@ -319,13 +319,13 @@ class TestPath:
         assert exists(expected_dir) is False
 
         try:
-            for i, info, nextdict in multiple_progress_storing_tempdir(
+            for _, info, nextdict in multiple_progress_storing_tempdir(
                 tempfolder, iterators, keys
             ):
                 if "iso3" in nextdict and nextdict["iso3"] == "YEM":
                     start_batch = info["batch"]
                     raise ValueError("Problem!")
-        except:
+        except ValueError:
             pass
         for result in expected_results:
             result[1]["batch"] = start_batch
@@ -343,20 +343,20 @@ class TestPath:
         monkeypatch.delenv("WHERETOSTART")
 
         try:
-            for i, info, nextdict in multiple_progress_storing_tempdir(
+            for _, info, nextdict in multiple_progress_storing_tempdir(
                 tempfolder, iterators, keys
             ):
                 if "iso3" in nextdict and nextdict["iso3"] == "YEM":
                     start_batch = info["batch"]
                     raise ValueError("Problem!")
-        except:
+        except ValueError:
             pass
         for result in expected_results:
             result[1]["batch"] = start_batch
         assert exists(expected_dir) is True
         monkeypatch.setenv("WHERETOSTART", "iso3=SDN")
         result = list()
-        for i, info, nextdict in multiple_progress_storing_tempdir(
+        for _, info, nextdict in multiple_progress_storing_tempdir(
             tempfolder, iterators, keys
         ):
             assert exists(info["folder"]) is True
