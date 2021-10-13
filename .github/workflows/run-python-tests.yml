@@ -27,7 +27,7 @@ jobs:
         python -m pip install tox tox-gh-actions
     - name: Test with tox/pytest
       run: |
-        python -m tox
+        tox
     - name: Publish in Coveralls
       uses: AndreMiras/coveralls-python-action@develop
       if: success()
