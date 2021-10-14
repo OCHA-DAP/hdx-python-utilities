@@ -28,6 +28,7 @@ flake8-black = ["+*"]
 
 [tool.coverage.run]
 relative_files = true
+source = ["src"]
 
 [tool.coverage.report]
 omit = [
@@ -71,7 +72,7 @@ deps =
     -r test-requirements.txt
 commands =
     flakehell lint src tests
-    pytest --junitxml=.tox/test-results.xml --cov-config .coveragerc --cov-report= --cov=.
+    pytest --junitxml=.tox/test-results.xml --no-cov-on-fail --cov-report=
 
 [testenv:publish]
 wheel_build_env = py38
