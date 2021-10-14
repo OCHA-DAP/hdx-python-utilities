@@ -30,7 +30,8 @@ jobs:
       run: |
         tox
     - name: Publish in Coveralls
-      uses: miurahr/coveralls-python-action@patch-pyprject-toml
+      run: pip install --upgrade coverage[toml]
+      uses: AndreMiras/coveralls-python-action@develop
       if: success()
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
