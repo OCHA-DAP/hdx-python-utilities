@@ -29,8 +29,9 @@ jobs:
     - name: Test with tox/pytest
       run: |
         tox
-    - name: Publish in Coveralls
+    - name: Install coverage dependency
       run: pip install --upgrade coverage[toml]
+    - name: Publish in Coveralls
       uses: AndreMiras/coveralls-python-action@develop
       if: success()
       with:
