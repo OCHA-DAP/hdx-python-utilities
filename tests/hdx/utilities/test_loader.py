@@ -43,15 +43,25 @@ class TestLoader:
             ),
             (
                 "dataset",
-                OrderedDict([("required_fields", ["name", "title", "dataset_date"])]),
+                OrderedDict(
+                    [("required_fields", ["name", "title", "dataset_date"])]
+                ),
             ),
             (
                 "resource",
                 OrderedDict(
-                    [("required_fields", ["package_id", "name", "description"])]
+                    [
+                        (
+                            "required_fields",
+                            ["package_id", "name", "description"],
+                        )
+                    ]
                 ),
             ),
-            ("showcase", OrderedDict([("required_fields", ["name", "title"])])),
+            (
+                "showcase",
+                OrderedDict([("required_fields", ["name", "title"])]),
+            ),
             ("param_1", "ABC"),
         ]
     )
@@ -78,8 +88,14 @@ class TestLoader:
                     ]
                 ),
             ),
-            ("dataset", OrderedDict([("required_fields", ["name", "dataset_date"])])),
-            ("resource", OrderedDict([("required_fields", ["name", "description"])])),
+            (
+                "dataset",
+                OrderedDict([("required_fields", ["name", "dataset_date"])]),
+            ),
+            (
+                "resource",
+                OrderedDict([("required_fields", ["name", "description"])]),
+            ),
             ("showcase", OrderedDict([("required_fields", ["name"])])),
             ("my_param", "abc"),
         ]

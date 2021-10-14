@@ -59,13 +59,17 @@ class TestUserAgent:
             == f"papa:HDXPythonUtilities/{version}-my_ua"
         )
         UserAgent.set_global(
-            user_agent_config_yaml=user_agent_config3_yaml, user_agent_lookup="lookup2"
+            user_agent_config_yaml=user_agent_config3_yaml,
+            user_agent_lookup="lookup2",
         )
-        assert UserAgent.get() == f"HDXPythonUtilities/{version}-mylookupagent2"
+        assert (
+            UserAgent.get() == f"HDXPythonUtilities/{version}-mylookupagent2"
+        )
         UserAgent.clear_global()
         with pytest.raises(UserAgentError):
             UserAgent.get(
-                user_agent_config_yaml=user_agent_config3_yaml, user_agent_lookup="fail"
+                user_agent_config_yaml=user_agent_config3_yaml,
+                user_agent_lookup="fail",
             )
         with pytest.raises(LoadError):
             UserAgent.get(user_agent_config_yaml=empty_yaml)
@@ -79,7 +83,9 @@ class TestUserAgent:
             UserAgent._load(prefix="", user_agent_config_yaml="")
         my_user_agent = "lala"
         monkeypatch.setenv("USER_AGENT", my_user_agent)
-        assert UserAgent.get() == f"HDXPythonUtilities/{version}-{my_user_agent}"
+        assert (
+            UserAgent.get() == f"HDXPythonUtilities/{version}-{my_user_agent}"
+        )
         my_preprefix = "haha"
         monkeypatch.setenv("PREPREFIX", my_preprefix)
         assert (

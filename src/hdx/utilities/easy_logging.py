@@ -38,7 +38,9 @@ def setup_logging(**kwargs: Any) -> None:
         if smtp_config_found:
             raise LoggingError("More than one smtp configuration file given!")
         smtp_config_found = True
-        print(f"Loading smtp configuration customisations from: {smtp_config_json}")
+        print(
+            f"Loading smtp configuration customisations from: {smtp_config_json}"
+        )
         smtp_config_dict = load_json(smtp_config_json)
 
     smtp_config_yaml = kwargs.get("smtp_config_yaml", "")
@@ -46,7 +48,9 @@ def setup_logging(**kwargs: Any) -> None:
         if smtp_config_found:
             raise LoggingError("More than one smtp configuration file given!")
         smtp_config_found = True
-        print(f"Loading smtp configuration customisations from: {smtp_config_yaml}")
+        print(
+            f"Loading smtp configuration customisations from: {smtp_config_yaml}"
+        )
         smtp_config_dict = load_yaml(smtp_config_yaml)
 
     logging_smtp_config_dict = None
@@ -59,7 +63,9 @@ def setup_logging(**kwargs: Any) -> None:
     logging_config_json = kwargs.get("logging_config_json", "")
     if logging_config_json:
         if logging_config_found:
-            raise LoggingError("More than one logging configuration file given!")
+            raise LoggingError(
+                "More than one logging configuration file given!"
+            )
         logging_config_found = True
         print(f"Loading logging configuration from: {logging_config_json}")
         logging_config_dict = load_json(logging_config_json)
@@ -67,7 +73,9 @@ def setup_logging(**kwargs: Any) -> None:
     logging_config_yaml = kwargs.get("logging_config_yaml", "")
     if logging_config_found:
         if logging_config_yaml:
-            raise LoggingError("More than one logging configuration file given!")
+            raise LoggingError(
+                "More than one logging configuration file given!"
+            )
     else:
         if not logging_config_yaml:
             print("No logging configuration parameter. Using default.")
@@ -88,7 +96,11 @@ def setup_logging(**kwargs: Any) -> None:
     if smtp_config_found:
         if logging_smtp_config_dict:
             logging_config_dict = merge_dictionaries(
-                [logging_config_dict, logging_smtp_config_dict, smtp_config_dict]
+                [
+                    logging_config_dict,
+                    logging_smtp_config_dict,
+                    smtp_config_dict,
+                ]
             )
         else:
             raise LoggingError(

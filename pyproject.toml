@@ -1,0 +1,82 @@
+[build-system]
+requires = [ "setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.black]
+line-length = 79
+
+[tool.isort]
+profile = "black"
+line_length = 79
+multi_line_output = 3
+
+[tool.flakehell]
+# make output nice
+format = "grouped"
+max_line_length = 79
+# show line of source code in output
+show_source = true
+
+# list of plugins and rules for them
+[tool.flakehell.plugins]
+mccabe = ["+*"]
+pycodestyle = ["+*", "-E203", "-E501", "-W503"]
+pyflakes = ["+*"]
+pylint = ["+*"]
+flake8-isort = ["+*"]
+flake8-black = ["+*"]
+
+[tool.coverage.run]
+relative_files = true
+
+[tool.coverage.report]
+omit = [
+    "*/setup.py",
+    "*/python?.?/*",
+    "*/venv/*",
+    "*/site-packages/*",
+    "*/tests/*",
+    "*__init__*"
+]
+
+exclude_lines = [
+    "pragma: no cover",  # Have to re-enable the standard pragma
+    "def __repr__",  # Don't complain about missing
+    "if self.debug",  # debug-only code
+    "raise AssertionError",  # Don't complain if tests don't hit
+    "raise NotImplementedError",  # defensive assertion code
+    "if 0:",  # Don't complain if non-runnable code
+    "if __name__ == .__main__.:"  # isn't run
+]
+
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+isolated_build = True
+envlist = py38
+
+[gh-actions]
+python =
+    3: flake8, py38
+
+[testenv]
+wheel = true
+deps =
+    flakehell
+    flake8==3.9.0
+    flake8-isort
+    flake8-black
+    coveralls
+    -r test-requirements.txt
+commands =
+    flakehell lint src tests
+    pytest --junitxml=.tox/test-results.xml --cov-config .coveragerc --cov-report= --cov=.
+
+[testenv:publish]
+wheel_build_env = py38
+deps =
+    twine
+
+commands =
+    python -c "from hdx.utilities import get_version; {toxinidir}/setup.cfg"
+"""

@@ -67,23 +67,31 @@ class TestDownloader:
     def fixtureprocessurlblank(self):
         return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/downloader/test_csv_processing_blanks.csv?a=1"
 
-    def test_get_path_for_url(self, tmpdir, fixtureurl, configfolder, downloaderfolder):
+    def test_get_path_for_url(
+        self, tmpdir, fixtureurl, configfolder, downloaderfolder
+    ):
         tmpdir = str(tmpdir)
         filename = "test_data.csv"
         path = Download.get_path_for_url(fixtureurl, configfolder)
         assert abspath(path) == abspath(join(configfolder, filename))
         path = Download.get_path_for_url(fixtureurl, downloaderfolder)
-        assert abspath(path) == abspath(join(downloaderfolder, "test_data3.csv"))
+        assert abspath(path) == abspath(
+            join(downloaderfolder, "test_data3.csv")
+        )
         testfolder = join(tmpdir, self.downloaderfoldername)
         rmtree(testfolder, ignore_errors=True)
         copytree(downloaderfolder, testfolder)
-        path = Download.get_path_for_url(fixtureurl, testfolder, overwrite=True)
+        path = Download.get_path_for_url(
+            fixtureurl, testfolder, overwrite=True
+        )
         assert abspath(path) == abspath(join(testfolder, filename))
         rmtree(testfolder)
         filename = "myfilename.txt"
         path = Download.get_path_for_url(fixtureurl, filename=filename)
         assert abspath(path) == abspath(join(gettempdir(), filename))
-        path = Download.get_path_for_url(fixtureurl, downloaderfolder, filename)
+        path = Download.get_path_for_url(
+            fixtureurl, downloaderfolder, filename
+        )
         assert abspath(path) == abspath(join(downloaderfolder, filename))
 
     def test_init(self, monkeypatch, downloaderfolder):
@@ -106,7 +114,10 @@ class TestDownloader:
         with pytest.raises(SessionError):
             Download(basic_auth="12345")
         with pytest.raises(SessionError):
-            Download(extra_params_yaml=extraparamsyamltree, extra_params_lookup="mykey")
+            Download(
+                extra_params_yaml=extraparamsyamltree,
+                extra_params_lookup="mykey",
+            )
         monkeypatch.delenv("BASIC_AUTH")
         with pytest.raises(SessionError):
             Download(
@@ -120,7 +131,10 @@ class TestDownloader:
         with pytest.raises(SessionError):
             Download(auth=("u", "p"), basic_auth_file=extraparamsjson)
         with pytest.raises(SessionError):
-            Download(basic_auth="Basic dXNlcjpwYXNz", basic_auth_file=extraparamsjson)
+            Download(
+                basic_auth="Basic dXNlcjpwYXNz",
+                basic_auth_file=extraparamsjson,
+            )
         with pytest.raises(SessionError):
             Download(
                 auth=("u", "p"),
@@ -135,7 +149,8 @@ class TestDownloader:
             )
         with pytest.raises(SessionError):
             Download(
-                extra_params_yaml=extraparamsyamltree, extra_params_lookup="missingkey"
+                extra_params_yaml=extraparamsyamltree,
+                extra_params_lookup="missingkey",
             )
         with pytest.raises(IOError):
             Download(basic_auth_file="NOTEXIST")
@@ -194,11 +209,13 @@ class TestDownloader:
         monkeypatch.delenv("EXTRA_PARAMS")
         with pytest.raises(SessionError):
             Download(
-                extra_params_dict={"key1": "val1"}, extra_params_json=extraparamsjson
+                extra_params_dict={"key1": "val1"},
+                extra_params_json=extraparamsjson,
             )
         with pytest.raises(SessionError):
             Download(
-                extra_params_dict={"key1": "val1"}, extra_params_yaml=extraparamsyaml
+                extra_params_dict={"key1": "val1"},
+                extra_params_yaml=extraparamsyaml,
             )
         with pytest.raises(SessionError):
             Download(
@@ -232,18 +249,23 @@ class TestDownloader:
 
     def test_get_url_params_for_post(self):
         result = Download.get_url_params_for_post(
-            "http://www.lala.com/hdfa?a=3&b=4", OrderedDict([("c", "e"), ("d", "f")])
+            "http://www.lala.com/hdfa?a=3&b=4",
+            OrderedDict([("c", "e"), ("d", "f")]),
         )
         assert result[0] == "http://www.lala.com/hdfa"
         assert list(result[1].items()) == list(
-            OrderedDict([("a", "3"), ("b", "4"), ("c", "e"), ("d", "f")]).items()
+            OrderedDict(
+                [("a", "3"), ("b", "4"), ("c", "e"), ("d", "f")]
+            ).items()
         )
         result = Download.get_url_params_for_post(
             "http://www.lala.com/hdfa?a=3&b=4", {"c": "e", "d": "f"}
         )
         assert result[0] == "http://www.lala.com/hdfa"
         assert list(result[1].items()) == list(
-            OrderedDict([("a", "3"), ("b", "4"), ("c", "e"), ("d", "f")]).items()
+            OrderedDict(
+                [("a", "3"), ("b", "4"), ("c", "e"), ("d", "f")]
+            ).items()
         )
 
     def test_hxl_row(self):
@@ -332,7 +354,9 @@ class TestDownloader:
             fpath = abspath(f)
             remove(f)
             assert fpath == abspath(join(tmpdir, "test_data.csv"))
-            f = downloader.download_file(fixtureurl, folder=tmpdir, filename=filename)
+            f = downloader.download_file(
+                fixtureurl, folder=tmpdir, filename=filename
+            )
             fpath = abspath(f)
             remove(f)
             assert fpath == abspath(join(tmpdir, filename))
@@ -392,7 +416,9 @@ class TestDownloader:
             assert downloader.get_status() == 200
             assert len(downloader.get_headers()) == 24
             assert (
-                bool(re.match(r"7\d\d", downloader.get_header("Content-Length")))
+                bool(
+                    re.match(r"7\d\d", downloader.get_header("Content-Length"))
+                )
                 is True
             )
             assert (
@@ -450,12 +476,18 @@ class TestDownloader:
 
     def test_download_tabular_key_value(self, fixtureurl, fixtureprocessurl):
         with Download() as downloader:
-            result = downloader.download_tabular_key_value(fixtureurl, file_type="csv")
+            result = downloader.download_tabular_key_value(
+                fixtureurl, file_type="csv"
+            )
             assert result == {"615": "2231RTA", "GWNO": "EVENT_ID_CNTY"}
-            result = downloader.download_tabular_key_value(fixtureprocessurl, headers=2)
+            result = downloader.download_tabular_key_value(
+                fixtureprocessurl, headers=2
+            )
             assert result == {"coal": "3", "gas": "2"}
             with pytest.raises(DownloadError):
-                downloader.download_tabular_key_value("NOTEXIST://NOTEXIST.csv")
+                downloader.download_tabular_key_value(
+                    "NOTEXIST://NOTEXIST.csv"
+                )
 
     @staticmethod
     def fix_strings(
@@ -487,7 +519,9 @@ class TestDownloader:
             headers, iterator = downloader.get_tabular_rows(fixtureprocessurl)
             assert headers == expected_headers
             assert list(iterator) == expected[1:]
-            headers, iterator = downloader.get_tabular_rows(fixtureprocessurlblank)
+            headers, iterator = downloader.get_tabular_rows(
+                fixtureprocessurlblank
+            )
             assert headers == expected_headers
             blank_expected = copy.deepcopy(expected[1:])
             blank_expected[2][0] = ""
@@ -544,7 +578,9 @@ class TestDownloader:
                 fixtureprocessurl, headers=3, dict_form=True
             )
             assert headers == expected[2]
-            expected_dicts = [{"coal": "gas", "3": "2", "7.4": "6.5", "needed": "n/a"}]
+            expected_dicts = [
+                {"coal": "gas", "3": "2", "7.4": "6.5", "needed": "n/a"}
+            ]
             assert list(iterator) == expected_dicts
 
             def testfn(headers, row):
@@ -603,7 +639,13 @@ class TestDownloader:
                     "ma1": "needed",
                     "la": "lala",
                 },
-                {"la1": "", "ha1": "2", "ba1": "6.5", "ma1": "n/a", "la": "lala"},
+                {
+                    "la1": "",
+                    "ha1": "2",
+                    "ba1": "6.5",
+                    "ma1": "n/a",
+                    "la": "lala",
+                },
                 {"la": "lala"},
             ]
             assert list(iterator) == expected_dicts
@@ -656,7 +698,11 @@ class TestDownloader:
             )
             self.fix_strings(result)
             assert result == {
-                "coal": {"header2": "3", "header3": "7.4", "header4": "needed"},
+                "coal": {
+                    "header2": "3",
+                    "header3": "7.4",
+                    "header4": "needed",
+                },
                 "gas": {"header2": "2", "header3": "6.5", "header4": "n/a"},
             }
             result = downloader.download_tabular_rows_as_dicts(
@@ -665,7 +711,11 @@ class TestDownloader:
             self.fix_strings(result)
             assert result == {
                 "2": {"header1": "gas", "header3": "6.5", "header4": "n/a"},
-                "3": {"header1": "coal", "header3": "7.4", "header4": "needed"},
+                "3": {
+                    "header1": "coal",
+                    "header3": "7.4",
+                    "header4": "needed",
+                },
             }
 
     def test_download_tabular_cols_as_dicts(self, fixtureprocessurl):

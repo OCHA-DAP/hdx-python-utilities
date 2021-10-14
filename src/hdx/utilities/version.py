@@ -1,13 +1,21 @@
-"""Version utility"""
-import logging
-
-from hdx.utilities.loader import load_file_to_str
-from hdx.utilities.path import script_dir_plus_file
-
-logger = logging.getLogger(__name__)
+from configparser import SafeConfigParser
+from os.path import join
+from typing import Optional
 
 
-def get_utils_version():
-    return load_file_to_str(
-        script_dir_plus_file("version.txt", get_utils_version), strip=True
-    )
+def get_version(projname: str) -> Optional[str]:
+    """
+    Get version
+
+    Args:
+        dirpath (str): Directory where setup.cfg is located
+
+    Returns:
+        Optional[str]: Version if available or None
+
+    """
+    config = SafeConfigParser()
+    config.read(join(dirpath, "setup.cfg"))
+    if not config.has_section("metadata"):
+        return None
+    return config["metadata"].get("version")

@@ -34,15 +34,25 @@ class TestLoader:
             ),
             (
                 "dataset",
-                OrderedDict([("required_fields", ["name", "title", "dataset_date"])]),
+                OrderedDict(
+                    [("required_fields", ["name", "title", "dataset_date"])]
+                ),
             ),
             (
                 "resource",
                 OrderedDict(
-                    [("required_fields", ["package_id", "name", "description"])]
+                    [
+                        (
+                            "required_fields",
+                            ["package_id", "name", "description"],
+                        )
+                    ]
                 ),
             ),
-            ("showcase", OrderedDict([("required_fields", ["name", "title"])])),
+            (
+                "showcase",
+                OrderedDict([("required_fields", ["name", "title"])]),
+            ),
             ("param_1", "ABC"),
         ]
     )
@@ -69,8 +79,14 @@ class TestLoader:
                     ]
                 ),
             ),
-            ("dataset", OrderedDict([("required_fields", ["name", "dataset_date"])])),
-            ("resource", OrderedDict([("required_fields", ["name", "description"])])),
+            (
+                "dataset",
+                OrderedDict([("required_fields", ["name", "dataset_date"])]),
+            ),
+            (
+                "resource",
+                OrderedDict([("required_fields", ["name", "description"])]),
+            ),
             ("showcase", OrderedDict([("required_fields", ["name"])])),
             ("my_param", "abc"),
         ]
@@ -92,7 +108,12 @@ class TestLoader:
     def test_save_yaml(self, tmpdir, saverfolder, filename, pretty, sortkeys):
         test_path = join(str(tmpdir), filename)
         ref_path = join(saverfolder, filename)
-        save_yaml(TestLoader.yaml_to_write, test_path, pretty=pretty, sortkeys=sortkeys)
+        save_yaml(
+            TestLoader.yaml_to_write,
+            test_path,
+            pretty=pretty,
+            sortkeys=sortkeys,
+        )
         assert_files_same(ref_path, test_path)
         dct = json.loads(json.dumps(TestLoader.yaml_to_write))
         save_yaml(dct, test_path, pretty=pretty, sortkeys=sortkeys)
@@ -110,7 +131,12 @@ class TestLoader:
     def test_save_json(self, tmpdir, saverfolder, filename, pretty, sortkeys):
         test_path = join(str(tmpdir), filename)
         ref_path = join(saverfolder, filename)
-        save_json(TestLoader.json_to_write, test_path, pretty=pretty, sortkeys=sortkeys)
+        save_json(
+            TestLoader.json_to_write,
+            test_path,
+            pretty=pretty,
+            sortkeys=sortkeys,
+        )
         assert_files_same(ref_path, test_path)
         dct = json.loads(json.dumps(TestLoader.json_to_write))
         save_json(dct, test_path, pretty=pretty, sortkeys=sortkeys)

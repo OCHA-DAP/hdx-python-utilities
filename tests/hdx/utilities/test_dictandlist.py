@@ -50,7 +50,14 @@ class TestDictAndList:
         assert result == {1: 1, 2: 6, 3: 3, 4: ["d", "e"], 5: 8, 6: 9}
         d1 = {1: 1, 2: 2, 3: 3, 4: ["a", "b", "c"]}
         result = merge_dictionaries([d1, d2], merge_lists=True)
-        assert result == {1: 1, 2: 6, 3: 3, 4: ["a", "b", "c", "d", "e"], 5: 8, 6: 9}
+        assert result == {
+            1: 1,
+            2: 6,
+            3: 3,
+            4: ["a", "b", "c", "d", "e"],
+            5: 8,
+            6: 9,
+        }
 
     def test_dict_diff(self):
         d1 = {1: 1, 2: 2, 3: 3, 4: {"a": 1, "b": "c"}}
@@ -138,7 +145,9 @@ class TestDictAndList:
             {"key": "a", "data": 3},
             {"key": "b", "data": 5},
         ]
-        result = list_distribute_contents_simple(input_list, lambda x: x["key"])
+        result = list_distribute_contents_simple(
+            input_list, lambda x: x["key"]
+        )
         assert result == [
             {"key": "a", "data": 2},
             {"key": "b", "data": 5},
@@ -207,14 +216,24 @@ class TestDictAndList:
         d1 = {1: 1, 2: 1.0, 3: 3, 4: 4}
         assert key_value_convert(d1) == d1
         d1 = {1: 2, 2: 2.0, 3: 5, "la": 4}
-        assert key_value_convert(d1, keyfn=int) == {1: 2, 2: 2.0, 3: 5, "la": 4}
+        assert key_value_convert(d1, keyfn=int) == {
+            1: 2,
+            2: 2.0,
+            3: 5,
+            "la": 4,
+        }
         assert key_value_convert(d1, keyfn=int, dropfailedkeys=True) == {
             1: 2,
             2: 2.0,
             3: 5,
         }
         d1 = {1: 2, 2: 2.0, 3: 5, 4: "la"}
-        assert key_value_convert(d1, valuefn=int) == {1: 2, 2: 2.0, 3: 5, 4: "la"}
+        assert key_value_convert(d1, valuefn=int) == {
+            1: 2,
+            2: 2.0,
+            3: 5,
+            4: "la",
+        }
         assert key_value_convert(d1, valuefn=int, dropfailedvalues=True) == {
             1: 2,
             2: 2.0,
@@ -250,7 +269,9 @@ class TestDictAndList:
         folder = gettempdir()
         filename = "test_read_write_list_to_csv.csv"
         filepath = join(folder, filename)
-        write_list_to_csv(filepath, list_of_lists, headers=["h1", "h2", "h3", "h4"])
+        write_list_to_csv(
+            filepath, list_of_lists, headers=["h1", "h2", "h3", "h4"]
+        )
         newll = read_list_from_csv(filepath)
         newld = read_list_from_csv(filepath, headers=1, dict_form=True)
         remove(filepath)

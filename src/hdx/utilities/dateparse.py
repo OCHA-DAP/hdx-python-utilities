@@ -11,11 +11,23 @@ from dateutil.tz import tzutc
 
 default_sd_year = 1
 default_date = datetime(
-    year=default_sd_year, month=1, day=1, hour=0, minute=0, second=0, microsecond=0
+    year=default_sd_year,
+    month=1,
+    day=1,
+    hour=0,
+    minute=0,
+    second=0,
+    microsecond=0,
 )
 default_ed_year = 9990
 default_enddate = datetime(
-    year=default_ed_year, month=12, day=31, hour=0, minute=0, second=0, microsecond=0
+    year=default_ed_year,
+    month=12,
+    day=31,
+    hour=0,
+    minute=0,
+    second=0,
+    microsecond=0,
 )
 
 
@@ -105,10 +117,16 @@ class _ymd(list):  # pragma: no cover
         len_ymd = len(self)
         year, month, day = (None, None, None)
 
-        strids = (("y", self.ystridx), ("m", self.mstridx), ("d", self.dstridx))
+        strids = (
+            ("y", self.ystridx),
+            ("m", self.mstridx),
+            ("d", self.dstridx),
+        )
 
         strids = {key: val for key, val in strids if val is not None}
-        if len(self) == len(strids) > 0 or (len(self) == 3 and len(strids) == 2):
+        if len(self) == len(strids) > 0 or (
+            len(self) == 3 and len(strids) == 2
+        ):
             return self._resolve_from_stridxs(strids)
 
         mstridx = self.mstridx
@@ -332,7 +350,9 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
                         skipped_idxs.append(i)
 
                 # Check for a timezone name
-                elif self._could_be_tzname(res.hour, res.tzname, res.tzoffset, l[i]):
+                elif self._could_be_tzname(
+                    res.hour, res.tzname, res.tzoffset, l[i]
+                ):
                     res.tzname = l[i]
                     res.tzoffset = info.tzoffset(res.tzname)
 
@@ -373,7 +393,9 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
                     else:
                         raise ValueError(timestr)
 
-                    res.tzoffset = signal * (hour_offset * 3600 + min_offset * 60)
+                    res.tzoffset = signal * (
+                        hour_offset * 3600 + min_offset * 60
+                    )
 
                     # Look for a timezone name between parenthesis
                     if (
@@ -382,7 +404,9 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
                         and l[i + 3] == "("
                         and l[i + 5] == ")"
                         and 3 <= len(l[i + 4])
-                        and self._could_be_tzname(res.hour, res.tzname, None, l[i + 4])
+                        and self._could_be_tzname(
+                            res.hour, res.tzname, None, l[i + 4]
+                        )
                     ):
                         # -0300 (BRST)
                         res.tzname = l[i + 4]
@@ -413,7 +437,9 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
             return None, None, None
 
         if fuzzy_with_tokens:
-            skipped_tokens, date_tokens = self._recombine_skipped_date(l, skipped_idxs)
+            skipped_tokens, date_tokens = self._recombine_skipped_date(
+                l, skipped_idxs
+            )
             return res, tuple(skipped_tokens), tuple(date_tokens)
         else:
             return res, None, None
@@ -514,7 +540,9 @@ def parse(
     """
 
     if default is None:
-        default = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        default = datetime.now().replace(
+            hour=0, minute=0, second=0, microsecond=0
+        )
 
     res, skipped_tokens, date_tokens = DEFAULTPARSER._parse(timestr, **kwargs)
 
@@ -561,7 +589,9 @@ def parse_date_range(
     """
     if date_format is None or fuzzy is not None:
         if fuzzy is not None:
-            parsed_string1 = parse(string, fuzzy_with_tokens=True, default=default_date)
+            parsed_string1 = parse(
+                string, fuzzy_with_tokens=True, default=default_date
+            )
             parsed_string2 = parse(
                 string, fuzzy_with_tokens=True, default=default_enddate
             )
@@ -576,7 +606,10 @@ def parse_date_range(
         else:
             startdate = parse(string, default=default_date)
             enddate = parse(string, default=default_enddate)
-        if startdate.year == default_sd_year and enddate.year == default_ed_year:
+        if (
+            startdate.year == default_sd_year
+            and enddate.year == default_ed_year
+        ):
             raise ParserError("No year in date!")
     else:
         try:
@@ -606,7 +639,9 @@ def parse_date_range(
             startdate = startdate.replace(month=default_date.month)
             enddate = enddate.replace(month=default_enddate.month)
     if zero_time:
-        startdate = startdate.replace(hour=0, minute=0, second=0, microsecond=0)
+        startdate = startdate.replace(
+            hour=0, minute=0, second=0, microsecond=0
+        )
         enddate = enddate.replace(hour=0, minute=0, second=0, microsecond=0)
     if fuzzy is not None:
         fuzzy["startdate"] = startdate

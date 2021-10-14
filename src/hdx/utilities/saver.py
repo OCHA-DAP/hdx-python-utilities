@@ -3,7 +3,12 @@ import json
 from collections import OrderedDict
 from typing import Any, Dict
 
-from ruamel.yaml import YAML, RoundTripRepresenter, SafeRepresenter, add_representer
+from ruamel.yaml import (
+    YAML,
+    RoundTripRepresenter,
+    SafeRepresenter,
+    add_representer,
+)
 
 
 class UnPrettyRTRepresenter(RoundTripRepresenter):
@@ -27,9 +32,15 @@ class PrettySafeRepresenter(SafeRepresenter):
         return self.represent_scalar("tag:yaml.org,2002:null", "")
 
 
-UnPrettyRTRepresenter.add_representer(None, UnPrettyRTRepresenter.represent_none)
-UnPrettySafeRepresenter.add_representer(None, UnPrettySafeRepresenter.represent_none)
-PrettySafeRepresenter.add_representer(None, PrettySafeRepresenter.represent_none)
+UnPrettyRTRepresenter.add_representer(
+    None, UnPrettyRTRepresenter.represent_none
+)
+UnPrettySafeRepresenter.add_representer(
+    None, UnPrettySafeRepresenter.represent_none
+)
+PrettySafeRepresenter.add_representer(
+    None, PrettySafeRepresenter.represent_none
+)
 
 
 representers = {
@@ -83,7 +94,9 @@ def save_yaml(
             yaml.indent(offset=2)
         else:
             yaml.default_flow_style = None
-        yaml.representer.add_representer(type(None), representer.represent_none)
+        yaml.representer.add_representer(
+            type(None), representer.represent_none
+        )
         yaml.dump(dictionary, f)
 
 
@@ -114,5 +127,9 @@ def save_json(
             indent = None
             separators = (", ", ": ")
         json.dump(
-            dictionary, f, indent=indent, sort_keys=sortkeys, separators=separators
+            dictionary,
+            f,
+            indent=indent,
+            sort_keys=sortkeys,
+            separators=separators,
         )

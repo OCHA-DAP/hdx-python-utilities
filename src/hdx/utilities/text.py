@@ -11,7 +11,9 @@ logger = logging.getLogger(__name__)
 PUNCTUATION_MINUS_BRACKETS = r"""!"#$%&'*+,-./:;<=>?@\^_`|~"""
 
 
-def remove_end_characters(string: str, characters_to_remove: str = punctuation) -> str:
+def remove_end_characters(
+    string: str, characters_to_remove: str = punctuation
+) -> str:
     """Remove any characters at end of string that are in characters_to_remove
 
     Args:
@@ -100,7 +102,9 @@ def multiple_replace(string: str, replacements: Dict[str, str]) -> str:
     if not replacements:
         return string
     pattern = re.compile(
-        "|".join([re.escape(k) for k in sorted(replacements, key=len, reverse=True)]),
+        "|".join(
+            [re.escape(k) for k in sorted(replacements, key=len, reverse=True)]
+        ),
         flags=re.DOTALL,
     )
     return pattern.sub(lambda x: replacements[x.group(0)], string)
@@ -116,11 +120,17 @@ def get_words_in_sentence(sentence: str) -> List[str]:
         List[str]: List of words in sentence
 
     """
-    return re.sub("[" + punctuation.replace("'", "") + "]", " ", sentence).split()
+    return re.sub(
+        "[" + punctuation.replace("'", "") + "]", " ", sentence
+    ).split()
 
 
 def get_matching_text_in_strs(
-    a: str, b: str, match_min_size: int = 30, ignore: str = "", end_characters: str = ""
+    a: str,
+    b: str,
+    match_min_size: int = 30,
+    ignore: str = "",
+    end_characters: str = "",
 ) -> List[str]:
     """Returns a list of matching blocks of text in a and b
 
@@ -275,7 +285,9 @@ def get_matching_then_nonmatching_text(
     return a
 
 
-def number_format(val: Any, format: str = "%.4f", trailing_zeros: bool = True) -> str:
+def number_format(
+    val: Any, format: str = "%.4f", trailing_zeros: bool = True
+) -> str:
     """Format float-castable input as string
 
     Args:

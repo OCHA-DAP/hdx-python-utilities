@@ -95,10 +95,14 @@ class UserAgent:
             raise UserAgentError(
                 "User_agent should be supplied in a YAML config file. It can be your project's name for example."
             )
-        logger.info(f"Loading user agent config from: {user_agent_config_yaml}")
+        logger.info(
+            f"Loading user agent config from: {user_agent_config_yaml}"
+        )
         user_agent_config_dict = load_yaml(user_agent_config_yaml)
         if user_agent_lookup:
-            user_agent_config_dict = user_agent_config_dict.get(user_agent_lookup)
+            user_agent_config_dict = user_agent_config_dict.get(
+                user_agent_lookup
+            )
         if not user_agent_config_dict:
             raise UserAgentError(
                 f"No user agent information read from: {user_agent_config_yaml}"

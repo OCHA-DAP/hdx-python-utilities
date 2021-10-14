@@ -261,7 +261,9 @@ class Download:
                     spliturl = spliturl._replace(scheme="http")
                     url = urlunsplit(spliturl)
             if post:
-                full_url, parameters = self.get_url_params_for_post(url, parameters)
+                full_url, parameters = self.get_url_params_for_post(
+                    url, parameters
+                )
                 self.response = self.session.post(
                     full_url,
                     data=parameters,
@@ -280,7 +282,9 @@ class Download:
             if encoding:
                 self.response.encoding = encoding
         except Exception as e:
-            raise DownloadError(f"Setup of Streaming Download of {url} failed!") from e
+            raise DownloadError(
+                f"Setup of Streaming Download of {url} failed!"
+            ) from e
         return self.response
 
     def hash_stream(self, url: str) -> str:
@@ -502,9 +506,13 @@ class Download:
             self.response.open()
             return self.response
         except Exception as e:
-            raise DownloadError(f"Getting tabular stream for {url} failed!") from e
+            raise DownloadError(
+                f"Getting tabular stream for {url} failed!"
+            ) from e
 
-    def get_tabular_rows_as_list(self, url: str, **kwargs: Any) -> Iterator[List]:
+    def get_tabular_rows_as_list(
+        self, url: str, **kwargs: Any
+    ) -> Iterator[List]:
         """Get iterator for reading rows from tabular data. Each row is returned as a list.
 
         Args:

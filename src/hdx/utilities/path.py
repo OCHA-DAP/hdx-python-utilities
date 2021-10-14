@@ -3,8 +3,9 @@ import contextlib
 import inspect
 import logging
 import sys
-from os import getenv, makedirs, remove
-from os.path import abspath, dirname, exists, join, realpath, splitext
+from os import getenv, makedirs, remove, sep
+from os.path import abspath, dirname, exists, join, realpath, splitext, isabs
+from pathlib import Path
 from posixpath import basename
 from shutil import rmtree
 from tempfile import gettempdir
@@ -20,6 +21,55 @@ logger = logging.getLogger(__name__)
 
 class NotFoundError(Exception):
     pass
+
+
+def get_project_root_dir() -> str:
+    """
+    Returns the project root directory.
+
+    :return: Project root directory
+    """
+
+    # stack trace history related to the call of this function
+    frame_stack: [inspect.FrameInfo] = inspect.stack()
+
+    # get info about the module that has invoked this function
+    # (index=0 is always this very module, index=1 is fine as long this function is not called by some other
+    # function in this module)
+    frame_info: inspect.FrameInfo = frame_stack[1]
+
+    # if there are multiple calls in the stacktrace of this very module, we have to skip those and take the first
+    # one which comes from another module
+    if frame_info.filename == __file__:
+        for frame in frame_stack:
+            if frame.filename != __file__:
+                frame_info = frame
+                break
+
+    # path of the module that has invoked this function
+    caller_path: str = frame_info.filename
+
+    # absolute path of the of the module that has invoked this function
+    caller_absolute_path: str = abspath(caller_path)
+
+    # get the top most directory path which contains the invoker module
+    paths: [str] = [p for p in sys.path if p in caller_absolute_path]
+    paths.sort(key=lambda p: len(p))
+    caller_root_path: str = paths[0]
+
+    if not isabs(caller_path):
+        # file name of the invoker module (eg: "mymodule.py")
+        caller_module_name: str = Path(caller_path).name
+
+        # this piece represents a subpath in the project directory
+        # (eg. if the root folder is "myproject" and this function has ben called from myproject/foo/bar/mymodule.py
+        # this will be "foo/bar")
+        project_related_folders: str = caller_path.replace(sep + caller_module_name, '')
+
+        # fix root path by removing the undesired subpath
+        caller_root_path = caller_root_path.replace(project_related_folders, '')
+
+    return caller_root_path
 
 
 def script_dir(pyobject: Any, follow_symlinks: bool = True) -> str:
@@ -107,7 +157,9 @@ def temp_dir(
     Returns:
         str: A temporary directory
     """
-    tempdir = get_temp_dir(folder, delete_if_exists=delete_if_exists, tempdir=tempdir)
+    tempdir = get_temp_dir(
+        folder, delete_if_exists=delete_if_exists, tempdir=tempdir
+    )
     try:
         yield tempdir
         if folder and delete_on_success:
@@ -166,9 +218,16 @@ def temp_dir_batch(
         Dict: Dictionary containing temporary directory in key folder and batch id in key batch
     """
     with temp_dir(
-        folder, delete_if_exists, delete_on_success, delete_on_failure, tempdir=tempdir
+        folder,
+        delete_if_exists,
+        delete_on_success,
+        delete_on_failure,
+        tempdir=tempdir,
     ) as tempdir:
-        yield {"folder": tempdir, "batch": read_or_create_batch(tempdir, batch)}
+        yield {
+            "folder": tempdir,
+            "batch": read_or_create_batch(tempdir, batch),
+        }
 
 
 def get_wheretostart(text: str, message: str, key: str) -> Optional[str]:
@@ -194,7 +253,10 @@ def get_wheretostart(text: str, message: str, key: str) -> Optional[str]:
 
 
 def progress_storing_folder(
-    info: Dict, iterator: Iterable[Dict], key: str, wheretostart: Optional[str] = None
+    info: Dict,
+    iterator: Iterable[Dict],
+    key: str,
+    wheretostart: Optional[str] = None,
 ) -> Tuple[Dict, Dict]:
     """Store progress in folder in key folder of info dictionary parameter. Yields 2 dictionaries. The first is the
     info dictionary. It contains in key folder the folder being used to store progress and in key progress the current
@@ -217,7 +279,9 @@ def progress_storing_folder(
     if not wheretostart:
         contents = getenv("WHERETOSTART")
         if contents:
-            wheretostart = get_wheretostart(contents, "Environment variable", key)
+            wheretostart = get_wheretostart(
+                contents, "Environment variable", key
+            )
         else:
             if exists(progress_file):
                 contents = load_file_to_str(progress_file, strip=True)
@@ -233,7 +297,9 @@ def progress_storing_folder(
             if not found:
                 if current == wheretostart:
                     found = True
-                    logger.info(f"Starting run from WHERETOSTART {wheretostart}")
+                    logger.info(
+                        f"Starting run from WHERETOSTART {wheretostart}"
+                    )
                 else:
                     logger.info(
                         "Run not started. Ignoring {}. WHERETOSTART ({}) not matched.".format(
@@ -273,7 +339,9 @@ def wheretostart_tempdir_batch(
     if wheretostart:
         if wheretostart.upper() == "RESET":
             delete_if_exists = True
-            logger.info("Removing progress file and will start from beginning!")
+            logger.info(
+                "Removing progress file and will start from beginning!"
+            )
     with temp_dir_batch(
         folder,
         delete_if_exists,
@@ -310,7 +378,9 @@ def progress_storing_tempdir(
     Returns:
         Tuple[Dict,Dict]: A tuple of the form (info dictionary, next object in iterator)
     """
-    with wheretostart_tempdir_batch(folder, batch=batch, tempdir=tempdir) as info:
+    with wheretostart_tempdir_batch(
+        folder, batch=batch, tempdir=tempdir
+    ) as info:
         yield from progress_storing_folder(info, iterator, key)
 
 
@@ -343,7 +413,9 @@ def multiple_progress_storing_tempdir(
     if wheretostartenv:
         if wheretostartenv.upper() == "RESET":
             delete_if_exists = True
-            logger.info("Removing progress file and will start from beginning!")
+            logger.info(
+                "Removing progress file and will start from beginning!"
+            )
     with temp_dir_batch(
         folder,
         delete_if_exists,
