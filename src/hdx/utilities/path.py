@@ -4,7 +4,7 @@ import inspect
 import logging
 import sys
 from os import getenv, makedirs, remove, sep
-from os.path import abspath, dirname, exists, join, realpath, splitext, isabs
+from os.path import abspath, dirname, exists, isabs, join, realpath, splitext
 from pathlib import Path
 from posixpath import basename
 from shutil import rmtree
@@ -23,11 +23,14 @@ class NotFoundError(Exception):
     pass
 
 
-def get_project_root_dir() -> str:
-    """
-    Returns the project root directory.
+def project_root_dir(level: int = 1) -> str:
+    """Get caller's root directory
 
-    :return: Project root directory
+    Args:
+        level (int): 1 for the caller, 2 for the caller's caller. Defaults to 1.
+
+    Returns:
+        str: Caller's root directory
     """
 
     # stack trace history related to the call of this function
@@ -36,7 +39,7 @@ def get_project_root_dir() -> str:
     # get info about the module that has invoked this function
     # (index=0 is always this very module, index=1 is fine as long this function is not called by some other
     # function in this module)
-    frame_info: inspect.FrameInfo = frame_stack[1]
+    frame_info: inspect.FrameInfo = frame_stack[level]
 
     # if there are multiple calls in the stacktrace of this very module, we have to skip those and take the first
     # one which comes from another module
@@ -64,10 +67,14 @@ def get_project_root_dir() -> str:
         # this piece represents a subpath in the project directory
         # (eg. if the root folder is "myproject" and this function has ben called from myproject/foo/bar/mymodule.py
         # this will be "foo/bar")
-        project_related_folders: str = caller_path.replace(sep + caller_module_name, '')
+        project_related_folders: str = caller_path.replace(
+            sep + caller_module_name, ""
+        )
 
         # fix root path by removing the undesired subpath
-        caller_root_path = caller_root_path.replace(project_related_folders, '')
+        caller_root_path = caller_root_path.replace(
+            project_related_folders, ""
+        )
 
     return caller_root_path
 
