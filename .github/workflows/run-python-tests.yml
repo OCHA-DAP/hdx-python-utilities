@@ -29,17 +29,15 @@ jobs:
     - name: Test with tox/pytest
       run: |
         tox
-    - name: Install coverage dependency
-      run: pip install --upgrade coverage[toml]
-    - name: Publish in Coveralls
-      uses: AndreMiras/coveralls-python-action@develop
-      if: success()
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        flag-name: tests
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action@v1
       if: always()
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         files: .tox/*.xml
+    - name: Upload Coverage Results
+      uses: coverallsapp/github-action@master
+      if: success()
+      with:
+        github-token: ${{ secrets.github_token }}
+        path-to-lcov: .tox/lcov.info

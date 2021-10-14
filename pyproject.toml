@@ -61,6 +61,7 @@ python =
     3: flake8, py38
 
 [testenv]
+passenv = GITHUB_*
 wheel = true
 deps =
     flakehell
@@ -68,11 +69,12 @@ deps =
     flake8-isort
     flake8-black
     coverage[toml]
-    coveralls
+    coveragepy-lcov
     -r test-requirements.txt
 commands =
     flakehell lint src tests
     pytest --junitxml=.tox/test-results.xml --no-cov-on-fail --cov-report=
+    coveragepy-lcov --data_file_path .coverage --output_file_path .tox/lcov.info
 
 [testenv:publish]
 wheel_build_env = py38
