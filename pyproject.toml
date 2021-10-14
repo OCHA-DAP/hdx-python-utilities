@@ -54,27 +54,30 @@ exclude_lines = [
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py38
+envlist = py38, lint
 
 [gh-actions]
 python =
-    3: flake8, py38
+    3: py38, lint
 
 [testenv]
-passenv = GITHUB_*
 wheel = true
+deps =
+    coverage[toml]
+    coveragepy-lcov
+    -r test-requirements.txt
+commands =
+    pytest --junitxml=.tox/test-results.xml --no-cov-on-fail --cov-report=
+    coveragepy-lcov --data_file_path .coverage --output_file_path .tox/lcov.info
+
+[testenv:lint]
+wheel_build_env = py38
 deps =
     flakehell
     flake8==3.9.0
     flake8-isort
     flake8-black
-    coverage[toml]
-    coveragepy-lcov
-    -r test-requirements.txt
-commands =
     flakehell lint src tests
-    pytest --junitxml=.tox/test-results.xml --no-cov-on-fail --cov-report=
-    coveragepy-lcov --data_file_path .coverage --output_file_path .tox/lcov.info
 
 [testenv:publish]
 wheel_build_env = py38

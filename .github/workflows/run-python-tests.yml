@@ -36,8 +36,5 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         files: .tox/*.xml
     - name: Upload Coverage Results
-      uses: coverallsapp/github-action@master
+      uses: codecov/codecov-action@v2
       if: success()
-      with:
-        github-token: ${{ secrets.github_token }}
-        path-to-lcov: .tox/lcov.info
