@@ -64,11 +64,9 @@ python =
 wheel = true
 deps =
     coverage[toml]
-    coveragepy-lcov
     -r test-requirements.txt
 commands =
     pytest --junitxml=.tox/test-results.xml --no-cov-on-fail --cov-report=
-    coveragepy-lcov --data_file_path .coverage --output_file_path .tox/lcov.info
 
 [testenv:lint]
 wheel_build_env = py38
@@ -77,6 +75,7 @@ deps =
     flake8==3.9.0
     flake8-isort
     flake8-black
+commands =
     flakehell lint src tests
 
 [testenv:publish]
