@@ -5,7 +5,7 @@ from typing import Optional
 from hdx.utilities.path import project_root_dir
 
 
-def get_version() -> Optional[str]:
+def get_utils_version() -> Optional[str]:
     """
     Get version
 

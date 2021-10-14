@@ -4,10 +4,6 @@ from uuid import UUID, uuid4
 __version__ = importlib.metadata.version("hdx-python-utilities")
 
 
-def get_utils_version():
-    return __version__
-
-
 def get_uuid() -> str:
     """
     Get an UUID.
