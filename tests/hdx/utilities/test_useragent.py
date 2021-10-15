@@ -3,9 +3,9 @@ from os.path import join
 
 import pytest
 
+from hdx.utilities import __version__
 from hdx.utilities.loader import LoadError
 from hdx.utilities.useragent import UserAgent, UserAgentError
-from hdx.utilities.version import get_utils_version
 
 
 class TestUserAgent:
@@ -38,32 +38,32 @@ class TestUserAgent:
         empty_yaml,
         user_agent_config_wrong_yaml,
     ):
-        version = get_utils_version()
         assert (
             UserAgent.get(user_agent_config_yaml=user_agent_config_yaml)
-            == f"lala:HDXPythonUtilities/{version}-myua"
+            == f"lala:HDXPythonUtilities/{__version__}-myua"
         )
         assert (
             UserAgent.get(user_agent_config_yaml=user_agent_config2_yaml)
-            == f"HDXPythonUtilities/{version}-myuseragent"
+            == f"HDXPythonUtilities/{__version__}-myuseragent"
         )
         assert (
             UserAgent.get(
                 user_agent_config_yaml=user_agent_config3_yaml,
                 user_agent_lookup="lookup",
             )
-            == f"HDXPythonUtilities/{version}-mylookupagent"
+            == f"HDXPythonUtilities/{__version__}-mylookupagent"
         )
         assert (
             UserAgent.get(user_agent="my_ua", preprefix="papa")
-            == f"papa:HDXPythonUtilities/{version}-my_ua"
+            == f"papa:HDXPythonUtilities/{__version__}-my_ua"
         )
         UserAgent.set_global(
             user_agent_config_yaml=user_agent_config3_yaml,
             user_agent_lookup="lookup2",
         )
         assert (
-            UserAgent.get() == f"HDXPythonUtilities/{version}-mylookupagent2"
+            UserAgent.get()
+            == f"HDXPythonUtilities/{__version__}-mylookupagent2"
         )
         UserAgent.clear_global()
         with pytest.raises(UserAgentError):
@@ -84,15 +84,16 @@ class TestUserAgent:
         my_user_agent = "lala"
         monkeypatch.setenv("USER_AGENT", my_user_agent)
         assert (
-            UserAgent.get() == f"HDXPythonUtilities/{version}-{my_user_agent}"
+            UserAgent.get()
+            == f"HDXPythonUtilities/{__version__}-{my_user_agent}"
         )
         my_preprefix = "haha"
         monkeypatch.setenv("PREPREFIX", my_preprefix)
         assert (
             UserAgent.get()
-            == f"{my_preprefix}:HDXPythonUtilities/{version}-{my_user_agent}"
+            == f"{my_preprefix}:HDXPythonUtilities/{__version__}-{my_user_agent}"
         )
-        my_prefix = f"HDXPythonLibrary/{version}"
+        my_prefix = f"HDXPythonLibrary/{__version__}"
         assert (
             UserAgent.get(prefix=my_prefix)
             == f"{my_preprefix}:{my_prefix}-{my_user_agent}"

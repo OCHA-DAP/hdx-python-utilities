@@ -1,5 +1,4 @@
 include *.txt
-include pyproject.toml
 include LICENSE
 recursive-include documentation *.py
 recursive-include documentation *.rst

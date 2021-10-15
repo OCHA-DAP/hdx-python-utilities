@@ -1,7 +1,6 @@
-import importlib.metadata
 from uuid import UUID, uuid4
 
-__version__ = importlib.metadata.version("hdx-python-utilities")
+__version__ = "3.0.2"
 
 
 def get_uuid() -> str:

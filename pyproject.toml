@@ -54,7 +54,7 @@ exclude_lines = [
 legacy_tox_ini = """
 [tox]
 isolated_build = True
-envlist = py38, lint
+envlist = clean, py38, lint
 
 [gh-actions]
 python =
@@ -67,6 +67,10 @@ deps =
     -r test-requirements.txt
 commands =
     pytest --junitxml=.tox/test-results.xml --no-cov-on-fail --cov-report=
+
+[testenv:clean]
+commands =
+    python -c \"import shutil; shutil.rmtree(join('{toxworkdir}', py38))\"
 
 [testenv:lint]
 wheel_build_env = py38
@@ -84,5 +88,6 @@ deps =
     twine
 
 commands =
-    python -c "from hdx.utilities import get_version; {toxinidir}/setup.cfg"
+    python -c \"from hdx.utilities.wheel import git_tag_whl; git_tag_whl('{distdir}')\"
+    twine upload {distdir}/*
 """

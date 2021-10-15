@@ -4,8 +4,8 @@ import os
 from os.path import expanduser, isfile, join
 from typing import Any, Dict, Optional
 
+from hdx.utilities import __version__
 from hdx.utilities.loader import load_yaml
-from hdx.utilities.version import get_utils_version
 
 logger = logging.getLogger(__name__)
 
@@ -138,7 +138,7 @@ class UserAgent:
         if prefix:
             del kwargs["prefix"]
         else:
-            prefix = f"HDXPythonUtilities/{get_utils_version()}"
+            prefix = f"HDXPythonUtilities/{__version__}"
         if not user_agent:
             ua = cls._load(prefix, user_agent_config_yaml, user_agent_lookup)
         else:

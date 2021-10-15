@@ -3,9 +3,8 @@ import contextlib
 import inspect
 import logging
 import sys
-from os import getenv, makedirs, remove, sep
-from os.path import abspath, dirname, exists, isabs, join, realpath, splitext
-from pathlib import Path
+from os import getenv, makedirs, remove
+from os.path import abspath, dirname, exists, join, realpath, splitext
 from posixpath import basename
 from shutil import rmtree
 from tempfile import gettempdir
@@ -21,62 +20,6 @@ logger = logging.getLogger(__name__)
 
 class NotFoundError(Exception):
     pass
-
-
-def project_root_dir(level: int = 1) -> str:
-    """Get caller's root directory
-
-    Args:
-        level (int): 1 for the caller, 2 for the caller's caller. Defaults to 1.
-
-    Returns:
-        str: Caller's root directory
-    """
-
-    # stack trace history related to the call of this function
-    frame_stack: [inspect.FrameInfo] = inspect.stack()
-
-    # get info about the module that has invoked this function
-    # (index=0 is always this very module, index=1 is fine as long this function is not called by some other
-    # function in this module)
-    frame_info: inspect.FrameInfo = frame_stack[level]
-
-    # if there are multiple calls in the stacktrace of this very module, we have to skip those and take the first
-    # one which comes from another module
-    if frame_info.filename == __file__:
-        for frame in frame_stack:
-            if frame.filename != __file__:
-                frame_info = frame
-                break
-
-    # path of the module that has invoked this function
-    caller_path: str = frame_info.filename
-
-    # absolute path of the of the module that has invoked this function
-    caller_absolute_path: str = abspath(caller_path)
-
-    # get the top most directory path which contains the invoker module
-    paths: [str] = [p for p in sys.path if p in caller_absolute_path]
-    paths.sort(key=lambda p: len(p))
-    caller_root_path: str = paths[0]
-
-    if not isabs(caller_path):
-        # file name of the invoker module (eg: "mymodule.py")
-        caller_module_name: str = Path(caller_path).name
-
-        # this piece represents a subpath in the project directory
-        # (eg. if the root folder is "myproject" and this function has ben called from myproject/foo/bar/mymodule.py
-        # this will be "foo/bar")
-        project_related_folders: str = caller_path.replace(
-            sep + caller_module_name, ""
-        )
-
-        # fix root path by removing the undesired subpath
-        caller_root_path = caller_root_path.replace(
-            project_related_folders, ""
-        )
-
-    return caller_root_path
 
 
 def script_dir(pyobject: Any, follow_symlinks: bool = True) -> str:
