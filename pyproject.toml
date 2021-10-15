@@ -84,10 +84,11 @@ commands =
 
 [testenv:publish]
 wheel_build_env = py38
+passenv = SSH_AUTH_SOCK
 deps =
     twine
 
 commands =
-    python -c \"from hdx.utilities.wheel import git_tag_whl; git_tag_whl({distdir})\"
+    python -c \"from hdx.utilities.wheel import git_tag_whl; git_tag_whl('{distdir}')\"
     twine upload {distdir}/*
 """
