@@ -26,6 +26,9 @@ pylint = ["+*"]
 flake8-isort = ["+*"]
 flake8-black = ["+*"]
 
+[tool.pytest.ini_options]
+site_dirs = "src"
+
 [tool.coverage.run]
 relative_files = true
 source = ["src"]
@@ -65,7 +68,7 @@ wheel = true
 deps =
     -r test-requirements.txt
 commands =
-    pytest --junitxml=.tox/test-results.xml --no-cov-on-fail --cov-config=pyproject.toml --cov-report= --cov=src
+    pytest --cov --no-cov-on-fail --junitxml=.tox/test-results.xml --cov-report=term-missing
 
 [testenv:clean]
 commands =
