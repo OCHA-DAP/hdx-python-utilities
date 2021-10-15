@@ -70,7 +70,7 @@ commands =
 
 [testenv:clean]
 commands =
-    python -c \"import shutil; shutil.rmtree(join('{toxworkdir}', py38))\"
+    python -c \"import shutil; from os.path import join; shutil.rmtree(join('{toxworkdir}', 'py38'))\"
 
 [testenv:lint]
 wheel_build_env = py38
@@ -88,6 +88,6 @@ deps =
     twine
 
 commands =
-    python -c \"from hdx.utilities.wheel import git_tag_whl; git_tag_whl('{distdir}')\"
+    python -c \"from hdx.utilities.wheel import git_tag_whl; git_tag_whl({distdir})\"
     twine upload {distdir}/*
 """
