@@ -67,7 +67,7 @@ wheel = True
 deps =
     -r test-requirements.txt
 commands =
-    pytest --cov=hdx --no-cov-on-fail --junitxml=.tox/test-results.xml --cov-report=term-missing
+    pytest --cov=hdx --no-cov-on-fail --junitxml=.tox/test-results.xml --cov-report=xml
 
 [testenv:clean]
 commands =
