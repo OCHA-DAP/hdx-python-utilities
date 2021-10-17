@@ -29,9 +29,8 @@ flake8-black = ["+*"]
 [tool.pytest.ini_options]
 site_dirs = "src"
 
-[tool.coverage.run]
-relative_files = true
-source = ["src"]
+[tool.coverage.paths]
+source = ["src/hdx", "*/site-packages/hdx"]
 
 [tool.coverage.report]
 omit = [
@@ -64,15 +63,15 @@ python =
     3: py38, lint
 
 [testenv]
-wheel = true
+wheel = True
 deps =
     -r test-requirements.txt
 commands =
-    pytest --cov --no-cov-on-fail --junitxml=.tox/test-results.xml --cov-report=term-missing
+    pytest --cov=hdx --no-cov-on-fail --junitxml=.tox/test-results.xml --cov-report=term-missing
 
 [testenv:clean]
 commands =
-    python -c \"import shutil; from os.path import join; shutil.rmtree(join('{toxworkdir}', 'py38'))\"
+    python -c \"import shutil; from os.path import join; shutil.rmtree(join('{toxworkdir}', 'py38'), ignore_errors=True)\"
 
 [testenv:lint]
 wheel_build_env = py38
