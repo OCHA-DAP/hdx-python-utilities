@@ -77,7 +77,9 @@ def get_session(
         if extra_params:
             if "=" in extra_params:
                 extra_params_dict = dict()
-                logger.info("Loading extra parameters from environment variable")
+                logger.info(
+                    "Loading extra parameters from environment variable"
+                )
                 for extra_param in extra_params.split(","):
                     key, value = extra_param.split("=")
                     extra_params_dict[key] = value
@@ -92,7 +94,9 @@ def get_session(
         extra_params_json = kwargs.get("extra_params_json", "")
         if extra_params_json:
             if extra_params_found:
-                raise SessionError("More than one set of extra parameters given!")
+                raise SessionError(
+                    "More than one set of extra parameters given!"
+                )
             extra_params_found = True
             logger.info(f"Loading extra parameters from: {extra_params_json}")
             try:
@@ -103,7 +107,9 @@ def get_session(
         extra_params_yaml = kwargs.get("extra_params_yaml", "")
         if extra_params_yaml:
             if extra_params_found:
-                raise SessionError("More than one set of extra parameters given!")
+                raise SessionError(
+                    "More than one set of extra parameters given!"
+                )
             logger.info(f"Loading extra parameters from: {extra_params_yaml}")
             try:
                 extra_params_dict = load_yaml(extra_params_yaml)
@@ -145,13 +151,17 @@ def get_session(
                 raise
     if len(auths_found) > 1:
         auths_found_str = ", ".join(auths_found)
-        raise SessionError(f"More than one authorisation given! ({auths_found_str})")
+        raise SessionError(
+            f"More than one authorisation given! ({auths_found_str})"
+        )
     if "headers" not in auths_found:
         if basic_auth:
             auth = decode(basic_auth)
         s.auth = auth
 
-    status_forcelist = kwargs.get("status_forcelist", [429, 500, 502, 503, 504])
+    status_forcelist = kwargs.get(
+        "status_forcelist", [429, 500, 502, 503, 504]
+    )
     allowed_methods = kwargs.get(
         "allowed_methods",
         frozenset(["HEAD", "TRACE", "GET", "PUT", "OPTIONS", "DELETE"]),
@@ -168,10 +178,14 @@ def get_session(
     s.mount("file://", FileAdapter())
     s.mount(
         "http://",
-        HTTPAdapter(max_retries=retries, pool_connections=100, pool_maxsize=100),
+        HTTPAdapter(
+            max_retries=retries, pool_connections=100, pool_maxsize=100
+        ),
     )
     s.mount(
         "https://",
-        HTTPAdapter(max_retries=retries, pool_connections=100, pool_maxsize=100),
+        HTTPAdapter(
+            max_retries=retries, pool_connections=100, pool_maxsize=100
+        ),
     )
     return s

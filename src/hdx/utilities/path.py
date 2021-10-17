@@ -107,7 +107,9 @@ def temp_dir(
     Returns:
         str: A temporary directory
     """
-    tempdir = get_temp_dir(folder, delete_if_exists=delete_if_exists, tempdir=tempdir)
+    tempdir = get_temp_dir(
+        folder, delete_if_exists=delete_if_exists, tempdir=tempdir
+    )
     try:
         yield tempdir
         if folder and delete_on_success:
@@ -166,9 +168,16 @@ def temp_dir_batch(
         Dict: Dictionary containing temporary directory in key folder and batch id in key batch
     """
     with temp_dir(
-        folder, delete_if_exists, delete_on_success, delete_on_failure, tempdir=tempdir
+        folder,
+        delete_if_exists,
+        delete_on_success,
+        delete_on_failure,
+        tempdir=tempdir,
     ) as tempdir:
-        yield {"folder": tempdir, "batch": read_or_create_batch(tempdir, batch)}
+        yield {
+            "folder": tempdir,
+            "batch": read_or_create_batch(tempdir, batch),
+        }
 
 
 def get_wheretostart(text: str, message: str, key: str) -> Optional[str]:
@@ -194,7 +203,10 @@ def get_wheretostart(text: str, message: str, key: str) -> Optional[str]:
 
 
 def progress_storing_folder(
-    info: Dict, iterator: Iterable[Dict], key: str, wheretostart: Optional[str] = None
+    info: Dict,
+    iterator: Iterable[Dict],
+    key: str,
+    wheretostart: Optional[str] = None,
 ) -> Tuple[Dict, Dict]:
     """Store progress in folder in key folder of info dictionary parameter. Yields 2 dictionaries. The first is the
     info dictionary. It contains in key folder the folder being used to store progress and in key progress the current
@@ -217,7 +229,9 @@ def progress_storing_folder(
     if not wheretostart:
         contents = getenv("WHERETOSTART")
         if contents:
-            wheretostart = get_wheretostart(contents, "Environment variable", key)
+            wheretostart = get_wheretostart(
+                contents, "Environment variable", key
+            )
         else:
             if exists(progress_file):
                 contents = load_file_to_str(progress_file, strip=True)
@@ -233,7 +247,9 @@ def progress_storing_folder(
             if not found:
                 if current == wheretostart:
                     found = True
-                    logger.info(f"Starting run from WHERETOSTART {wheretostart}")
+                    logger.info(
+                        f"Starting run from WHERETOSTART {wheretostart}"
+                    )
                 else:
                     logger.info(
                         "Run not started. Ignoring {}. WHERETOSTART ({}) not matched.".format(
@@ -273,7 +289,9 @@ def wheretostart_tempdir_batch(
     if wheretostart:
         if wheretostart.upper() == "RESET":
             delete_if_exists = True
-            logger.info("Removing progress file and will start from beginning!")
+            logger.info(
+                "Removing progress file and will start from beginning!"
+            )
     with temp_dir_batch(
         folder,
         delete_if_exists,
@@ -310,7 +328,9 @@ def progress_storing_tempdir(
     Returns:
         Tuple[Dict,Dict]: A tuple of the form (info dictionary, next object in iterator)
     """
-    with wheretostart_tempdir_batch(folder, batch=batch, tempdir=tempdir) as info:
+    with wheretostart_tempdir_batch(
+        folder, batch=batch, tempdir=tempdir
+    ) as info:
         yield from progress_storing_folder(info, iterator, key)
 
 
@@ -343,7 +363,9 @@ def multiple_progress_storing_tempdir(
     if wheretostartenv:
         if wheretostartenv.upper() == "RESET":
             delete_if_exists = True
-            logger.info("Removing progress file and will start from beginning!")
+            logger.info(
+                "Removing progress file and will start from beginning!"
+            )
     with temp_dir_batch(
         folder,
         delete_if_exists,

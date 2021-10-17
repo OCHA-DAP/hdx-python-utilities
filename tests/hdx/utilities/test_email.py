@@ -160,11 +160,13 @@ Content-Transfer-Encoding: 7bit
         Email.default_email_config_yaml = default_email_config_yaml
         with pytest.raises(EmailConfigurationError):
             with Email(
-                email_config_dict=email_config_dict, email_config_json=email_json
+                email_config_dict=email_config_dict,
+                email_config_json=email_json,
             ) as _:
                 pass
         with pytest.raises(EmailConfigurationError):
             with Email(
-                email_config_dict=email_config_dict, email_config_yaml=email_yaml
+                email_config_dict=email_config_dict,
+                email_config_yaml=email_yaml,
             ) as _:
                 pass

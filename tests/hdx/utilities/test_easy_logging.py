@@ -50,12 +50,14 @@ class TestLogging:
 
         with pytest.raises(FILENOTFOUND_EXCTYPE):
             setup_logging(
-                logging_config_json="NOT_EXIST", smtp_config_yaml=smtp_config_yaml
+                logging_config_json="NOT_EXIST",
+                smtp_config_yaml=smtp_config_yaml,
             )
 
         with pytest.raises(FILENOTFOUND_EXCTYPE):
             setup_logging(
-                logging_config_yaml="NOT_EXIST", smtp_config_yaml=smtp_config_yaml
+                logging_config_yaml="NOT_EXIST",
+                smtp_config_yaml=smtp_config_yaml,
             )
 
         with pytest.raises(LoggingError):
@@ -87,17 +89,20 @@ class TestLogging:
 
         with pytest.raises(LoggingError):
             setup_logging(
-                smtp_config_dict={"la": "la"}, smtp_config_json=smtp_config_json
+                smtp_config_dict={"la": "la"},
+                smtp_config_json=smtp_config_json,
             )
 
         with pytest.raises(LoggingError):
             setup_logging(
-                smtp_config_dict={"la": "la"}, smtp_config_yaml=smtp_config_yaml
+                smtp_config_dict={"la": "la"},
+                smtp_config_yaml=smtp_config_yaml,
             )
 
         with pytest.raises(LoggingError):
             setup_logging(
-                smtp_config_json=smtp_config_json, smtp_config_yaml=smtp_config_yaml
+                smtp_config_json=smtp_config_json,
+                smtp_config_yaml=smtp_config_yaml,
             )
 
     def test_setup_logging_dict(self, smtp_config_yaml):
@@ -155,7 +160,10 @@ class TestLogging:
     def test_setup_logging_smtp_dict(self):
         smtp_config_dict = {
             "handlers": {
-                "error_mail_handler": {"toaddrs": "lalala@la.com", "subject": "lala"}
+                "error_mail_handler": {
+                    "toaddrs": "lalala@la.com",
+                    "subject": "lala",
+                }
             }
         }
         setup_logging(smtp_config_dict=smtp_config_dict)

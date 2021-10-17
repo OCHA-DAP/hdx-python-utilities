@@ -28,7 +28,9 @@ class TestText:
     def test_remove_end_characters(self):
         assert remove_end_characters('lalala,.,"') == "lalala"
         assert (
-            remove_end_characters('lalala, .\t/,"', f"{punctuation}{whitespace}")
+            remove_end_characters(
+                'lalala, .\t/,"', f"{punctuation}{whitespace}"
+            )
             == "lalala"
         )
 
@@ -38,7 +40,10 @@ class TestText:
         )
         assert result == "The quick brown fox jumped over the lazy dog. It was"
         result = remove_from_end(
-            TestText.a, ["fast!", "so", "hello", "as"], "Transforming %s -> %s", False
+            TestText.a,
+            ["fast!", "so", "hello", "as"],
+            "Transforming %s -> %s",
+            False,
         )
         assert result == "The quick brown fox jumped over the lazy dog. It w"
 
@@ -46,7 +51,9 @@ class TestText:
         assert remove_string("lala, 01/02/2020 ", "01/02/2020") == "lala "
         assert remove_string("lala,(01/02/2020) ", "01/02/2020") == "lala) "
         assert (
-            remove_string("lala, 01/02/2020 ", "01/02/2020", PUNCTUATION_MINUS_BRACKETS)
+            remove_string(
+                "lala, 01/02/2020 ", "01/02/2020", PUNCTUATION_MINUS_BRACKETS
+            )
             == "lala "
         )
         assert (
@@ -60,24 +67,46 @@ class TestText:
         result = multiple_replace(
             TestText.a, {"quick": "slow", "fast": "slow", "lazy": "busy"}
         )
-        assert result == "The slow brown fox jumped over the busy dog. It was so slow!"
+        assert (
+            result
+            == "The slow brown fox jumped over the busy dog. It was so slow!"
+        )
 
     def test_get_words_in_sentence(self):
-        result = get_words_in_sentence("Korea (Democratic People's Republic of)")
+        result = get_words_in_sentence(
+            "Korea (Democratic People's Republic of)"
+        )
         assert result == ["Korea", "Democratic", "People's", "Republic", "of"]
         result = get_words_in_sentence("Serbia and Kosovo: S/RES/1244 (1999)")
-        assert result == ["Serbia", "and", "Kosovo", "S", "RES", "1244", "1999"]
+        assert result == [
+            "Serbia",
+            "and",
+            "Kosovo",
+            "S",
+            "RES",
+            "1244",
+            "1999",
+        ]
 
     def test_get_matching_text_in_strs(self):
         result = get_matching_text_in_strs(TestText.a, TestText.b)
         assert result == []
-        result = get_matching_text_in_strs(TestText.a, TestText.b, match_min_size=10)
+        result = get_matching_text_in_strs(
+            TestText.a, TestText.b, match_min_size=10
+        )
         assert result == [" brown fox ", " over the ", ". It was so fast!"]
         result = get_matching_text_in_strs(
             TestText.a, TestText.b, match_min_size=9, end_characters=".!\r\n"
         )
-        assert result == ["The quick", " brown fox ", " over the ", " It was so fast!"]
-        result = get_matching_text_in_strs(TestText.a, TestText.c, match_min_size=5)
+        assert result == [
+            "The quick",
+            " brown fox ",
+            " over the ",
+            " It was so fast!",
+        ]
+        result = get_matching_text_in_strs(
+            TestText.a, TestText.c, match_min_size=5
+        )
         assert result == [
             "The quick brown fox ",
             "ed over the lazy dog. It was so fast!",
@@ -103,7 +132,9 @@ class TestText:
             'Internally displaced persons are defined according to the 1998 Guiding Principles (http://www.internal-displacement.org/publications/1998/ocha-guiding-principles-on-internal-displacement) as people or groups of people who have been forced or obliged to flee or to leave their homes or places of habitual residence, in particular as a result of armed conflict, or to avoid the effects of armed conflict, situations of generalized violence, violations of human rights, or natural or human-made disasters and who have not crossed an international border.\n\n"New Displacement" refers to the number of new cases or incidents of displacement recorded, rather than the number of people displaced. This is done because people may have been displaced more than once.\n\nContains data from IDMC\'s [data portal](https://github.com/idmc-labs/IDMC-Platform-API/wiki).',
             'Internally displaced persons are defined according to the 1998 Guiding Principles (http://www.internal-displacement.org/publications/1998/ocha-guiding-principles-on-internal-displacement) as people or groups of people who have been forced or obliged to flee or to leave their homes or places of habitual residence, in particular as a result of armed conflict, or to avoid the effects of armed conflict, situations of generalized violence, violations of human rights, or natural or human-made disasters and who have not crossed an international border.\n\n"New Displacement" refers to the number of new cases or incidents of displacement recorded, rather than the number of people displaced. This is done because people may have been displaced more than once.\n\nContains data from IDMC\'s [data portal](https://github.com/idmc-labs/IDMC-Platform-API/wiki).',
         ]
-        result = get_matching_text(description, ignore="\n", end_characters=".!")
+        result = get_matching_text(
+            description, ignore="\n", end_characters=".!"
+        )
         assert (
             result
             == """Internally displaced persons are defined according to the 1998 Guiding Principles (http://www.internal-displacement.org/publications/1998/ocha-guiding-principles-on-internal-displacement) as people or groups of people who have been forced or obliged to flee or to leave their homes or places of habitual residence, in particular as a result of armed conflict, or to avoid the effects of armed conflict, situations of generalized violence, violations of human rights, or natural or human-made disasters and who have not crossed an international border.
@@ -113,7 +144,9 @@ Contains data from IDMC's [data portal](https://github.com/idmc-labs/IDMC-Platfo
 
     def test_get_matching_then_nonmatching_text(self):
         list_of_str = [TestText.a, TestText.b, TestText.c]
-        result = get_matching_then_nonmatching_text(list_of_str, match_min_size=10)
+        result = get_matching_then_nonmatching_text(
+            list_of_str, match_min_size=10
+        )
         assert (
             result
             == " brown fox  over the  It was so fast!The quickjumpedlazy dog.The quickerleaptslower fox.The quickclimbedlazy dog."

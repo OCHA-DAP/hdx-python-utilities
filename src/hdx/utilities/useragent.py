@@ -4,8 +4,8 @@ import os
 from os.path import expanduser, isfile, join
 from typing import Any, Dict, Optional
 
+from hdx.utilities import __version__
 from hdx.utilities.loader import load_yaml
-from hdx.utilities.version import get_utils_version
 
 logger = logging.getLogger(__name__)
 
@@ -95,10 +95,14 @@ class UserAgent:
             raise UserAgentError(
                 "User_agent should be supplied in a YAML config file. It can be your project's name for example."
             )
-        logger.info(f"Loading user agent config from: {user_agent_config_yaml}")
+        logger.info(
+            f"Loading user agent config from: {user_agent_config_yaml}"
+        )
         user_agent_config_dict = load_yaml(user_agent_config_yaml)
         if user_agent_lookup:
-            user_agent_config_dict = user_agent_config_dict.get(user_agent_lookup)
+            user_agent_config_dict = user_agent_config_dict.get(
+                user_agent_lookup
+            )
         if not user_agent_config_dict:
             raise UserAgentError(
                 f"No user agent information read from: {user_agent_config_yaml}"
@@ -134,7 +138,7 @@ class UserAgent:
         if prefix:
             del kwargs["prefix"]
         else:
-            prefix = f"HDXPythonUtilities/{get_utils_version()}"
+            prefix = f"HDXPythonUtilities/{__version__}"
         if not user_agent:
             ua = cls._load(prefix, user_agent_config_yaml, user_agent_lookup)
         else:

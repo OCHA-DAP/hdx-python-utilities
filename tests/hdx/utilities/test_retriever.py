@@ -68,7 +68,9 @@ class TestRetriever:
                 retriever.retrieve_file("NOTEXIST", filename, fallback=False)
             with pytest.raises(DownloadError):
                 long_url = "".join(
-                    random.SystemRandom().choice(string.ascii_uppercase + string.digits)
+                    random.SystemRandom().choice(
+                        string.ascii_uppercase + string.digits
+                    )
                     for _ in range(150)
                 )
                 retriever.retrieve_file(long_url, filename, fallback=False)
@@ -180,7 +182,9 @@ class TestRetriever:
                 "NOTEXIST", filename, logstr="test file", fallback=True
             )
             assert path == join(saved_dir, filename)
-            path = retriever.retrieve_file("NOTEXIST", filename, fallback=False)
+            path = retriever.retrieve_file(
+                "NOTEXIST", filename, fallback=False
+            )
             assert path == join(saved_dir, filename)
             text = retriever.retrieve_text(
                 url, filename, logstr="test file", fallback=False
@@ -190,7 +194,9 @@ class TestRetriever:
                 "NOTEXIST", filename, logstr="test file", fallback=True
             )
             assert text == "hello"
-            text = retriever.retrieve_text("NOTEXIST", filename, fallback=False)
+            text = retriever.retrieve_text(
+                "NOTEXIST", filename, fallback=False
+            )
             assert text == "hello"
             filename = "test.yaml"
             url = join(retrieverfolder, filename)
@@ -202,7 +208,9 @@ class TestRetriever:
                 "NOTEXIST", filename, logstr="test file", fallback=True
             )
             assert data["param_1"] == "ABC"
-            data = retriever.retrieve_yaml("NOTEXIST", filename, fallback=False)
+            data = retriever.retrieve_yaml(
+                "NOTEXIST", filename, fallback=False
+            )
             assert data["param_1"] == "ABC"
             filename = "test.json"
             url = join(retrieverfolder, filename)
@@ -214,7 +222,9 @@ class TestRetriever:
                 "NOTEXIST", filename, logstr="test file", fallback=True
             )
             assert data["my_param"] == "abc"
-            data = retriever.retrieve_json("NOTEXIST", filename, fallback=False)
+            data = retriever.retrieve_json(
+                "NOTEXIST", filename, fallback=False
+            )
             assert data["my_param"] == "abc"
 
             retriever = Retrieve(

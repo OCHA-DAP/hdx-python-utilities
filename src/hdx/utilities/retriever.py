@@ -24,7 +24,13 @@ class Retrieve:
     """
 
     def __init__(
-        self, downloader, fallback_dir, saved_dir, temp_dir, save=False, use_saved=False
+        self,
+        downloader,
+        fallback_dir,
+        saved_dir,
+        temp_dir,
+        save=False,
+        use_saved=False,
     ):
         self.downloader = downloader
         self.fallback_dir = fallback_dir
@@ -55,7 +61,9 @@ class Retrieve:
             return f"{url[:100]}..."
         return url
 
-    def retrieve_file(self, url, filename, logstr=None, fallback=False, **kwargs):
+    def retrieve_file(
+        self, url, filename, logstr=None, fallback=False, **kwargs
+    ):
         """Retrieve file
 
         Args:
@@ -85,7 +93,9 @@ class Retrieve:
                 logger.info(
                     f"Downloading {logstr} from {self.get_url_logstr(url)} into {output_path}"
                 )
-                return self.downloader.download_file(url, path=output_path, **kwargs)
+                return self.downloader.download_file(
+                    url, path=output_path, **kwargs
+                )
             except DownloadError:
                 if not fallback:
                     raise
@@ -95,7 +105,9 @@ class Retrieve:
                 )
                 return fallback_path
 
-    def retrieve_text(self, url, filename, logstr=None, fallback=False, **kwargs):
+    def retrieve_text(
+        self, url, filename, logstr=None, fallback=False, **kwargs
+    ):
         """Retrieve text
 
         Args:
@@ -117,7 +129,9 @@ class Retrieve:
             text = load_file_to_str(saved_path)
         else:
             try:
-                logger.info(f"Downloading {logstr} from {self.get_url_logstr(url)}")
+                logger.info(
+                    f"Downloading {logstr} from {self.get_url_logstr(url)}"
+                )
                 self.downloader.download(url, **kwargs)
                 text = self.downloader.get_text()
                 if self.save:
@@ -133,7 +147,9 @@ class Retrieve:
                 text = load_file_to_str(fallback_path)
         return text
 
-    def retrieve_yaml(self, url, filename, logstr=None, fallback=False, **kwargs):
+    def retrieve_yaml(
+        self, url, filename, logstr=None, fallback=False, **kwargs
+    ):
         """Retrieve YAML
 
         Args:
@@ -155,7 +171,9 @@ class Retrieve:
             ryaml = load_yaml(saved_path)
         else:
             try:
-                logger.info(f"Downloading {logstr} from {self.get_url_logstr(url)}")
+                logger.info(
+                    f"Downloading {logstr} from {self.get_url_logstr(url)}"
+                )
                 self.downloader.download(url, **kwargs)
                 ryaml = self.downloader.get_yaml()
                 if self.save:
@@ -171,7 +189,9 @@ class Retrieve:
                 ryaml = load_yaml(fallback_path)
         return ryaml
 
-    def retrieve_json(self, url, filename, logstr=None, fallback=False, **kwargs):
+    def retrieve_json(
+        self, url, filename, logstr=None, fallback=False, **kwargs
+    ):
         """Retrieve JSON
 
         Args:
@@ -193,7 +213,9 @@ class Retrieve:
             rjson = load_json(saved_path)
         else:
             try:
-                logger.info(f"Downloading {logstr} from {self.get_url_logstr(url)}")
+                logger.info(
+                    f"Downloading {logstr} from {self.get_url_logstr(url)}"
+                )
                 self.downloader.download(url, **kwargs)
                 rjson = self.downloader.get_json()
                 if self.save:

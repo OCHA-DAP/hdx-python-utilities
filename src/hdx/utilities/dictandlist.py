@@ -55,7 +55,9 @@ def merge_two_dictionaries(
                     else:
                         a[key] = b[key]
             else:
-                raise ValueError(f'Cannot merge non-dict "{b}" into dict "{a}"')
+                raise ValueError(
+                    f'Cannot merge non-dict "{b}" into dict "{a}"'
+                )
         else:
             raise ValueError(f'NOT IMPLEMENTED "{b}" into "{a}"')
     except TypeError as e:
@@ -107,7 +109,9 @@ def dict_diff(
     return diff
 
 
-def dict_of_lists_add(dictionary: DictUpperBound, key: Any, value: Any) -> None:
+def dict_of_lists_add(
+    dictionary: DictUpperBound, key: Any, value: Any
+) -> None:
     """Add value to a list in a dictionary by key
 
     Args:
@@ -220,9 +224,12 @@ def list_distribute_contents(
         width = len(piles_list[0])
         pile_iters_list = [iter(pile) for pile in piles_list]
         pile_sizes_list = [
-            [pile_position] * len(pile) for pile_position, pile in enumerate(piles_list)
+            [pile_position] * len(pile)
+            for pile_position, pile in enumerate(piles_list)
         ]
-        grouped_rows = grouper(width, itertools.chain.from_iterable(pile_sizes_list))
+        grouped_rows = grouper(
+            width, itertools.chain.from_iterable(pile_sizes_list)
+        )
         grouped_columns = itertools.zip_longest(*grouped_rows)
         shuffled_pile = [
             next(pile_iters_list[position])
@@ -300,7 +307,9 @@ def key_value_convert(
     return dictout
 
 
-def integer_key_convert(dictin: DictUpperBound, dropfailedkeys: bool = False) -> Dict:
+def integer_key_convert(
+    dictin: DictUpperBound, dropfailedkeys: bool = False
+) -> Dict:
     """Convert keys of dictionary to integers
 
     Args:
@@ -327,10 +336,14 @@ def integer_value_convert(
         Dict: Dictionary with values converted to integers
 
     """
-    return key_value_convert(dictin, valuefn=int, dropfailedvalues=dropfailedvalues)
+    return key_value_convert(
+        dictin, valuefn=int, dropfailedvalues=dropfailedvalues
+    )
 
 
-def float_value_convert(dictin: DictUpperBound, dropfailedvalues: bool = False) -> Dict:
+def float_value_convert(
+    dictin: DictUpperBound, dropfailedvalues: bool = False
+) -> Dict:
     """Convert values of dictionary to floats
 
     Args:
@@ -341,7 +354,9 @@ def float_value_convert(dictin: DictUpperBound, dropfailedvalues: bool = False) 
         Dict: Dictionary with values converted to floats
 
     """
-    return key_value_convert(dictin, valuefn=float, dropfailedvalues=dropfailedvalues)
+    return key_value_convert(
+        dictin, valuefn=float, dropfailedvalues=dropfailedvalues
+    )
 
 
 def avg_dicts(

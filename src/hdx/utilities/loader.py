@@ -6,7 +6,10 @@ from typing import Dict, List, Optional
 
 from ruamel.yaml import YAML
 
-from hdx.utilities.dictandlist import merge_dictionaries, merge_two_dictionaries
+from hdx.utilities.dictandlist import (
+    merge_dictionaries,
+    merge_two_dictionaries,
+)
 
 
 class LoadError(Exception):
