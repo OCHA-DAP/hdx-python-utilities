@@ -68,23 +68,20 @@ repo = "OCHA-DAP/hdx-python-utilities"
 [tool.tox]
 legacy_tox_ini = """
 [tox]
-isolated_build = True
-envlist = clean, py38, lint, docs
+isolated_build = true
+envlist = py38, lint, docs
 
 [gh-actions]
 python =
-    3: clean, py38, lint, docs
+    3: py38, lint, docs
 
 [testenv]
-wheel = True
+recreate = true
+wheel = true
 deps =
     -r test-requirements.txt
 commands =
     pytest --cov=hdx --no-cov-on-fail --junitxml=.tox/test-results.xml --cov-report=xml
-
-[testenv:clean]
-commands =
-    python -c \"import shutil; from os.path import join; shutil.rmtree(join('{toxworkdir}', 'py38'), ignore_errors=True)\"
 
 [testenv:lint]
 wheel_build_env = py38
