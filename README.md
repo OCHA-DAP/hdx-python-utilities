@@ -24,8 +24,8 @@ humanitarian related data, please upload your datasets to HDX.
 
 ## Usage
 
-The library has detailed API documentation which can be found here: <https://github.com/ocha-dap/hdx-python-utilities/apidocs.md>. 
-The code for the library is here: <https://github.com/ocha-dap/hdx-python-utilities>.
+The library has detailed API documentation which can be found [here](https://github.com/OCHA-DAP/hdx-python-utilities/blob/main/apidocs.md). 
+The code for the library is [here](https://github.com/OCHA-DAP/hdx-python-utilities).
 
 ## Breaking Changes
 
