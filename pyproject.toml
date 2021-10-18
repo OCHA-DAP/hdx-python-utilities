@@ -69,11 +69,11 @@ repo = "OCHA-DAP/hdx-python-utilities"
 legacy_tox_ini = """
 [tox]
 isolated_build = true
-envlist = py38, lint, docs
+envlist = py38, lint
 
 [gh-actions]
 python =
-    3: py38, lint, docs
+    3: py38, lint
 
 [testenv]
 recreate = true
