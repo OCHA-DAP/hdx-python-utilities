@@ -2,7 +2,7 @@
 
 # hdx.utilities
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/__init__.py#L1)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/__init__.py#L1)
 
 <a id="hdx.utilities.get_uuid"></a>
 
@@ -12,7 +12,7 @@
 def get_uuid() -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/__init__.py#L6)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/__init__.py#L6)
 
 Get an UUID.
 
@@ -28,7 +28,7 @@ Get an UUID.
 def is_valid_uuid(uuid_to_test: str, version: int = 4) -> bool
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/__init__.py#L16)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/__init__.py#L16)
 
 Check if uuid_to_test is a valid UUID.
 
@@ -46,7 +46,7 @@ Check if uuid_to_test is a valid UUID.
 
 # hdx.utilities.session
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/session.py#L1)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/session.py#L1)
 
 Session utilities for urls
 
@@ -58,7 +58,7 @@ Session utilities for urls
 def get_session(user_agent: Optional[str] = None, user_agent_config_yaml: Optional[str] = None, user_agent_lookup: Optional[str] = None, use_env: bool = True, fail_on_missing_file: bool = True, **kwargs: Any, ,) -> requests.Session
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/session.py#L22)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/session.py#L22)
 
 Set up and return Session object that is set up with retrying. Requires either global user agent to be set or
 appropriate user agent parameter(s) to be completed. If the EXTRA_PARAMS or BASIC_AUTH environment variable is
@@ -87,7 +87,7 @@ supplied, the extra_params* parameters will be ignored.
 
 # hdx.utilities.wheel
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/wheel.py#L1)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/wheel.py#L1)
 
 <a id="hdx.utilities.wheel.get_version_from_whl"></a>
 
@@ -97,7 +97,7 @@ supplied, the extra_params* parameters will be ignored.
 def get_version_from_whl(dirpath: str) -> Optional[str]
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/wheel.py#L8)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/wheel.py#L8)
 
 Get version
 
@@ -118,7 +118,7 @@ Get version
 def git_tag_whl(dirpath: str) -> None
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/wheel.py#L27)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/wheel.py#L27)
 
 Create git tag for whl given folder
 
@@ -135,7 +135,7 @@ Create git tag for whl given folder
 
 # hdx.utilities.downloader
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L1)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L1)
 
 Downloading utilities for urls
 
@@ -147,7 +147,7 @@ Downloading utilities for urls
 class Download()
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L27)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L27)
 
 Download class with various download operations. Requires either global user agent to be set or appropriate
 user agent parameter(s) to be completed.
@@ -180,7 +180,7 @@ user agent parameter(s) to be completed.
 def close_response() -> None
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L79)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L79)
 
 Close response
 
@@ -196,7 +196,7 @@ Close response
 def close() -> None
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L92)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L92)
 
 Close response and session
 
@@ -213,7 +213,7 @@ Close response and session
 def get_path_for_url(url: str, folder: Optional[str] = None, filename: Optional[str] = None, path: Optional[str] = None, overwrite: bool = False) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L109)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L109)
 
 Get filename from url and join to provided folder or temporary folder if no folder supplied, ensuring uniqueness
 
@@ -238,7 +238,7 @@ Get filename from url and join to provided folder or temporary folder if no fold
 def get_full_url(url: str) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L153)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L153)
 
 Get full url including any additional parameters
 
@@ -260,7 +260,7 @@ Get full url including any additional parameters
 def get_url_for_get(url: str, parameters: Optional[Dict] = None) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L167)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L167)
 
 Get full url for GET request including parameters
 
@@ -283,7 +283,7 @@ Get full url for GET request including parameters
 def get_url_params_for_post(url: str, parameters: Optional[Dict] = None) -> Tuple[str, Dict]
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L186)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L186)
 
 Get full url for POST request and all parameters including any in the url
 
@@ -306,7 +306,7 @@ Get full url for POST request and all parameters including any in the url
 def hxl_row(headers: List[str], hxltags: Dict[str, str], dict_form: bool = False) -> Union[List[str], Dict[str, str]]
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L208)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L208)
 
 Return HXL tag row for header row given list of headers and dictionary with header to HXL hashtag mappings.
 Return list or dictionary depending upon the dict_form argument.
@@ -330,7 +330,7 @@ Return list or dictionary depending upon the dict_form argument.
 def normal_setup(url: str, stream: bool = True, post: bool = False, parameters: Optional[Dict] = None, timeout: Optional[float] = None, headers: Optional[Dict] = None, encoding: Optional[str] = None) -> requests.Response
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L228)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L228)
 
 Setup download from provided url returning the response
 
@@ -357,7 +357,7 @@ Setup download from provided url returning the response
 def hash_stream(url: str) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L290)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L290)
 
 Stream file from url and hash it using MD5. Must call setup method first.
 
@@ -378,7 +378,7 @@ Stream file from url and hash it using MD5. Must call setup method first.
 def stream_file(url: str, folder: Optional[str] = None, filename: Optional[str] = None, path: Optional[str] = None, overwrite: bool = False) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L311)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L311)
 
 Stream file from url and store in provided folder or temporary folder if no folder supplied.
 Must call setup method first.
@@ -404,7 +404,7 @@ Must call setup method first.
 def download_file(url: str, folder: Optional[str] = None, filename: Optional[str] = None, path: Optional[str] = None, overwrite: bool = False, post: bool = False, parameters: Optional[Dict] = None, timeout: Optional[float] = None, headers: Optional[Dict] = None, encoding: Optional[str] = None) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L350)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L350)
 
 Download file from url and store in provided folder or temporary folder if no folder supplied
 
@@ -434,7 +434,7 @@ Download file from url and store in provided folder or temporary folder if no fo
 def download(url: str, post: bool = False, parameters: Optional[Dict] = None, timeout: Optional[float] = None, headers: Optional[Dict] = None, encoding: Optional[str] = None) -> requests.Response
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L392)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L392)
 
 Download url
 
@@ -460,7 +460,7 @@ Download url
 def get_header(header: str) -> Any
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L425)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L425)
 
 Get a particular response header of download
 
@@ -481,7 +481,7 @@ Get a particular response header of download
 def get_headers() -> Any
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L437)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L437)
 
 Get response headers of download
 
@@ -497,7 +497,7 @@ Get response headers of download
 def get_status() -> int
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L446)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L446)
 
 Get response status code
 
@@ -513,7 +513,7 @@ Get response status code
 def get_text() -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L455)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L455)
 
 Get text content of download
 
@@ -529,7 +529,7 @@ Get text content of download
 def get_yaml() -> Any
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L464)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L464)
 
 Get YAML content of download
 
@@ -545,7 +545,7 @@ Get YAML content of download
 def get_json() -> Any
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L474)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L474)
 
 Get JSON content of download
 
@@ -561,7 +561,7 @@ Get JSON content of download
 def get_tabular_stream(url: str, **kwargs: Any) -> tabulator.Stream
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L483)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L483)
 
 Get Tabulator stream.
 
@@ -586,7 +586,7 @@ Get Tabulator stream.
 def get_tabular_rows_as_list(url: str, **kwargs: Any) -> Iterator[List]
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L513)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L513)
 
 Get iterator for reading rows from tabular data. Each row is returned as a list.
 
@@ -613,7 +613,7 @@ def get_tabular_rows(url: str, headers: Union[int, List[int], List[str]] = 1, di
         ] = None, **kwargs: Any, ,) -> Tuple[List[str], Iterator[Union[List, Dict]]]
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L531)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L531)
 
 Returns header of tabular file pointed to by url and an iterator where each row is returned as a list
 or dictionary depending on the dict_rows argument. The headers argument is either a row number or list of row
@@ -652,7 +652,7 @@ or None to ignore the row.
 def download_tabular_key_value(url: str, **kwargs: Any) -> Dict
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L599)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L599)
 
 Download 2 column csv from url and return a dictionary of keys (first column) and values (second column)
 
@@ -677,7 +677,7 @@ Download 2 column csv from url and return a dictionary of keys (first column) an
 def download_tabular_rows_as_dicts(url: str, headers: Union[int, List[int], List[str]] = 1, keycolumn: int = 1, **kwargs: Any, ,) -> Dict[str, Dict]
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L620)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L620)
 
 Download multicolumn csv from url and return dictionary where keys are first column and values are
 dictionaries with keys from column headers and values from columns beneath
@@ -705,7 +705,7 @@ dictionaries with keys from column headers and values from columns beneath
 def download_tabular_cols_as_dicts(url: str, headers: Union[int, List[int], List[str]] = 1, keycolumn: int = 1, **kwargs: Any, ,) -> Dict[str, Dict]
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L658)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L658)
 
 Download multicolumn csv from url and return dictionary where keys are header names and values are
 dictionaries with keys from first column and values from other columns
@@ -734,7 +734,7 @@ dictionaries with keys from first column and values from other columns
 def get_column_positions(headers: List[str]) -> Dict[str, int]
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/downloader.py#L698)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/downloader.py#L698)
 
 Get mapping of headers to column positions
 
@@ -751,7 +751,7 @@ Get mapping of headers to column positions
 
 # hdx.utilities.loader
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/loader.py#L1)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/loader.py#L1)
 
 Loading utilities for YAML, JSON etc.
 
@@ -763,7 +763,7 @@ Loading utilities for YAML, JSON etc.
 def load_file_to_str(path: str, encoding: str = "utf-8", strip: bool = False, replace_newlines: Optional[str] = None) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/loader.py#L19)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/loader.py#L19)
 
 Load file into a string removing newlines
 
@@ -787,7 +787,7 @@ Load file into a string removing newlines
 def load_yaml(path: str, encoding: str = "utf-8") -> Dict
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/loader.py#L49)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/loader.py#L49)
 
 Load YAML file into an ordered dictionary
 
@@ -809,7 +809,7 @@ Load YAML file into an ordered dictionary
 def load_json(path: str, encoding: str = "utf-8") -> Dict
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/loader.py#L67)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/loader.py#L67)
 
 Load JSON file into an ordered dictionary (dict for Python 3.7+)
 
@@ -831,7 +831,7 @@ Load JSON file into an ordered dictionary (dict for Python 3.7+)
 def load_and_merge_yaml(paths: List[str], encoding: str = "utf-8") -> Dict
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/loader.py#L84)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/loader.py#L84)
 
 Load multiple YAML files and merge into one dictionary
 
@@ -853,7 +853,7 @@ Load multiple YAML files and merge into one dictionary
 def load_and_merge_json(paths: List[str], encoding: str = "utf-8") -> Dict
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/loader.py#L99)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/loader.py#L99)
 
 Load multiple JSON files and merge into one dictionary
 
@@ -875,7 +875,7 @@ Load multiple JSON files and merge into one dictionary
 def load_yaml_into_existing_dict(data: dict, path: str, encoding: str = "utf-8") -> Dict
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/loader.py#L114)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/loader.py#L114)
 
 Merge YAML file into existing dictionary
 
@@ -898,7 +898,7 @@ Merge YAML file into existing dictionary
 def load_json_into_existing_dict(data: dict, path: str, encoding: str = "utf-8") -> Dict
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/loader.py#L131)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/loader.py#L131)
 
 Merge JSON file into existing dictionary
 
@@ -917,7 +917,7 @@ Merge JSON file into existing dictionary
 
 # hdx.utilities.retriever
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/retriever.py#L1)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/retriever.py#L1)
 
 <a id="hdx.utilities.retriever.Retrieve"></a>
 
@@ -927,7 +927,7 @@ Merge JSON file into existing dictionary
 class Retrieve()
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/retriever.py#L13)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/retriever.py#L13)
 
 Retrieve class which takes in a Download object and can either download, download and save or use previously
 downloaded and saved data. It also allows the use of a static fallback when downloading fails.
@@ -950,7 +950,7 @@ downloaded and saved data. It also allows the use of a static fallback when down
 def get_url_logstr(url: str) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/retriever.py#L50)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/retriever.py#L50)
 
 Url string that will be logged. It is limited to 100 characters if necessary.
 
@@ -971,7 +971,7 @@ Url string that will be logged. It is limited to 100 characters if necessary.
 def retrieve_file(url, filename, logstr=None, fallback=False, **kwargs)
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/retriever.py#L64)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/retriever.py#L64)
 
 Retrieve file
 
@@ -996,7 +996,7 @@ Retrieve file
 def retrieve_text(url, filename, logstr=None, fallback=False, **kwargs)
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/retriever.py#L108)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/retriever.py#L108)
 
 Retrieve text
 
@@ -1021,7 +1021,7 @@ Retrieve text
 def retrieve_yaml(url, filename, logstr=None, fallback=False, **kwargs)
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/retriever.py#L150)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/retriever.py#L150)
 
 Retrieve YAML
 
@@ -1046,7 +1046,7 @@ Retrieve YAML
 def retrieve_json(url, filename, logstr=None, fallback=False, **kwargs)
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/retriever.py#L192)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/retriever.py#L192)
 
 Retrieve JSON
 
@@ -1067,7 +1067,7 @@ Retrieve JSON
 
 # hdx.utilities.text
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/text.py#L1)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/text.py#L1)
 
 Text processing utilities
 
@@ -1079,7 +1079,7 @@ Text processing utilities
 def remove_end_characters(string: str, characters_to_remove: str = punctuation) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/text.py#L14)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/text.py#L14)
 
 Remove any characters at end of string that are in characters_to_remove
 
@@ -1101,7 +1101,7 @@ Remove any characters at end of string that are in characters_to_remove
 def remove_from_end(string: str, things_to_remove: List[str], logging_text: Optional[str] = None, whole_words: bool = True) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/text.py#L32)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/text.py#L32)
 
 Remove list of items from end of string, stripping any whitespace
 
@@ -1125,7 +1125,7 @@ Remove list of items from end of string, stripping any whitespace
 def remove_string(string: str, toremove: str, end_characters_to_remove: str = punctuation) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/text.py#L67)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/text.py#L67)
 
 Remove string from another string and delete any preceding end characters - by default punctuation (eg. comma)
 and any whitespace following the punctuation
@@ -1149,7 +1149,7 @@ and any whitespace following the punctuation
 def multiple_replace(string: str, replacements: Dict[str, str]) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/text.py#L91)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/text.py#L91)
 
 Simultaneously replace multiple strings in a string
 
@@ -1171,7 +1171,7 @@ Simultaneously replace multiple strings in a string
 def get_words_in_sentence(sentence: str) -> List[str]
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/text.py#L113)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/text.py#L113)
 
 Returns list of words in a sentence
 
@@ -1192,7 +1192,7 @@ Returns list of words in a sentence
 def get_matching_text_in_strs(a: str, b: str, match_min_size: int = 30, ignore: str = "", end_characters: str = "") -> List[str]
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/text.py#L128)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/text.py#L128)
 
 Returns a list of matching blocks of text in a and b
 
@@ -1217,7 +1217,7 @@ Returns a list of matching blocks of text in a and b
 def get_matching_text(string_list: List[str], match_min_size: int = 30, ignore: str = "", end_characters: str = ".!\r\n") -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/text.py#L168)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/text.py#L168)
 
 Returns a string containing matching blocks of text in a list of strings followed by non-matching.
 
@@ -1241,7 +1241,7 @@ Returns a string containing matching blocks of text in a list of strings followe
 def get_matching_then_nonmatching_text(string_list: List[str], separator: str = "", match_min_size: int = 30, ignore: str = "", end_characters: str = ".!\r\n") -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/text.py#L200)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/text.py#L200)
 
 Returns a string containing matching blocks of text in a list of strings followed by non-matching.
 
@@ -1266,7 +1266,7 @@ Returns a string containing matching blocks of text in a list of strings followe
 def number_format(val: Any, format: str = "%.4f", trailing_zeros: bool = True) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/text.py#L288)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/text.py#L288)
 
 Format float-castable input as string
 
@@ -1289,7 +1289,7 @@ Format float-castable input as string
 def get_fraction_str(numerator: Any, denominator: Optional[Any] = None, format: str = "%.4f", trailing_zeros: bool = True) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/text.py#L309)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/text.py#L309)
 
 Given float-castable numerator and optional float-castable denominator, format as string, returning '' for
 invalid numerator or 0 denominator.
@@ -1314,7 +1314,7 @@ invalid numerator or 0 denominator.
 def only_allowed_in_str(test_str: str, allowed_chars: Set) -> bool
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/text.py#L340)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/text.py#L340)
 
 Returns True if test string contains only allowed characters, False if not.
 
@@ -1336,7 +1336,7 @@ Returns True if test string contains only allowed characters, False if not.
 def get_numeric_if_possible(value: Any) -> Any
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/text.py#L356)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/text.py#L356)
 
 Return val if it is not a string, otherwise see if it can be cast to float or int,
 taking into account commas and periods.
@@ -1354,7 +1354,7 @@ taking into account commas and periods.
 
 # hdx.utilities.useragent
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/useragent.py#L1)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/useragent.py#L1)
 
 User agent utilities
 
@@ -1366,7 +1366,7 @@ User agent utilities
 class UserAgent()
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/useragent.py#L17)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/useragent.py#L17)
 
 <a id="hdx.utilities.useragent.UserAgent.clear_global"></a>
 
@@ -1377,7 +1377,7 @@ class UserAgent()
 def clear_global(cls) -> None
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/useragent.py#L149)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/useragent.py#L149)
 
 Clear stored user agent string
 
@@ -1394,7 +1394,7 @@ Clear stored user agent string
 def set_global(cls, user_agent: Optional[str] = None, user_agent_config_yaml: Optional[str] = None, user_agent_lookup: Optional[str] = None, **kwargs: Any, ,) -> None
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/useragent.py#L160)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/useragent.py#L160)
 
 Set global user agent string
 
@@ -1418,7 +1418,7 @@ Set global user agent string
 def get(cls, user_agent: Optional[str] = None, user_agent_config_yaml: Optional[str] = None, user_agent_lookup: Optional[str] = None, **kwargs: Any, ,) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/useragent.py#L183)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/useragent.py#L183)
 
 Get full user agent string from parameters if supplied falling back on global user agent if set.
 
@@ -1437,7 +1437,7 @@ Get full user agent string from parameters if supplied falling back on global us
 
 # hdx.utilities.saver
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/saver.py#L1)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/saver.py#L1)
 
 Saving utilities for YAML, JSON etc.
 
@@ -1449,7 +1449,7 @@ Saving utilities for YAML, JSON etc.
 def save_str_to_file(string: str, path: str, encoding: str = "utf-8") -> None
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/saver.py#L52)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/saver.py#L52)
 
 Save string to file
 
@@ -1472,7 +1472,7 @@ Save string to file
 def save_yaml(dictionary: Dict, path: str, encoding: str = "utf-8", pretty: bool = False, sortkeys: bool = False) -> None
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/saver.py#L67)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/saver.py#L67)
 
 Save dictionary to YAML file preserving order if it is an OrderedDict
 
@@ -1497,7 +1497,7 @@ Save dictionary to YAML file preserving order if it is an OrderedDict
 def save_json(dictionary: Dict, path: str, encoding: str = "utf-8", pretty: bool = False, sortkeys: bool = False) -> None
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/saver.py#L103)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/saver.py#L103)
 
 Save dictionary to JSON file preserving order if it is an OrderedDict
 
@@ -1518,7 +1518,7 @@ Save dictionary to JSON file preserving order if it is an OrderedDict
 
 # hdx.utilities.path
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/path.py#L1)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/path.py#L1)
 
 Directory Path Utilities
 
@@ -1530,7 +1530,7 @@ Directory Path Utilities
 def script_dir(pyobject: Any, follow_symlinks: bool = True) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/path.py#L25)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/path.py#L25)
 
 Get current script's directory
 
@@ -1552,7 +1552,7 @@ Get current script's directory
 def script_dir_plus_file(filename: str, pyobject: Any, follow_symlinks: bool = True) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/path.py#L44)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/path.py#L44)
 
 Get current script's directory and then append a filename
 
@@ -1575,7 +1575,7 @@ Get current script's directory and then append a filename
 def get_temp_dir(folder: Optional[str] = None, delete_if_exists: bool = False, tempdir: Optional[str] = None) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/path.py#L60)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/path.py#L60)
 
 Get a temporary directory. Looks for environment variable TEMP_DIR and falls
 back on os.gettempdir if a root temporary directory is not supplied. If a folder is supplied, creates that folder
@@ -1601,7 +1601,7 @@ within the temporary directory. Optionally deletes and recreates it if it alread
 def temp_dir(folder: Optional[str] = None, delete_if_exists: bool = False, delete_on_success: bool = True, delete_on_failure: bool = True, tempdir: Optional[str] = None) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/path.py#L91)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/path.py#L91)
 
 Get a temporary directory optionally with folder appended (and created if it doesn't exist)
 
@@ -1626,7 +1626,7 @@ Get a temporary directory optionally with folder appended (and created if it doe
 def read_or_create_batch(folder: str, batch: Optional[str] = None) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/path.py#L124)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/path.py#L124)
 
 Get batch or create it if it doesn't exist
 
@@ -1649,7 +1649,7 @@ Get batch or create it if it doesn't exist
 def temp_dir_batch(folder: Optional[str] = None, delete_if_exists: bool = False, delete_on_success: bool = True, delete_on_failure: bool = True, batch: Optional[str] = None, tempdir: Optional[str] = None) -> Dict
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/path.py#L147)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/path.py#L147)
 
 Get a temporary directory and batch id. Yields a dictionary with key folder which is the temporary directory
 optionally with folder appended (and created if it doesn't exist). In key batch is a batch code to be passed as
@@ -1677,7 +1677,7 @@ the batch parameter in create_in_hdx or update_in_hdx calls.
 def get_wheretostart(text: str, message: str, key: str) -> Optional[str]
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/path.py#L183)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/path.py#L183)
 
 Evaluate WHERETOSTART.
 
@@ -1700,7 +1700,7 @@ Evaluate WHERETOSTART.
 def progress_storing_folder(info: Dict, iterator: Iterable[Dict], key: str, wheretostart: Optional[str] = None) -> Tuple[Dict, Dict]
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/path.py#L205)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/path.py#L205)
 
 Store progress in folder in key folder of info dictionary parameter. Yields 2 dictionaries. The first is the
 info dictionary. It contains in key folder the folder being used to store progress and in key progress the current
@@ -1729,7 +1729,7 @@ dictionary in the iterator.
 def wheretostart_tempdir_batch(folder: str, batch: Optional[str] = None, tempdir: Optional[str] = None) -> Dict
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/path.py#L271)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/path.py#L271)
 
 Get a temporary directory and batch id. Deletes any existing folder if WHERETOSTART environment variable is set
 to RESET. Yields a dictionary with key folder which is the temporary directory optionally with folder appended
@@ -1755,7 +1755,7 @@ create_in_hdx or update_in_hdx calls.
 def progress_storing_tempdir(folder: str, iterator: Iterable[Dict], key: str, batch: Optional[str] = None, tempdir: Optional[str] = None) -> Tuple[Dict, Dict]
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/path.py#L306)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/path.py#L306)
 
 Store progress in temporary directory. The folder persists until the final iteration allowing which iteration to
 start at and the batch code to be persisted between runs. Yields 2 dictionaries. The first contains key folder which
@@ -1786,7 +1786,7 @@ temporary directory or to a key value pair in the form key=value eg. iso3=PAK in
 def multiple_progress_storing_tempdir(folder: str, iterators: List[Iterable[Dict]], keys: List[str], batch: Optional[str] = None) -> Tuple[Dict, Dict]
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/path.py#L337)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/path.py#L337)
 
 Store progress in temporary directory. The folder persists until the final iteration of the last iterator
 allowing which iteration to start at and the batch code to be persisted between runs. Yields 2 dictionaries. The
@@ -1817,7 +1817,7 @@ iso3=PAK indicating where to start.
 def get_filename_from_url(url: str) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/path.py#L407)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/path.py#L407)
 
 Get filename including extension from url
 
@@ -1838,7 +1838,7 @@ Get filename including extension from url
 def get_filename_extension_from_url(url: str) -> Tuple[str, str]
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/path.py#L421)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/path.py#L421)
 
 Get separately filename and extension from url
 
@@ -1855,7 +1855,7 @@ Get separately filename and extension from url
 
 # hdx.utilities.compare
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/compare.py#L1)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/compare.py#L1)
 
 File compare utilities
 
@@ -1867,7 +1867,7 @@ File compare utilities
 def compare_files(path1: str, path2: str) -> List[str]
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/compare.py#L7)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/compare.py#L7)
 
 Returns the delta between two files using -, ?, + format excluding
 lines that are the same
@@ -1890,7 +1890,7 @@ lines that are the same
 def assert_files_same(path1: str, path2: str) -> None
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/compare.py#L25)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/compare.py#L25)
 
 Asserts that two files are the same and returns delta using
 -, ?, + format if not
@@ -1909,7 +1909,7 @@ Asserts that two files are the same and returns delta using
 
 # hdx.utilities.dictandlist
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dictandlist.py#L1)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dictandlist.py#L1)
 
 Dict and List utilities
 
@@ -1921,7 +1921,7 @@ Dict and List utilities
 def merge_two_dictionaries(a: DictUpperBound, b: DictUpperBound, merge_lists: bool = False) -> DictUpperBound
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dictandlist.py#L13)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dictandlist.py#L13)
 
 Merges b into a and returns merged result
 
@@ -1946,7 +1946,7 @@ NOTE: tuples and arbitrary objects are not handled as it is totally ambiguous wh
 def merge_dictionaries(dicts: List[DictUpperBound], merge_lists: bool = False) -> DictUpperBound
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dictandlist.py#L70)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dictandlist.py#L70)
 
 Merges all dictionaries in dicts into a single dictionary and returns result
 
@@ -1968,7 +1968,7 @@ Merges all dictionaries in dicts into a single dictionary and returns result
 def dict_diff(d1: DictUpperBound, d2: DictUpperBound, no_key: str = "<KEYNOTFOUND>") -> Dict
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dictandlist.py#L89)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dictandlist.py#L89)
 
 Compares two dictionaries
 
@@ -1991,7 +1991,7 @@ Compares two dictionaries
 def dict_of_lists_add(dictionary: DictUpperBound, key: Any, value: Any) -> None
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dictandlist.py#L112)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dictandlist.py#L112)
 
 Add value to a list in a dictionary by key
 
@@ -2014,7 +2014,7 @@ Add value to a list in a dictionary by key
 def dict_of_sets_add(dictionary: DictUpperBound, key: Any, value: Any) -> None
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dictandlist.py#L131)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dictandlist.py#L131)
 
 Add value to a set in a dictionary by key
 
@@ -2037,7 +2037,7 @@ Add value to a set in a dictionary by key
 def dict_of_dicts_add(dictionary: DictUpperBound, parent_key: Any, key: Any, value: Any) -> None
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dictandlist.py#L148)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dictandlist.py#L148)
 
 Add key value pair to a dictionary within a dictionary by key
 
@@ -2061,7 +2061,7 @@ Add key value pair to a dictionary within a dictionary by key
 def list_distribute_contents_simple(input_list: List, function: Callable[[Any], Any] = lambda x: x) -> List
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dictandlist.py#L168)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dictandlist.py#L168)
 
 Distribute the contents of a list eg. [1, 1, 1, 2, 2, 3] -> [1, 2, 3, 1, 2, 1]. List can contain complex types
 like dictionaries in which case the function can return the appropriate value eg.  lambda x: x[KEY]
@@ -2084,7 +2084,7 @@ like dictionaries in which case the function can return the appropriate value eg
 def list_distribute_contents(input_list: List, function: Callable[[Any], Any] = lambda x: x) -> List
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dictandlist.py#L201)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dictandlist.py#L201)
 
 Distribute the contents of a list eg. [1, 1, 1, 2, 2, 3] -> [1, 2, 1, 2, 1, 3]. List can contain complex types
 like dictionaries in which case the function can return the appropriate value eg.  lambda x: x[KEY]
@@ -2107,7 +2107,7 @@ like dictionaries in which case the function can return the appropriate value eg
 def extract_list_from_list_of_dict(list_of_dict: List[DictUpperBound], key: Any) -> List
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dictandlist.py#L250)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dictandlist.py#L250)
 
 Extract a list by looking up key in each member of a list of dictionaries
 
@@ -2129,7 +2129,7 @@ Extract a list by looking up key in each member of a list of dictionaries
 def key_value_convert(dictin: DictUpperBound, keyfn: Callable[[Any], Any] = lambda x: x, valuefn: Callable[[Any], Any] = lambda x: x, dropfailedkeys: bool = False, dropfailedvalues: bool = False, exception: ExceptionUpperBound = ValueError) -> Dict
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dictandlist.py#L269)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dictandlist.py#L269)
 
 Convert keys and/or values of dictionary using functions passed in as parameters
 
@@ -2155,7 +2155,7 @@ Convert keys and/or values of dictionary using functions passed in as parameters
 def integer_key_convert(dictin: DictUpperBound, dropfailedkeys: bool = False) -> Dict
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dictandlist.py#L310)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dictandlist.py#L310)
 
 Convert keys of dictionary to integers
 
@@ -2177,7 +2177,7 @@ Convert keys of dictionary to integers
 def integer_value_convert(dictin: DictUpperBound, dropfailedvalues: bool = False) -> Dict
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dictandlist.py#L326)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dictandlist.py#L326)
 
 Convert values of dictionary to integers
 
@@ -2199,7 +2199,7 @@ Convert values of dictionary to integers
 def float_value_convert(dictin: DictUpperBound, dropfailedvalues: bool = False) -> Dict
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dictandlist.py#L344)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dictandlist.py#L344)
 
 Convert values of dictionary to floats
 
@@ -2221,7 +2221,7 @@ Convert values of dictionary to floats
 def avg_dicts(dictin1: DictUpperBound, dictin2: DictUpperBound, dropmissing: bool = True) -> Dict
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dictandlist.py#L362)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dictandlist.py#L362)
 
 Create a new dictionary from two dictionaries by averaging values
 
@@ -2244,7 +2244,7 @@ Create a new dictionary from two dictionaries by averaging values
 def read_list_from_csv(url: str, headers: Union[int, List[int], List[str], None] = None, dict_form: bool = False, **kwargs: Any, ,) -> List[Union[Dict, List]]
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dictandlist.py#L389)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dictandlist.py#L389)
 
 Read a list of rows in dict or list form from a csv. The headers argument is either a row
 number or list of row numbers (in case of multi-line headers) to be considered as headers
@@ -2271,7 +2271,7 @@ all rows will be treated as containing values.
 def write_list_to_csv(filepath: str, list_of_rows: List[Union[DictUpperBound, List]], headers: Union[int, List[int], List[str], None] = None) -> None
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dictandlist.py#L419)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dictandlist.py#L419)
 
 Write a list of rows in dict or list form to a csv. (The headers argument is either a row
 number or list of row numbers (in case of multi-line headers) to be considered as headers
@@ -2297,7 +2297,7 @@ all rows will be treated as containing values.)
 def args_to_dict(args: str) -> DictUpperBound
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dictandlist.py#L444)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dictandlist.py#L444)
 
 Convert command line arguments in a comma separated string to a dictionary
 
@@ -2314,7 +2314,7 @@ Convert command line arguments in a comma separated string to a dictionary
 
 # hdx.utilities.encoding
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/encoding.py#L1)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/encoding.py#L1)
 
 Encoding utilities
 
@@ -2326,7 +2326,7 @@ Encoding utilities
 def str_to_base64(string: str) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/encoding.py#L6)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/encoding.py#L6)
 
 Base 64 encode string
 
@@ -2347,7 +2347,7 @@ Base 64 encode string
 def base64_to_str(bstring: str) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/encoding.py#L20)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/encoding.py#L20)
 
 Base 64 decode string
 
@@ -2364,7 +2364,7 @@ Base 64 decode string
 
 # hdx.utilities.easy\_logging
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/easy_logging.py#L1)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/easy_logging.py#L1)
 
 Configuration of logging
 
@@ -2376,7 +2376,7 @@ Configuration of logging
 def setup_logging(**kwargs: Any) -> None
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/easy_logging.py#L15)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/easy_logging.py#L15)
 
 Setup logging configuration
 
@@ -2399,7 +2399,7 @@ Setup logging configuration
 
 # hdx.utilities.email
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/email.py#L1)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/email.py#L1)
 
 Utility class to simplify sending emails
 
@@ -2411,7 +2411,7 @@ Utility class to simplify sending emails
 class Email()
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/email.py#L21)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/email.py#L21)
 
 Emailer utility. Parameters in dictionary or file (eg. yaml below):
 | connection_type: "ssl"   ("ssl" for smtp ssl or "lmtp", otherwise basic smtp is assumed)
@@ -2438,7 +2438,7 @@ Emailer utility. Parameters in dictionary or file (eg. yaml below):
 def __enter__() -> "Email"
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/email.py#L91)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/email.py#L91)
 
 Return Email object for with statement
 
@@ -2454,7 +2454,7 @@ Return Email object for with statement
 def __exit__(*args: Any) -> None
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/email.py#L101)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/email.py#L101)
 
 Close Email object for end of with statement
 
@@ -2475,7 +2475,7 @@ Close Email object for end of with statement
 def connect() -> None
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/email.py#L113)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/email.py#L113)
 
 Connect to server
 
@@ -2491,7 +2491,7 @@ Connect to server
 def close() -> None
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/email.py#L146)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/email.py#L146)
 
 Close connection to email server
 
@@ -2508,7 +2508,7 @@ Close connection to email server
 def get_normalised_emails(recipients: List[str]) -> List[str]
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/email.py#L157)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/email.py#L157)
 
 Get list of normalised emails
 
@@ -2529,7 +2529,7 @@ Get list of normalised emails
 def send(recipients: List[str], subject: str, text_body: str, html_body: Optional[str] = None, sender: Optional[str] = None, cc: Optional[List[str]] = None, bcc: Optional[List[str]] = None, **kwargs: Any, ,) -> None
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/email.py#L178)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/email.py#L178)
 
 Send email
 
@@ -2555,7 +2555,7 @@ Send email
 
 # hdx.utilities.dateparse
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dateparse.py#L1)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dateparse.py#L1)
 
 Date parsing utilities
 
@@ -2567,7 +2567,7 @@ Date parsing utilities
 def parse(timestr, default=None, ignoretz=False, tzinfos=None, **kwargs)
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dateparse.py#L477)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dateparse.py#L477)
 
 Parse the date/time string into a :class:`datetime.datetime` object.
 
@@ -2639,7 +2639,7 @@ Parse the date/time string into a :class:`datetime.datetime` object.
 def parse_date_range(string: str, date_format: Optional[str] = None, fuzzy: Optional[Dict] = None, zero_time: bool = False) -> Tuple[datetime, datetime]
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dateparse.py#L569)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dateparse.py#L569)
 
 Parse date from string using specified format (setting any time elements to 0 if zero_time is True).
 If no format is supplied, the function will guess. For unambiguous formats, this should be fine.
@@ -2667,7 +2667,7 @@ date (the string elements used to make the date) and nondate (the non date part 
 def parse_date(string: str, date_format: Optional[str] = None, fuzzy: Optional[Dict] = None, zero_time: bool = False) -> datetime
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dateparse.py#L652)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dateparse.py#L652)
 
 Parse date from string using specified format (setting any time elements to 0 if zero_time is True).
 If no format is supplied, the function will guess. For unambiguous formats, this should be fine.
@@ -2696,7 +2696,7 @@ nondate (the non date part of the string).
 def get_timestamp_from_datetime(date: datetime) -> float
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dateparse.py#L682)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dateparse.py#L682)
 
 Convert datetime to timestamp.
 
@@ -2717,7 +2717,7 @@ Convert datetime to timestamp.
 def get_datetime_from_timestamp(timestamp: float, timezone: datetime.tzinfo = tzutc, today: datetime = datetime.now(tzutc())) -> datetime
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/dateparse.py#L712)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/dateparse.py#L712)
 
 Convert timestamp to datetime.
 
@@ -2736,7 +2736,7 @@ Convert timestamp to datetime.
 
 # hdx.utilities.html
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/html.py#L1)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/html.py#L1)
 
 HTML parsing utilities
 
@@ -2748,7 +2748,7 @@ HTML parsing utilities
 def get_soup(url: str, downloader: Download = None, user_agent: Optional[str] = None, user_agent_config_yaml: Optional[str] = None, user_agent_lookup: Optional[str] = None, **kwargs: Any, ,) -> BeautifulSoup
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/html.py#L13)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/html.py#L13)
 
 Get BeautifulSoup object for a url. Requires either global user agent to be set or appropriate user agent
 parameter(s) to be completed.
@@ -2774,7 +2774,7 @@ parameter(s) to be completed.
 def get_text(tag: Tag) -> str
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/html.py#L44)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/html.py#L44)
 
 Get text of tag stripped of leading and trailing whitespace and newlines and with &nbsp replaced with space
 
@@ -2795,7 +2795,7 @@ Get text of tag stripped of leading and trailing whitespace and newlines and wit
 def extract_table(tabletag: Tag) -> List[Dict]
 ```
 
-[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/d1a88102d25a0878c549bbf5cdf74ec59e5b4c98/src/hdx/utilities/html.py#L58)
+[[view_source]](https://github.com/OCHA-DAP/hdx-python-utilities/blob/a67800c92ddb61afd7b569af33c6f30218b9e0d5/src/hdx/utilities/html.py#L58)
 
 Extract HTML table as list of dictionaries
 
