@@ -58,8 +58,22 @@ search_path = ["src"]
 packages = ["hdx.utilities"]
 
 [tool.pydoc-markdown.renderer]
-type = "markdown"
-filename = "apidocs.md"
+type = "mkdocs"
+output_directory = "docs/build"
+
+[tool.pydoc-markdown.renderer.mkdocs_config]
+site_name = "HDX Python Utilities"
+theme = "readthedocs"
+repo_url = "https://github.com/OCHA-DAP/hdx-python-utilities"
+
+[[tool.pydoc-markdown.renderer.pages]]
+title = "Home"
+name = "index"
+source ="README.md"
+
+[[tool.pydoc-markdown.renderer.pages]]
+title = "API Documentation"
+contents = [ "*" ]
 
 [tool.pydoc-markdown.renderer.source_linker]
 type = "github"
