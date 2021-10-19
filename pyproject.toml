@@ -81,7 +81,7 @@ wheel = true
 deps =
     -r test-requirements.txt
 commands =
-    pytest --cov=hdx --no-cov-on-fail --junitxml=.tox/test-results.xml --cov-report=xml
+    pytest --cov=hdx --no-cov-on-fail --junitxml=.tox/test-results.xml --cov-report=xml --cov-report=term-missing
 
 [testenv:lint]
 wheel_build_env = py38
