@@ -15,7 +15,6 @@ The HDX Python Utilities Library provides a range of helpful utilities:
 1. [Date parsing utilities](#date-parsing-utilities)
 1. [Text processing](#text-processing)
 1. [Encoding utilities](#encoding-utilities)
-1. [Py3-like raise from for Py2](#raise-from)
 1. [Check valid UUID](#valid-uuid)
 1. [Easy building and packaging](#easy-building-and-packaging)
 
@@ -28,6 +27,8 @@ The library has detailed API documentation which can be found [here](https://git
 The code for the library is [here](https://github.com/OCHA-DAP/hdx-python-utilities).
 
 ## Breaking Changes
+
+From 3.0.3, build stack has changed. Now uses tox, codecov etc. setup.py clean, package and publish removed.
 
 From 3.0.1, removed raisefrom function
 
@@ -562,14 +563,6 @@ Examples:
     b = str_to_base64(a)
     c = base64_to_str(b)
 
-### Raise from
-
-Examples:
-
-    # Raise an exception from another exception on Py2 or Py3
-    except IOError as e:
-        raisefrom(IOError, 'My Error Message', e)
-
 ### Valid UUID
 
 Examples:
@@ -579,54 +572,6 @@ Examples:
 
 ### Easy building and packaging
 
-The **clean** command of setup.py has been extended to use the --all flag by default and to clean the **dist** folder. 
-Two new commands folder have been created. **package** calls the new clean command and also **sdist** and also 
-**bdist_wheel**. In other words, it cleans thoroughly and builds source and wheel distributions. **publish** publishes 
-to pypi and creates a git tag. It requires that the command line git tool be installed as well as the Python package 
-twine (which is not in the requirements of HDX Python Utilities and must be separately installed eg. with pip).
-
-    python setup.py clean
-    python setup.py package
-    python setup.py publish
-   
-To use these commands, create a setup.py like this: 
-
-    requirements = ['ckanapi>=4.2']
-    
-    classifiers = [
-        "Development Status :: 5 - Production/Stable",
-        "Intended Audience :: Developers",
-        "Natural Language :: English",
-        "License :: OSI Approved :: MIT License",
-        "Operating System :: OS Independent",
-        "Programming Language :: Python",
-        "Programming Language :: Python :: 2.7",
-        "Programming Language :: Python :: 3",
-        "Topic :: Software Development :: Libraries :: Python Modules",
-    ]
-    
-    # Version of project in plain text file in src/hdx/version.txt
-    PublishCommand.version = load_file_to_str(join('src', 'hdx', 'version.txt'), strip=True)
-    
-    setup(
-        name='hdx-python-api',
-        description='HDX Python Library',
-        license='MIT',
-        url='https://github.com/OCHA-DAP/hdx-python-api',
-        version=PublishCommand.version,
-        author='Michael Rans',
-        author_email='rans@email.com',
-        keywords=['HDX', 'API', 'library'],
-        long_description=load_file_to_str('README.md'),
-        long_description_content_type='text/markdown',
-        packages=find_packages(where='src'),
-        package_dir={'': 'src'},
-        include_package_data=True,
-        setup_requires=['pytest-runner'],
-        tests_require=['pytest'],
-        zip_safe=True,
-        classifiers=classifiers,
-        install_requires=requirements,
-        cmdclass={'clean': CleanCommand, 'package': PackageCommand, 'publish': PublishCommand},
-    )
-
+The pyproject.toml and setup.cfg provide a template that can be used by other projects. There is a helper 
+function in this library, git_tag_whl, which aids with creating a tag in GitHub based on the version in
+the wheel file built by tox.
