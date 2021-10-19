@@ -69,7 +69,7 @@ repo_url = "https://github.com/OCHA-DAP/hdx-python-utilities"
 [[tool.pydoc-markdown.renderer.pages]]
 title = "Home"
 name = "index"
-source ="README.md"
+source ="docs/main.md"
 
 [[tool.pydoc-markdown.renderer.pages]]
 title = "API Documentation"
