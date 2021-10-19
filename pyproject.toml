@@ -75,7 +75,7 @@ source ="README.md"
 title = "API Documentation"
 contents = [ "*" ]
 
-[tool.pydoc-markdown.renderer.source_linker]
+[tool.pydoc-markdown.renderer.markdown.source_linker]
 type = "github"
 repo = "OCHA-DAP/hdx-python-utilities"
 
