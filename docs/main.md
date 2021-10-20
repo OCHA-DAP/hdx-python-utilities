@@ -1,4 +1,4 @@
-The HDX Python Utilities Library provides a range of helpful utilities:
+# Summary of Utilities
 
 1. [Easy downloading of files with support for authentication, streaming and hashing](#downloading-files)
 1. [Retrieval of data from url with saving to file or from data previously saved](#retrieving-files)
@@ -15,16 +15,16 @@ The HDX Python Utilities Library provides a range of helpful utilities:
 1. [Check valid UUID](#valid-uuid)
 1. [Easy building and packaging](#easy-building-and-packaging)
 
+# Information
+
 This library is part of the [Humanitarian Data Exchange](https://data.humdata.org/) (HDX) project. If you have 
 humanitarian related data, please upload your datasets to HDX.
 
-# Usage
-
+The code for the library is [here](https://github.com/OCHA-DAP/hdx-python-utilities).
 The library has detailed API documentation which can be found in the menu on the left and starts 
 [here](https://hdx-python-utilities.readthedocs.io/en/latest/api-documentation/downloading-files/). 
-The code for the library is [here](https://github.com/OCHA-DAP/hdx-python-utilities).
 
-# Breaking Changes
+## Breaking Changes
 
 From 3.0.3, build stack has changed. Now uses tox, codecov etc. setup.py clean, package and publish removed.
 
@@ -43,8 +43,9 @@ returns only the iterator.
 From 2.1.4, read_list_from_csv and write_list_to_csv change the order of their parameters to be more logical.
 Arguments about choosing between dict and list are all made consistent - dict_form.
 
-# Downloading files
+# Description of Utilities
 
+## Downloading files
 
 Various utilities to help with downloading files. Includes retrying by default.
 
@@ -138,7 +139,7 @@ Other useful functions:
 
 For more detail and additional functions, check the API docs mentioned earlier in the [usage section](#usage).
 
-# Retrieving files
+## Retrieving files
 
 When you download a file, you can opt to download from the web as usual or download from the web and and save for future
 reuse or use the previously downloaded file. The advantage is this is all handled in the class so you don't need to do 
@@ -182,7 +183,7 @@ Examples:
         retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save=False, use_saved=True)
         data = retriever.retrieve_json(url, filename, logstr='test json', fallback=False)
 
-# Loading and saving JSON and YAML
+## Loading and saving JSON and YAML
 
 Examples:
 
@@ -212,7 +213,7 @@ Examples:
     # sorting the keys
     save_json(mydict, 'mypath.json', pretty=False, sortkeys=False)
 
-# Dictionary and list utilities
+## Dictionary and list utilities
 
 Examples:
 
@@ -306,7 +307,7 @@ Examples:
     args = 'a=1,big=hello,1=3'
     assert args_to_dict(args) == {'a': '1', 'big': 'hello', '1': '3'}
 
-# HTML utilities
+## HTML utilities
 
 These are built on top of BeautifulSoup and simplify its setup.
 
@@ -325,7 +326,7 @@ Examples:
     # Extract HTML table as list of dictionaries
     result = extract_table(tabletag)
 
-# Comparing files
+## Comparing files
 
 Compare two files:
 
@@ -336,7 +337,7 @@ Compare two files:
     #  "+ coal   ,1      ,7.4    ,'notneeded'\n",
     #  '?         ^                +++\n']
 
-# Emailing
+## Emailing
 
 Example of setup and sending email:
 
@@ -375,7 +376,7 @@ Example of setup and sending email:
     with Email(email_config_dict=email_config_dict) as email:
         email.send(recipients, subject, text_body, sender=sender)
 
-# Configuring logging
+## Configuring logging
 
 The library provides coloured logs with a simple default setup which should be adequate for most cases. If you wish to 
 change the logging configuration from the defaults, you will need to call **setup\_logging** with arguments.
@@ -425,7 +426,7 @@ Then use the logger like this:
     logger.error('ERROR message')
     logger.critical('CRITICAL error message')
 
-# Path utilities
+## Path utilities
 
 Examples:
 
@@ -477,7 +478,7 @@ Examples:
     assert filename == 'test_data'
     assert extension == '.csv'
 
-# Date parsing utilities
+## Date parsing utilities
 
 Ambiguous dates are parsed as day first D/M/Y where there are values in front of the year and day last Y/M/D
 where there are values after the year.
@@ -514,7 +515,7 @@ Examples:
     assert fuzzy == {'startdate': datetime(2013, 2, 1, 0, 0), 'enddate': datetime(2013, 2, 28, 0, 0), 
                      'nondate': ('date is ', ' for this test'), 'date': ('02/2013',)}
 
-# Text processing
+## Text processing
 
 Examples:
 
@@ -550,7 +551,7 @@ Examples:
     result = get_matching_text([a, b, c], match_min_size=10)
     assert result == ' brown fox  over the  It was so fast!'
 
-# Encoding utilities
+## Encoding utilities
 
 Examples:
 
@@ -559,14 +560,14 @@ Examples:
     b = str_to_base64(a)
     c = base64_to_str(b)
 
-# Valid UUID
+## Valid UUID
 
 Examples:
 
     assert is_valid_uuid('jpsmith') is False
     assert is_valid_uuid('c9bf9e57-1685-4c89-bafb-ff5af830be8a') is True
 
-# Easy building and packaging
+## Easy building and packaging
 
 The pyproject.toml and setup.cfg provide a template that can be used by other projects. There is a helper 
 function in this library, git_tag_whl, which aids with creating a tag in GitHub based on the version in
