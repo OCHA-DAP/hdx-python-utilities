@@ -17,14 +17,14 @@ max_line_length = 79
 # show line of source code in output
 show_source = true
 
-# list of plugins and rules for them
-[tool.flakehell.plugins]
-mccabe = ["+*"]
-pycodestyle = ["+*", "-E203", "-E501", "-W503"]
-pyflakes = ["+*"]
-pylint = ["+*"]
-flake8-isort = ["+*"]
-flake8-black = ["+*"]
+    # list of plugins and rules for them
+    [tool.flakehell.plugins]
+    mccabe = ["+*"]
+    pycodestyle = ["+*", "-E203", "-E501", "-W503"]
+    pyflakes = ["+*"]
+    pylint = ["+*"]
+    flake8-isort = ["+*"]
+    flake8-black = ["+*"]
 
 [tool.pytest.ini_options]
 site_dirs = "src"
@@ -61,23 +61,87 @@ packages = ["hdx.utilities"]
 type = "mkdocs"
 output_directory = "docs/build"
 
-[tool.pydoc-markdown.renderer.mkdocs_config]
-site_name = "HDX Python Utilities"
-theme = "readthedocs"
-repo_url = "https://github.com/OCHA-DAP/hdx-python-utilities"
+    [tool.pydoc-markdown.renderer.mkdocs_config]
+    site_name = "HDX Python Utilities"
+    theme = "readthedocs"
+    repo_url = "https://github.com/OCHA-DAP/hdx-python-utilities"
 
-[[tool.pydoc-markdown.renderer.pages]]
-title = "Home"
-name = "index"
-source ="docs/main.md"
+    [tool.pydoc-markdown.renderer.markdown.source_linker]
+    type = "github"
+    repo = "OCHA-DAP/hdx-python-utilities"
 
-[[tool.pydoc-markdown.renderer.pages]]
-title = "API Documentation"
-contents = [ "*" ]
+    [[tool.pydoc-markdown.renderer.pages]]
+    title = "Home"
+    name = "index"
+    source ="docs/main.md"
 
-[tool.pydoc-markdown.renderer.markdown.source_linker]
-type = "github"
-repo = "OCHA-DAP/hdx-python-utilities"
+    [[tool.pydoc-markdown.renderer.pages]]
+    title = "API Documentation"
+
+        [[tool.pydoc-markdown.renderer.pages.children]]
+        title = "Downloading files"
+        contents = ["hdx.utilities.downloader.*"]
+
+        [[tool.pydoc-markdown.renderer.pages.children]]
+        title = "Retrieving files"
+        contents = ["hdx.utilities.retriever.*"]
+
+        [[tool.pydoc-markdown.renderer.pages.children]]
+        title = "Loading and saving JSON and YAML"
+        contents = ["hdx.utilities.loader.*", "hdx.utilities.saver.*"]
+
+        [[tool.pydoc-markdown.renderer.pages.children]]
+        title = "Dictionary and list utilities"
+        contents = ["hdx.utilities.dictandlist.*"]
+
+        [[tool.pydoc-markdown.renderer.pages.children]]
+        title = "HTML utilities"
+        contents = ["hdx.utilities.html.*"]
+
+        [[tool.pydoc-markdown.renderer.pages.children]]
+        title = "Comparing files"
+        contents = ["hdx.utilities.compare.*"]
+
+        [[tool.pydoc-markdown.renderer.pages.children]]
+        title = "Emailing"
+        contents = ["hdx.utilities.email.*"]
+
+        [[tool.pydoc-markdown.renderer.pages.children]]
+        title = "Configuring logging"
+        contents = ["hdx.utilities.easy_logging.*"]
+
+        [[tool.pydoc-markdown.renderer.pages.children]]
+        title = "Path utilities"
+        contents = ["hdx.utilities.path.*"]
+
+        [[tool.pydoc-markdown.renderer.pages.children]]
+        title = "Date parsing utilities"
+        contents = ["hdx.utilities.dateparse.*"]
+
+        [[tool.pydoc-markdown.renderer.pages.children]]
+        title = "Text processing"
+        contents = ["hdx.utilities.text.*"]
+
+        [[tool.pydoc-markdown.renderer.pages.children]]
+        title = "Encoding utilities"
+        contents = ["hdx.utilities.encoding.*"]
+
+        [[tool.pydoc-markdown.renderer.pages.children]]
+        title = "Valid UUID"
+        contents = ["hdx.utilities.uuid.*"]
+
+        [[tool.pydoc-markdown.renderer.pages.children]]
+        title = "Wheel utilities"
+        contents = ["hdx.utilities.session.*"]
+
+        [[tool.pydoc-markdown.renderer.pages.children]]
+        title = "Retrying Requests session"
+        contents = ["hdx.utilities.session.*"]
+
+        [[tool.pydoc-markdown.renderer.pages.children]]
+        title = "User Agent"
+        contents = ["hdx.utilities.useragent.*"]
+
 
 [tool.tox]
 legacy_tox_ini = """

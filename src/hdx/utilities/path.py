@@ -11,9 +11,9 @@ from tempfile import gettempdir
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 from urllib.parse import urlsplit
 
-from hdx.utilities import get_uuid
 from hdx.utilities.loader import load_file_to_str
 from hdx.utilities.saver import save_str_to_file
+from hdx.utilities.uuid import get_uuid
 
 logger = logging.getLogger(__name__)
 

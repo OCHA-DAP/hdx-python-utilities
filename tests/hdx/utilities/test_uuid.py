@@ -1,6 +1,6 @@
 """UUID Tests"""
 
-from hdx.utilities import is_valid_uuid
+from hdx.utilities.uuid import is_valid_uuid
 
 
 class TestUUID:
