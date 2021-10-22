@@ -1,8 +1,8 @@
 """Date Parse Utility Tests"""
 from datetime import datetime
-from parser import ParserError
 
 import pytest
+from dateutil.parser import ParserError
 from dateutil.tz import tzutc
 
 from hdx.utilities.dateparse import (

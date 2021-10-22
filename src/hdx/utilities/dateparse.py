@@ -2,11 +2,10 @@
 import time
 from calendar import monthrange
 from datetime import datetime
-from parser import ParserError
 from typing import Dict, Optional, Tuple
 
 import dateutil
-from dateutil.parser import _timelex, parserinfo
+from dateutil.parser import ParserError, _timelex, parserinfo
 from dateutil.tz import tzutc
 
 default_sd_year = 1
