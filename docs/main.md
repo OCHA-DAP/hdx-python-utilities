@@ -58,40 +58,40 @@ For example, given YAML file extraparams.yml:
 We can create a downloader as shown below that will use the authentication defined in basic\_auth and add the parameter 
 locale=en to each request (eg. for get request <http://myurl/lala?param1=p1&locale=en>):
 
-    with Download(user_agent='test', extra_params_yaml='extraparams.yml', extra_params_lookup='mykey') as downloader:
+    with Download(user_agent="test", extra_params_yaml="extraparams.yml", extra_params_lookup="mykey") as downloader:
         response = downloader.download(url)  # get requests library response
         json = response.json()
 
         # Download file to folder/filename
-        f = downloader.download_file('http://myurl', post=False,
-                                     parameters=OrderedDict([('b', '4'), ('d', '3')]),
+        f = downloader.download_file("http://myurl", post=False,
+                                     parameters=OrderedDict([("b", "4"), ("d", "3")]),
                                      folder=tmpdir, filename=filename)
         filepath = abspath(f)
 
         # Read row by row from tabular file
-        for row in downloader.get_tabular_rows('http://myurl/my.csv', dict_rows=True, headers=1)
-            a = row['col']
+        for row in downloader.get_tabular_rows("http://myurl/my.csv", dict_rows=True, headers=1)
+            a = row["col"]
 
 If we want to limit the rate of get and post requests to say 1 per 0.1 seconds, then the rate_limit parameter can be 
 passed:
 
-    with Download(rate_limit={'calls': 1, 'period': 0.1}) as downloader:
+    with Download(rate_limit={"calls": 1, "period": 0.1}) as downloader:
         response = downloader.download(url)  # get requests library response
 
 If we want a user agent that will be used in all relevant HDX Python Utilities methods (and all HDX Python API ones too 
 if that library is included), then it can be configured once and used automatically:
 
-    UserAgent.set_global('test')
+    UserAgent.set_global("test")
     with Download() as downloader:
         response = downloader.download(url)  # get requests library response
 
-The response is of the form produced by teh requests library. It may not be needed as there are functions directly on 
+The response is of the form produced by the requests library. It may not be needed as there are functions directly on 
 the Download object eg.
 
     assert downloader.get_status() == 200
     assert len(downloader.get_headers()) == 24
-    assert bool(re.match(r'7\d\d', downloader.get_header('Content-Length'))) is True
-    assert downloader.get_text() == 'XXX'
+    assert bool(re.match(r"7\d\d", downloader.get_header("Content-Length"))) is True
+    assert downloader.get_text() == "XXX"
     assert downloader.get_json() == {...}
     assert downloader.get_yaml() == {...}
 
@@ -108,12 +108,12 @@ each row. If supplied, it takes as arguments: headers (prior to any insertions) 
 form depending upon the dict_rows argument) and outputs a modified row. Example:
 
     def testfn(headers, row):
-        row['la'] = 'lala'
+        row["la"] = "lala"
         return row
 
-    insertions = {'headers': [(2, 'la')], 'function': testfn}
+    insertions = {"headers": [(2, "la")], "function": testfn}
     headers, generator = downloader.get_tabular_rows(url, headers=3, 
-                                                     header_insertions=[(2, 'la')], row_function=testfn)
+                                                     header_insertions=[(2, "la")], row_function=testfn)
 
 Other useful functions:
 
@@ -121,21 +121,21 @@ Other useful functions:
     for row in downloader.get_tabular_rows_as_list(url):
         ...
     # Get hxl row
-    assert Download.hxl_row(['a', 'b', 'c'], {'b': '#b', 'c': '#c'}, dict_form=True)
-    # == {'a': '', 'b': '#b', 'c': '#c'}        
+    assert Download.hxl_row(["a", "b", "c"], {"b": "#b", "c": "#c"}, dict_form=True)
+    # == {"a": "", "b": "#b", "c": "#c"}        
     # Build get url from url and dictionary of parameters
-    Download.get_url_for_get('http://www.lala.com/hdfa?a=3&b=4',
-                             OrderedDict([('c', 'e'), ('d', 'f')]))
-    # == 'http://www.lala.com/hdfa?a=3&b=4&c=e&d=f'
+    Download.get_url_for_get("http://www.lala.com/hdfa?a=3&b=4",
+                             OrderedDict([("c", "e"), ("d", "f")]))
+    # == "http://www.lala.com/hdfa?a=3&b=4&c=e&d=f"
 
     # Extract url and dictionary of parameters from get url
-    Download.get_url_params_for_post('http://www.lala.com/hdfa?a=3&b=4',
-                                     OrderedDict([('c', 'e'), ('d', 'f')]))
-    # == ('http://www.lala.com/hdfa',
-              OrderedDict([('a', '3'), ('b', '4'), ('c', 'e'), ('d', 'f')]))
+    Download.get_url_params_for_post("http://www.lala.com/hdfa?a=3&b=4",
+                                     OrderedDict([("c", "e"), ("d", "f")]))
+    # == ("http://www.lala.com/hdfa",
+              OrderedDict([("a", "3"), ("b", "4"), ("c", "e"), ("d", "f")]))
     # Get mapping of columns positions of headers          
-    Download.get_column_positions(['a', 'b', 'c'])
-    # == {'a': 0, 'b': 1, 'c': 2}
+    Download.get_column_positions(["a", "b", "c"])
+    # == {"a": 0, "b": 1, "c": 2}
 
 For more detail and additional functions, check the API docs mentioned earlier in the [usage section](#usage).
 
@@ -169,63 +169,63 @@ Examples:
         # Downloads file returning the path to the downloaded file and using a fallback file if the download 
         # fails. Since saved is False, the file will be saved with name filename in temp_dir
         retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save=False, use_saved=False) 
-        path = retriever.retrieve_file(url, filename, logstr='my file', fallback=True)
+        path = retriever.retrieve_file(url, filename, logstr="my file", fallback=True)
 
         # Downloads text file saving it for future usage and returning the text data (with no fallback) 
         # Since saved is True, the file will be saved with name filename in saved_dir
         retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save=True, use_saved=False)
-        text = retriever.retrieve_text(url, filename, logstr='test text', fallback=False)
+        text = retriever.retrieve_text(url, filename, logstr="test text", fallback=False)
         # Downloads YAML file saving it for future usage and returning the YAML data with fallback taken
         # from fallback_dir if needed.
-        data = retriever.retrieve_yaml(url, filename, logstr='test yaml', fallback=True)
+        data = retriever.retrieve_yaml(url, filename, logstr="test yaml", fallback=True)
 
         # Uses previously downloaded JSON file in saved_dir returning the JSON data (with no fallback) 
         retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save=False, use_saved=True)
-        data = retriever.retrieve_json(url, filename, logstr='test json', fallback=False)
+        data = retriever.retrieve_json(url, filename, logstr="test json", fallback=False)
 
 ## Loading and saving JSON and YAML
 
 Examples:
 
     # Load YAML
-    mydict = load_yaml('my_yaml.yml')
+    mydict = load_yaml("my_yaml.yml")
 
     # Load 2 YAMLs and merge into dictionary
-    mydict = load_and_merge_yaml('my_yaml1.yml', 'my_yaml2.yml')
+    mydict = load_and_merge_yaml("my_yaml1.yml", "my_yaml2.yml")
 
     # Load YAML into existing dictionary
-    mydict = load_yaml_into_existing_dict(existing_dict, 'my_yaml.yml')
+    mydict = load_yaml_into_existing_dict(existing_dict, "my_yaml.yml")
 
     # Load JSON
-    mydict = load_json('my_json.yml')
+    mydict = load_json("my_json.yml")
 
     # Load 2 JSONs and merge into dictionary
-    mydict = load_and_merge_json('my_json1.json', 'my_json2.json')
+    mydict = load_and_merge_json("my_json1.json", "my_json2.json")
 
     # Load JSON into existing dictionary
-    mydict = load_json_into_existing_dict(existing_dict, 'my_json.json')
+    mydict = load_json_into_existing_dict(existing_dict, "my_json.json")
 
     # Save dictionary to YAML file in pretty format
     # preserving order if it is an OrderedDict
-    save_yaml(mydict, 'mypath.yml', pretty=True, sortkeys=False)
+    save_yaml(mydict, "mypath.yml", pretty=True, sortkeys=False)
 
     # Save dictionary to JSON file in compact form
     # sorting the keys
-    save_json(mydict, 'mypath.json', pretty=False, sortkeys=False)
+    save_json(mydict, "mypath.json", pretty=False, sortkeys=False)
 
 ## Dictionary and list utilities
 
 Examples:
 
     # Merge dictionaries
-    d1 = {1: 1, 2: 2, 3: 3, 4: ['a', 'b', 'c']}
-    d2 = {2: 6, 5: 8, 6: 9, 4: ['d', 'e']}
+    d1 = {1: 1, 2: 2, 3: 3, 4: ["a", "b", "c"]}
+    d2 = {2: 6, 5: 8, 6: 9, 4: ["d", "e"]}
     result = merge_dictionaries([d1, d2])
-    assert result == {1: 1, 2: 6, 3: 3, 4: ['d', 'e'], 5: 8, 6: 9}
+    assert result == {1: 1, 2: 6, 3: 3, 4: ["d", "e"], 5: 8, 6: 9}
 
     # Diff dictionaries
-    d1 = {1: 1, 2: 2, 3: 3, 4: {'a': 1, 'b': 'c'}}
-    d2 = {4: {'a': 1, 'b': 'c'}, 2: 2, 3: 3, 1: 1}
+    d1 = {1: 1, 2: 2, 3: 3, 4: {"a": 1, "b": "c"}}
+    d2 = {4: {"a": 1, "b": "c"}, 2: 2, 3: 3, 1: 1}
     diff = dict_diff(d1, d2)
     assert diff == {}
     d2[3] = 4
@@ -234,26 +234,26 @@ Examples:
 
     # Add element to list in dict
     d = dict()
-    dict_of_lists_add(d, 'a', 1)
-    assert d == {'a': [1]}
-    dict_of_lists_add(d, 2, 'b')
-    assert d == {'a': [1], 2: ['b']}
-    dict_of_lists_add(d, 'a', 2)
-    assert d == {'a': [1, 2], 2: ['b']}
+    dict_of_lists_add(d, "a", 1)
+    assert d == {"a": [1]}
+    dict_of_lists_add(d, 2, "b")
+    assert d == {"a": [1], 2: ["b"]}
+    dict_of_lists_add(d, "a", 2)
+    assert d == {"a": [1, 2], 2: ["b"]}
 
     # Add element to set in dict
     d = dict()
-    dict_of_sets_add(d, 'a', 1)
-    assert d == {'a': {1}}
-    dict_of_sets_add(d, 2, 'b')
-    assert d == {'a': {1}, 2: {'b'}}
+    dict_of_sets_add(d, "a", 1)
+    assert d == {"a": {1}}
+    dict_of_sets_add(d, 2, "b")
+    assert d == {"a": {1}, 2: {"b"}}
 
     # Add element to dict in dict
     d = dict()
-    dict_of_dicts_add(d, 'a', 1, 3.0)
-    assert d == {'a': {1: 3.0}}
-    dict_of_dicts_add(d, 2, 'b', 5.0)
-    assert d == {'a': {1: 3.0}, 2: {'b': 5.0}}
+    dict_of_dicts_add(d, "a", 1, 3.0)
+    assert d == {"a": {1: 3.0}}
+    dict_of_dicts_add(d, 2, "b", 5.0)
+    assert d == {"a": {1: 3.0}, 2: {"b": 5.0}}
 
     # Spread items in list so similar items are further apart
     input_list = [3, 1, 1, 1, 2, 2]
@@ -261,29 +261,29 @@ Examples:
     assert result == [1, 2, 1, 2, 1, 3]
 
     # Get values for the same key in all dicts in list
-    input_list = [{'key': 'd', 1: 5}, {'key': 'd', 1: 1}, {'key': 'g', 1: 2},
-                  {'key': 'a', 1: 2}, {'key': 'a', 1: 3}, {'key': 'b', 1: 5}]
-    result = extract_list_from_list_of_dict(input_list, 'key')
-    assert result == ['d', 'd', 'g', 'a', 'a', 'b']
+    input_list = [{"key": "d", 1: 5}, {"key": "d", 1: 1}, {"key": "g", 1: 2},
+                  {"key": "a", 1: 2}, {"key": "a", 1: 3}, {"key": "b", 1: 5}]
+    result = extract_list_from_list_of_dict(input_list, "key")
+    assert result == ["d", "d", "g", "a", "a", "b"]
 
     # Cast either keys or values or both in dictionary to type
-    d1 = {1: 2, 2: 2.0, 3: 5, 'la': 4}
-    assert key_value_convert(d1, keyfn=int) == {1: 2, 2: 2.0, 3: 5, 'la': 4}
+    d1 = {1: 2, 2: 2.0, 3: 5, "la": 4}
+    assert key_value_convert(d1, keyfn=int) == {1: 2, 2: 2.0, 3: 5, "la": 4}
     assert key_value_convert(d1, keyfn=int, dropfailedkeys=True) == {1: 2, 2: 2.0, 3: 5}
-    d1 = {1: 2, 2: 2.0, 3: 5, 4: 'la'}
-    assert key_value_convert(d1, valuefn=int) == {1: 2, 2: 2.0, 3: 5, 4: 'la'}
+    d1 = {1: 2, 2: 2.0, 3: 5, 4: "la"}
+    assert key_value_convert(d1, valuefn=int) == {1: 2, 2: 2.0, 3: 5, 4: "la"}
     assert key_value_convert(d1, valuefn=int, dropfailedvalues=True) == {1: 2, 2: 2.0, 3: 5}
 
     # Cast keys in dictionary to integer
-    d1 = {1: 1, 2: 1.5, 3.5: 3, '4': 4}
+    d1 = {1: 1, 2: 1.5, 3.5: 3, "4": 4}
     assert integer_key_convert(d1) == {1: 1, 2: 1.5, 3: 3, 4: 4}
 
     # Cast values in dictionary to integer
-    d1 = {1: 1, 2: 1.5, 3: '3', 4: 4}
+    d1 = {1: 1, 2: 1.5, 3: "3", 4: 4}
     assert integer_value_convert(d1) == {1: 1, 2: 1, 3: 3, 4: 4}
 
     # Cast values in dictionary to float
-    d1 = {1: 1, 2: 1.5, 3: '3', 4: 4}
+    d1 = {1: 1, 2: 1.5, 3: "3", 4: 4}
     assert float_value_convert(d1) == {1: 1.0, 2: 1.5, 3: 3.0, 4: 4.0}
 
     # Average values by key in two dictionaries
@@ -292,20 +292,20 @@ Examples:
     assert avg_dicts(d1, d2) == {1: 1.5, 2: 1.5, 3: 4, 4: 4}
 
     # Read and write lists to csv
-    l = [[1, 2, 3, 'a'],
-         [4, 5, 6, 'b'],
-         [7, 8, 9, 'c']]
-    write_list_to_csv(filepath, l, headers=['h1', 'h2', 'h3', 'h4'])
+    l = [[1, 2, 3, "a"],
+         [4, 5, 6, "b"],
+         [7, 8, 9, "c"]]
+    write_list_to_csv(filepath, l, headers=["h1", "h2", "h3", "h4"])
     newll = read_list_from_csv(filepath)
     newld = read_list_from_csv(filepath, headers=1, dict_form=True)
-    assert newll == [['h1', 'h2', 'h3', 'h4'], ['1', '2', '3', 'a'], ['4', '5', '6', 'b'], ['7', '8', '9', 'c']]
-    assert newld == [{'h1': '1', 'h2': '2', 'h4': 'a', 'h3': '3'},
-                    {'h1': '4', 'h2': '5', 'h4': 'b', 'h3': '6'},
-                    {'h1': '7', 'h2': '8', 'h4': 'c', 'h3': '9'}]
+    assert newll == [["h1", "h2", "h3", "h4"], ["1", "2", "3", "a"], ["4", "5", "6", "b"], ["7", "8", "9", "c"]]
+    assert newld == [{"h1": "1", "h2": "2", "h4": "a", "h3": "3"},
+                    {"h1": "4", "h2": "5", "h4": "b", "h3": "6"},
+                    {"h1": "7", "h2": "8", "h4": "c", "h3": "9"}]
 
     ## Convert command line arguments to dictionary
-    args = 'a=1,big=hello,1=3'
-    assert args_to_dict(args) == {'a': '1', 'big': 'hello', '1': '3'}
+    args = "a=1,big=hello,1=3"
+    assert args_to_dict(args) == {"a": "1", "big": "hello", "1": "3"}
 
 ## HTML utilities
 
@@ -314,14 +314,14 @@ These are built on top of BeautifulSoup and simplify its setup.
 Examples:
 
     # Get soup for url with optional kwarg downloader=Download() object
-    soup = get_soup('http://myurl', user_agent='test')
+    soup = get_soup("http://myurl", user_agent="test")
     # user agent can be set globally using:
-    # UserAgent.set_global('test')
-    tag = soup.find(id='mytag')
+    # UserAgent.set_global("test")
+    tag = soup.find(id="mytag")
 
     # Get text of tag stripped of leading and trailing whitespace
     # and newlines and with &nbsp replaced with space
-    result = get_text('mytag')
+    result = get_text("mytag")
 
     # Extract HTML table as list of dictionaries
     result = extract_table(tabletag)
@@ -333,33 +333,33 @@ Compare two files:
     result = compare_files(testfile1, testfile2)
     # Result is of form eg.:
     # ["- coal   ,3      ,7.4    ,'needed'\n",
-    #  '?         ^\n',
+    #  "?         ^\n",
     #  "+ coal   ,1      ,7.4    ,'notneeded'\n",
-    #  '?         ^                +++\n']
+    #  "?         ^                +++\n"]
 
 ## Emailing
 
 Example of setup and sending email:
 
     smtp_initargs = {
-        'host': 'localhost',
-        'port': 123,
-        'local_hostname': 'mycomputer.fqdn.com',
-        'timeout': 3,
-        'source_address': ('machine', 456),
+        "host": "localhost",
+        "port": 123,
+        "local_hostname": "mycomputer.fqdn.com",
+        "timeout": 3,
+        "source_address": ("machine", 456),
     }
-    username = 'user@user.com'
-    password = 'pass'
+    username = "user@user.com"
+    password = "pass"
     email_config_dict = {
-        'connection_type': 'ssl',
-        'username': username,
-        'password': password
+        "connection_type": "ssl",
+        "username": username,
+        "password": password
     }
     email_config_dict.update(smtp_initargs)
 
-    recipients = ['larry@gmail.com', 'moe@gmail.com', 'curly@gmail.com']
-    subject = 'hello'
-    text_body = 'hello there'
+    recipients = ["larry@gmail.com", "moe@gmail.com", "curly@gmail.com"]
+    subject = "hello"
+    text_body = "hello there"
     html_body = """\
     <html>
       <head></head>
@@ -371,7 +371,7 @@ Example of setup and sending email:
       </body>
     </html>
     """
-    sender = 'me@gmail.com'
+    sender = "me@gmail.com"
 
     with Email(email_config_dict=email_config_dict) as email:
         email.send(recipients, subject, text_body, sender=sender)
@@ -420,11 +420,11 @@ each Python file:
 
 Then use the logger like this:
 
-    logger.debug('DEBUG message')
-    logger.info('INFORMATION message')
-    logger.warning('WARNING message')
-    logger.error('ERROR message')
-    logger.critical('CRITICAL error message')
+    logger.debug("DEBUG message")
+    logger.info("INFORMATION message")
+    logger.warning("WARNING message")
+    logger.error("ERROR message")
+    logger.critical("CRITICAL error message")
 
 ## Path utilities
 
@@ -440,7 +440,7 @@ Examples:
     # folder and deletes the folder if exiting 
     # successfully else keeps the folder if there was
     # an exception
-    with temp_dir('papa', delete_on_success=True, delete_on_failure=False) as tempdir:
+    with temp_dir("papa", delete_on_success=True, delete_on_failure=False) as tempdir:
         ...
     # Sometimes it is necessary to be able to resume runs if they fail. The following
     # example creates a temporary folder and iterates through a list of items.
@@ -458,25 +458,25 @@ Examples:
     # iso3=SDN in the example below. If it is
     # set to RESET, then the temporary folder is deleted before the run starts to ensure
     # it starts from the beginning.    
-    iterator = [{'iso3': 'AFG', 'name': 'Afghanistan'}, {'iso3': 'SDN', 'name': 'Sudan'},
-                {'iso3': 'YEM', 'name': 'Yemen'}, {'iso3': 'ZAM', 'name': 'Zambia'}]
+    iterator = [{"iso3": "AFG", "name": "Afghanistan"}, {"iso3": "SDN", "name": "Sudan"},
+                {"iso3": "YEM", "name": "Yemen"}, {"iso3": "ZAM", "name": "Zambia"}]
     result = list()
-    for info, nextdict in progress_storing_tempdir(tempfolder, iterator, 'iso3'):
+    for info, nextdict in progress_storing_tempdir(tempfolder, iterator, "iso3"):
         ...
 
     # Get current directory of script
     dir = script_dir(ANY_PYTHON_OBJECT_IN_SCRIPT)
 
     # Get current directory of script with filename appended
-    path = script_dir_plus_file('myfile.txt', ANY_PYTHON_OBJECT_IN_SCRIPT)
+    path = script_dir_plus_file("myfile.txt", ANY_PYTHON_OBJECT_IN_SCRIPT)
 
     # Get filename or (filename, extension) from url
-    url = 'https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/test_data.csv'
+    url = "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/test_data.csv"
     filename = get_filename_from_url(fixtureurl)
-    assert filename == 'test_data.csv'
+    assert filename == "test_data.csv"
     filename, extension = get_filename_extension_from_url(fixtureurl)
-    assert filename == 'test_data'
-    assert extension == '.csv'
+    assert filename == "test_data"
+    assert extension == ".csv"
 
 ## Date parsing utilities
 
@@ -486,77 +486,77 @@ where there are values after the year.
 Examples:
 
     # Parse dates
-    assert parse_date('20/02/2013') == datetime(2013, 2, 20, 0, 0)
-    assert parse_date('20/02/2013', '%d/%m/%Y') == datetime(2013, 2, 20, 0, 0)
+    assert parse_date("20/02/2013") == datetime(2013, 2, 20, 0, 0)
+    assert parse_date("20/02/2013", "%d/%m/%Y") == datetime(2013, 2, 20, 0, 0)
     
     # Parse date ranges
-    parse_date_range('20/02/2013')
+    parse_date_range("20/02/2013")
     # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
-    parse_date_range('20/02/2013 10:00:00')
+    parse_date_range("20/02/2013 10:00:00")
     # == datetime(2013, 2, 20, 10, 0), datetime(2013, 2, 20, 10, 0)
-    parse_date_range('20/02/2013 10:00:00', zero_time=True)
+    parse_date_range("20/02/2013 10:00:00", zero_time=True)
     # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
-    parse_date_range('20/02/2013', '%d/%m/%Y')
+    parse_date_range("20/02/2013", "%d/%m/%Y")
     # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
-    parse_date_range('02/2013')
+    parse_date_range("02/2013")
     # == datetime(2013, 2, 1, 0, 0), datetime(2013, 2, 28, 0, 0)
-    parse_date_range('2013')
+    parse_date_range("2013")
     # == datetime(2013, 1, 1, 0, 0), datetime(2013, 12, 31, 0, 0)
     
     # Pass dict in fuzzy activates fuzzy matching that allows for looking for dates within a sentence
     fuzzy = dict()
-    parse_date_range('date is 20/02/2013 for this test', fuzzy=fuzzy)
+    parse_date_range("date is 20/02/2013 for this test", fuzzy=fuzzy)
     # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)    
-    assert fuzzy == {'startdate': datetime(2013, 2, 20, 0, 0), 'enddate': datetime(2013, 2, 20, 0, 0), 
-                     'nondate': ('date is ', ' for this test'), 'date': ('20/02/2013',)}
+    assert fuzzy == {"startdate": datetime(2013, 2, 20, 0, 0), "enddate": datetime(2013, 2, 20, 0, 0), 
+                     "nondate": ("date is ", " for this test"), "date": ("20/02/2013",)}
     fuzzy = dict()
-    parse_date_range('date is 02/2013 for this test', fuzzy=fuzzy)
+    parse_date_range("date is 02/2013 for this test", fuzzy=fuzzy)
     # == datetime(2013, 2, 1, 0, 0), datetime(2013, 2, 28, 0, 0)
-    assert fuzzy == {'startdate': datetime(2013, 2, 1, 0, 0), 'enddate': datetime(2013, 2, 28, 0, 0), 
-                     'nondate': ('date is ', ' for this test'), 'date': ('02/2013',)}
+    assert fuzzy == {"startdate": datetime(2013, 2, 1, 0, 0), "enddate": datetime(2013, 2, 28, 0, 0), 
+                     "nondate": ("date is ", " for this test"), "date": ("02/2013",)}
 
 ## Text processing
 
 Examples:
 
-    a = 'The quick brown fox jumped over the lazy dog. It was so fast!'
+    a = "The quick brown fox jumped over the lazy dog. It was so fast!"
     
     # Remove whitespace and punctuation from end of string
-    assert remove_end_characters('lalala,.,"') == 'lalala'
-    assert remove_end_characters('lalala, .\t/,"', '%s%s' % (punctuation, whitespace)) == 'lalala'
+    assert remove_end_characters('lalala,.,"') == "lalala"
+    assert remove_end_characters('lalala, .\t/,"', f"{punctuation}{whitespace}" == "lalala"
     
     # Remove list of items from end of string, stripping any whitespace
-    result = remove_from_end(a, ['fast!', 'so'], 'Transforming %s -> %s')
-    assert result == 'The quick brown fox jumped over the lazy dog. It was'
+    result = remove_from_end(a, ["fast!", "so"], "Transforming %s -> %s")
+    assert result == "The quick brown fox jumped over the lazy dog. It was"
 
     # Remove string from another string and delete any preceding end characters - by default 
     # punctuation (eg. comma) and any whitespace following the punctuation
-    assert remove_string('lala, 01/02/2020 ', '01/02/2020') == 'lala '
-    assert remove_string('lala,(01/02/2020) ', '01/02/2020') == 'lala) '
-    assert remove_string('lala, 01/02/2020 ', '01/02/2020', PUNCTUATION_MINUS_BRACKETS) == 'lala '
-    assert remove_string('lala,(01/02/2020) ', '01/02/2020', PUNCTUATION_MINUS_BRACKETS) == 'lala,() '
+    assert remove_string("lala, 01/02/2020 ", "01/02/2020") == "lala "
+    assert remove_string("lala,(01/02/2020) ", "01/02/2020") == "lala) "
+    assert remove_string("lala, 01/02/2020 ", "01/02/2020", PUNCTUATION_MINUS_BRACKETS) == "lala "
+    assert remove_string("lala,(01/02/2020) ", "01/02/2020", PUNCTUATION_MINUS_BRACKETS) == "lala,() "
 
     # Replace multiple strings in a string simultaneously
-    result = multiple_replace(a, {'quick': 'slow', 'fast': 'slow', 'lazy': 'busy'})
-    assert result == 'The slow brown fox jumped over the busy dog. It was so slow!'
+    result = multiple_replace(a, {"quick": "slow", "fast": "slow", "lazy": "busy"})
+    assert result == "The slow brown fox jumped over the busy dog. It was so slow!"
 
     # Extract words from a string sentence into a list
     result = get_words_in_sentence("Korea (Democratic People's Republic of)")
-    assert result == ['Korea', 'Democratic', "People's", 'Republic', 'of']
+    assert result == ["Korea", "Democratic", "People's", "Republic", "of"]
 
     # Find matching text in strings
-    a = 'The quick brown fox jumped over the lazy dog. It was so fast!'
-    b = 'The quicker brown fox leapt over the slower fox. It was so fast!'
-    c = 'The quick brown fox climbed over the lazy dog. It was so fast!'
+    a = "The quick brown fox jumped over the lazy dog. It was so fast!"
+    b = "The quicker brown fox leapt over the slower fox. It was so fast!"
+    c = "The quick brown fox climbed over the lazy dog. It was so fast!"
     result = get_matching_text([a, b, c], match_min_size=10)
-    assert result == ' brown fox  over the  It was so fast!'
+    assert result == " brown fox  over the  It was so fast!"
 
 ## Encoding utilities
 
 Examples:
 
     # Base 64 encode and decode string
-    a = 'The quick brown fox jumped over the lazy dog. It was so fast!'
+    a = "The quick brown fox jumped over the lazy dog. It was so fast!"
     b = str_to_base64(a)
     c = base64_to_str(b)
 
@@ -564,8 +564,8 @@ Examples:
 
 Examples:
 
-    assert is_valid_uuid('jpsmith') is False
-    assert is_valid_uuid('c9bf9e57-1685-4c89-bafb-ff5af830be8a') is True
+    assert is_valid_uuid("jpsmith") is False
+    assert is_valid_uuid("c9bf9e57-1685-4c89-bafb-ff5af830be8a") is True
 
 ## Easy building and packaging
 
