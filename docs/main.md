@@ -27,6 +27,7 @@ The library has detailed API documentation which can be found in the menu on the
 ## Breaking Changes
 
 From 3.0.3, build stack has changed. Now uses tox, codecov etc. setup.py clean, package and publish removed.
+is_valid_uuid and get_uuid are now under hdx.utilities.uuid.
 
 From 3.0.1, removed raisefrom function
 
