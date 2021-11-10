@@ -1,4 +1,9 @@
-# Summary of Utilities
+# Summary
+
+The HDX Python Utilities Library provides a range of helpful utilities for Python developers.
+Note that these are not specific to HDX.
+
+# Contents
 
 1. [Easy downloading of files with support for authentication, streaming and hashing](#downloading-files)
 1. [Retrieval of data from url with saving to file or from data previously saved](#retrieving-files)

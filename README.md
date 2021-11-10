@@ -3,7 +3,8 @@
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
 
-The HDX Python Utilities Library provides a range of helpful utilities:
+The HDX Python Utilities Library provides a range of helpful utilities for Python developers.
+Note that these are not specific to HDX.
 
 1. Easy downloading of files with support for authentication, streaming and hashing
 1. Retrieval of data from url with saving to file or from data previously saved
