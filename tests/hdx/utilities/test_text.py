@@ -5,6 +5,7 @@ from pytest import approx
 
 from hdx.utilities.text import (
     PUNCTUATION_MINUS_BRACKETS,
+    earliest_index,
     get_fraction_str,
     get_matching_text,
     get_matching_text_in_strs,
@@ -16,7 +17,7 @@ from hdx.utilities.text import (
     only_allowed_in_str,
     remove_end_characters,
     remove_from_end,
-    remove_string, earliest_index,
+    remove_string,
 )
 
 
@@ -91,9 +92,7 @@ class TestText:
     def test_get_matching_text_in_strs(self):
         result = get_matching_text_in_strs(self.a, self.b)
         assert result == []
-        result = get_matching_text_in_strs(
-            self.a, self.b, match_min_size=10
-        )
+        result = get_matching_text_in_strs(self.a, self.b, match_min_size=10)
         assert result == [" brown fox ", " over the ", ". It was so fast!"]
         result = get_matching_text_in_strs(
             self.a, self.b, match_min_size=9, end_characters=".!\r\n"
@@ -104,9 +103,7 @@ class TestText:
             " over the ",
             " It was so fast!",
         ]
-        result = get_matching_text_in_strs(
-            self.a, self.c, match_min_size=5
-        )
+        result = get_matching_text_in_strs(self.a, self.c, match_min_size=5)
         assert result == [
             "The quick brown fox ",
             "ed over the lazy dog. It was so fast!",
@@ -216,4 +213,7 @@ Contains data from IDMC's [data portal](https://github.com/idmc-labs/IDMC-Platfo
         assert earliest_index(self.a, ["lala"]) is None
         assert earliest_index(self.a, ["lala", "fox", "haha", "dog"]) == 16
         assert earliest_index(self.a, ["dog", "lala", "fox", "haha"]) == 16
-        assert earliest_index(self.a, ["dog", "lala", "fox", "haha", "quick"]) == 4
+        assert (
+            earliest_index(self.a, ["dog", "lala", "fox", "haha", "quick"])
+            == 4
+        )

@@ -414,7 +414,9 @@ def get_numeric_if_possible(value: Any) -> Any:
     return value
 
 
-def earliest_index(string_to_search: str, strings_to_try: List[str]) -> Optional[int]:
+def earliest_index(
+    string_to_search: str, strings_to_try: List[str]
+) -> Optional[int]:
     """Search a string for each of a list of strings and return the earliest index.
 
     Args:
