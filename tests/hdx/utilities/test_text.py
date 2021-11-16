@@ -16,7 +16,7 @@ from hdx.utilities.text import (
     only_allowed_in_str,
     remove_end_characters,
     remove_from_end,
-    remove_string,
+    remove_string, earliest_index,
 )
 
 
@@ -36,11 +36,11 @@ class TestText:
 
     def test_remove_from_end(self):
         result = remove_from_end(
-            TestText.a, ["fast!", "so", "hello", "as"], "Transforming %s -> %s"
+            self.a, ["fast!", "so", "hello", "as"], "Transforming %s -> %s"
         )
         assert result == "The quick brown fox jumped over the lazy dog. It was"
         result = remove_from_end(
-            TestText.a,
+            self.a,
             ["fast!", "so", "hello", "as"],
             "Transforming %s -> %s",
             False,
@@ -65,7 +65,7 @@ class TestText:
 
     def test_multiple_replace(self):
         result = multiple_replace(
-            TestText.a, {"quick": "slow", "fast": "slow", "lazy": "busy"}
+            self.a, {"quick": "slow", "fast": "slow", "lazy": "busy"}
         )
         assert (
             result
@@ -89,14 +89,14 @@ class TestText:
         ]
 
     def test_get_matching_text_in_strs(self):
-        result = get_matching_text_in_strs(TestText.a, TestText.b)
+        result = get_matching_text_in_strs(self.a, self.b)
         assert result == []
         result = get_matching_text_in_strs(
-            TestText.a, TestText.b, match_min_size=10
+            self.a, self.b, match_min_size=10
         )
         assert result == [" brown fox ", " over the ", ". It was so fast!"]
         result = get_matching_text_in_strs(
-            TestText.a, TestText.b, match_min_size=9, end_characters=".!\r\n"
+            self.a, self.b, match_min_size=9, end_characters=".!\r\n"
         )
         assert result == [
             "The quick",
@@ -105,18 +105,18 @@ class TestText:
             " It was so fast!",
         ]
         result = get_matching_text_in_strs(
-            TestText.a, TestText.c, match_min_size=5
+            self.a, self.c, match_min_size=5
         )
         assert result == [
             "The quick brown fox ",
             "ed over the lazy dog. It was so fast!",
         ]
         result = get_matching_text_in_strs(
-            TestText.a, TestText.c, match_min_size=5, end_characters=".\r\n"
+            self.a, self.c, match_min_size=5, end_characters=".\r\n"
         )
         assert result == ["The quick brown fox ", "ed over the lazy dog."]
         result = get_matching_text_in_strs(
-            TestText.a, TestText.c, match_min_size=5, end_characters=".!\r\n"
+            self.a, self.c, match_min_size=5, end_characters=".!\r\n"
         )
         assert result == [
             "The quick brown fox ",
@@ -124,7 +124,7 @@ class TestText:
         ]
 
     def test_get_matching_text(self):
-        list_of_text = [TestText.a, TestText.b, TestText.c]
+        list_of_text = [self.a, self.b, self.c]
         result = get_matching_text(list_of_text, match_min_size=10)
         assert result == " brown fox  over the  It was so fast!"
         description = [
@@ -143,7 +143,7 @@ Contains data from IDMC's [data portal](https://github.com/idmc-labs/IDMC-Platfo
         )
 
     def test_get_matching_then_nonmatching_text(self):
-        list_of_str = [TestText.a, TestText.b, TestText.c]
+        list_of_str = [self.a, self.b, self.c]
         result = get_matching_then_nonmatching_text(
             list_of_str, match_min_size=10
         )
@@ -210,3 +210,10 @@ Contains data from IDMC's [data portal](https://github.com/idmc-labs/IDMC-Platfo
         assert get_numeric_if_possible("123,123.45%") == 1231.2345
         assert get_numeric_if_possible("-123,123.45%") == -1231.2345
         assert get_numeric_if_possible("123.123,45%") == 1231.2345
+
+    def test_earliest_index(self):
+        assert earliest_index(self.a, ["fox"]) == 16
+        assert earliest_index(self.a, ["lala"]) is None
+        assert earliest_index(self.a, ["lala", "fox", "haha", "dog"]) == 16
+        assert earliest_index(self.a, ["dog", "lala", "fox", "haha"]) == 16
+        assert earliest_index(self.a, ["dog", "lala", "fox", "haha", "quick"]) == 4

@@ -412,3 +412,28 @@ def get_numeric_if_possible(value: Any) -> Any:
                         val = val.replace(",", ".")
                     return float(val) / denominator
     return value
+
+
+def earliest_index(string_to_search: str, strings_to_try: List[str]) -> Optional[int]:
+    """Search a string for each of a list of strings and return the earliest index.
+
+    Args:
+        string_to_search (str): String to search
+        strings_to_try (List[str]): Strings to try
+
+    Returns:
+        Optional[int]: Earliest index of the strings to try in string to search or None
+    """
+    after_string = len(string_to_search) + 1
+    indices = list()
+    for string_to_try in strings_to_try:
+        try:
+            index = string_to_search.index(string_to_try)
+            indices.append(index)
+        except ValueError:
+            indices.append(after_string)
+    earliest_index = sorted(indices)[0]
+    if earliest_index == after_string:
+        return None
+    else:
+        return earliest_index

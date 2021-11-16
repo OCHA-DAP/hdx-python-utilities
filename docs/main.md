@@ -557,6 +557,9 @@ Examples:
     result = get_matching_text([a, b, c], match_min_size=10)
     assert result == " brown fox  over the  It was so fast!"
 
+    # Search a string for each of a list of strings and return the earliest index
+    assert earliest_index(a, ["dog", "lala", "fox", "haha", "quick"]) == 4
+
 ## Encoding utilities
 
 Examples:
