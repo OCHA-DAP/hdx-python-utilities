@@ -196,7 +196,7 @@ class Email:
             html_body (Optional[str]): HTML email body
             sender (Optional[str]): Email sender. Defaults to global sender.
             cc (Optional[List[str]]): Email cc. Defaults to None.
-            bcc (Optional[List[str]]): Email cc. Defaults to None.
+            bcc (Optional[List[str]]): Email bcc. Defaults to None.
             **kwargs: See below
             mail_options (list): Mail options (see smtplib documentation)
             rcpt_options (list): Recipient options (see smtplib documentation)
