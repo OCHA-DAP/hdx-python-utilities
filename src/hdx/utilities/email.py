@@ -5,7 +5,7 @@ import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from os.path import expanduser, join
-from typing import Any, List, Optional
+from typing import Any, List, Optional, Union
 
 from email_validator import validate_email
 
@@ -154,17 +154,19 @@ class Email:
         self.server.quit()
 
     @staticmethod
-    def get_normalised_emails(recipients: List[str]) -> List[str]:
+    def get_normalised_emails(recipients: Union[str, List[str]]) -> List[str]:
         """
         Get list of normalised emails
 
         Args:
-            recipients (List[str]): Email recipient
+            recipients (Union[str, List[str]]): Email recipient(s)
 
         Returns:
             List[str]: Normalised emails
 
         """
+        if isinstance(recipients, str):
+            recipients = [recipients]
         normalised_recipients = list()
         for recipient in recipients:
             v = validate_email(
@@ -177,29 +179,30 @@ class Email:
 
     def send(
         self,
-        recipients: List[str],
+        to: Union[str, List[str]],
         subject: str,
         text_body: str,
         html_body: Optional[str] = None,
         sender: Optional[str] = None,
-        cc: Optional[List[str]] = None,
-        bcc: Optional[List[str]] = None,
+        cc: Union[str, List[str], None] = None,
+        bcc: Union[str, List[str], None] = None,
         **kwargs: Any,
     ) -> None:
         """
-        Send email
+        Send email. to, cc and bcc take either a string email address or a list of
+        string email addresses. cc and bcc default to None.
 
         Args:
-            recipients (List[str]): Email recipient
+            to (Union[str, List[str]]): Email recipient(s)
             subject (str): Email subject
             text_body (str): Plain text email body
             html_body (Optional[str]): HTML email body
             sender (Optional[str]): Email sender. Defaults to global sender.
-            cc (Optional[List[str]]): Email cc. Defaults to None.
-            bcc (Optional[List[str]]): Email bcc. Defaults to None.
+            cc (Union[str, List[str], None]): Email cc. Defaults to None.
+            bcc (Union[str, List[str], None]): Email bcc. Defaults to None.
             **kwargs: See below
-            mail_options (list): Mail options (see smtplib documentation)
-            rcpt_options (list): Recipient options (see smtplib documentation)
+            mail_options (List): Mail options (see smtplib documentation)
+            rcpt_options (List): Recipient options (see smtplib documentation)
 
         Returns:
             None
@@ -223,21 +226,19 @@ class Email:
         msg["Subject"] = subject
         msg["From"] = sender
 
-        normalised_recipients = self.get_normalised_emails(recipients)
-        msg["To"] = ", ".join(normalised_recipients)
+        normalised_to = self.get_normalised_emails(to)
+        msg["To"] = ", ".join(normalised_to)
 
         if cc is not None:
             normalised_cc = self.get_normalised_emails(cc)
             msg["Cc"] = ", ".join(normalised_cc)
-            normalised_recipients.extend(normalised_cc)
+            normalised_to.extend(normalised_cc)
 
         if bcc is not None:
             normalised_bcc = self.get_normalised_emails(bcc)
-            normalised_recipients.extend(normalised_bcc)
+            normalised_to.extend(normalised_bcc)
 
         # Perform operations via server
         self.connect()
-        self.server.sendmail(
-            sender, normalised_recipients, msg.as_string(), **kwargs
-        )
+        self.server.sendmail(sender, normalised_to, msg.as_string(), **kwargs)
         self.close()

@@ -137,6 +137,18 @@ Content-Transfer-Encoding: 7bit
                 rcpt_options=rcpt_options,
             )
             assert email.server.sender == username
+            email.send(
+                "larry@gmail.com",
+                subject,
+                text_body,
+                html_body=html_body,
+                sender=sender,
+                cc="moe@gmail.com",
+                bcc="curly@gmail.com",
+                mail_options=mail_options,
+                rcpt_options=rcpt_options,
+            )
+            assert email.server.recipients == recipients
 
     def test_json(self, mocksmtp, email_json):
         with Email(email_config_json=email_json) as email:
