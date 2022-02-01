@@ -12,7 +12,7 @@ Note that these are not specific to HDX.
 1. [HTML utilities (inc. BeautifulSoup helper)](#html-utilities)
 1. [Compare files (eg. for testing)](#comparing-files)
 1. [Simple emailing](#emailing)
-1. [Easy logging setup](#configuring-logging)
+1. [Easy logging setup and error logging](#logging)
 1. [Path utilities](#path-utilities)
 1. [Date parsing utilities](#date-parsing-utilities)
 1. [Text processing](#text-processing)
@@ -385,7 +385,7 @@ Example of setup and sending email:
     with Email(email_config_dict=email_config_dict) as email:
         email.send(recipients, subject, text_body, sender=sender)
 
-## Configuring logging
+## Logging
 
 The library provides coloured logs with a simple default setup which should be adequate for most cases. If you wish to 
 change the logging configuration from the defaults, you will need to call **setup\_logging** with arguments.
@@ -434,6 +434,19 @@ Then use the logger like this:
     logger.warning("WARNING message")
     logger.error("ERROR message")
     logger.critical("CRITICAL error message")
+
+There is a class that allows collecting of errors to be logged later, typically on exit.
+It is called ErrorsOnExit and can be used as follows:
+
+    with ErrorsOnExit() as errors:
+        ...
+        errors.add("MY ERROR MESSAGE")
+        ...
+        errors.add("ANOTHER ERROR MESSAGE")
+
+The above code will collect the errors, in this case "MY ERROR MESSAGE" and "ANOTHER 
+ERROR MESSAGE". On exiting the with statement, it will log them and exit with error code 
+1. If there are no errors, execution will continue as sys.exit will not be called.
 
 ## Path utilities
 
