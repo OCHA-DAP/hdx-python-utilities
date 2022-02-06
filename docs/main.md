@@ -445,8 +445,10 @@ It is called ErrorsOnExit and can be used as follows:
         errors.add("ANOTHER ERROR MESSAGE")
 
 The above code will collect the errors, in this case "MY ERROR MESSAGE" and "ANOTHER 
-ERROR MESSAGE". On exiting the with statement, it will log them and exit with error code 
-1. If there are no errors, execution will continue as sys.exit will not be called.
+ERROR MESSAGE". On leaving the `with` block, the errors will be logged and the code will
+exit with the error code 1 (ie. `sys.exit(1)` will be called). If there are no errors, 
+the code will not exit and execution will continue after the `with` block (ie.
+`sys.exit(1)` will not be called).
 
 ## Path utilities
 
