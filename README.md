@@ -13,7 +13,7 @@ Note that these are not specific to HDX.
 1. HTML utilities (inc. BeautifulSoup helper)
 1. Compare files (eg. for testing)
 1. Simple emailing
-1. Easy logging setup
+1. Easy logging setup and error logging
 1. Path utilities
 1. Date parsing utilities
 1. Text processing
