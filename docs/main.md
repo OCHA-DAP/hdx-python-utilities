@@ -31,7 +31,7 @@ The library has detailed API documentation which can be found in the menu on the
 
 ## Breaking Changes
 
-From 3.0.7, send methdo of Email class has parameter to rather than recipients. The parameters to, cc and bcc
+From 3.0.7, send method of Email class has parameter to rather than recipients. The parameters to, cc and bcc
 take either a string email address or list of string email addresses.
 
 From 3.0.3, build stack has changed. Now uses tox, codecov etc. setup.py clean, package and publish removed.
