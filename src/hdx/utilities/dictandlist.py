@@ -2,7 +2,7 @@
 
 import itertools
 from collections import UserDict
-from typing import Any, Callable, Dict, List, Union, MutableMapping
+from typing import Any, Callable, Dict, List, MutableMapping, Union
 
 from tabulator import Stream
 
