@@ -2,28 +2,25 @@
 
 import itertools
 from collections import UserDict
-from typing import Any, Callable, Dict, List, TypeVar, Union
+from typing import Any, Callable, Dict, List, Union, MutableMapping
 
 from tabulator import Stream
 
-DictUpperBound = TypeVar("DictUpperBound", bound="dict")
-ExceptionUpperBound = TypeVar("ExceptionUpperBound", bound="Exception")
-
 
 def merge_two_dictionaries(
-    a: DictUpperBound, b: DictUpperBound, merge_lists: bool = False
-) -> DictUpperBound:
+    a: MutableMapping, b: MutableMapping, merge_lists: bool = False
+) -> MutableMapping:
     """Merges b into a and returns merged result
 
     NOTE: tuples and arbitrary objects are not handled as it is totally ambiguous what should happen
 
     Args:
-        a (DictUpperBound): dictionary to merge into
-        b (DictUpperBound): dictionary to merge from
+        a (MutableMapping): dictionary to merge into
+        b (MutableMapping): dictionary to merge from
         merge_lists (bool): Whether to merge lists (True) or replace lists (False). Default is False.
 
     Returns:
-        DictUpperBound: Merged dictionary
+        MutableMapping: Merged dictionary
     """
     key = None
     # ## debug output
@@ -68,16 +65,16 @@ def merge_two_dictionaries(
 
 
 def merge_dictionaries(
-    dicts: List[DictUpperBound], merge_lists: bool = False
-) -> DictUpperBound:
+    dicts: List[MutableMapping], merge_lists: bool = False
+) -> MutableMapping:
     """Merges all dictionaries in dicts into a single dictionary and returns result
 
     Args:
-        dicts (List[DictUpperBound]): Dictionaries to merge into the first one in the list
+        dicts (List[MutableMapping]): Dictionaries to merge into the first one in the list
         merge_lists (bool): Whether to merge lists (True) or replace lists (False). Default is False.
 
     Returns:
-        DictUpperBound: Merged dictionary
+        MutableMapping: Merged dictionary
 
     """
     dict1 = dicts[0]
@@ -87,13 +84,13 @@ def merge_dictionaries(
 
 
 def dict_diff(
-    d1: DictUpperBound, d2: DictUpperBound, no_key: str = "<KEYNOTFOUND>"
+    d1: MutableMapping, d2: MutableMapping, no_key: str = "<KEYNOTFOUND>"
 ) -> Dict:
     """Compares two dictionaries
 
     Args:
-        d1 (DictUpperBound): First dictionary to compare
-        d2 (DictUpperBound): Second dictionary to compare
+        d1 (MutableMapping): First dictionary to compare
+        d2 (MutableMapping): Second dictionary to compare
         no_key (str): What value to use if key is not found Defaults to '<KEYNOTFOUND>'.
 
     Returns:
@@ -110,12 +107,12 @@ def dict_diff(
 
 
 def dict_of_lists_add(
-    dictionary: DictUpperBound, key: Any, value: Any
+    dictionary: MutableMapping, key: Any, value: Any
 ) -> None:
     """Add value to a list in a dictionary by key
 
     Args:
-        dictionary (DictUpperBound): Dictionary to which to add values
+        dictionary (MutableMapping): Dictionary to which to add values
         key (Any): Key within dictionary
         value (Any): Value to add to list in dictionary
 
@@ -128,11 +125,11 @@ def dict_of_lists_add(
     dictionary[key] = list_objs
 
 
-def dict_of_sets_add(dictionary: DictUpperBound, key: Any, value: Any) -> None:
+def dict_of_sets_add(dictionary: MutableMapping, key: Any, value: Any) -> None:
     """Add value to a set in a dictionary by key
 
     Args:
-        dictionary (DictUpperBound): Dictionary to which to add values
+        dictionary (MutableMapping): Dictionary to which to add values
         key (Any): Key within dictionary
         value (Any): Value to add to set in dictionary
 
@@ -146,12 +143,12 @@ def dict_of_sets_add(dictionary: DictUpperBound, key: Any, value: Any) -> None:
 
 
 def dict_of_dicts_add(
-    dictionary: DictUpperBound, parent_key: Any, key: Any, value: Any
+    dictionary: MutableMapping, parent_key: Any, key: Any, value: Any
 ) -> None:
     """Add key value pair to a dictionary within a dictionary by key
 
     Args:
-        dictionary (DictUpperBound): Dictionary to which to add values
+        dictionary (MutableMapping): Dictionary to which to add values
         parent_key (Any): Key within parent dictionary
         key (Any): Key within dictionary
         value (Any): Value to add to set in dictionary
@@ -248,12 +245,12 @@ def list_distribute_contents(
 
 
 def extract_list_from_list_of_dict(
-    list_of_dict: List[DictUpperBound], key: Any
+    list_of_dict: List[MutableMapping], key: Any
 ) -> List:
     """Extract a list by looking up key in each member of a list of dictionaries
 
     Args:
-        list_of_dict (List[DictUpperBound]): List of dictionaries
+        list_of_dict (List[MutableMapping]): List of dictionaries
         key (Any): Key to find in each dictionary
 
     Returns:
@@ -267,22 +264,22 @@ def extract_list_from_list_of_dict(
 
 
 def key_value_convert(
-    dictin: DictUpperBound,
+    dictin: MutableMapping,
     keyfn: Callable[[Any], Any] = lambda x: x,
     valuefn: Callable[[Any], Any] = lambda x: x,
     dropfailedkeys: bool = False,
     dropfailedvalues: bool = False,
-    exception: ExceptionUpperBound = ValueError,
+    exception: Exception = ValueError,
 ) -> Dict:
     """Convert keys and/or values of dictionary using functions passed in as parameters
 
     Args:
-        dictin (DictUpperBound): Input dictionary
+        dictin (MutableMapping): Input dictionary
         keyfn (Callable[[Any], Any]): Function to convert keys. Defaults to lambda x: x
         valuefn (Callable[[Any], Any]): Function to convert values. Defaults to lambda x: x
         dropfailedkeys (bool): Whether to drop dictionary entries where key conversion fails. Defaults to False.
         dropfailedvalues (bool): Whether to drop dictionary entries where value conversion fails. Defaults to False.
-        exception (ExceptionUpperBound): The exception to expect if keyfn or valuefn fail. Defaults to ValueError.
+        exception (Exception): The exception to expect if keyfn or valuefn fail. Defaults to ValueError.
 
     Returns:
         Dict: Dictionary with converted keys and/or values
@@ -308,12 +305,12 @@ def key_value_convert(
 
 
 def integer_key_convert(
-    dictin: DictUpperBound, dropfailedkeys: bool = False
+    dictin: MutableMapping, dropfailedkeys: bool = False
 ) -> Dict:
     """Convert keys of dictionary to integers
 
     Args:
-        dictin (DictUpperBound): Input dictionary
+        dictin (MutableMapping): Input dictionary
         dropfailedkeys (bool): Whether to drop dictionary entries where key conversion fails. Defaults to False.
 
     Returns:
@@ -324,12 +321,12 @@ def integer_key_convert(
 
 
 def integer_value_convert(
-    dictin: DictUpperBound, dropfailedvalues: bool = False
+    dictin: MutableMapping, dropfailedvalues: bool = False
 ) -> Dict:
     """Convert values of dictionary to integers
 
     Args:
-        dictin (DictUpperBound): Input dictionary
+        dictin (MutableMapping): Input dictionary
         dropfailedvalues (bool): Whether to drop dictionary entries where key conversion fails. Defaults to False.
 
     Returns:
@@ -342,12 +339,12 @@ def integer_value_convert(
 
 
 def float_value_convert(
-    dictin: DictUpperBound, dropfailedvalues: bool = False
+    dictin: MutableMapping, dropfailedvalues: bool = False
 ) -> Dict:
     """Convert values of dictionary to floats
 
     Args:
-        dictin (DictUpperBound): Input dictionary
+        dictin (MutableMapping): Input dictionary
         dropfailedvalues (bool): Whether to drop dictionary entries where key conversion fails. Defaults to False.
 
     Returns:
@@ -360,13 +357,13 @@ def float_value_convert(
 
 
 def avg_dicts(
-    dictin1: DictUpperBound, dictin2: DictUpperBound, dropmissing: bool = True
+    dictin1: MutableMapping, dictin2: MutableMapping, dropmissing: bool = True
 ) -> Dict:
     """Create a new dictionary from two dictionaries by averaging values
 
     Args:
-        dictin1 (DictUpperBound): First input dictionary
-        dictin2 (DictUpperBound): Second input dictionary
+        dictin1 (MutableMapping): First input dictionary
+        dictin2 (MutableMapping): Second input dictionary
         dropmissing (bool): Whether to drop keys missing in one dictionary. Defaults to True.
 
     Returns:
@@ -418,7 +415,7 @@ def read_list_from_csv(
 
 def write_list_to_csv(
     filepath: str,
-    list_of_rows: List[Union[DictUpperBound, List]],
+    list_of_rows: List[Union[MutableMapping, List]],
     headers: Union[int, List[int], List[str], None] = None,
 ) -> None:
     """Write a list of rows in dict or list form to a csv. (The headers argument is either a row
@@ -428,7 +425,7 @@ def write_list_to_csv(
 
     Args:
         filepath (str): Path to write to
-        list_of_rows (List[Union[DictUpperBound, List]]): List of rows in dict or list form
+        list_of_rows (List[Union[MutableMapping, List]]): List of rows in dict or list form
         headers (Union[int, List[int], List[str], None]): Headers to write. Defaults to None.
 
     Returns:
@@ -441,14 +438,14 @@ def write_list_to_csv(
     stream.close()
 
 
-def args_to_dict(args: str) -> DictUpperBound:
+def args_to_dict(args: str) -> MutableMapping:
     """Convert command line arguments in a comma separated string to a dictionary
 
     Args:
         args (str): Command line arguments
 
     Returns:
-        DictUpperBound: Dictionary of arguments
+        MutableMapping: Dictionary of arguments
 
     """
     arguments = dict()

@@ -31,7 +31,7 @@ class TestDictAndList:
         d2 = {2: 6, 4: 8, 6: 9, 9: {"c": 12, "e": "h"}}
         d3 = {4: {"g": 3}, 5: 7, 8: {3: 12, "k": "b"}}
         with pytest.raises(ValueError):
-            result = merge_dictionaries([d1, d2, d3])
+            merge_dictionaries([d1, d2, d3])
         d2[4] = {8: "8"}
         result = merge_dictionaries([d1, d2, d3])
         assert result == {
