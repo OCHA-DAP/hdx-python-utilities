@@ -58,14 +58,18 @@ class Download:
         rate_limit: Optional[Dict] = None,
         **kwargs: Any,
     ) -> None:
-        self.session = get_session(
-            user_agent,
-            user_agent_config_yaml,
-            user_agent_lookup,
-            use_env,
-            fail_on_missing_file,
-            **kwargs,
-        )
+        session = kwargs.get("session")
+        if session:
+            self.session = session
+        else:
+            self.session = get_session(
+                user_agent,
+                user_agent_config_yaml,
+                user_agent_lookup,
+                use_env,
+                fail_on_missing_file,
+                **kwargs,
+            )
         self.response = None
         if rate_limit is not None:
             self.setup = sleep_and_retry(
