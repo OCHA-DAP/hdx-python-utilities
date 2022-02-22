@@ -143,6 +143,10 @@ output_directory = "docs/build"
         title = "User Agent"
         contents = ["hdx.utilities.useragent.*"]
 
+[tool.readthedocs-custom-steps]
+script = """
+pydoc-markdown --build --site-dir "$PWD/_build/html"
+"""
 
 [tool.tox]
 legacy_tox_ini = """
