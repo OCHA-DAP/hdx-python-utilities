@@ -71,6 +71,5 @@ try:
         yield caplog
         logger.remove(handler_id)
 
-
 except ModuleNotFoundError:
     pass
