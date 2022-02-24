@@ -31,6 +31,10 @@ The library has detailed API documentation which can be found in the menu on the
 
 ## Breaking Changes
 
+From 3.1.1, setup_logging now sets up logaru instead of colorlog and has only one 
+parameter error_file which is False by default. There is no longer SMTP (email) handling
+which can be done directly with logaru instead.
+
 From 3.0.7, send method of Email class has parameter to rather than recipients. The parameters to, cc and bcc
 take either a string email address or list of string email addresses.
 
@@ -387,40 +391,14 @@ Example of setup and sending email:
 
 ## Logging
 
-The library provides coloured logs with a simple default setup which should be adequate for most cases. If you wish to 
-change the logging configuration from the defaults, you will need to call **setup\_logging** with arguments.
+The library provides elegant logs to the console with a simple default setup which 
+should be adequate for most cases. Specifying `error_file` to be `True` will in addition 
+output errors to a log file. 
 
     from hdx.utilities.easy_logging import setup_logging
     ...
     logger = logging.getLogger(__name__)
-    setup_logging(KEYWORD ARGUMENTS)
-
-**KEYWORD ARGUMENTS** can be:
-
-|Choose|Argument|Type|Value|Default|
-|---|---|---|---|---|
-|One of:|logging\_config\_dict|dict|Logging configuration<br>dictionary|
-|or|logging\_config\_json|str|Path to JSON<br>Logging configuration|
-|or| logging\_config\_yaml|str|Path to YAML<br>Logging configuration|Library's internal<br>logging\_configuration.yml|
-|One of:|smtp\_config\_dict|dict|Email Logging<br>configuration dictionary|
-|or|smtp\_config\_json|str|Path to JSON Email<br>Logging configuration|
-|or|smtp\_config\_yaml|str|Path to YAML Email<br>Logging configuration|
-  
-
-Do not supply **smtp\_config\_dict**, **smtp\_config\_json** or **smtp\_config\_yaml** unless you are using the default 
-logging configuration!
-
-If you are using the default logging configuration, you have the option to have a default SMTP handler that sends an 
-email in the event of a CRITICAL error by supplying either **smtp\_config\_dict**, **smtp\_config\_json** or 
-**smtp\_config\_yaml**. Here is a template of a YAML file that can be passed as the **smtp\_config\_yaml** parameter:
-
-    handlers:
-        error_mail_handler:
-            toaddrs: EMAIL_ADDRESSES
-            subject: "RUN FAILED: MY_PROJECT_NAME"
-
-Unless you override it, the mail server **mailhost** for the default SMTP handler is **localhost** and the from address
-**fromaddr** is <**noreply@localhost**>.
+    setup_logging(error_file=True)
 
 To use logging in your files, simply add the line below to the top of
 each Python file:

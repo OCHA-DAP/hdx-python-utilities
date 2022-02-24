@@ -1,125 +1,70 @@
 """Configuration of logging"""
-import logging.config
-import os
-from typing import Any
+import logging
 
-from hdx.utilities.dictandlist import merge_dictionaries
-from hdx.utilities.loader import load_json, load_yaml
-from hdx.utilities.path import script_dir_plus_file
+import pytest
+from _pytest.logging import LogCaptureFixture
+from loguru import logger
 
 
-class LoggingError(Exception):
-    pass
-
-
-def setup_logging(**kwargs: Any) -> None:
-    """Setup logging configuration
+def setup_logging(error_file: bool = False) -> None:
+    """Setup logging configuration. intercepts standard logging and outputs errors to
+    a file.
 
     Args:
-        **kwargs: See below
-        logging_config_dict (dict): Logging configuration dictionary OR
-        logging_config_json (str): Path to JSON Logging configuration OR
-        logging_config_yaml (str): Path to YAML Logging configuration. Defaults to internal logging_configuration.yml.
-        smtp_config_dict (dict): Email Logging configuration dictionary if using default logging configuration OR
-        smtp_config_json (str): Path to JSON Email Logging configuration if using default logging configuration OR
-        smtp_config_yaml (str): Path to YAML Email Logging configuration if using default logging configuration
+        error_file (bool): Whether to output errors.log file. Defaults to False.
 
     Returns:
         None
     """
-    smtp_config_found = False
-    smtp_config_dict = kwargs.get("smtp_config_dict", None)
-    if smtp_config_dict:
-        smtp_config_found = True
-        print("Loading smtp configuration customisations from dictionary")
 
-    smtp_config_json = kwargs.get("smtp_config_json", "")
-    if smtp_config_json:
-        if smtp_config_found:
-            raise LoggingError("More than one smtp configuration file given!")
-        smtp_config_found = True
-        print(
-            f"Loading smtp configuration customisations from: {smtp_config_json}"
+    class InterceptHandler(logging.Handler):
+        def emit(self, record):
+            # Get corresponding Loguru level if it exists
+            try:
+                level = logger.level(record.levelname).name
+            except ValueError:
+                level = record.levelno
+
+            # Find caller from where originated the logged message
+            frame, depth = logging.currentframe(), 2
+            while frame.f_code.co_filename == logging.__file__:
+                frame = frame.f_back
+                depth += 1
+
+            logger.opt(depth=depth, exception=record.exc_info).log(
+                level, record.getMessage()
+            )
+
+    if error_file:
+        logger.add(
+            "errors.log",
+            level="ERROR",
+            mode="w",
+            backtrace=True,
+            diagnose=True,
         )
-        smtp_config_dict = load_json(smtp_config_json)
+    logging.basicConfig(handlers=[InterceptHandler()], level=logging.NOTSET)
 
-    smtp_config_yaml = kwargs.get("smtp_config_yaml", "")
-    if smtp_config_yaml:
-        if smtp_config_found:
-            raise LoggingError("More than one smtp configuration file given!")
-        smtp_config_found = True
-        print(
-            f"Loading smtp configuration customisations from: {smtp_config_yaml}"
-        )
-        smtp_config_dict = load_yaml(smtp_config_yaml)
 
-    logging_smtp_config_dict = None
-    logging_config_found = False
-    logging_config_dict = kwargs.get("logging_config_dict", None)
-    if logging_config_dict:
-        logging_config_found = True
-        print("Loading logging configuration from dictionary")
+@pytest.fixture
+def caplog(caplog: LogCaptureFixture) -> None:
+    """Emitting logs from loguru's logger.log means that they will not show up in caplog
+     which only works with Python standard logging. This adds the same `
+     LogCaptureHandler` being used by caplog to hook into loguru.
 
-    logging_config_json = kwargs.get("logging_config_json", "")
-    if logging_config_json:
-        if logging_config_found:
-            raise LoggingError(
-                "More than one logging configuration file given!"
-            )
-        logging_config_found = True
-        print(f"Loading logging configuration from: {logging_config_json}")
-        logging_config_dict = load_json(logging_config_json)
+    Args:
+        caplog (LogCaptureFixture): caplog fixture
 
-    logging_config_yaml = kwargs.get("logging_config_yaml", "")
-    if logging_config_found:
-        if logging_config_yaml:
-            raise LoggingError(
-                "More than one logging configuration file given!"
-            )
-    else:
-        if not logging_config_yaml:
-            print("No logging configuration parameter. Using default.")
-            logging_config_yaml = script_dir_plus_file(
-                "logging_configuration.yml", setup_logging
-            )
-            if smtp_config_found:
-                logging_smtp_config_yaml = script_dir_plus_file(
-                    "logging_smtp_configuration.yml", setup_logging
-                )
-                print(
-                    f"Loading base SMTP logging configuration from: {logging_smtp_config_yaml}"
-                )
-                logging_smtp_config_dict = load_yaml(logging_smtp_config_yaml)
-        print(f"Loading logging configuration from: {logging_config_yaml}")
-        logging_config_dict = load_yaml(logging_config_yaml)
+    Returns:
+        None
+    """
 
-    if smtp_config_found:
-        if logging_smtp_config_dict:
-            logging_config_dict = merge_dictionaries(
-                [
-                    logging_config_dict,
-                    logging_smtp_config_dict,
-                    smtp_config_dict,
-                ]
-            )
-        else:
-            raise LoggingError(
-                "SMTP logging configuration file given but not using default logging configuration!"
-            )
-    file_only = os.getenv("LOG_FILE_ONLY")
-    if file_only is not None and file_only.lower() not in [
-        "false",
-        "f",
-        "n",
-        "no",
-        "0",
-    ]:
-        root = logging_config_dict.get("root")
-        if root is not None:
-            handlers = root.get("handlers", list())
-            for i, handler in enumerate(handlers):
-                if handler.lower() == "console":
-                    del handlers[i]
-                    break
+    class PropogateHandler(logging.Handler):
+        def emit(self, record):
+            logging.getLogger(record.name).handle(record)
 
-    logging.config.dictConfig(logging_config_dict)
+    handler_id = logger.add(
+        PropogateHandler(), format="{message} {extra}", level="TRACE"
+    )
+    yield caplog
+    logger.remove(handler_id)

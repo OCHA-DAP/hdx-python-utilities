@@ -4,6 +4,8 @@ from os.path import join
 
 import pytest
 
+from hdx.utilities.easy_logging import caplog
+
 
 @pytest.fixture(scope="session")
 def fixturesfolder():

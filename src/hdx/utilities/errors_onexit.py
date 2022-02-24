@@ -51,6 +51,7 @@ class ErrorsOnExit:
         self.exit_on_error()
 
     def __enter__(self) -> "ErrorsOnExit":
+        logging.errors_on_exit = self
         return self
 
     def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
