@@ -3,9 +3,10 @@ import logging
 
 from loguru import logger
 
+from hdx.utilities.easy_logging import setup_logging
+
 standard_logger = logging.getLogger(__name__)
 
-from hdx.utilities.easy_logging import setup_logging
 
 setup_logging(error_file=True)
 
@@ -24,7 +25,7 @@ class TestLogging:
 
             try:
                 divide(1, 0)
-            except:
+            except ZeroDivisionError:
                 standard_logger.exception(text)
 
             assert text in caplog.text
@@ -32,7 +33,7 @@ class TestLogging:
             text = "Another zero error!"
             try:
                 divide(2, 0)
-            except:
+            except ZeroDivisionError:
                 logger.exception(text)
 
             assert text in caplog.text

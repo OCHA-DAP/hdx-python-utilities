@@ -4,7 +4,7 @@ from os.path import join
 
 import pytest
 
-from hdx.utilities.easy_logging import caplog
+from hdx.utilities.easy_logging import caplog  # noqa: F401
 
 
 @pytest.fixture(scope="session")
