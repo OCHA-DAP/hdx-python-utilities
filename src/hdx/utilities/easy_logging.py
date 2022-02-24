@@ -1,8 +1,6 @@
 """Configuration of logging"""
 import logging
 
-import pytest
-from _pytest.logging import LogCaptureFixture
 from loguru import logger
 
 
@@ -46,25 +44,33 @@ def setup_logging(error_file: bool = False) -> None:
     logging.basicConfig(handlers=[InterceptHandler()], level=logging.NOTSET)
 
 
-@pytest.fixture
-def caplog(caplog: LogCaptureFixture) -> None:
-    """Emitting logs from loguru's logger.log means that they will not show up in caplog
-     which only works with Python standard logging. This adds the same `
-     LogCaptureHandler` being used by caplog to hook into loguru.
+try:
+    import pytest
+    from _pytest.logging import LogCaptureFixture
 
-    Args:
-        caplog (LogCaptureFixture): caplog fixture
+    @pytest.fixture
+    def caplog(caplog: LogCaptureFixture) -> None:
+        """Emitting logs from loguru's logger.log means that they will not show up in caplog
+         which only works with Python standard logging. This adds the same `
+         LogCaptureHandler` being used by caplog to hook into loguru.
 
-    Returns:
-        None
-    """
+        Args:
+            caplog (LogCaptureFixture): caplog fixture
 
-    class PropogateHandler(logging.Handler):
-        def emit(self, record):
-            logging.getLogger(record.name).handle(record)
+        Returns:
+            None
+        """
 
-    handler_id = logger.add(
-        PropogateHandler(), format="{message} {extra}", level="TRACE"
-    )
-    yield caplog
-    logger.remove(handler_id)
+        class PropogateHandler(logging.Handler):
+            def emit(self, record):
+                logging.getLogger(record.name).handle(record)
+
+        handler_id = logger.add(
+            PropogateHandler(), format="{message} {extra}", level="TRACE"
+        )
+        yield caplog
+        logger.remove(handler_id)
+
+
+except ModuleNotFoundError:
+    pass
