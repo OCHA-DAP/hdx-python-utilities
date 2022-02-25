@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools_scm]
 write_to = "src/hdx/utilities/_version.py"
 local_scheme = "no-local-version"
-version_scheme = "release-branch-semver"
+version_scheme = "python-simplified-semver"
 
 [tool.black]
 line-length = 79
