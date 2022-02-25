@@ -196,5 +196,5 @@ deps =
     twine
 
 commands =
-    twine upload -r testpypi {distdir}/*
+    twine upload {distdir}/*
 """
