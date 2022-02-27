@@ -34,6 +34,7 @@ exclude = ["_version.py"]
 
 [tool.pytest.ini_options]
 pythonpath = "src"
+addopts = "--color=yes"
 log_cli = 1
 
 [tool.coverage.paths]
