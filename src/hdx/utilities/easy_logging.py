@@ -1,5 +1,6 @@
 """Configuration of logging"""
 import logging
+from sys import stdout
 
 from loguru import logger
 
@@ -14,6 +15,7 @@ def setup_logging(error_file: bool = False) -> None:
     Returns:
         None
     """
+    logger.add(stdout, colorize=True)
 
     class InterceptHandler(logging.Handler):
         def emit(self, record):
