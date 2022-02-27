@@ -5,10 +5,10 @@ from loguru import logger
 
 from hdx.utilities.easy_logging import setup_logging
 
-standard_logger = logging.getLogger(__name__)
-
-
 setup_logging(error_file=True)
+
+
+standard_logger = logging.getLogger(__name__)
 
 
 class TestLogging:

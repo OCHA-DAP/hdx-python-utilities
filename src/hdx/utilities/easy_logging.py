@@ -16,6 +16,14 @@ def setup_logging(error_file: bool = False) -> None:
         None
     """
     logger.add(stdout, colorize=True, backtrace=True, diagnose=True)
+    if error_file:
+        logger.add(
+            "errors.log",
+            level="ERROR",
+            mode="w",
+            backtrace=True,
+            diagnose=True,
+        )
 
     class InterceptHandler(logging.Handler):
         def emit(self, record):
@@ -38,12 +46,4 @@ def setup_logging(error_file: bool = False) -> None:
                 exception=record.exc_info,
             ).log(level, record.getMessage())
 
-    if error_file:
-        logger.add(
-            "errors.log",
-            level="ERROR",
-            mode="w",
-            backtrace=True,
-            diagnose=True,
-        )
     logging.basicConfig(handlers=[InterceptHandler()], level=logging.NOTSET)
