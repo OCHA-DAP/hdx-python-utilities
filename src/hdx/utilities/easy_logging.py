@@ -15,7 +15,7 @@ def setup_logging(error_file: bool = False) -> None:
     Returns:
         None
     """
-    logger.add(stdout, colorize=True)
+    logger.add(stdout, colorize=True, backtrace=True, diagnose=True)
 
     class InterceptHandler(logging.Handler):
         def emit(self, record):
