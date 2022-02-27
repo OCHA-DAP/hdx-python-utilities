@@ -29,9 +29,9 @@ def setup_logging(error_file: bool = False) -> None:
                 frame = frame.f_back
                 depth += 1
 
-            logger.opt(depth=depth, exception=record.exc_info).log(
-                level, record.getMessage()
-            )
+            logger.opt(
+                colors=True, depth=depth, exception=record.exc_info
+            ).log(level, record.getMessage())
 
     if error_file:
         logger.add(
@@ -42,34 +42,3 @@ def setup_logging(error_file: bool = False) -> None:
             diagnose=True,
         )
     logging.basicConfig(handlers=[InterceptHandler()], level=logging.NOTSET)
-
-
-try:
-    import pytest
-    from _pytest.logging import LogCaptureFixture
-
-    @pytest.fixture
-    def caplog(caplog: LogCaptureFixture) -> None:
-        """Emitting logs from loguru's logger.log means that they will not show up in caplog
-         which only works with Python standard logging. This adds the same `
-         LogCaptureHandler` being used by caplog to hook into loguru.
-
-        Args:
-            caplog (LogCaptureFixture): caplog fixture
-
-        Returns:
-            None
-        """
-
-        class PropogateHandler(logging.Handler):
-            def emit(self, record):
-                logging.getLogger(record.name).handle(record)
-
-        handler_id = logger.add(
-            PropogateHandler(), format="{message} {extra}", level="TRACE"
-        )
-        yield caplog
-        logger.remove(handler_id)
-
-except ModuleNotFoundError:
-    pass
