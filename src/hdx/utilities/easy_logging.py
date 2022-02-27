@@ -32,7 +32,10 @@ def setup_logging(error_file: bool = False) -> None:
                 depth += 1
 
             logger.opt(
-                colors=True, depth=depth, exception=record.exc_info
+                colors=True,
+                record=True,
+                depth=depth,
+                exception=record.exc_info,
             ).log(level, record.getMessage())
 
     if error_file:
