@@ -31,6 +31,9 @@ The library has detailed API documentation which can be found in the menu on the
 
 ## Breaking Changes
 
+From 3.1.5, changed setup_logging parameters to console_log_level, log_file and 
+file_log_level.
+
 From 3.1.1, setup_logging now sets up logaru instead of colorlog and has only one 
 parameter error_file which is False by default. There is no longer SMTP (email) handling
 which can be done directly with logaru instead.
@@ -392,13 +395,16 @@ Example of setup and sending email:
 ## Logging
 
 The library provides elegant logs to the console with a simple default setup which 
-should be adequate for most cases. Specifying `error_file` to be `True` will in addition 
-output errors to a log file. 
+should be adequate for most cases. By default, the log shows `INFO` level and higher. 
+This can be changed with `console_log_level`. If `log_file`, a path to a log file, is 
+specified then logging will also go to a file. The log level for the file can be
+set using `file_log_level` which by default is `ERROR`.
 
     from hdx.utilities.easy_logging import setup_logging
     ...
     logger = logging.getLogger(__name__)
-    setup_logging(error_file=True)
+    setup_logging(console_log_level="DEBUG", log_file="output.log", 
+    file_log_level="INFO")
 
 To use logging in your files, simply add the line below to the top of
 each Python file:

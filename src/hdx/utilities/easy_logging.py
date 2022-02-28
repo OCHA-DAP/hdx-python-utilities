@@ -1,25 +1,38 @@
 """Configuration of logging"""
 import logging
 from sys import stdout
+from typing import Optional
 
 from loguru import logger
 
 
-def setup_logging(error_file: bool = False) -> None:
+def setup_logging(
+    console_log_level: str = "INFO",
+    log_file: Optional[str] = None,
+    file_log_level: str = "ERROR",
+) -> None:
     """Setup logging configuration. intercepts standard logging and outputs errors to
     a file.
 
     Args:
-        error_file (bool): Whether to output errors.log file. Defaults to False.
+        console_log_level (str): Log level to use for console output. Defaults to INFO.
+        log_file (Optional[str]): Path of log file. Defaults to None (No log file).
+        file_log_level (str): Log level to use for console output. Defaults to ERROR.
 
     Returns:
         None
     """
-    logger.add(stdout, colorize=True, backtrace=True, diagnose=True)
-    if error_file:
+    logger.add(
+        stdout,
+        level=console_log_level,
+        colorize=True,
+        backtrace=True,
+        diagnose=True,
+    )
+    if log_file:
         logger.add(
-            "errors.log",
-            level="ERROR",
+            log_file,
+            level=file_log_level,
             mode="w",
             backtrace=True,
             diagnose=True,

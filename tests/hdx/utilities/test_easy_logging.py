@@ -5,7 +5,7 @@ from loguru import logger
 
 from hdx.utilities.easy_logging import setup_logging
 
-setup_logging(error_file=True)
+setup_logging(log_file="errors.log")
 
 
 standard_logger = logging.getLogger(__name__)
