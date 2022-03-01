@@ -1,6 +1,6 @@
 """Configuration of logging"""
 import logging
-from sys import stdout
+from sys import stderr
 from typing import Optional
 
 from loguru import logger
@@ -22,8 +22,9 @@ def setup_logging(
     Returns:
         None
     """
+    logger.remove()
     logger.add(
-        stdout,
+        stderr,
         level=console_log_level,
         colorize=True,
         backtrace=True,
