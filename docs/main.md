@@ -580,6 +580,5 @@ Examples:
 
 ## Easy building and packaging
 
-The pyproject.toml and setup.cfg provide a template that can be used by other projects. There is a helper 
-function in this library, git_tag_whl, which aids with creating a tag in GitHub based on the version in
-the wheel file built by tox.
+The pyproject.toml, setup.cfg, .readthedocs.yml and GitHub Actions workflows provide a 
+template that can be used by other projects or libraries.
