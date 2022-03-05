@@ -55,9 +55,10 @@ def setup_logging(
 
             logger.opt(
                 colors=True,
-                record=True,
                 depth=depth,
                 exception=record.exc_info,
             ).log(level, record.getMessage())
 
-    logging.basicConfig(handlers=[InterceptHandler()], level=logging.NOTSET)
+    logging.basicConfig(
+        handlers=[InterceptHandler()], level=logging.NOTSET, force=True
+    )
