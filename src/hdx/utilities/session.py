@@ -9,7 +9,7 @@ from requests.adapters import HTTPAdapter
 from requests_file import FileAdapter
 from urllib3.util import Retry
 
-from hdx.utilities.loader import load_file_to_str, load_json, load_yaml
+from hdx.utilities.loader import load_json, load_text, load_yaml
 from hdx.utilities.useragent import UserAgent
 
 logger = logging.getLogger(__name__)
@@ -144,7 +144,7 @@ def get_session(
     if basic_auth_file:
         logger.info(f"Loading basic auth from: {basic_auth_file}")
         try:
-            basic_auth = load_file_to_str(basic_auth_file, strip=True)
+            basic_auth = load_text(basic_auth_file, strip=True)
             auths_found.append(f"file {basic_auth_file}")
         except OSError:
             if fail_on_missing_file:

@@ -7,7 +7,8 @@ from shutil import rmtree
 
 import pytest
 
-from hdx.utilities.downloader import Download, DownloadError
+from hdx.utilities.base_downloader import DownloadError
+from hdx.utilities.downloader import Download
 from hdx.utilities.retriever import Retrieve
 from hdx.utilities.useragent import UserAgent
 
@@ -35,25 +36,22 @@ class TestRetriever:
         temp_dir = join(tmpdir, "temp")
         rmtree(temp_dir, ignore_errors=True)
         mkdir(temp_dir)
-        with Download() as downloader:
-            with pytest.raises(ValueError):
-                Retrieve(
-                    downloader,
-                    fallback_dir,
-                    saved_dir,
-                    temp_dir,
-                    save=True,
-                    use_saved=True,
-                )
-
-            retriever = Retrieve(
-                downloader,
+        with pytest.raises(ValueError):
+            Retrieve(
                 fallback_dir,
                 saved_dir,
                 temp_dir,
-                save=False,
-                use_saved=False,
+                save=True,
+                use_saved=True,
             )
+
+        with Retrieve(
+            fallback_dir,
+            saved_dir,
+            temp_dir,
+            save=False,
+            use_saved=False,
+        ) as retriever:
             filename = "test.txt"
             url = join(retrieverfolder, filename)
             path = retriever.retrieve_file(
@@ -109,14 +107,13 @@ class TestRetriever:
             with pytest.raises(DownloadError):
                 retriever.retrieve_json("NOTEXIST", filename, fallback=False)
 
-            retriever = Retrieve(
-                downloader,
-                fallback_dir,
-                saved_dir,
-                temp_dir,
-                save=True,
-                use_saved=False,
-            )
+        with Retrieve(
+            fallback_dir,
+            saved_dir,
+            temp_dir,
+            save=True,
+            use_saved=False,
+        ) as retriever:
             filename = "test.txt"
             url = join(retrieverfolder, filename)
             path = retriever.retrieve_file(
@@ -164,14 +161,13 @@ class TestRetriever:
             with pytest.raises(DownloadError):
                 retriever.retrieve_json("NOTEXIST", filename, fallback=False)
 
-            retriever = Retrieve(
-                downloader,
-                fallback_dir,
-                saved_dir,
-                temp_dir,
-                save=False,
-                use_saved=True,
-            )
+        with Retrieve(
+            fallback_dir,
+            saved_dir,
+            temp_dir,
+            save=False,
+            use_saved=True,
+        ) as retriever:
             filename = "test.txt"
             url = join(retrieverfolder, filename)
             path = retriever.retrieve_file(
@@ -226,12 +222,3 @@ class TestRetriever:
                 "NOTEXIST", filename, fallback=False
             )
             assert data["my_param"] == "abc"
-
-            retriever = Retrieve(
-                downloader,
-                fallback_dir,
-                saved_dir,
-                temp_dir,
-                save=False,
-                use_saved=True,
-            )

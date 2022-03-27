@@ -2,17 +2,22 @@ import logging
 from os import mkdir
 from os.path import join
 from shutil import rmtree
+from typing import Any, Dict, Iterator, List, Optional, Tuple, Union
 
-from hdx.utilities.downloader import DownloadError
-from hdx.utilities.loader import load_file_to_str, load_json, load_yaml
-from hdx.utilities.saver import save_json, save_str_to_file, save_yaml
+from hdx.utilities.base_downloader import BaseDownload, DownloadError
+from hdx.utilities.downloader import Download
+from hdx.utilities.loader import load_json, load_text, load_yaml
+from hdx.utilities.path import get_filename_from_url
+from hdx.utilities.saver import save_json, save_text, save_yaml
+from hdx.utilities.typehint import ListDict, ListTuple
 
 logger = logging.getLogger(__name__)
 
 
-class Retrieve:
-    """Retrieve class which takes in a Download object and can either download, download and save or use previously
-    downloaded and saved data. It also allows the use of a static fallback when downloading fails.
+class Retrieve(BaseDownload):
+    """Retrieve class which takes in a Download object and can either download, download
+    and save or use previously downloaded and saved data. It also allows the use of a
+    static fallback when downloading fails.
 
     Args:
         downloader (Download): Download object
@@ -25,12 +30,12 @@ class Retrieve:
 
     def __init__(
         self,
-        downloader,
-        fallback_dir,
-        saved_dir,
-        temp_dir,
-        save=False,
-        use_saved=False,
+        downloader: Download,
+        fallback_dir: str,
+        saved_dir: str,
+        temp_dir: str,
+        save: bool = False,
+        use_saved: bool = False,
     ):
         self.downloader = downloader
         self.fallback_dir = fallback_dir
@@ -61,14 +66,19 @@ class Retrieve:
             return f"{url[:100]}..."
         return url
 
-    def retrieve_file(
-        self, url, filename, logstr=None, fallback=False, **kwargs
-    ):
+    def download_file(
+        self,
+        url: str,
+        filename: Optional[str] = None,
+        logstr: Optional[str] = None,
+        fallback: bool = False,
+        **kwargs: Any,
+    ) -> str:
         """Retrieve file
 
         Args:
             url (str): URL to download
-            filename (str): Filename to use for saved file
+            filename (Optional[str]): Filename of saved file. Defaults to getting from url.
             logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
             fallback (bool): Whether to use static fallback if download fails. Defaults to False.
             **kwargs: Parameters to pass to download_file call
@@ -77,6 +87,8 @@ class Retrieve:
             str: Path to downloaded file
 
         """
+        if not filename:
+            filename = get_filename_from_url(url)
         if not logstr:
             logstr = filename
         if self.save:
@@ -93,9 +105,7 @@ class Retrieve:
                 logger.info(
                     f"Downloading {logstr} from {self.get_url_logstr(url)} into {output_path}"
                 )
-                return self.downloader.download_file(
-                    url, path=output_path, **kwargs
-                )
+                return super().download_file(url, path=output_path, **kwargs)
             except DownloadError:
                 if not fallback:
                     raise
@@ -105,38 +115,44 @@ class Retrieve:
                 )
                 return fallback_path
 
-    def retrieve_text(
-        self, url, filename, logstr=None, fallback=False, **kwargs
-    ):
-        """Retrieve text
+    def download_text(
+        self,
+        url: str,
+        filename: Optional[str] = None,
+        logstr: Optional[str] = None,
+        fallback: bool = False,
+        **kwargs: Any,
+    ) -> str:
+        """Download text
 
         Args:
             url (str): URL to download
-            filename (str): Filename to use for saved file
+            filename (Optional[str]): Filename of saved file. Defaults to getting from url.
             logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
             fallback (bool): Whether to use static fallback if download fails. Defaults to False.
             **kwargs: Parameters to pass to download call
 
         Returns:
-            Union[Dict,List]: The text from the file
+            str: The text from the file
 
         """
+        if not filename:
+            filename = get_filename_from_url(url)
         if not logstr:
             logstr = filename
         saved_path = join(self.saved_dir, filename)
         if self.use_saved:
             logger.info(f"Using saved {logstr} in {saved_path}")
-            text = load_file_to_str(saved_path)
+            text = load_text(saved_path)
         else:
             try:
                 logger.info(
                     f"Downloading {logstr} from {self.get_url_logstr(url)}"
                 )
-                self.downloader.download(url, **kwargs)
-                text = self.downloader.get_text()
+                text = self.downloader.download_text(url, **kwargs)
                 if self.save:
                     logger.info(f"Saving {logstr} in {saved_path}")
-                    save_str_to_file(text, saved_path)
+                    save_text(text, saved_path)
             except DownloadError:
                 if not fallback:
                     raise
@@ -144,25 +160,32 @@ class Retrieve:
                 logger.exception(
                     f"{logstr} download failed, using static data {fallback_path}!"
                 )
-                text = load_file_to_str(fallback_path)
+                text = load_text(fallback_path)
         return text
 
-    def retrieve_yaml(
-        self, url, filename, logstr=None, fallback=False, **kwargs
-    ):
+    def download_yaml(
+        self,
+        url: str,
+        filename: Optional[str] = None,
+        logstr: Optional[str] = None,
+        fallback: bool = False,
+        **kwargs: Any,
+    ) -> Any:
         """Retrieve YAML
 
         Args:
             url (str): URL to download
-            filename (str): Filename to use for saved file
+            filename (Optional[str]): Filename of saved file. Defaults to getting from url.
             logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
             fallback (bool): Whether to use static fallback if download fails. Defaults to False.
             **kwargs: Parameters to pass to download call
 
         Returns:
-            Union[Dict,List]: The data from the YAML file
+            Any: The data from the YAML file
 
         """
+        if not filename:
+            filename = get_filename_from_url(url)
         if not logstr:
             logstr = filename
         saved_path = join(self.saved_dir, filename)
@@ -174,8 +197,7 @@ class Retrieve:
                 logger.info(
                     f"Downloading {logstr} from {self.get_url_logstr(url)}"
                 )
-                self.downloader.download(url, **kwargs)
-                ryaml = self.downloader.get_yaml()
+                ryaml = self.downloader.download_yaml(url, **kwargs)
                 if self.save:
                     logger.info(f"Saving {logstr} in {saved_path}")
                     save_yaml(ryaml, saved_path)
@@ -189,22 +211,29 @@ class Retrieve:
                 ryaml = load_yaml(fallback_path)
         return ryaml
 
-    def retrieve_json(
-        self, url, filename, logstr=None, fallback=False, **kwargs
-    ):
+    def download_json(
+        self,
+        url: str,
+        filename: Optional[str] = None,
+        logstr: Optional[str] = None,
+        fallback: bool = False,
+        **kwargs: Any,
+    ) -> Any:
         """Retrieve JSON
 
         Args:
             url (str): URL to download
-            filename (str): Filename to use for saved file
+            filename (Optional[str]): Filename of saved file. Defaults to getting from url.
             logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
             fallback (bool): Whether to use static fallback if download fails. Defaults to False.
             **kwargs: Parameters to pass to download call
 
         Returns:
-            Union[Dict,List]: The data from the JSON file
+            Any: The data from the JSON file
 
         """
+        if not filename:
+            filename = get_filename_from_url(url)
         if not logstr:
             logstr = filename
         saved_path = join(self.saved_dir, filename)
@@ -216,8 +245,7 @@ class Retrieve:
                 logger.info(
                     f"Downloading {logstr} from {self.get_url_logstr(url)}"
                 )
-                self.downloader.download(url, **kwargs)
-                rjson = self.downloader.get_json()
+                rjson = self.downloader.download_json(url, **kwargs)
                 if self.save:
                     logger.info(f"Saving {logstr} in {saved_path}")
                     save_json(rjson, saved_path)
@@ -230,3 +258,31 @@ class Retrieve:
                 )
                 rjson = load_json(fallback_path)
         return rjson
+
+    def get_tabular_rows(
+        self,
+        url: str,
+        headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
+        dict_form: bool = False,
+        *args: Any,
+        **kwargs: Any,
+    ) -> Tuple[List[str], Iterator[ListDict]]:
+        """Returns header of tabular file pointed to by url and an iterator where each
+        row is returned as a list or dictionary depending on the dict_rows argument.
+        The headers argument is either a row number or list of row numbers (in case of
+        multi-line headers) to be considered as headers (rows start counting at 1), or
+        the actual headers defined as a list of strings. It defaults to 1.
+        The dict_form arguments specifies if each row should be returned as a dictionary
+        or a list, defaulting to a list.
+
+        Args:
+            url (str): URL or path to read from
+            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            dict_form (bool): Return dict or list for each row. Defaults to False (list)
+            *args (Any): Positional arguments
+            **kwargs (Any): Keyword arguments
+
+        Returns:
+            Tuple[List[str],Iterator[ListDict]]: Tuple (headers, iterator where each row is a list or dictionary)
+
+        """

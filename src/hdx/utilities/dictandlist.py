@@ -6,6 +6,8 @@ from typing import Any, Callable, Dict, List, MutableMapping, Union
 
 from tabulator import Stream
 
+from hdx.utilities.typehint import ListDict, ListTuple
+
 
 def merge_two_dictionaries(
     a: MutableMapping, b: MutableMapping, merge_lists: bool = False
@@ -65,7 +67,7 @@ def merge_two_dictionaries(
 
 
 def merge_dictionaries(
-    dicts: List[MutableMapping], merge_lists: bool = False
+    dicts: ListTuple[MutableMapping], merge_lists: bool = False
 ) -> MutableMapping:
     """Merges all dictionaries in dicts into a single dictionary and returns result
 
@@ -385,10 +387,10 @@ def avg_dicts(
 
 def read_list_from_csv(
     url: str,
-    headers: Union[int, List[int], List[str], None] = None,
+    headers: Union[int, ListTuple[int], ListTuple[str], None] = None,
     dict_form: bool = False,
     **kwargs: Any,
-) -> List[Union[Dict, List]]:
+) -> List[ListDict]:
     """Read a list of rows in dict or list form from a csv. The headers argument is either a row
        number or list of row numbers (in case of multi-line headers) to be considered as headers
        (rows start counting at 1), or the actual headers defined a list of strings. If not set,
@@ -396,12 +398,12 @@ def read_list_from_csv(
 
     Args:
         url (str): URL or path to read from
-        headers (Union[int, List[int], List[str], None]): Row number of headers. Defaults to None.
+        headers (Union[int, ListTuple[int], ListTuple[str], None]): Row number of headers. Defaults to None.
         dict_form (bool): Return dict (requires headers parameter) or list for each row. Defaults to False (list)
         **kwargs: Other arguments to pass to Tabulator Stream
 
     Returns:
-        List[Union[Dict, List]]: List of rows in dict or list form
+        List[ListDict]: List of rows in dict or list form
 
     """
     if dict_form and headers is None:
@@ -416,7 +418,7 @@ def read_list_from_csv(
 def write_list_to_csv(
     filepath: str,
     list_of_rows: List[Union[MutableMapping, List]],
-    headers: Union[int, List[int], List[str], None] = None,
+    headers: Union[int, ListTuple[int], ListTuple[str], None] = None,
 ) -> None:
     """Write a list of rows in dict or list form to a csv. (The headers argument is either a row
        number or list of row numbers (in case of multi-line headers) to be considered as headers
@@ -426,7 +428,7 @@ def write_list_to_csv(
     Args:
         filepath (str): Path to write to
         list_of_rows (List[Union[MutableMapping, List]]): List of rows in dict or list form
-        headers (Union[int, List[int], List[str], None]): Headers to write. Defaults to None.
+        headers (Union[int, ListTuple[int], ListTuple[str], None]): Headers to write. Defaults to None.
 
     Returns:
         None

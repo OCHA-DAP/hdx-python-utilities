@@ -10,7 +10,8 @@ from tempfile import gettempdir
 
 import pytest
 
-from hdx.utilities.downloader import Download, DownloadError
+from hdx.utilities.base_downloader import DownloadError
+from hdx.utilities.downloader import Download
 from hdx.utilities.session import SessionError
 from hdx.utilities.useragent import UserAgent
 

@@ -14,17 +14,15 @@ from ratelimit import RateLimitDecorator, sleep_and_retry
 from requests import Request
 from ruamel.yaml import YAML
 
+from hdx.utilities.base_downloader import BaseDownload, DownloadError
 from hdx.utilities.path import get_filename_from_url, get_temp_dir
 from hdx.utilities.session import get_session
+from hdx.utilities.typehint import ListDict, ListTuple
 
 logger = logging.getLogger(__name__)
 
 
-class DownloadError(Exception):
-    pass
-
-
-class Download:
+class Download(BaseDownload):
     """Download class with various download operations. Requires either global user agent to be set or appropriate
     user agent parameter(s) to be completed.
 
@@ -484,13 +482,91 @@ class Download:
         """
         return self.response.json()
 
+    def download_text(
+        self,
+        url: str,
+        post: bool = False,
+        parameters: Optional[Dict] = None,
+        timeout: Optional[float] = None,
+        headers: Optional[Dict] = None,
+        encoding: Optional[str] = None,
+    ) -> str:
+        """Download url as text
+
+        Args:
+            url (str): URL or path to download
+            post (bool): Whether to use POST instead of GET. Defaults to False.
+            parameters (Optional[Dict]): Parameters to pass. Defaults to None.
+            timeout (Optional[float]): Timeout for connecting to URL. Defaults to None (no timeout).
+            headers (Optional[Dict]): Headers to pass. Defaults to None.
+            encoding (Optional[str]): Encoding to use for text response. Defaults to None (best guess).
+
+        Returns:
+            str: Text content of download
+
+        """
+        self.download(url, post, parameters, timeout, headers, encoding)
+        return self.get_text()
+
+    def download_yaml(
+        self,
+        url: str,
+        post: bool = False,
+        parameters: Optional[Dict] = None,
+        timeout: Optional[float] = None,
+        headers: Optional[Dict] = None,
+        encoding: Optional[str] = None,
+    ) -> Any:
+        """Download url as YAML
+
+        Args:
+            url (str): URL or path to download
+            post (bool): Whether to use POST instead of GET. Defaults to False.
+            parameters (Optional[Dict]): Parameters to pass. Defaults to None.
+            timeout (Optional[float]): Timeout for connecting to URL. Defaults to None (no timeout).
+            headers (Optional[Dict]): Headers to pass. Defaults to None.
+            encoding (Optional[str]): Encoding to use for text response. Defaults to None (best guess).
+
+        Returns:
+            str: YAML content of download
+
+        """
+        self.download(url, post, parameters, timeout, headers, encoding)
+        return self.get_yaml()
+
+    def download_json(
+        self,
+        url: str,
+        post: bool = False,
+        parameters: Optional[Dict] = None,
+        timeout: Optional[float] = None,
+        headers: Optional[Dict] = None,
+        encoding: Optional[str] = None,
+    ) -> Any:
+        """Download url as JSON
+
+        Args:
+            url (str): URL or path to download
+            post (bool): Whether to use POST instead of GET. Defaults to False.
+            parameters (Optional[Dict]): Parameters to pass. Defaults to None.
+            timeout (Optional[float]): Timeout for connecting to URL. Defaults to None (no timeout).
+            headers (Optional[Dict]): Headers to pass. Defaults to None.
+            encoding (Optional[str]): Encoding to use for text response. Defaults to None (best guess).
+
+        Returns:
+            str: JSON content of download
+
+        """
+        self.download(url, post, parameters, timeout, headers, encoding)
+        return self.get_json()
+
     def get_tabular_stream(self, url: str, **kwargs: Any) -> tabulator.Stream:
         """Get Tabulator stream.
 
         Args:
             url (str): URL or path to download
             **kwargs:
-            headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers
+            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers
             file_type (Optional[str]): Type of file. Defaults to inferring.
             delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
 
@@ -522,12 +598,12 @@ class Download:
         Args:
             url (str): URL or path to download
             **kwargs:
-            headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers
+            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers
             file_type (Optional[str]): Type of file. Defaults to inferring.
             delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
 
         Returns:
-            Iterator[Union[List,Dict]]: Iterator where each row is returned as a list or dictionary.
+            Iterator[ListDict]: Iterator where each row is returned as a list or dictionary.
 
         """
         return self.get_tabular_stream(url, **kwargs).iter(keyed=False)
@@ -535,15 +611,15 @@ class Download:
     def get_tabular_rows(
         self,
         url: str,
-        headers: Union[int, List[int], List[str]] = 1,
+        headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
         dict_form: bool = False,
         ignore_blank_rows: bool = True,
         header_insertions: Optional[List[Tuple[int, str]]] = None,
         row_function: Optional[
-            Callable[[List[str], Union[List, Dict]], Union[List, Dict]]
+            Callable[[List[str], ListDict], ListDict]
         ] = None,
         **kwargs: Any,
-    ) -> Tuple[List[str], Iterator[Union[List, Dict]]]:
+    ) -> Tuple[List[str], Iterator[ListDict]]:
         """Returns header of tabular file pointed to by url and an iterator where each row is returned as a list
         or dictionary depending on the dict_rows argument. The headers argument is either a row number or list of row
         numbers (in case of multi-line headers) to be considered as headers (rows start counting at 1), or the actual
@@ -558,17 +634,17 @@ class Download:
 
         Args:
             url (str): URL or path to read from
-            headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             dict_form (bool): Return dict or list for each row. Defaults to False (list)
             ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
             header_insertions (Optional[List[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
-            row_function (Optional[Callable[[List[str],Union[List,Dict]],Union[List,Dict]]]): Function to call for each row. Defaults to None.
+            row_function (Optional[Callable[[List[str],ListDict],ListDict]]): Function to call for each row. Defaults to None.
             **kwargs:
             file_type (Optional[str]): Type of file. Defaults to inferring.
             delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
 
         Returns:
-            Tuple[List[str],Iterator[Union[List,Dict]]]: Tuple (headers, iterator where each row is a list or dictionary)
+            Tuple[List[str],Iterator[ListDict]]: Tuple (headers, iterator where each row is a list or dictionary)
 
         """
         if headers is None:
@@ -606,7 +682,7 @@ class Download:
         Args:
             url (str): URL or path to download
             **kwargs:
-            headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers
+            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers
             file_type (Optional[str]): Type of file. Defaults to inferring.
             delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
 
@@ -624,7 +700,7 @@ class Download:
     def download_tabular_rows_as_dicts(
         self,
         url: str,
-        headers: Union[int, List[int], List[str]] = 1,
+        headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
         keycolumn: int = 1,
         **kwargs: Any,
     ) -> Dict[str, Dict]:
@@ -633,7 +709,7 @@ class Download:
 
         Args:
             url (str): URL or path to download
-            headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             keycolumn (int): Number of column to be used for key. Defaults to 1.
             **kwargs:
             file_type (Optional[str]): Type of file. Defaults to inferring.
@@ -662,7 +738,7 @@ class Download:
     def download_tabular_cols_as_dicts(
         self,
         url: str,
-        headers: Union[int, List[int], List[str]] = 1,
+        headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
         keycolumn: int = 1,
         **kwargs: Any,
     ) -> Dict[str, Dict]:
@@ -671,7 +747,7 @@ class Download:
 
         Args:
             url (str): URL or path to download
-            headers (Union[int, List[int], List[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             keycolumn (int): Number of column to be used for key. Defaults to 1.
             **kwargs:
             file_type (Optional[str]): Type of file. Defaults to inferring.

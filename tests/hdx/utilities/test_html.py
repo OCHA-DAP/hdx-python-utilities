@@ -4,7 +4,7 @@ from os.path import join
 import pytest
 
 from hdx.utilities.html import extract_table, get_soup
-from hdx.utilities.loader import load_file_to_str
+from hdx.utilities.loader import load_text
 
 
 class TestHTML:
@@ -12,7 +12,7 @@ class TestHTML:
 
     @pytest.fixture(scope="function")
     def htmltext(self, fixturesfolder):
-        return load_file_to_str(join(fixturesfolder, "html", "response.html"))
+        return load_text(join(fixturesfolder, "html", "response.html"))
 
     @pytest.fixture(scope="function")
     def downloader(self, htmltext):

@@ -8,14 +8,14 @@ from hdx.utilities.loader import (
     LoadError,
     load_and_merge_json,
     load_and_merge_yaml,
-    load_file_to_str,
     load_json,
     load_json_into_existing_dict,
+    load_text,
     load_yaml,
     load_yaml_into_existing_dict,
 )
 from hdx.utilities.path import temp_dir
-from hdx.utilities.saver import save_str_to_file
+from hdx.utilities.saver import save_text
 
 
 class TestLoader:
@@ -117,7 +117,7 @@ test"""
     def test_load_empty(self, fixturesfolder):
         loaderfolder = join(fixturesfolder, "loader")
         with pytest.raises(LoadError):
-            load_file_to_str(join(loaderfolder, "empty.yml"))
+            load_text(join(loaderfolder, "empty.yml"))
         with pytest.raises(LoadError):
             load_yaml(join(loaderfolder, "empty.yml"))
         with pytest.raises(LoadError):
@@ -158,12 +158,12 @@ test"""
     def test_load_file_to_str(self):
         with temp_dir(folder="test_text") as tmpdir:
             text_file = join(tmpdir, "text_file.txt")
-            save_str_to_file(TestLoader.text, text_file)
-            result = load_file_to_str(text_file)
+            save_text(TestLoader.text, text_file)
+            result = load_text(text_file)
             assert result == TestLoader.text
-            result = load_file_to_str(text_file, strip=True)
+            result = load_text(text_file, strip=True)
             assert result == TestLoader.expected_text_strip
-            result = load_file_to_str(text_file, replace_newlines=" ")
+            result = load_text(text_file, replace_newlines=" ")
             assert result == TestLoader.expected_text_newlines_to_spaces
             with pytest.raises(IOError):
-                load_file_to_str(join(tmpdir, "NOTEXIST.txt"))
+                load_text(join(tmpdir, "NOTEXIST.txt"))

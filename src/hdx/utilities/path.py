@@ -11,8 +11,8 @@ from tempfile import gettempdir
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 from urllib.parse import urlsplit
 
-from hdx.utilities.loader import load_file_to_str
-from hdx.utilities.saver import save_str_to_file
+from hdx.utilities.loader import load_text
+from hdx.utilities.saver import save_text
 from hdx.utilities.uuid import get_uuid
 
 logger = logging.getLogger(__name__)
@@ -133,13 +133,13 @@ def read_or_create_batch(folder: str, batch: Optional[str] = None) -> str:
     """
     batch_file = join(folder, "batch.txt")
     if exists(batch_file):
-        batch = load_file_to_str(batch_file, strip=True)
+        batch = load_text(batch_file, strip=True)
         logger.info(f"File BATCH = {batch}")
     else:
         if not batch:
             batch = get_uuid()
             logger.info(f"Generated BATCH = {batch}")
-        save_str_to_file(batch, batch_file)
+        save_text(batch, batch_file)
     return batch
 
 
@@ -234,7 +234,7 @@ def progress_storing_folder(
             )
         else:
             if exists(progress_file):
-                contents = load_file_to_str(progress_file, strip=True)
+                contents = load_text(progress_file, strip=True)
                 wheretostart = get_wheretostart(contents, "File", key)
             else:
                 wheretostart = None
@@ -259,7 +259,7 @@ def progress_storing_folder(
                     continue
         output = f"{key}={current}"
         info["progress"] = output
-        save_str_to_file(output, progress_file)
+        save_text(output, progress_file)
         yield info, nextdict
     if wheretostart and not found:
         raise NotFoundError(
@@ -383,7 +383,7 @@ def multiple_progress_storing_tempdir(
                 )
             else:
                 if exists(progress_file):
-                    contents = load_file_to_str(progress_file, strip=True)
+                    contents = load_text(progress_file, strip=True)
                     wheretostart = get_wheretostart(contents, "File", key)
                 else:
                     wheretostart = None
@@ -398,7 +398,7 @@ def multiple_progress_storing_tempdir(
                 for info, nextdict in progress_storing_folder(
                     info, iterators[i], key, wheretostart
                 ):
-                    save_str_to_file(info["progress"], progress_file)
+                    save_text(info["progress"], progress_file)
                     yield i, info, nextdict
                 if exists(progress_file):
                     remove(progress_file)
