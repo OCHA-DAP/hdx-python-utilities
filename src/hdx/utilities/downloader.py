@@ -101,9 +101,6 @@ class Download(BaseDownload):
         self.close_response()
         self.session.close()
 
-    def __enter__(self) -> "Download":
-        return self
-
     def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
         self.close()
 

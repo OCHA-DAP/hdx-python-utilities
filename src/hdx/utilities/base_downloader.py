@@ -13,17 +13,16 @@ class BaseDownload(ABC):
     implement.
     """
 
-    @abstractmethod
     def __enter__(self) -> "BaseDownload":
         """
-        Subclasses should define this to allow with usage
+        Allow usage of with
 
         Returns:
             BaseDownload: Download object
 
         """
+        return self
 
-    @abstractmethod
     def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
         """
         Subclasses should define this to allow with usage
@@ -37,6 +36,7 @@ class BaseDownload(ABC):
             None
 
         """
+        pass
 
     @abstractmethod
     def download_file(self, url: str, *args: Any, **kwargs: Any) -> str:

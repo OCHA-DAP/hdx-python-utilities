@@ -2,7 +2,7 @@ import logging
 from os import mkdir
 from os.path import join
 from shutil import rmtree
-from typing import Any, Dict, Iterator, List, Optional, Tuple, Union
+from typing import Any, Iterator, List, Optional, Tuple, Union
 
 from hdx.utilities.base_downloader import BaseDownload, DownloadError
 from hdx.utilities.downloader import Download
@@ -66,6 +66,9 @@ class Retrieve(BaseDownload):
             return f"{url[:100]}..."
         return url
 
+    def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
+        self.downloader.close()
+
     def download_file(
         self,
         url: str,
@@ -105,7 +108,7 @@ class Retrieve(BaseDownload):
                 logger.info(
                     f"Downloading {logstr} from {self.get_url_logstr(url)} into {output_path}"
                 )
-                return super().download_file(url, path=output_path, **kwargs)
+                return self.downloader.download_file(url, path=output_path, **kwargs)
             except DownloadError:
                 if not fallback:
                     raise
