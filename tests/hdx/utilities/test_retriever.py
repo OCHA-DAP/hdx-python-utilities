@@ -191,69 +191,10 @@ class TestRetriever:
                         "NOTEXIST", filename, fallback=False
                     )
 
-                retriever = Retrieve(
-                    downloader,
-                    fallback_dir,
-                    saved_dir,
-                    temp_dir,
-                    save=False,
-                    use_saved=True,
-                )
-                filename = "test.txt"
-                url = join(retrieverfolder, filename)
-                path = retriever.download_file(
-                    url, filename, logstr="test file", fallback=True
-                )
-                assert path == join(saved_dir, filename)
-                path = retriever.download_file(
-                    "NOTEXIST", filename, logstr="test file", fallback=True
-                )
-                assert path == join(saved_dir, filename)
-                path = retriever.download_file(
-                    "NOTEXIST", filename, fallback=False
-                )
-                assert path == join(saved_dir, filename)
-                text = retriever.download_text(
-                    url, filename, logstr="test file", fallback=False
-                )
-                assert text == "hello"
-                text = retriever.download_text(
-                    "NOTEXIST", filename, logstr="test file", fallback=True
-                )
-                assert text == "hello"
-                text = retriever.download_text(
-                    "NOTEXIST", filename, fallback=False
-                )
-                assert text == "hello"
-                filename = "test.yaml"
-                url = join(retrieverfolder, filename)
-                data = retriever.download_yaml(
-                    url, filename, logstr="test file", fallback=False
-                )
-                assert data["param_1"] == "ABC"
-                data = retriever.download_yaml(
-                    "NOTEXIST", filename, logstr="test file", fallback=True
-                )
-                assert data["param_1"] == "ABC"
-                data = retriever.download_yaml(
-                    "NOTEXIST", filename, fallback=False
-                )
-                assert data["param_1"] == "ABC"
-                filename = "test.json"
-                url = join(retrieverfolder, filename)
-                data = retriever.download_json(
-                    url, filename, logstr="test file", fallback=False
-                )
-                assert data["my_param"] == "abc"
-                data = retriever.download_json(
-                    "NOTEXIST", filename, logstr="test file", fallback=True
-                )
-                assert data["my_param"] == "abc"
-                data = retriever.download_json(
-                    "NOTEXIST", filename, fallback=False
-                )
-                assert data["my_param"] == "abc"
-
+    def test_download_usesaved(self, dirs, retrieverfolder, fallback_dir):
+        _, temp_dir = dirs
+        saved_dir = retrieverfolder
+        with Download() as downloader:
             retriever = Retrieve(
                 downloader,
                 fallback_dir,
@@ -262,3 +203,57 @@ class TestRetriever:
                 save=False,
                 use_saved=True,
             )
+            filename = "test.txt"
+            url = join(retrieverfolder, filename)
+            path = retriever.download_file(
+                url, filename, logstr="test file", fallback=True
+            )
+            assert path == join(saved_dir, filename)
+            path = retriever.download_file(
+                "NOTEXIST", filename, logstr="test file", fallback=True
+            )
+            assert path == join(saved_dir, filename)
+            path = retriever.download_file(
+                "NOTEXIST", filename, fallback=False
+            )
+            assert path == join(saved_dir, filename)
+            text = retriever.download_text(
+                url, filename, logstr="test file", fallback=False
+            )
+            assert text == "hello"
+            text = retriever.download_text(
+                "NOTEXIST", filename, logstr="test file", fallback=True
+            )
+            assert text == "hello"
+            text = retriever.download_text(
+                "NOTEXIST", filename, fallback=False
+            )
+            assert text == "hello"
+            filename = "test.yaml"
+            url = join(retrieverfolder, filename)
+            data = retriever.download_yaml(
+                url, filename, logstr="test file", fallback=False
+            )
+            assert data["param_1"] == "ABC"
+            data = retriever.download_yaml(
+                "NOTEXIST", filename, logstr="test file", fallback=True
+            )
+            assert data["param_1"] == "ABC"
+            data = retriever.download_yaml(
+                "NOTEXIST", filename, fallback=False
+            )
+            assert data["param_1"] == "ABC"
+            filename = "test.json"
+            url = join(retrieverfolder, filename)
+            data = retriever.download_json(
+                url, filename, logstr="test file", fallback=False
+            )
+            assert data["my_param"] == "abc"
+            data = retriever.download_json(
+                "NOTEXIST", filename, logstr="test file", fallback=True
+            )
+            assert data["my_param"] == "abc"
+            data = retriever.download_json(
+                "NOTEXIST", filename, fallback=False
+            )
+            assert data["my_param"] == "abc"

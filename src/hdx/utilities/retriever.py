@@ -105,7 +105,9 @@ class Retrieve(BaseDownload):
                 logger.info(
                     f"Downloading {logstr} from {self.get_url_logstr(url)} into {output_path}"
                 )
-                return self.downloader.download_file(url, path=output_path, **kwargs)
+                return self.downloader.download_file(
+                    url, path=output_path, **kwargs
+                )
             except DownloadError:
                 if not fallback:
                     raise
@@ -291,4 +293,6 @@ class Retrieve(BaseDownload):
 
         """
         path = self.download_file(url, filename, logstr, fallback, **kwargs)
-        return self.downloader.get_tabular_rows(path, headers, dict_form, **kwargs)
+        return self.downloader.get_tabular_rows(
+            path, headers, dict_form, **kwargs
+        )
