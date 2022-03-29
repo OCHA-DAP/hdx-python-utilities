@@ -124,6 +124,31 @@ class TestRetriever:
                     retriever.download_json(
                         "NOTEXIST", filename, fallback=False
                     )
+                filename = "test.csv"
+                url = join(retrieverfolder, filename)
+                headers, iterator = retriever.get_tabular_rows(
+                    url, logstr="test file", fallback=False
+                )
+                assert headers == ["header1", "header2", "header3", "header4"]
+                headers, iterator = retriever.get_tabular_rows(
+                    "NOTEXIST",
+                    filename="test.csv",
+                    logstr="test file",
+                    fallback=True,
+                )
+                assert headers == [
+                    "header1a",
+                    "header2a",
+                    "header3a",
+                    "header4a",
+                ]
+                with pytest.raises(DownloadError):
+                    retriever.get_tabular_rows(
+                        "NOTEXIST",
+                        filename="test.csv",
+                        logstr="test file",
+                        fallback=False,
+                    )
 
     def test_download_save(self, dirs, retrieverfolder, fallback_dir):
         saved_dir, temp_dir = dirs
@@ -189,6 +214,31 @@ class TestRetriever:
                 with pytest.raises(DownloadError):
                     retriever.download_json(
                         "NOTEXIST", filename, fallback=False
+                    )
+                filename = "test.csv"
+                url = join(retrieverfolder, filename)
+                headers, iterator = retriever.get_tabular_rows(
+                    url, logstr="test file", fallback=False
+                )
+                assert headers == ["header1", "header2", "header3", "header4"]
+                headers, iterator = retriever.get_tabular_rows(
+                    "NOTEXIST",
+                    filename="test.csv",
+                    logstr="test file",
+                    fallback=True,
+                )
+                assert headers == [
+                    "header1a",
+                    "header2a",
+                    "header3a",
+                    "header4a",
+                ]
+                with pytest.raises(DownloadError):
+                    retriever.get_tabular_rows(
+                        "NOTEXIST",
+                        filename="test.csv",
+                        logstr="test file",
+                        fallback=False,
                     )
 
     def test_download_usesaved(self, dirs, retrieverfolder, fallback_dir):
@@ -257,3 +307,25 @@ class TestRetriever:
                 "NOTEXIST", filename, fallback=False
             )
             assert data["my_param"] == "abc"
+            filename = "test.csv"
+            url = join(retrieverfolder, filename)
+            headers, iterator = retriever.get_tabular_rows(
+                url, logstr="test file", fallback=False
+            )
+            assert headers == ["header1", "header2", "header3", "header4"]
+            headers, iterator = retriever.get_tabular_rows(
+                "NOTEXIST",
+                filename="test.csv",
+                logstr="test file",
+                fallback=True,
+            )
+            # Uses saved file so doesn't need fallback
+            assert headers == ["header1", "header2", "header3", "header4"]
+            headers, iterator = retriever.get_tabular_rows(
+                "NOTEXIST",
+                filename="test.csv",
+                logstr="test file",
+                fallback=False,
+            )
+            # Uses saved file
+            assert headers == ["header1", "header2", "header3", "header4"]
