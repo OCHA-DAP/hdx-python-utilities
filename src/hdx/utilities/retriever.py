@@ -66,9 +66,6 @@ class Retrieve(BaseDownload):
             return f"{url[:100]}..."
         return url
 
-    def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
-        self.downloader.close()
-
     def download_file(
         self,
         url: str,
@@ -267,7 +264,9 @@ class Retrieve(BaseDownload):
         url: str,
         headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
         dict_form: bool = False,
-        *args: Any,
+        filename: Optional[str] = None,
+        logstr: Optional[str] = None,
+        fallback: bool = False,
         **kwargs: Any,
     ) -> Tuple[List[str], Iterator[ListDict]]:
         """Returns header of tabular file pointed to by url and an iterator where each
@@ -282,10 +281,14 @@ class Retrieve(BaseDownload):
             url (str): URL or path to read from
             headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             dict_form (bool): Return dict or list for each row. Defaults to False (list)
-            *args (Any): Positional arguments
-            **kwargs (Any): Keyword arguments
+            filename (Optional[str]): Filename of saved file. Defaults to getting from url.
+            logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
+            fallback (bool): Whether to use static fallback if download fails. Defaults to False.
+            **kwargs: Parameters to pass to download call
 
         Returns:
             Tuple[List[str],Iterator[ListDict]]: Tuple (headers, iterator where each row is a list or dictionary)
 
         """
+        path = self.download_file(url, filename, logstr, fallback, **kwargs)
+        return self.downloader.get_tabular_rows(path, headers, dict_form, **kwargs)

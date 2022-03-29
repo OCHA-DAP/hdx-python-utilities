@@ -102,6 +102,18 @@ class Download(BaseDownload):
         self.session.close()
 
     def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
+        """
+        Allow usage of with
+
+        Args:
+            exc_type (Any): Exception type
+            exc_value (Any): Exception value
+            traceback (Any): Traceback
+
+        Returns:
+            None
+
+        """
         self.close()
 
     @staticmethod
