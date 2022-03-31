@@ -632,9 +632,7 @@ class Download(BaseDownload):
                         fill_merged_cells = True
                     else:
                         del kwargs["fill_merged_cells"]
-                    setattr(
-                        dialect, "fill_merged_cells", fill_merged_cells
-                    )
+                    setattr(dialect, "fill_merged_cells", fill_merged_cells)
             del kwargs["file_type"]
         http_session = kwargs.get("http_session")
         if http_session is not None:
@@ -878,13 +876,14 @@ class Download(BaseDownload):
         """
         output_dict = dict()
         for row in self.get_tabular_rows_as_list(
-                url,
-                headers,
-                ignore_blank_rows,
-                infer_types,
-                header_insertions,
-                row_function,
-                **kwargs):
+            url,
+            headers,
+            ignore_blank_rows,
+            infer_types,
+            header_insertions,
+            row_function,
+            **kwargs,
+        ):
             if len(row) < 2:
                 continue
             output_dict[row[0]] = row[1]

@@ -479,7 +479,9 @@ class TestDownloader:
                 ).items()
             )
 
-    def test_download_tabular_key_value(self, fixtureurl, fixtureurlexcel, fixtureprocessurl):
+    def test_download_tabular_key_value(
+        self, fixtureurl, fixtureurlexcel, fixtureprocessurl
+    ):
         with Download() as downloader:
             result = downloader.download_tabular_key_value(
                 fixtureurl,
