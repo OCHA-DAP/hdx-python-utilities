@@ -627,12 +627,14 @@ class Download(BaseDownload):
                     if sheet is not None:
                         setattr(dialect, "sheet", sheet)
                         del kwargs["sheet"]
-                    fill_merged_cells = kwargs.get("fill_merged_cells", True)
-                    if fill_merged_cells is not None:
-                        setattr(
-                            dialect, "fill_merged_cells", fill_merged_cells
-                        )
+                    fill_merged_cells = kwargs.get("fill_merged_cells")
+                    if fill_merged_cells is None:
+                        fill_merged_cells = True
+                    else:
                         del kwargs["fill_merged_cells"]
+                    setattr(
+                        dialect, "fill_merged_cells", fill_merged_cells
+                    )
             del kwargs["file_type"]
         http_session = kwargs.get("http_session")
         if http_session is not None:

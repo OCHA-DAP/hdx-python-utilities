@@ -49,6 +49,10 @@ class TestDownloader:
         return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/main/tests/fixtures/test_data.csv"
 
     @pytest.fixture(scope="class")
+    def fixtureurlexcel(self):
+        return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/base_downloader/tests/fixtures/downloader/test_data.xlsx"
+
+    @pytest.fixture(scope="class")
     def getfixtureurl(self):
         return "http://httpbin.org/get"
 
@@ -475,7 +479,7 @@ class TestDownloader:
                 ).items()
             )
 
-    def test_download_tabular_key_value(self, fixtureurl, fixtureprocessurl):
+    def test_download_tabular_key_value(self, fixtureurl, fixtureurlexcel, fixtureprocessurl):
         with Download() as downloader:
             result = downloader.download_tabular_key_value(
                 fixtureurl,
@@ -486,7 +490,14 @@ class TestDownloader:
             )
             assert result == {615: "2231RTA", "GWNO": "EVENT_ID_CNTY"}
             result = downloader.download_tabular_key_value(
-                fixtureprocessurl, headers=2
+                fixtureurlexcel,
+                file_type="xlsx",
+                sheet="test_data",
+                infer_types=True,
+            )
+            assert result == {615: "2231RTA", "GWNO": "EVENT_ID_CNTY"}
+            result = downloader.download_tabular_key_value(
+                fixtureprocessurl, headers=3
             )
             assert result == {"coal": "3", "gas": "2"}
             with pytest.raises(DownloadError):
