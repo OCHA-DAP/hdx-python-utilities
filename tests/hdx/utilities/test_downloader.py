@@ -46,7 +46,7 @@ class TestDownloader:
 
     @pytest.fixture(scope="class")
     def fixtureurl(self):
-        return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/test_data.csv"
+        return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/main/tests/fixtures/test_data.csv"
 
     @pytest.fixture(scope="class")
     def getfixtureurl(self):
@@ -58,15 +58,15 @@ class TestDownloader:
 
     @pytest.fixture(scope="class")
     def fixturenotexistsurl(self):
-        return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/NOTEXIST.csv"
+        return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/main/tests/fixtures/NOTEXIST.csv"
 
     @pytest.fixture(scope="class")
     def fixtureprocessurl(self):
-        return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/downloader/test_csv_processing.csv?a=1"
+        return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/main/tests/fixtures/downloader/test_csv_processing.csv?a=1"
 
     @pytest.fixture(scope="class")
     def fixtureprocessurlblank(self):
-        return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/downloader/test_csv_processing_blanks.csv?a=1"
+        return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/main/tests/fixtures/downloader/test_csv_processing_blanks.csv?a=1"
 
     def test_get_path_for_url(
         self, tmpdir, fixtureurl, configfolder, downloaderfolder
@@ -478,9 +478,13 @@ class TestDownloader:
     def test_download_tabular_key_value(self, fixtureurl, fixtureprocessurl):
         with Download() as downloader:
             result = downloader.download_tabular_key_value(
-                fixtureurl, file_type="csv"
+                fixtureurl,
+                file_type="csv",
+                delimiter=",",
+                line_terminator="\n",
+                infer_types=True,
             )
-            assert result == {"615": "2231RTA", "GWNO": "EVENT_ID_CNTY"}
+            assert result == {615: "2231RTA", "GWNO": "EVENT_ID_CNTY"}
             result = downloader.download_tabular_key_value(
                 fixtureprocessurl, headers=2
             )

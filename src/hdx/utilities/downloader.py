@@ -833,22 +833,56 @@ class Download(BaseDownload):
         for row in iterator:
             yield row
 
-    def download_tabular_key_value(self, url: str, **kwargs: Any) -> Dict:
+    def download_tabular_key_value(
+        self,
+        url: str,
+        headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
+        ignore_blank_rows: bool = True,
+        infer_types: bool = False,
+        header_insertions: Optional[List[Tuple[int, str]]] = None,
+        row_function: Optional[
+            Callable[[List[str], ListDict], ListDict]
+        ] = None,
+        **kwargs: Any,
+    ) -> Dict:
         """Download 2 column csv from url and return a dictionary of keys (first column) and values (second column)
 
         Args:
             url (str): URL or path to download
+            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
+            infer_types (bool): Whether to infer types. Defaults to False (strings).
+            header_insertions (Optional[List[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
+            row_function (Optional[Callable[[List[str],ListDict],ListDict]]): Function to call for each row. Defaults to None.
             **kwargs:
-            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers
             file_type (Optional[str]): Type of file. Defaults to inferring.
-            delimiter (Optional[str]): Delimiter used for values in each row. Defaults to inferring.
+            encoding (Optional[str]): Type of encoding. Defaults to inferring.
+            compression (Optional[str]): Type of compression. Defaults to inferring.
+            delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
+            line_terminator (Optional[str]): Line terminator for values in csv rows. Defaults to inferring.
+            sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
+            fill_merged_cells (bool): Whetehr to fill merged cells. Defaults to True.
+            http_session (Session): Session object to use. Defaults to downloader session.
+            field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
+            field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
+            dialect (Dialect): This can be set to override the above. See Frictionless docs.
+            detector (Detector): This can be set to override the above. See Frictionless docs.
+            layout (Layout): This can be set to override the above. See Frictionless docs.
+            schema (Schema): This can be set to override the above. See Frictionless docs.
 
         Returns:
             Dict: Dictionary keys (first column) and values (second column)
 
         """
         output_dict = dict()
-        for row in self.get_tabular_rows_as_list(url, **kwargs):
+        for row in self.get_tabular_rows_as_list(
+                url,
+                headers,
+                ignore_blank_rows,
+                infer_types,
+                header_insertions,
+                row_function,
+                **kwargs):
             if len(row) < 2:
                 continue
             output_dict[row[0]] = row[1]
