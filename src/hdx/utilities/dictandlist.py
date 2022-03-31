@@ -4,7 +4,7 @@ import itertools
 from collections import UserDict
 from typing import Any, Callable, Dict, List, MutableMapping, Union
 
-from tabulator import Stream
+import frictionless
 
 from hdx.utilities.typehint import ListDict, ListTuple
 
@@ -408,7 +408,7 @@ def read_list_from_csv(
     """
     if dict_form and headers is None:
         raise ValueError("If dict_form is True, headers must not be None!")
-    stream = Stream(url, headers=headers, **kwargs)
+    stream = frictionless.Resource(url, headers=headers, **kwargs)
     stream.open()
     result = stream.read(keyed=dict_form)
     stream.close()
@@ -434,7 +434,7 @@ def write_list_to_csv(
         None
 
     """
-    stream = Stream(list_of_rows, headers=headers)
+    stream = frictionless.Resource(list_of_rows, headers=headers)
     stream.open()
     stream.save(filepath, format="csv")
     stream.close()

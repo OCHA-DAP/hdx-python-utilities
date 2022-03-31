@@ -490,22 +490,14 @@ class TestDownloader:
                     "NOTEXIST://NOTEXIST.csv"
                 )
 
-    @staticmethod
-    def fix_strings(
-        result,
-    ):  # This isn't needed when I run locally but is when run in Travis!
-        for x in result:
-            for y in result[x]:
-                result[x][y] = result[x][y].replace("'", "")
-
     def test_get_tabular_rows_as_list(self, fixtureprocessurl):
         with Download() as downloader:
             rows = list(downloader.get_tabular_rows_as_list(fixtureprocessurl))
             assert rows == [
                 ["la1", "ha1", "ba1", "ma1"],
                 ["header1", "header2", "header3", "header4"],
-                ["coal", "3", "7.4", "needed"],
-                ["gas", "2", "6.5", "n/a"],
+                ["coal", "3", "7.4", "'needed'"],
+                ["gas", "2", "6.5", "'n/a'"],
             ]
 
     def test_get_tabular_rows(self, fixtureprocessurl, fixtureprocessurlblank):
@@ -513,8 +505,8 @@ class TestDownloader:
             expected = [
                 ["la1", "ha1", "ba1", "ma1"],
                 ["header1", "header2", "header3", "header4"],
-                ["coal", "3", "7.4", "needed"],
-                ["gas", "2", "6.5", "n/a"],
+                ["coal", "3", "7.4", "'needed'"],
+                ["gas", "2", "6.5", "'n/a'"],
             ]
             expected_headers = expected[0]
             headers, iterator = downloader.get_tabular_rows(fixtureprocessurl)
@@ -525,14 +517,14 @@ class TestDownloader:
             )
             assert headers == expected_headers
             blank_expected = copy.deepcopy(expected[1:])
-            blank_expected[2][0] = ""
+            blank_expected[2][0] = None
             assert list(iterator) == blank_expected
             headers, iterator = downloader.get_tabular_rows(
                 fixtureprocessurlblank, ignore_blank_rows=False
             )
             assert headers == expected_headers
-            blank_expected.append(list())
-            blank_expected.insert(1, list())
+            blank_expected.append([None, None, None, None])
+            blank_expected.insert(1, [None, None, None, None])
             assert list(iterator) == blank_expected
             headers, iterator = downloader.get_tabular_rows(
                 fixtureprocessurl, headers=1
@@ -571,8 +563,8 @@ class TestDownloader:
                     "ba1": "header3",
                     "ma1": "header4",
                 },
-                {"la1": "coal", "ha1": "3", "ba1": "7.4", "ma1": "needed"},
-                {"la1": "gas", "ha1": "2", "ba1": "6.5", "ma1": "n/a"},
+                {"la1": "coal", "ha1": "3", "ba1": "7.4", "ma1": "'needed'"},
+                {"la1": "gas", "ha1": "2", "ba1": "6.5", "ma1": "'n/a'"},
             ]
             assert list(iterator) == expected_dicts
             headers, iterator = downloader.get_tabular_rows(
@@ -580,7 +572,7 @@ class TestDownloader:
             )
             assert headers == expected[2]
             expected_dicts = [
-                {"coal": "gas", "3": "2", "7.4": "6.5", "needed": "n/a"}
+                {"coal": "gas", "3": "2", "7.4": "6.5", "'needed'": "'n/a'"}
             ]
             assert list(iterator) == expected_dicts
 
@@ -594,9 +586,9 @@ class TestDownloader:
                 header_insertions=[(2, "la")],
                 row_function=testfn,
             )
-            expected_headers = ["coal", "3", "la", "7.4", "needed"]
+            expected_headers = ["coal", "3", "la", "7.4", "'needed'"]
             assert headers == expected_headers
-            assert list(iterator) == [["gas", "2", "lala", "6.5", "n/a"]]
+            assert list(iterator) == [["gas", "2", "lala", "6.5", "'n/a'"]]
 
             def testfn(headers, row):
                 row["la"] = "lala"
@@ -632,22 +624,34 @@ class TestDownloader:
                     "ma1": "header4",
                     "la": "lala",
                 },
-                {"la": "lala"},
+                {
+                    "la1": None,
+                    "ha1": None,
+                    "ba1": None,
+                    "ma1": None,
+                    "la": "lala",
+                },
                 {
                     "la1": "coal",
                     "ha1": "3",
                     "ba1": "7.4",
-                    "ma1": "needed",
+                    "ma1": "'needed'",
                     "la": "lala",
                 },
                 {
-                    "la1": "",
+                    "la1": None,
                     "ha1": "2",
                     "ba1": "6.5",
-                    "ma1": "n/a",
+                    "ma1": "'n/a'",
                     "la": "lala",
                 },
-                {"la": "lala"},
+                {
+                    "la1": None,
+                    "ha1": None,
+                    "ba1": None,
+                    "ma1": None,
+                    "la": "lala",
+                },
             ]
             assert list(iterator) == expected_dicts
             headers, iterator = downloader.get_tabular_rows(
@@ -697,25 +701,23 @@ class TestDownloader:
             result = downloader.download_tabular_rows_as_dicts(
                 fixtureprocessurl, headers=2
             )
-            self.fix_strings(result)
             assert result == {
                 "coal": {
                     "header2": "3",
                     "header3": "7.4",
-                    "header4": "needed",
+                    "header4": "'needed'",
                 },
-                "gas": {"header2": "2", "header3": "6.5", "header4": "n/a"},
+                "gas": {"header2": "2", "header3": "6.5", "header4": "'n/a'"},
             }
             result = downloader.download_tabular_rows_as_dicts(
                 fixtureprocessurl, headers=2, keycolumn=2
             )
-            self.fix_strings(result)
             assert result == {
-                "2": {"header1": "gas", "header3": "6.5", "header4": "n/a"},
+                "2": {"header1": "gas", "header3": "6.5", "header4": "'n/a'"},
                 "3": {
                     "header1": "coal",
                     "header3": "7.4",
-                    "header4": "needed",
+                    "header4": "'needed'",
                 },
             }
 
@@ -724,20 +726,18 @@ class TestDownloader:
             result = downloader.download_tabular_cols_as_dicts(
                 fixtureprocessurl, headers=2
             )
-            self.fix_strings(result)
             assert result == {
                 "header2": {"coal": "3", "gas": "2"},
                 "header3": {"coal": "7.4", "gas": "6.5"},
-                "header4": {"coal": "needed", "gas": "n/a"},
+                "header4": {"coal": "'needed'", "gas": "'n/a'"},
             }
             result = downloader.download_tabular_cols_as_dicts(
                 fixtureprocessurl, headers=2, keycolumn=2
             )
-            self.fix_strings(result)
             assert result == {
                 "header1": {"3": "coal", "2": "gas"},
                 "header3": {"3": "7.4", "2": "6.5"},
-                "header4": {"3": "needed", "2": "n/a"},
+                "header4": {"3": "'needed'", "2": "'n/a'"},
             }
 
     def test_get_column_positions(self):
