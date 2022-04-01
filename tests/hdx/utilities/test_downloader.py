@@ -509,12 +509,32 @@ class TestDownloader:
 
     def test_get_tabular_rows_as_list(self, fixtureprocessurl):
         with Download() as downloader:
-            rows = list(downloader.get_tabular_rows_as_list(fixtureprocessurl))
+            headers, rows = downloader.get_tabular_rows_as_list(
+                fixtureprocessurl
+            )
+            rows = list(rows)
             assert rows == [
                 ["la1", "ha1", "ba1", "ma1"],
                 ["header1", "header2", "header3", "header4"],
                 ["coal", "3", "7.4", "'needed'"],
                 ["gas", "2", "6.5", "'n/a'"],
+            ]
+
+    def test_get_tabular_rows_as_dict(self, fixtureprocessurl):
+        with Download() as downloader:
+            headers, rows = downloader.get_tabular_rows_as_dict(
+                fixtureprocessurl
+            )
+            rows = list(rows)
+            assert rows == [
+                {
+                    "la1": "header1",
+                    "ha1": "header2",
+                    "ba1": "header3",
+                    "ma1": "header4",
+                },
+                {"la1": "coal", "ha1": "3", "ba1": "7.4", "ma1": "'needed'"},
+                {"la1": "gas", "ha1": "2", "ba1": "6.5", "ma1": "'n/a'"},
             ]
 
     def test_get_tabular_rows(self, fixtureprocessurl, fixtureprocessurlblank):

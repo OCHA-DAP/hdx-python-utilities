@@ -10,13 +10,13 @@ from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import frictionless
 import requests
-from frictionless.plugins.csv import CsvDialect
-from frictionless.plugins.excel import ExcelDialect
+from frictionless import FrictionlessException
 from ratelimit import RateLimitDecorator, sleep_and_retry
 from requests import Request
 from ruamel.yaml import YAML
 
 from hdx.utilities.base_downloader import BaseDownload, DownloadError
+from hdx.utilities.frictionless_wrapper import get_frictionless_resource
 from hdx.utilities.path import get_filename_from_url, get_temp_dir
 from hdx.utilities.session import get_session
 from hdx.utilities.typehint import ListDict, ListTuple
@@ -586,13 +586,14 @@ class Download(BaseDownload):
             infer_types (bool): Whether to infer types. Defaults to False (strings).
             **kwargs:
             headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers
+            format (Optional[str]): Type of file. Defaults to inferring.
             file_type (Optional[str]): Type of file. Defaults to inferring.
             encoding (Optional[str]): Type of encoding. Defaults to inferring.
             compression (Optional[str]): Type of compression. Defaults to inferring.
             delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
             line_terminator (Optional[str]): Line terminator for values in csv rows. Defaults to inferring.
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
-            fill_merged_cells (bool): Whetehr to fill merged cells. Defaults to True.
+            fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
             field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
@@ -606,82 +607,20 @@ class Download(BaseDownload):
 
         """
         self.close_response()
-        file_type = kwargs.get("file_type")
-        dialect = kwargs.get("dialect")
-        if file_type is not None:
-            kwargs["format"] = file_type
-            if dialect is None:
-                if file_type == "csv":
-                    dialect = CsvDialect()
-                    delimiter = kwargs.get("delimiter")
-                    if delimiter is not None:
-                        setattr(dialect, "delimiter", delimiter)
-                        del kwargs["delimiter"]
-                    line_terminator = kwargs.get("line_terminator")
-                    if line_terminator is not None:
-                        setattr(dialect, "line_terminator", line_terminator)
-                        del kwargs["line_terminator"]
-                elif file_type in ("xls", "xlsx"):
-                    dialect = ExcelDialect()
-                    sheet = kwargs.get("sheet")
-                    if sheet is not None:
-                        setattr(dialect, "sheet", sheet)
-                        del kwargs["sheet"]
-                    fill_merged_cells = kwargs.get("fill_merged_cells")
-                    if fill_merged_cells is None:
-                        fill_merged_cells = True
-                    else:
-                        del kwargs["fill_merged_cells"]
-                    setattr(dialect, "fill_merged_cells", fill_merged_cells)
-            del kwargs["file_type"]
-        http_session = kwargs.get("http_session")
-        if http_session is not None:
-            http_session = self.session
-            del kwargs["http_session"]
-        frictionless.system.use_http_session(http_session)
-        detector = kwargs.get("detector", frictionless.Detector())
-        if infer_types:
-            default = None
-        else:
-            default = "string"
-        field_type = kwargs.get("field_type", default)
-        detector._Detector__field_type = field_type
-        field_float_numbers = kwargs.get("field_float_numbers", True)
-        detector._Detector__field_float_numbers = field_float_numbers
-        layout = kwargs.get("layout", frictionless.Layout())
-        headers = kwargs.get("headers")
-        if headers is not None:
-            if isinstance(headers, int):
-                headers = [headers]
-            if isinstance(headers[0], int):
-                layout.header_rows = headers
-            else:
-                detector._Detector__field_names = headers
-                layout.header = False
-            del kwargs["headers"]
-        if ignore_blank_rows:
-            if layout.skip_rows is None:
-                layout.skip_rows = ["<blank>"]
-            elif "<blank>" not in layout.skip_rows:
-                layout.skip_rows.append("<blank>")
-            kwargs["layout"] = layout
-        kwargs["dialect"] = dialect
-        kwargs["detector"] = detector
-        kwargs["layout"] = layout
         try:
-            self.response = frictionless.Resource(url, **kwargs)
-            self.response.open()
-            return self.response
-        except Exception as e:
-            raise DownloadError(
-                f"Getting tabular stream for {url} failed!"
-            ) from e
+            self.response = get_frictionless_resource(
+                url, ignore_blank_rows, infer_types, self.session, **kwargs
+            )
+        except FrictionlessException as e:
+            raise DownloadError("Download Error!") from e
+        return self.response
 
     def get_tabular_rows(
         self,
         url: str,
         headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
         dict_form: bool = False,
+        include_headers: bool = False,
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
         header_insertions: Optional[List[Tuple[int, str]]] = None,
@@ -709,18 +648,20 @@ class Download(BaseDownload):
             url (str): URL or path to read from
             headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             dict_form (bool): Return dict or list for each row. Defaults to False (list)
+            include_headers (bool): Whether to include headers in iterator. Defaults to False.
             ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
             infer_types (bool): Whether to infer types. Defaults to False (strings).
             header_insertions (Optional[List[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
             row_function (Optional[Callable[[List[str],ListDict],ListDict]]): Function to call for each row. Defaults to None.
             **kwargs:
+            format (Optional[str]): Type of file. Defaults to inferring.
             file_type (Optional[str]): Type of file. Defaults to inferring.
             encoding (Optional[str]): Type of encoding. Defaults to inferring.
             compression (Optional[str]): Type of compression. Defaults to inferring.
             delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
             line_terminator (Optional[str]): Line terminator for values in csv rows. Defaults to inferring.
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
-            fill_merged_cells (bool): Whetehr to fill merged cells. Defaults to True.
+            fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
             field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
@@ -751,6 +692,8 @@ class Download(BaseDownload):
                 headers.insert(position, header)
 
         def get_next():
+            if include_headers:
+                yield headers
             for inrow in resource.row_stream:
                 if dict_form:
                     row = inrow.to_dict()
@@ -771,6 +714,7 @@ class Download(BaseDownload):
         self,
         url: str,
         headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
+        include_headers: bool = True,
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
         header_insertions: Optional[List[Tuple[int, str]]] = None,
@@ -778,11 +722,80 @@ class Download(BaseDownload):
             Callable[[List[str], ListDict], ListDict]
         ] = None,
         **kwargs: Any,
-    ) -> Tuple[List[str], Iterator[ListDict]]:
-        """Returns an iterator where each row is returned as a list. The headers
-        argument is either a row number or list of row numbers (in case of multi-line
-        headers) to be considered as headers (rows start counting at 1), or the actual
-        headers defined as a list of strings. It defaults to 1 and cannot be None.
+    ) -> Tuple[List[str], Iterator[List]]:
+        """Returns headers and an iterator where each row is returned as a list. The
+        headers argument is either a row number or list of row numbers (in case of
+        multi-line headers) to be considered as headers (rows start counting at 1), or
+        the actual headers defined as a list of strings. It defaults to 1 and cannot be
+        None.
+
+        Optionally, headers can be inserted at specific positions. This is achieved
+        using the header_insertions argument. If supplied, it is a list of tuples of the
+        form (position, header) to be inserted. A function is called for each row. If
+        supplied, it takes as arguments: headers (prior to any insertions) and row
+        (which will be in dict or list form depending upon the dict_rows argument) and
+        outputs a modified row or None to ignore the row.
+
+        Args:
+            url (str): URL or path to read from
+            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            include_headers (bool): Whether to include headers in iterator. Defaults to True.
+            ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
+            infer_types (bool): Whether to infer types. Defaults to False (strings).
+            header_insertions (Optional[List[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
+            row_function (Optional[Callable[[List[str],ListDict],ListDict]]): Function to call for each row. Defaults to None.
+            **kwargs:
+            format (Optional[str]): Type of file. Defaults to inferring.
+            file_type (Optional[str]): Type of file. Defaults to inferring.
+            encoding (Optional[str]): Type of encoding. Defaults to inferring.
+            compression (Optional[str]): Type of compression. Defaults to inferring.
+            delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
+            line_terminator (Optional[str]): Line terminator for values in csv rows. Defaults to inferring.
+            sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
+            fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
+            http_session (Session): Session object to use. Defaults to downloader session.
+            field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
+            field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
+            dialect (Dialect): This can be set to override the above. See Frictionless docs.
+            detector (Detector): This can be set to override the above. See Frictionless docs.
+            layout (Layout): This can be set to override the above. See Frictionless docs.
+            schema (Schema): This can be set to override the above. See Frictionless docs.
+
+        Returns:
+            Tuple[List[str],Iterator[List]]: Tuple (headers, iterator where each row is a list)
+
+        """
+
+        headers, iterator = self.get_tabular_rows(
+            url,
+            headers,
+            False,
+            include_headers,
+            ignore_blank_rows,
+            infer_types,
+            header_insertions,
+            row_function,
+            **kwargs,
+        )
+        return headers, iterator
+
+    def get_tabular_rows_as_dict(
+        self,
+        url: str,
+        headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
+        ignore_blank_rows: bool = True,
+        infer_types: bool = False,
+        header_insertions: Optional[List[Tuple[int, str]]] = None,
+        row_function: Optional[
+            Callable[[List[str], ListDict], ListDict]
+        ] = None,
+        **kwargs: Any,
+    ) -> Tuple[List[str], Iterator[Dict]]:
+        """Returns headers and an iterator where each row is returned as a dictionary.
+        The headers argument is either a row number or list of row numbers (in case of
+        multi-line headers) to be considered as headers (rows start counting at 1), or
+        the actual headers defined as a list of strings. It defaults to 1 and cannot be
+        None.
 
         Optionally, headers can be inserted at specific positions. This is achieved
         using the header_insertions argument. If supplied, it is a list of tuples of the
@@ -799,13 +812,14 @@ class Download(BaseDownload):
             header_insertions (Optional[List[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
             row_function (Optional[Callable[[List[str],ListDict],ListDict]]): Function to call for each row. Defaults to None.
             **kwargs:
+            format (Optional[str]): Type of file. Defaults to inferring.
             file_type (Optional[str]): Type of file. Defaults to inferring.
             encoding (Optional[str]): Type of encoding. Defaults to inferring.
             compression (Optional[str]): Type of compression. Defaults to inferring.
             delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
             line_terminator (Optional[str]): Line terminator for values in csv rows. Defaults to inferring.
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
-            fill_merged_cells (bool): Whetehr to fill merged cells. Defaults to True.
+            fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
             field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
@@ -815,13 +829,14 @@ class Download(BaseDownload):
             schema (Schema): This can be set to override the above. See Frictionless docs.
 
         Returns:
-            Iterator[List]: Iterator where each row is a list
+            Tuple[List[str], Iterator[Dict]]: Tuple (headers, iterator where each row is a dictionary)
 
         """
 
         headers, iterator = self.get_tabular_rows(
             url,
             headers,
+            True,
             False,
             ignore_blank_rows,
             infer_types,
@@ -829,14 +844,13 @@ class Download(BaseDownload):
             row_function,
             **kwargs,
         )
-        yield headers
-        for row in iterator:
-            yield row
+        return headers, iterator
 
     def download_tabular_key_value(
         self,
         url: str,
         headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
+        include_headers: bool = True,
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
         header_insertions: Optional[List[Tuple[int, str]]] = None,
@@ -850,18 +864,20 @@ class Download(BaseDownload):
         Args:
             url (str): URL or path to download
             headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            include_headers (bool): Whether to include headers in iterator. Defaults to True.
             ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
             infer_types (bool): Whether to infer types. Defaults to False (strings).
             header_insertions (Optional[List[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
             row_function (Optional[Callable[[List[str],ListDict],ListDict]]): Function to call for each row. Defaults to None.
             **kwargs:
+            format (Optional[str]): Type of file. Defaults to inferring.
             file_type (Optional[str]): Type of file. Defaults to inferring.
             encoding (Optional[str]): Type of encoding. Defaults to inferring.
             compression (Optional[str]): Type of compression. Defaults to inferring.
             delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
             line_terminator (Optional[str]): Line terminator for values in csv rows. Defaults to inferring.
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
-            fill_merged_cells (bool): Whetehr to fill merged cells. Defaults to True.
+            fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
             field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
@@ -875,15 +891,17 @@ class Download(BaseDownload):
 
         """
         output_dict = dict()
-        for row in self.get_tabular_rows_as_list(
+        _, rows = self.get_tabular_rows_as_list(
             url,
             headers,
+            include_headers,
             ignore_blank_rows,
             infer_types,
             header_insertions,
             row_function,
             **kwargs,
-        ):
+        )
+        for row in rows:
             if len(row) < 2:
                 continue
             output_dict[row[0]] = row[1]
@@ -914,13 +932,14 @@ class Download(BaseDownload):
             header_insertions (Optional[List[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
             row_function (Optional[Callable[[List[str],ListDict],ListDict]]): Function to call for each row. Defaults to None.
             **kwargs:
+            format (Optional[str]): Type of file. Defaults to inferring.
             file_type (Optional[str]): Type of file. Defaults to inferring.
             encoding (Optional[str]): Type of encoding. Defaults to inferring.
             compression (Optional[str]): Type of compression. Defaults to inferring.
             delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
             line_terminator (Optional[str]): Line terminator for values in csv rows. Defaults to inferring.
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
-            fill_merged_cells (bool): Whetehr to fill merged cells. Defaults to True.
+            fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
             field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
@@ -934,10 +953,9 @@ class Download(BaseDownload):
             headers and values from columns beneath
 
         """
-        headers, iterator = self.get_tabular_rows(
+        headers, iterator = self.get_tabular_rows_as_dict(
             url,
             headers,
-            True,
             ignore_blank_rows,
             infer_types,
             header_insertions,
@@ -981,13 +999,14 @@ class Download(BaseDownload):
             header_insertions (Optional[List[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
             row_function (Optional[Callable[[List[str],ListDict],ListDict]]): Function to call for each row. Defaults to None.
             **kwargs:
+            format (Optional[str]): Type of file. Defaults to inferring.
             file_type (Optional[str]): Type of file. Defaults to inferring.
             encoding (Optional[str]): Type of encoding. Defaults to inferring.
             compression (Optional[str]): Type of compression. Defaults to inferring.
             delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
             line_terminator (Optional[str]): Line terminator for values in csv rows. Defaults to inferring.
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
-            fill_merged_cells (bool): Whetehr to fill merged cells. Defaults to True.
+            fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
             field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
@@ -1001,10 +1020,9 @@ class Download(BaseDownload):
             and values from other columns
 
         """
-        headers, iterator = self.get_tabular_rows(
+        headers, iterator = self.get_tabular_rows_as_dict(
             url,
             headers,
-            True,
             ignore_blank_rows,
             infer_types,
             header_insertions,

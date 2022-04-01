@@ -4,8 +4,7 @@ import itertools
 from collections import UserDict
 from typing import Any, Callable, Dict, List, MutableMapping, Union
 
-import frictionless
-
+from hdx.utilities.frictionless_wrapper import get_frictionless_resource
 from hdx.utilities.typehint import ListDict, ListTuple
 
 
@@ -408,16 +407,23 @@ def read_list_from_csv(
     """
     if dict_form and headers is None:
         raise ValueError("If dict_form is True, headers must not be None!")
-    stream = frictionless.Resource(url, headers=headers, **kwargs)
-    stream.open()
-    result = stream.read(keyed=dict_form)
-    stream.close()
+    resource = get_frictionless_resource(url, headers=headers, **kwargs)
+    result = list()
+    if not dict_form:
+        result.append(resource.header)
+    for inrow in resource.row_stream:
+        if dict_form:
+            row = inrow.to_dict()
+        else:
+            row = inrow.to_list()
+        result.append(row)
+    resource.close()
     return result
 
 
 def write_list_to_csv(
     filepath: str,
-    list_of_rows: List[Union[MutableMapping, List]],
+    list_of_rows: List[ListDict],
     headers: Union[int, ListTuple[int], ListTuple[str], None] = None,
 ) -> None:
     """Write a list of rows in dict or list form to a csv. (The headers argument is either a row
@@ -434,10 +440,11 @@ def write_list_to_csv(
         None
 
     """
-    stream = frictionless.Resource(list_of_rows, headers=headers)
-    stream.open()
-    stream.save(filepath, format="csv")
-    stream.close()
+    resource = get_frictionless_resource(
+        data=list_of_rows, infer_types=True, headers=headers
+    )
+    resource.write(filepath, format="csv")
+    resource.close()
 
 
 def args_to_dict(args: str) -> MutableMapping:
