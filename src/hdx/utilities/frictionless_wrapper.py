@@ -99,20 +99,11 @@ def get_frictionless_resource(
     kwargs["detector"] = detector
     kwargs["layout"] = layout
     http_session = kwargs.pop("http_session", session)
-    try:
-        if http_session is not None:
-            frictionless.system.use_http_session(http_session)
-        if url:
-            resource = frictionless.Resource(url, **kwargs)
-        else:
-            resource = frictionless.Resource(data=data, **kwargs)
-        resource.open()
-        return resource
-    except Exception as e:
-        msg = url
-        if not msg:
-            msg = "data"
-        error = ResourceError(
-            note=f"Getting Frictionless resource for {msg} failed!"
-        )
-        raise FrictionlessException(error=error) from e
+    if http_session is not None:
+        frictionless.system.use_http_session(http_session)
+    if url:
+        resource = frictionless.Resource(url, **kwargs)
+    else:
+        resource = frictionless.Resource(data=data, **kwargs)
+    resource.open()
+    return resource
