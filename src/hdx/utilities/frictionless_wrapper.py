@@ -75,9 +75,9 @@ def get_frictionless_resource(
         default = None
     else:
         default = "string"
-    field_type = kwargs.get("field_type", default)
+    field_type = kwargs.pop("field_type", default)
     detector._Detector__field_type = field_type
-    field_float_numbers = kwargs.get("field_float_numbers", True)
+    field_float_numbers = kwargs.pop("field_float_numbers", True)
     detector._Detector__field_float_numbers = field_float_numbers
     layout = kwargs.get("layout", frictionless.Layout())
     headers = kwargs.pop("headers", None)
