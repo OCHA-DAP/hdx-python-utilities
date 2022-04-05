@@ -31,7 +31,7 @@ def get_frictionless_resource(
         encoding (Optional[str]): Type of encoding. Defaults to inferring.
         compression (Optional[str]): Type of compression. Defaults to inferring.
         delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
-        line_terminator (Optional[str]): Line terminator for values in csv rows. Defaults to inferring.
+        skip_initial_space (bool): Ignore whitespace straight after delimiter. Defaults to False.
         sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
         fill_merged_cells (bool): Whetehr to fill merged cells. Defaults to True.
         http_session (Session): Session object to use. Defaults to downloader session.
@@ -59,17 +59,17 @@ def get_frictionless_resource(
                 dialect = CsvDialect()
                 delimiter = kwargs.pop("delimiter", None)
                 if delimiter is not None:
-                    setattr(dialect, "delimiter", delimiter)
-                line_terminator = kwargs.pop("line_terminator", None)
-                if line_terminator is not None:
-                    setattr(dialect, "line_terminator", line_terminator)
+                    dialect.delimiter = delimiter
+                skip_initial_space = kwargs.pop("skip_initial_space", None)
+                if skip_initial_space is not None:
+                    dialect.skip_initial_space = skip_initial_space
             elif format in ("xls", "xlsx"):
                 dialect = ExcelDialect()
                 sheet = kwargs.pop("sheet", None)
                 if sheet is not None:
-                    setattr(dialect, "sheet", sheet)
+                    dialect.sheet = sheet
                 fill_merged_cells = kwargs.pop("fill_merged_cells", True)
-                setattr(dialect, "fill_merged_cells", fill_merged_cells)
+                dialect.fill_merged_cells = fill_merged_cells
     detector = kwargs.get("detector", frictionless.Detector())
     if infer_types:
         default = None

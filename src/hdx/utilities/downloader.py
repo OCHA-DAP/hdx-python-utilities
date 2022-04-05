@@ -591,7 +591,7 @@ class Download(BaseDownload):
             encoding (Optional[str]): Type of encoding. Defaults to inferring.
             compression (Optional[str]): Type of compression. Defaults to inferring.
             delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
-            line_terminator (Optional[str]): Line terminator for values in csv rows. Defaults to inferring.
+            skip_initial_space (bool): Ignore whitespace straight after delimiter. Defaults to False.
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
             fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
@@ -659,7 +659,7 @@ class Download(BaseDownload):
             encoding (Optional[str]): Type of encoding. Defaults to inferring.
             compression (Optional[str]): Type of compression. Defaults to inferring.
             delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
-            line_terminator (Optional[str]): Line terminator for values in csv rows. Defaults to inferring.
+            skip_initial_space (bool): Ignore whitespace straight after delimiter. Defaults to False.
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
             fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
@@ -750,7 +750,7 @@ class Download(BaseDownload):
             encoding (Optional[str]): Type of encoding. Defaults to inferring.
             compression (Optional[str]): Type of compression. Defaults to inferring.
             delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
-            line_terminator (Optional[str]): Line terminator for values in csv rows. Defaults to inferring.
+            skip_initial_space (bool): Ignore whitespace straight after delimiter. Defaults to False.
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
             fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
@@ -817,7 +817,7 @@ class Download(BaseDownload):
             encoding (Optional[str]): Type of encoding. Defaults to inferring.
             compression (Optional[str]): Type of compression. Defaults to inferring.
             delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
-            line_terminator (Optional[str]): Line terminator for values in csv rows. Defaults to inferring.
+            skip_initial_space (bool): Ignore whitespace straight after delimiter. Defaults to False.
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
             fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
@@ -875,7 +875,7 @@ class Download(BaseDownload):
             encoding (Optional[str]): Type of encoding. Defaults to inferring.
             compression (Optional[str]): Type of compression. Defaults to inferring.
             delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
-            line_terminator (Optional[str]): Line terminator for values in csv rows. Defaults to inferring.
+            skip_initial_space (bool): Ignore whitespace straight after delimiter. Defaults to False.
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
             fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
@@ -937,7 +937,7 @@ class Download(BaseDownload):
             encoding (Optional[str]): Type of encoding. Defaults to inferring.
             compression (Optional[str]): Type of compression. Defaults to inferring.
             delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
-            line_terminator (Optional[str]): Line terminator for values in csv rows. Defaults to inferring.
+            skip_initial_space (bool): Ignore whitespace straight after delimiter. Defaults to False.
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
             fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
@@ -1004,7 +1004,7 @@ class Download(BaseDownload):
             encoding (Optional[str]): Type of encoding. Defaults to inferring.
             compression (Optional[str]): Type of compression. Defaults to inferring.
             delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
-            line_terminator (Optional[str]): Line terminator for values in csv rows. Defaults to inferring.
+            skip_initial_space (bool): Ignore whitespace straight after delimiter. Defaults to False.
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
             fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.

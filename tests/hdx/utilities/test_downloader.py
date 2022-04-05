@@ -487,7 +487,7 @@ class TestDownloader:
                 fixtureurl,
                 file_type="csv",
                 delimiter=",",
-                line_terminator="\n",
+                skip_initial_space=True,
                 infer_types=True,
             )
             assert result == {615: "2231RTA", "GWNO": "EVENT_ID_CNTY"}
