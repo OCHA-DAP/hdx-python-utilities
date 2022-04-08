@@ -783,3 +783,28 @@ class TestDownloader:
             "b": 1,
             "c": 2,
         }
+
+    def test_generate_downloaders(self):
+        test_url = "http://www.lalala.com/lala"
+        custom_user_agent = "custom"
+        extra_params_dict = {"key1": "val1"}
+        custom_configs = {
+            "test": {
+                "user_agent": custom_user_agent,
+                "basic_auth": "dXNlcjpwYXNz",
+                "extra_params_dict": extra_params_dict,
+            }
+        }
+        user_agent = "test"
+        Download.generate_downloaders(custom_configs, user_agent=user_agent)
+        downloader = Download.get_downloader()
+        assert downloader.session.headers["User-Agent"].endswith(user_agent)
+        assert downloader.session.auth is None
+        assert downloader.get_full_url(test_url) == test_url
+        downloader = Download.get_downloader("test")
+        assert downloader.session.headers["User-Agent"].endswith(
+            custom_user_agent
+        )
+        assert downloader.session.auth == ("user", "pass")
+        key, value = next(iter(extra_params_dict.items()))
+        assert downloader.get_full_url(test_url) == f"{test_url}?{key}={value}"

@@ -2,7 +2,7 @@ import logging
 from os import mkdir
 from os.path import join
 from shutil import rmtree
-from typing import Any, Iterator, List, Optional, Tuple, Union
+from typing import Any, Iterator, List, Mapping, Optional, Tuple, Union
 
 from hdx.utilities.base_downloader import BaseDownload, DownloadError
 from hdx.utilities.downloader import Download
@@ -27,6 +27,8 @@ class Retrieve(BaseDownload):
         save (bool): Whether to save downloaded data. Defaults to False.
         use_saved (bool): Whether to use saved data. Defaults to False.
     """
+
+    retrievers = dict()
 
     def __init__(
         self,
@@ -296,3 +298,46 @@ class Retrieve(BaseDownload):
         return self.downloader.get_tabular_rows(
             path, headers, dict_form, **kwargs
         )
+
+    @classmethod
+    def generate_retrievers(
+        cls,
+        fallback_dir: str,
+        saved_dir: str,
+        temp_dir: str,
+        save: bool = False,
+        use_saved: bool = False,
+    ) -> None:
+        """Generate retrievers. Retrievers are generated from downloaders so
+        Download.generate_downloaders() needs to have been called first. Each retriever
+        can either download, download and save or use previously downloaded and saved
+        data. It also allows the use of a static fallback when downloading fails.
+
+        Args:
+            fallback_dir (str): Directory containing static fallback data
+            saved_dir (str): Directory to save or load downloaded data
+            temp_dir (str): Temporary directory for when data is not needed after downloading
+            save (bool): Whether to save downloaded data. Defaults to False.
+            use_saved (bool): Whether to use saved data. Defaults to False.
+
+        Returns:
+            None
+        """
+        cls.retrievers = dict()
+        for name, downloader in Download.downloaders.items():
+            cls.retrievers[name] = cls(
+                downloader, fallback_dir, saved_dir, temp_dir, save, use_saved
+            )
+
+    @classmethod
+    def get_retriever(cls, name: Optional[str] = None) -> "Retrieve":
+        """Get a generated retriever given a name. If name is not supplied, the default
+        one will be returned.
+
+        Args:
+            name (Optional[str]): Name of retriever. Defaults to None (get default).
+
+        Returns:
+            Retriever: Retriever object
+        """
+        return cls.retrievers.get(name, cls.retrievers["default"])

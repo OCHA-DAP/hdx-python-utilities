@@ -2,14 +2,14 @@
 
 import itertools
 from collections import UserDict
-from typing import Any, Callable, Dict, List, MutableMapping, Union
+from typing import Any, Callable, Dict, List, Mapping, MutableMapping, Union
 
 from hdx.utilities.frictionless_wrapper import get_frictionless_resource
 from hdx.utilities.typehint import ListDict, ListTuple
 
 
 def merge_two_dictionaries(
-    a: MutableMapping, b: MutableMapping, merge_lists: bool = False
+    a: MutableMapping, b: Mapping, merge_lists: bool = False
 ) -> MutableMapping:
     """Merges b into a and returns merged result
 
@@ -17,7 +17,7 @@ def merge_two_dictionaries(
 
     Args:
         a (MutableMapping): dictionary to merge into
-        b (MutableMapping): dictionary to merge from
+        b (Mapping): dictionary to merge from
         merge_lists (bool): Whether to merge lists (True) or replace lists (False). Default is False.
 
     Returns:
@@ -84,14 +84,12 @@ def merge_dictionaries(
     return dict1
 
 
-def dict_diff(
-    d1: MutableMapping, d2: MutableMapping, no_key: str = "<KEYNOTFOUND>"
-) -> Dict:
+def dict_diff(d1: Mapping, d2: Mapping, no_key: str = "<KEYNOTFOUND>") -> Dict:
     """Compares two dictionaries
 
     Args:
-        d1 (MutableMapping): First dictionary to compare
-        d2 (MutableMapping): Second dictionary to compare
+        d1 (Mapping): First dictionary to compare
+        d2 (Mapping): Second dictionary to compare
         no_key (str): What value to use if key is not found Defaults to '<KEYNOTFOUND>'.
 
     Returns:
@@ -246,12 +244,12 @@ def list_distribute_contents(
 
 
 def extract_list_from_list_of_dict(
-    list_of_dict: List[MutableMapping], key: Any
+    list_of_dict: List[Mapping], key: Any
 ) -> List:
     """Extract a list by looking up key in each member of a list of dictionaries
 
     Args:
-        list_of_dict (List[MutableMapping]): List of dictionaries
+        list_of_dict (List[Mapping]): List of dictionaries
         key (Any): Key to find in each dictionary
 
     Returns:
@@ -265,7 +263,7 @@ def extract_list_from_list_of_dict(
 
 
 def key_value_convert(
-    dictin: MutableMapping,
+    dictin: Mapping,
     keyfn: Callable[[Any], Any] = lambda x: x,
     valuefn: Callable[[Any], Any] = lambda x: x,
     dropfailedkeys: bool = False,
@@ -275,7 +273,7 @@ def key_value_convert(
     """Convert keys and/or values of dictionary using functions passed in as parameters
 
     Args:
-        dictin (MutableMapping): Input dictionary
+        dictin (Mapping): Input dictionary
         keyfn (Callable[[Any], Any]): Function to convert keys. Defaults to lambda x: x
         valuefn (Callable[[Any], Any]): Function to convert values. Defaults to lambda x: x
         dropfailedkeys (bool): Whether to drop dictionary entries where key conversion fails. Defaults to False.
@@ -283,7 +281,7 @@ def key_value_convert(
         exception (Exception): The exception to expect if keyfn or valuefn fail. Defaults to ValueError.
 
     Returns:
-        Dict: Dictionary with converted keys and/or values
+        Dict: New dictionary with converted keys and/or values
 
     """
     dictout = dict()
@@ -305,13 +303,11 @@ def key_value_convert(
     return dictout
 
 
-def integer_key_convert(
-    dictin: MutableMapping, dropfailedkeys: bool = False
-) -> Dict:
+def integer_key_convert(dictin: Mapping, dropfailedkeys: bool = False) -> Dict:
     """Convert keys of dictionary to integers
 
     Args:
-        dictin (MutableMapping): Input dictionary
+        dictin (Mapping): Input dictionary
         dropfailedkeys (bool): Whether to drop dictionary entries where key conversion fails. Defaults to False.
 
     Returns:
@@ -322,12 +318,12 @@ def integer_key_convert(
 
 
 def integer_value_convert(
-    dictin: MutableMapping, dropfailedvalues: bool = False
+    dictin: Mapping, dropfailedvalues: bool = False
 ) -> Dict:
     """Convert values of dictionary to integers
 
     Args:
-        dictin (MutableMapping): Input dictionary
+        dictin (Mapping): Input dictionary
         dropfailedvalues (bool): Whether to drop dictionary entries where key conversion fails. Defaults to False.
 
     Returns:
@@ -340,12 +336,12 @@ def integer_value_convert(
 
 
 def float_value_convert(
-    dictin: MutableMapping, dropfailedvalues: bool = False
+    dictin: Mapping, dropfailedvalues: bool = False
 ) -> Dict:
     """Convert values of dictionary to floats
 
     Args:
-        dictin (MutableMapping): Input dictionary
+        dictin (Mapping): Input dictionary
         dropfailedvalues (bool): Whether to drop dictionary entries where key conversion fails. Defaults to False.
 
     Returns:
@@ -358,13 +354,13 @@ def float_value_convert(
 
 
 def avg_dicts(
-    dictin1: MutableMapping, dictin2: MutableMapping, dropmissing: bool = True
+    dictin1: Mapping, dictin2: Mapping, dropmissing: bool = True
 ) -> Dict:
     """Create a new dictionary from two dictionaries by averaging values
 
     Args:
-        dictin1 (MutableMapping): First input dictionary
-        dictin2 (MutableMapping): Second input dictionary
+        dictin1 (Mapping): First input dictionary
+        dictin2 (Mapping): Second input dictionary
         dropmissing (bool): Whether to drop keys missing in one dictionary. Defaults to True.
 
     Returns:
@@ -433,7 +429,7 @@ def write_list_to_csv(
 
     Args:
         filepath (str): Path to write to
-        list_of_rows (List[Union[MutableMapping, List]]): List of rows in dict or list form
+        list_of_rows (List[Union[Mapping, List]]): List of rows in dict or list form
         headers (Union[int, ListTuple[int], ListTuple[str], None]): Headers to write. Defaults to None.
 
     Returns:
@@ -447,14 +443,14 @@ def write_list_to_csv(
     resource.close()
 
 
-def args_to_dict(args: str) -> MutableMapping:
+def args_to_dict(args: str) -> Dict:
     """Convert command line arguments in a comma separated string to a dictionary
 
     Args:
         args (str): Command line arguments
 
     Returns:
-        MutableMapping: Dictionary of arguments
+        Dict: Dictionary of arguments
 
     """
     arguments = dict()

@@ -5,7 +5,17 @@ import logging
 from os import remove
 from os.path import exists, isfile, join, split, splitext
 from pathlib import Path
-from typing import Any, Callable, Dict, Iterator, List, Optional, Tuple, Union
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    Iterator,
+    List,
+    Mapping,
+    Optional,
+    Tuple,
+    Union,
+)
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import frictionless
@@ -47,6 +57,8 @@ class Download(BaseDownload):
         status_forcelist (List[int]): HTTP statuses for which to force retry
         allowed_methods (iterable): HTTP methods for which to force retry. Defaults t0 frozenset(['GET']).
     """
+
+    downloaders = dict()
 
     def __init__(
         self,
@@ -1057,3 +1069,72 @@ class Download(BaseDownload):
         for i, header in enumerate(headers):
             columnpositions[header] = i
         return columnpositions
+
+    @classmethod
+    def generate_downloaders(
+        cls,
+        custom_configs: Mapping[str, Mapping],
+        user_agent: Optional[str] = None,
+        user_agent_config_yaml: Optional[str] = None,
+        user_agent_lookup: Optional[str] = None,
+        use_env: bool = True,
+        fail_on_missing_file: bool = True,
+        rate_limit: Optional[Dict] = None,
+        **kwargs: Any,
+    ) -> None:
+        """Generate downloaders. Requires either global user agent to be set or
+        appropriate user agent parameter(s) to be completed. The custom_configs
+        dictionary is a mapping from name to a dictionary of custom configuration
+        parameters that is added to the underlying session's params or headers. It can
+        have keys that correspond to the input arguments of Download's constructor
+        __init__ (or the other arguments of this method).
+
+        Args:
+            custom_configs (Mapping[str, Mapping]): Optional dictionary of custom configurations.
+            auths (Mapping[str, Mapping]): Optional dictionary of authorisations
+            user_agent (Optional[str]): User agent string. HDXPythonUtilities/X.X.X- is prefixed.
+            user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.
+            user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
+            use_env (bool): Whether to read environment variables. Defaults to True.
+            fail_on_missing_file (bool): Raise an exception if any specified configuration files are missing. Defaults to True.
+            rate_limit (Optional[Dict]): Rate limiting to use as a dict with calls and period. Defaults to None.
+            **kwargs: See below
+            auth (Tuple[str, str]): Authorisation information in tuple form (user, pass) OR
+            basic_auth (str): Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
+            basic_auth_file (str): Path to file containing authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx)
+            extra_params_dict (Dict[str, str]): Extra parameters to put on end of url as a dictionary OR
+            extra_params_json (str): Path to JSON file containing extra parameters to put on end of url OR
+            extra_params_yaml (str): Path to YAML file containing extra parameters to put on end of url
+            extra_params_lookup (str): Lookup key for parameters. If not given assumes parameters are at root of the dict.
+            headers (Dict): Additional headers to add to request.
+            status_forcelist (List[int]): HTTP statuses for which to force retry
+            allowed_methods (iterable): HTTP methods for which to force retry. Defaults t0 frozenset(['GET']).
+
+        Returns:
+            None
+        """
+        kwargs["user_agent"] = user_agent
+        kwargs["user_agent_config_yaml"] = user_agent_config_yaml
+        kwargs["user_agent_lookup"] = user_agent_lookup
+        kwargs["use_env"] = use_env
+        kwargs["fail_on_missing_file"] = fail_on_missing_file
+        kwargs["rate_limit"] = rate_limit
+
+        cls.downloaders = {"default": cls(**kwargs)}
+        for name in custom_configs:
+            args_copy = copy.deepcopy(kwargs)
+            args_copy.update(custom_configs[name])
+            cls.downloaders[name] = cls(**args_copy)
+
+    @classmethod
+    def get_downloader(cls, name: Optional[str] = None) -> "Download":
+        """Get a generated downloader given a name. If name is not supplied, the default
+        one will be returned.
+
+        Args:
+            name (Optional[str]): Name of downloader. Defaults to None (get default).
+
+        Returns:
+            Download: Downloader object
+        """
+        return cls.downloaders.get(name, cls.downloaders["default"])
