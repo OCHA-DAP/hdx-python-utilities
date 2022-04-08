@@ -784,27 +784,23 @@ class TestDownloader:
             "c": 2,
         }
 
-    def test_generate_downloaders(self):
+    @staticmethod
+    def assert_downloaders(downloader1, downloader2, params):
+        user_agent, custom_user_agent, extra_params_dict = params
         test_url = "http://www.lalala.com/lala"
-        custom_user_agent = "custom"
-        extra_params_dict = {"key1": "val1"}
-        custom_configs = {
-            "test": {
-                "user_agent": custom_user_agent,
-                "basic_auth": "dXNlcjpwYXNz",
-                "extra_params_dict": extra_params_dict,
-            }
-        }
-        user_agent = "test"
-        Download.generate_downloaders(custom_configs, user_agent=user_agent)
-        downloader = Download.get_downloader()
-        assert downloader.session.headers["User-Agent"].endswith(user_agent)
-        assert downloader.session.auth is None
-        assert downloader.get_full_url(test_url) == test_url
-        downloader = Download.get_downloader("test")
-        assert downloader.session.headers["User-Agent"].endswith(
+        assert downloader1.session.headers["User-Agent"].endswith(user_agent)
+        assert downloader1.session.auth is None
+        assert downloader1.get_full_url(test_url) == test_url
+        assert downloader2.session.headers["User-Agent"].endswith(
             custom_user_agent
         )
-        assert downloader.session.auth == ("user", "pass")
+        assert downloader2.session.auth == ("user", "pass")
         key, value = next(iter(extra_params_dict.items()))
-        assert downloader.get_full_url(test_url) == f"{test_url}?{key}={value}"
+        assert (
+            downloader2.get_full_url(test_url) == f"{test_url}?{key}={value}"
+        )
+
+    def test_generate_downloaders(self, downloaders):
+        downloader1 = Download.get_downloader()
+        downloader2 = Download.get_downloader("test")
+        self.assert_downloaders(downloader1, downloader2, downloaders)

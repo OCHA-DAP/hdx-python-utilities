@@ -10,6 +10,7 @@ import pytest
 from hdx.utilities.downloader import Download, DownloadError
 from hdx.utilities.retriever import Retrieve
 from hdx.utilities.useragent import UserAgent
+from tests.hdx.utilities.test_downloader import TestDownloader
 
 
 class TestRetriever:
@@ -329,3 +330,12 @@ class TestRetriever:
             )
             # Uses saved file
             assert headers == ["header1", "header2", "header3", "header4"]
+
+    def test_generate_retrievers(self, downloaders, dirs, fallback_dir):
+        saved_dir, temp_dir = dirs
+        Retrieve.generate_retrievers(fallback_dir, saved_dir, temp_dir)
+        downloader1 = Retrieve.get_retriever().downloader
+        downloader2 = Retrieve.get_retriever("test").downloader
+        TestDownloader.assert_downloaders(
+            downloader1, downloader2, downloaders
+        )
