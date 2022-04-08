@@ -6,11 +6,11 @@ from os.path import join
 from shutil import rmtree
 
 import pytest
+from test_downloader import TestDownloader
 
 from hdx.utilities.downloader import Download, DownloadError
 from hdx.utilities.retriever import Retrieve
 from hdx.utilities.useragent import UserAgent
-from tests.hdx.utilities.test_downloader import TestDownloader
 
 
 class TestRetriever:
