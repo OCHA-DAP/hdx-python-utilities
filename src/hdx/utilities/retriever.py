@@ -2,7 +2,7 @@ import logging
 from os import mkdir
 from os.path import join
 from shutil import rmtree
-from typing import Any, Iterator, List, Mapping, Optional, Tuple, Union
+from typing import Any, Iterator, List, Optional, Tuple, Union
 
 from hdx.utilities.base_downloader import BaseDownload, DownloadError
 from hdx.utilities.downloader import Download
