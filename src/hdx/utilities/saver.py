@@ -1,7 +1,7 @@
 """Saving utilities for YAML, JSON etc."""
 import json
 from collections import OrderedDict
-from typing import Any, Dict
+from typing import Any
 
 from ruamel.yaml import (
     YAML,
@@ -49,8 +49,8 @@ representers = {
 }
 
 
-def save_str_to_file(string: str, path: str, encoding: str = "utf-8") -> None:
-    """Save string to file
+def save_text(string: str, path: str, encoding: str = "utf-8") -> None:
+    """Save text string to file
 
     Args:
         string (str): String to save
@@ -65,7 +65,7 @@ def save_str_to_file(string: str, path: str, encoding: str = "utf-8") -> None:
 
 
 def save_yaml(
-    dictionary: Dict,
+    object: Any,
     path: str,
     encoding: str = "utf-8",
     pretty: bool = False,
@@ -74,7 +74,7 @@ def save_yaml(
     """Save dictionary to YAML file preserving order if it is an OrderedDict
 
     Args:
-        dictionary (Dict): Python dictionary to save
+        object (Any): Python object to save
         path (str): Path to YAML file
         encoding (str): Encoding of file. Defaults to utf-8.
         pretty (bool): Whether to pretty print. Defaults to False.
@@ -97,11 +97,11 @@ def save_yaml(
         yaml.representer.add_representer(
             type(None), representer.represent_none
         )
-        yaml.dump(dictionary, f)
+        yaml.dump(object, f)
 
 
 def save_json(
-    dictionary: Dict,
+    object: Any,
     path: str,
     encoding: str = "utf-8",
     pretty: bool = False,
@@ -110,7 +110,7 @@ def save_json(
     """Save dictionary to JSON file preserving order if it is an OrderedDict
 
     Args:
-        dictionary (Dict): Python dictionary to save
+        object (Any): Python object to save
         path (str): Path to JSON file
         encoding (str): Encoding of file. Defaults to utf-8.
         pretty (bool): Whether to pretty print. Defaults to False.
@@ -127,7 +127,7 @@ def save_json(
             indent = None
             separators = (", ", ": ")
         json.dump(
-            dictionary,
+            object,
             f,
             indent=indent,
             sort_keys=sortkeys,

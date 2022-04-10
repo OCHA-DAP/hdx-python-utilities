@@ -2,7 +2,7 @@
 
 import json
 from os import linesep
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 
 from ruamel.yaml import YAML
 
@@ -16,7 +16,7 @@ class LoadError(Exception):
     pass
 
 
-def load_file_to_str(
+def load_text(
     path: str,
     encoding: str = "utf-8",
     strip: bool = False,
@@ -46,7 +46,7 @@ def load_file_to_str(
     return string
 
 
-def load_yaml(path: str, encoding: str = "utf-8") -> Dict:
+def load_yaml(path: str, encoding: str = "utf-8") -> Any:
     """Load YAML file into an ordered dictionary
 
     Args:
@@ -54,14 +54,14 @@ def load_yaml(path: str, encoding: str = "utf-8") -> Dict:
         encoding (str): Encoding of file. Defaults to utf-8.
 
     Returns:
-        Dict: Ordered dictionary containing loaded YAML file
+        Any: The data from the YAML file
     """
     with open(path, encoding=encoding) as f:
         yaml = YAML()
-        yamldict = yaml.load(f.read())
-    if not yamldict:
+        yamlobj = yaml.load(f.read())
+    if not yamlobj:
         raise (LoadError(f"YAML file: {path} is empty!"))
-    return yamldict
+    return yamlobj
 
 
 def load_json(path: str, encoding: str = "utf-8") -> Dict:
@@ -72,17 +72,18 @@ def load_json(path: str, encoding: str = "utf-8") -> Dict:
         encoding (str): Encoding of file. Defaults to utf-8.
 
     Returns:
-        Dict: Ordered dictionary containing loaded JSON file
+        Any: The data from the JSON file
     """
     with open(path, encoding=encoding) as f:
-        jsondict = json.loads(f.read())
-    if not jsondict:
+        jsonobj = json.loads(f.read())
+    if not jsonobj:
         raise (LoadError(f"JSON file: {path} is empty!"))
-    return jsondict
+    return jsonobj
 
 
 def load_and_merge_yaml(paths: List[str], encoding: str = "utf-8") -> Dict:
-    """Load multiple YAML files and merge into one dictionary
+    """Load multiple YAML files that are in dictionary form and merge into one
+    dictionary
 
     Args:
         paths (List[str]): Paths to YAML files
@@ -97,7 +98,8 @@ def load_and_merge_yaml(paths: List[str], encoding: str = "utf-8") -> Dict:
 
 
 def load_and_merge_json(paths: List[str], encoding: str = "utf-8") -> Dict:
-    """Load multiple JSON files and merge into one dictionary
+    """Load multiple JSON files that are in dictionary form and merge into one
+    dictionary
 
     Args:
         paths (List[str]): Paths to JSON files
@@ -114,7 +116,7 @@ def load_and_merge_json(paths: List[str], encoding: str = "utf-8") -> Dict:
 def load_yaml_into_existing_dict(
     data: dict, path: str, encoding: str = "utf-8"
 ) -> Dict:
-    """Merge YAML file into existing dictionary
+    """Merge YAML file that is in dictionary form into existing dictionary
 
     Args:
         data (dict): Dictionary to merge into
@@ -131,7 +133,7 @@ def load_yaml_into_existing_dict(
 def load_json_into_existing_dict(
     data: dict, path: str, encoding: str = "utf-8"
 ) -> Dict:
-    """Merge JSON file into existing dictionary
+    """Merge JSON file that is in dictionary form into existing dictionary
 
     Args:
         data (dict): Dictionary to merge into

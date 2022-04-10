@@ -6,7 +6,7 @@ from tempfile import gettempdir
 
 import pytest
 
-from hdx.utilities.loader import load_file_to_str
+from hdx.utilities.loader import load_text
 from hdx.utilities.path import (
     get_filename_extension_from_url,
     get_filename_from_url,
@@ -132,7 +132,7 @@ class TestPath:
             tempfolder, iterator, "iso3"
         ):
             assert info["folder"] == expected_dir
-            expected_batch = load_file_to_str(expected_batch_file, strip=True)
+            expected_batch = load_text(expected_batch_file, strip=True)
             result.append(nextdict)
         assert result == iterator
         assert expected_batch == info["batch"]
@@ -145,7 +145,7 @@ class TestPath:
         ):
             assert exists(info["folder"]) is True
             assert info["folder"] == expected_dir
-            expected_batch = load_file_to_str(expected_batch_file, strip=True)
+            expected_batch = load_text(expected_batch_file, strip=True)
             result.append(nextdict)
         assert result == iterator[1:]
         assert expected_batch == info["batch"]
@@ -234,7 +234,7 @@ class TestPath:
             found = True
         assert found is False
         assert exists(expected_dir) is True
-        batch = load_file_to_str(expected_batch_file, strip=True)
+        batch = load_text(expected_batch_file, strip=True)
         assert batch == start_batch
         monkeypatch.delenv("WHERETOSTART")
 
@@ -244,7 +244,7 @@ class TestPath:
             found = True
         assert found is False
         assert exists(expected_dir) is True
-        batch = load_file_to_str(expected_batch_file, strip=True)
+        batch = load_text(expected_batch_file, strip=True)
         assert batch == start_batch
         monkeypatch.delenv("WHERETOSTART")
 

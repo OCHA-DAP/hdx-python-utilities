@@ -7,7 +7,10 @@ from email.mime.text import MIMEText
 from os.path import expanduser, join
 from typing import Any, List, Optional, Union
 
-from email_validator import validate_email
+try:
+    from email_validator import validate_email
+except ImportError:
+    validate_email = None
 
 from hdx.utilities.loader import load_json, load_yaml
 
@@ -167,6 +170,8 @@ class Email:
         """
         if isinstance(recipients, str):
             recipients = [recipients]
+        if validate_email is None:
+            return recipients
         normalised_recipients = list()
         for recipient in recipients:
             v = validate_email(

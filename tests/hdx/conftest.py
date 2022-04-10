@@ -4,6 +4,8 @@ from os.path import join
 
 import pytest
 
+from hdx.utilities.downloader import Download
+
 
 @pytest.fixture(scope="session")
 def fixturesfolder():
@@ -49,3 +51,19 @@ def mocksmtp(monkeypatch):
     monkeypatch.setattr(smtplib, "SMTP_SSL", MockSMTPSSL)
     monkeypatch.setattr(smtplib, "LMTP", MockLMTP)
     monkeypatch.setattr(smtplib, "SMTP", MockSMTP)
+
+
+@pytest.fixture(scope="function")
+def downloaders():
+    custom_user_agent = "custom"
+    extra_params_dict = {"key1": "val1"}
+    custom_configs = {
+        "test": {
+            "user_agent": custom_user_agent,
+            "basic_auth": "dXNlcjpwYXNz",
+            "extra_params_dict": extra_params_dict,
+        }
+    }
+    user_agent = "test"
+    Download.generate_downloaders(custom_configs, user_agent=user_agent)
+    return user_agent, custom_user_agent, extra_params_dict
