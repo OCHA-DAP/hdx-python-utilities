@@ -1,7 +1,6 @@
 """Dictionary Tests"""
 from os import remove
 from os.path import join
-from tempfile import gettempdir
 
 import pytest
 
