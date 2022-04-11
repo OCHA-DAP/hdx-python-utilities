@@ -37,9 +37,9 @@ def get_frictionless_resource(
         sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
         fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
         http_session (Session): Session object to use. Defaults to downloader session.
-        field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
-        field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
-        field_missing_values (List[Any]): What gets treated as null. Defaults to [""].
+        default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
+        float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
+        null_values (List[Any]): Values that will return None. Defaults to [] (no values).
         dialect (Dialect): This can be set to override the above. See Frictionless docs.
         detector (Detector): This can be set to override the above. See Frictionless docs.
         layout (Layout): This can be set to override the above. See Frictionless docs.
@@ -78,12 +78,12 @@ def get_frictionless_resource(
         default = None
     else:
         default = "string"
-    field_type = kwargs.pop("field_type", default)
-    detector._Detector__field_type = field_type
-    field_float_numbers = kwargs.pop("field_float_numbers", True)
-    detector._Detector__field_float_numbers = field_float_numbers
-    field_missing_values = kwargs.pop("field_missing_values", [""])
-    detector._Detector__field_missing_values = field_missing_values
+    default_type = kwargs.pop("default_type", default)
+    detector._Detector__field_type = default_type
+    float_numbers = kwargs.pop("float_numbers", True)
+    detector._Detector__field_float_numbers = float_numbers
+    null_values = kwargs.pop("null_values", [])
+    detector._Detector__field_missing_values = null_values
     layout = kwargs.get("layout", frictionless.Layout())
     has_header = kwargs.pop("has_header", None)
     headers = kwargs.pop("headers", None)
