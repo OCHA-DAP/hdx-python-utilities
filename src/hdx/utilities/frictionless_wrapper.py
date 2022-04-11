@@ -25,6 +25,7 @@ def get_frictionless_resource(
         session (Optional[requests.Session]): Session to use. Defaults to not setting a session.
         data (Optional[Any]): Data to parse. Defaults to None.
         **kwargs:
+        has_header (bool): Whether data has a header. Defaults to True.
         headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers
         file_type (Optional[str]): Type of file. Defaults to inferring.
         format (Optional[str]): Type of file. Defaults to inferring.
@@ -33,7 +34,7 @@ def get_frictionless_resource(
         delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
         skip_initial_space (bool): Ignore whitespace straight after delimiter. Defaults to False.
         sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
-        fill_merged_cells (bool): Whetehr to fill merged cells. Defaults to True.
+        fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
         http_session (Session): Session object to use. Defaults to downloader session.
         field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
         field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
@@ -80,6 +81,7 @@ def get_frictionless_resource(
     field_float_numbers = kwargs.pop("field_float_numbers", True)
     detector._Detector__field_float_numbers = field_float_numbers
     layout = kwargs.get("layout", frictionless.Layout())
+    has_header = kwargs.pop("has_header", None)
     headers = kwargs.pop("headers", None)
     if headers is not None:
         if isinstance(headers, int):
@@ -88,7 +90,11 @@ def get_frictionless_resource(
             layout.header_rows = headers
         else:
             detector._Detector__field_names = headers
-            layout.header = False
+            if has_header is None:
+                has_header = False
+    if has_header is None:
+        has_header = True
+    layout.header = has_header
     if ignore_blank_rows:
         if layout.skip_rows is None:
             layout.skip_rows = ["<blank>"]
