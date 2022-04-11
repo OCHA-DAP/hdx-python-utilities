@@ -1,7 +1,6 @@
 """Dictionary Tests"""
 from os import remove
 from os.path import join
-from tempfile import gettempdir
 
 import pytest
 
@@ -23,6 +22,7 @@ from hdx.utilities.dictandlist import (
     read_list_from_csv,
     write_list_to_csv,
 )
+from hdx.utilities.path import temp_dir
 
 
 class TestDictAndList:
@@ -266,28 +266,127 @@ class TestDictAndList:
 
     def test_read_write_list_to_csv(self):
         list_of_lists = [[1, 2, 3, "a"], [4, 5, 6, "b"], [7, 8, 9, "c"]]
-        folder = gettempdir()
-        filename = "test_read_write_list_to_csv.csv"
-        filepath = join(folder, filename)
-        write_list_to_csv(
-            filepath, list_of_lists, headers=["h1", "h2", "h3", "h4"]
-        )
-        newll = read_list_from_csv(filepath)
-        newld = read_list_from_csv(filepath, headers=1, dict_form=True)
-        remove(filepath)
-        assert newll == [
-            ["h1", "h2", "h3", "h4"],
-            ["1", "2", "3", "a"],
-            ["4", "5", "6", "b"],
-            ["7", "8", "9", "c"],
-        ]
-        assert newld == [
-            {"h1": "1", "h2": "2", "h4": "a", "h3": "3"},
-            {"h1": "4", "h2": "5", "h4": "b", "h3": "6"},
-            {"h1": "7", "h2": "8", "h4": "c", "h3": "9"},
-        ]
-        with pytest.raises(ValueError):
-            read_list_from_csv(filepath, dict_form=True)
+        with temp_dir(
+            "TestReadWriteList",
+            delete_on_success=True,
+            delete_on_failure=False,
+        ) as tempdir:
+            filename = "test_read_write_list_to_csv.csv"
+            filepath = join(tempdir, filename)
+            write_list_to_csv(
+                filepath, list_of_lists, headers=["h1", "h2", "h3", "h4"]
+            )
+            newll = read_list_from_csv(filepath)
+            newld = read_list_from_csv(filepath, headers=1, dict_form=True)
+            remove(filepath)
+            assert newll == [
+                ["h1", "h2", "h3", "h4"],
+                ["1", "2", "3", "a"],
+                ["4", "5", "6", "b"],
+                ["7", "8", "9", "c"],
+            ]
+            assert newld == [
+                {"h1": "1", "h2": "2", "h4": "a", "h3": "3"},
+                {"h1": "4", "h2": "5", "h4": "b", "h3": "6"},
+                {"h1": "7", "h2": "8", "h4": "c", "h3": "9"},
+            ]
+            write_list_to_csv(
+                filepath, list_of_lists, headers=["h1", "h2", "h3"]
+            )
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [
+                ["h1", "h2", "h3"],
+                ["1", "2", "3"],
+                ["4", "5", "6"],
+                ["7", "8", "9"],
+            ]
+            write_list_to_csv(
+                filepath,
+                list_of_lists,
+                headers=["h1", "h3", "h4"],
+                columns=[1, 3, 4],
+            )
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [
+                ["h1", "h3", "h4"],
+                ["1", "3", "a"],
+                ["4", "6", "b"],
+                ["7", "9", "c"],
+            ]
+
+            list_of_lists = [
+                ["1", "2", "3", "a"],
+                ["4", "5", "6", "b"],
+                [7, 8, 9, "c"],
+            ]
+            write_list_to_csv(filepath, list_of_lists)
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [
+                ["1", "2", "3", "a"],
+                ["4", "5", "6", "b"],
+                ["7", "8", "9", "c"],
+            ]
+            write_list_to_csv(filepath, list_of_lists, headers=2)
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [
+                ["4", "5", "6", "b"],
+                ["7", "8", "9", "c"],
+            ]
+
+            list_of_dicts = [
+                {"h1": 1, "h2": 2, "h3": 3, "h4": "a"},
+                {"h1": 4, "h2": 5, "h3": 6, "h4": "b"},
+                {"h1": 7, "h2": 8, "h3": 9, "h4": "c"},
+            ]
+            write_list_to_csv(
+                filepath, list_of_dicts, headers=["h1", "h2", "h3", "h4"]
+            )
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [
+                ["h1", "h2", "h3", "h4"],
+                ["1", "2", "3", "a"],
+                ["4", "5", "6", "b"],
+                ["7", "8", "9", "c"],
+            ]
+            write_list_to_csv(filepath, list_of_dicts)
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [
+                ["h1", "h2", "h3", "h4"],
+                ["1", "2", "3", "a"],
+                ["4", "5", "6", "b"],
+                ["7", "8", "9", "c"],
+            ]
+            write_list_to_csv(filepath, list_of_dicts, headers=2)
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [
+                ["1", "2", "3", "a"],
+                ["4", "5", "6", "b"],
+                ["7", "8", "9", "c"],
+            ]
+            write_list_to_csv(
+                filepath,
+                list_of_dicts,
+                headers=["h1", "h3", "h4"],
+                columns=["h1", "h3", "h4"],
+            )
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [
+                ["h1", "h3", "h4"],
+                ["1", "3", "a"],
+                ["4", "6", "b"],
+                ["7", "9", "c"],
+            ]
+
+            with pytest.raises(ValueError):
+                read_list_from_csv(filepath, dict_form=True)
 
     def test_args_to_dict(self):
         args = "a=1,big=hello,1=3"
