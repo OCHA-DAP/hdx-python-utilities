@@ -554,7 +554,7 @@ class TestDownloader:
             )
             assert headers == expected_headers
             blank_expected = copy.deepcopy(expected[1:])
-            blank_expected[2][0] = ""
+            blank_expected[2][0] = None
             assert list(iterator) == blank_expected
             headers, iterator = downloader.get_tabular_rows(
                 fixtureprocessurlblank, ignore_blank_rows=False
@@ -676,7 +676,7 @@ class TestDownloader:
                     "la": "lala",
                 },
                 {
-                    "la1": "",
+                    "la1": None,
                     "ha1": "2",
                     "ba1": "6.5",
                     "ma1": "'n/a'",
