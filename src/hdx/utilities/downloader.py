@@ -612,6 +612,7 @@ class Download(BaseDownload):
             columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
             field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
+            field_missing_values (List[Any]): What gets treated as null. Defaults to [""].
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
             detector (Detector): This can be set to override the above. See Frictionless docs.
             layout (Layout): This can be set to override the above. See Frictionless docs.
@@ -681,6 +682,7 @@ class Download(BaseDownload):
             columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
             field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
+            field_missing_values (List[Any]): What gets treated as null. Defaults to [""].
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
             detector (Detector): This can be set to override the above. See Frictionless docs.
             layout (Layout): This can be set to override the above. See Frictionless docs.
@@ -773,6 +775,7 @@ class Download(BaseDownload):
             columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
             field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
+            field_missing_values (List[Any]): What gets treated as null. Defaults to [""].
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
             detector (Detector): This can be set to override the above. See Frictionless docs.
             layout (Layout): This can be set to override the above. See Frictionless docs.
@@ -841,6 +844,7 @@ class Download(BaseDownload):
             columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
             field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
+            field_missing_values (List[Any]): What gets treated as null. Defaults to [""].
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
             detector (Detector): This can be set to override the above. See Frictionless docs.
             layout (Layout): This can be set to override the above. See Frictionless docs.
@@ -900,6 +904,7 @@ class Download(BaseDownload):
             columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
             field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
+            field_missing_values (List[Any]): What gets treated as null. Defaults to [""].
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
             detector (Detector): This can be set to override the above. See Frictionless docs.
             layout (Layout): This can be set to override the above. See Frictionless docs.
@@ -963,6 +968,7 @@ class Download(BaseDownload):
             columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
             field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
+            field_missing_values (List[Any]): What gets treated as null. Defaults to [""].
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
             detector (Detector): This can be set to override the above. See Frictionless docs.
             layout (Layout): This can be set to override the above. See Frictionless docs.
@@ -1031,6 +1037,7 @@ class Download(BaseDownload):
             columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
             field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
+            field_missing_values (List[Any]): What gets treated as null. Defaults to [""].
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
             detector (Detector): This can be set to override the above. See Frictionless docs.
             layout (Layout): This can be set to override the above. See Frictionless docs.

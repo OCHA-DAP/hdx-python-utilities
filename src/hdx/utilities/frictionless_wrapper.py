@@ -39,6 +39,7 @@ def get_frictionless_resource(
         http_session (Session): Session object to use. Defaults to downloader session.
         field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
         field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
+        field_missing_values (List[Any]): What gets treated as null. Defaults to [""].
         dialect (Dialect): This can be set to override the above. See Frictionless docs.
         detector (Detector): This can be set to override the above. See Frictionless docs.
         layout (Layout): This can be set to override the above. See Frictionless docs.
@@ -81,6 +82,8 @@ def get_frictionless_resource(
     detector._Detector__field_type = field_type
     field_float_numbers = kwargs.pop("field_float_numbers", True)
     detector._Detector__field_float_numbers = field_float_numbers
+    field_missing_values = kwargs.pop("field_missing_values", [""])
+    detector._Detector__field_missing_values = field_missing_values
     layout = kwargs.get("layout", frictionless.Layout())
     has_header = kwargs.pop("has_header", None)
     headers = kwargs.pop("headers", None)
