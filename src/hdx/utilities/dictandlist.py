@@ -386,10 +386,10 @@ def read_list_from_csv(
     dict_form: bool = False,
     **kwargs: Any,
 ) -> List[ListDict]:
-    """Read a list of rows in dict or list form from a csv. The headers argument is either a row
-       number or list of row numbers (in case of multi-line headers) to be considered as headers
-       (rows start counting at 1), or the actual headers defined a list of strings. If not set,
-       all rows will be treated as containing values.
+    """Read a list of rows in dict or list form from a csv. The headers argument is
+    either a row number or list of row numbers (in case of multi-line headers) to be
+    considered as headers (rows start counting at 1), or the actual headers defined as
+    a list of strings. If not set, all rows will be treated as containing values.
 
     Args:
         url (str): URL or path to read from
@@ -420,29 +420,58 @@ def read_list_from_csv(
 def write_list_to_csv(
     filepath: str,
     rows: List[ListDict],
-    headers: Union[int, ListTuple[int], ListTuple[str], None] = None,
+    headers: Union[int, ListTuple[str], None] = None,
+    columns: Union[ListTuple[int], ListTuple[str], None] = None,
 ) -> None:
     """Write a list of rows in dict or list form to a csv. (The headers argument is
-    either a row number or list of row numbers (in case of multi-line headers) to be
-    considered as headers (rows start counting at 1), or the actual headers defined a
+    either a row number (rows start counting at 1), or the actual headers defined as a
     list of strings. If not set, all rows will be treated as containing values.)
 
     Args:
         filepath (str): Path to write to
         rows (List[ListDict]): List of rows in dict or list form
-        headers (Union[int, ListTuple[int], ListTuple[str], None]): Headers to write. Defaults to None.
+        headers (Union[int, ListTuple[str], None]): Headers to write. Defaults to None.
+        columns (Union[ListTuple[int], ListTuple[str], None]): Columns to write. Defaults to all.
 
     Returns:
         None
 
     """
     if len(rows) != 0:
-        if isinstance(rows[0], dict):
+        row = rows[0]
+        if isinstance(row, dict):
             has_header = True
+            if columns:
+                newrows = list()
+                for row in rows:
+                    newrow = dict()
+                    for column in columns:
+                        newrow[column] = row[column]
+                    newrows.append(newrow)
+                rows = newrows
+                if headers is None:
+                    headers = columns
         else:
+            if headers is None:
+                headers = 1
+            if isinstance(headers, int):
+                rowno = headers
+                headers = rows[rowno - 1]
+                rows = rows[rowno:]
             has_header = False
+            if columns:
+                newrows = list()
+                for row in rows:
+                    newrow = list()
+                    for column in columns:
+                        newrow.append(row[column - 1])
+                    newrows.append(newrow)
+                rows = newrows
         resource = get_frictionless_resource(
-            data=rows, infer_types=True, has_header=has_header, headers=headers
+            data=rows,
+            infer_types=True,
+            has_header=has_header,
+            headers=headers,
         )
         resource.write(filepath, format="csv")
         resource.close()

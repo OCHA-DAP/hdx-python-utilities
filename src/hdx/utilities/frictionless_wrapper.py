@@ -27,6 +27,7 @@ def get_frictionless_resource(
         **kwargs:
         has_header (bool): Whether data has a header. Defaults to True.
         headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers
+        columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
         file_type (Optional[str]): Type of file. Defaults to inferring.
         format (Optional[str]): Type of file. Defaults to inferring.
         encoding (Optional[str]): Type of encoding. Defaults to inferring.
@@ -95,12 +96,14 @@ def get_frictionless_resource(
     if has_header is None:
         has_header = True
     layout.header = has_header
+    columns = kwargs.pop("columns", None)
+    if columns:
+        layout.pick_fields = columns
     if ignore_blank_rows:
         if layout.skip_rows is None:
             layout.skip_rows = ["<blank>"]
         elif "<blank>" not in layout.skip_rows:
             layout.skip_rows.append("<blank>")
-        kwargs["layout"] = layout
     kwargs["dialect"] = dialect
     kwargs["detector"] = detector
     kwargs["layout"] = layout

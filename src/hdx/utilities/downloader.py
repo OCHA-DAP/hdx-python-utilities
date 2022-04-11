@@ -597,7 +597,9 @@ class Download(BaseDownload):
             ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
             infer_types (bool): Whether to infer types. Defaults to False (strings).
             **kwargs:
+            has_header (bool): Whether data has a header. Defaults to True.
             headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers
+            columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
             format (Optional[str]): Type of file. Defaults to inferring.
             file_type (Optional[str]): Type of file. Defaults to inferring.
             encoding (Optional[str]): Type of encoding. Defaults to inferring.
@@ -607,6 +609,7 @@ class Download(BaseDownload):
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
             fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
+            columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
             field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
@@ -675,6 +678,7 @@ class Download(BaseDownload):
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
             fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
+            columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
             field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
@@ -766,6 +770,7 @@ class Download(BaseDownload):
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
             fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
+            columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
             field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
@@ -833,6 +838,7 @@ class Download(BaseDownload):
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
             fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
+            columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
             field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
@@ -891,6 +897,7 @@ class Download(BaseDownload):
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
             fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
+            columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
             field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
@@ -953,6 +960,7 @@ class Download(BaseDownload):
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
             fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
+            columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
             field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
@@ -1020,6 +1028,7 @@ class Download(BaseDownload):
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
             fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
+            columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
             field_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             field_float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
