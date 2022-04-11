@@ -628,7 +628,7 @@ class Download(BaseDownload):
                 url, ignore_blank_rows, infer_types, self.session, **kwargs
             )
         except FrictionlessException as e:
-            raise DownloadError("Download Error!") from e
+            raise DownloadError(str(e)) from e
         return self.response
 
     def get_tabular_rows(
