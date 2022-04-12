@@ -114,7 +114,7 @@ def get_frictionless_resource(
     if http_session is not None:
         frictionless.system.use_http_session(http_session)
     if url:
-        resource = frictionless.Resource(url, **kwargs)
+        resource = frictionless.Resource(path=url, **kwargs)
     else:
         resource = frictionless.Resource(data=data, **kwargs)
     resource.open()
