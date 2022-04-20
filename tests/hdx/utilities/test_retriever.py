@@ -333,9 +333,13 @@ class TestRetriever:
 
     def test_generate_retrievers(self, downloaders, dirs, fallback_dir):
         saved_dir, temp_dir = dirs
-        Retrieve.generate_retrievers(fallback_dir, saved_dir, temp_dir)
+        Retrieve.generate_retrievers(
+            fallback_dir, saved_dir, temp_dir, ignore=("test2",)
+        )
         downloader1 = Retrieve.get_retriever().downloader
         downloader2 = Retrieve.get_retriever("test").downloader
         TestDownloader.assert_downloaders(
             downloader1, downloader2, downloaders
         )
+        downloader3 = Retrieve.get_retriever("test2").downloader
+        assert downloader3 == downloader1

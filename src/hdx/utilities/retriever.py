@@ -307,6 +307,7 @@ class Retrieve(BaseDownload):
         temp_dir: str,
         save: bool = False,
         use_saved: bool = False,
+        ignore: ListTuple[str] = tuple(),
     ) -> None:
         """Generate retrievers. Retrievers are generated from downloaders so
         Download.generate_downloaders() needs to have been called first. Each retriever
@@ -319,12 +320,15 @@ class Retrieve(BaseDownload):
             temp_dir (str): Temporary directory for when data is not needed after downloading
             save (bool): Whether to save downloaded data. Defaults to False.
             use_saved (bool): Whether to use saved data. Defaults to False.
+            ignore (ListTuple[str]): Don't generate retrievers for these downloaders
 
         Returns:
             None
         """
         cls.retrievers = dict()
         for name, downloader in Download.downloaders.items():
+            if name in ignore:
+                continue
             cls.retrievers[name] = cls(
                 downloader, fallback_dir, saved_dir, temp_dir, save, use_saved
             )

@@ -62,7 +62,10 @@ def downloaders():
             "user_agent": custom_user_agent,
             "basic_auth": "dXNlcjpwYXNz",
             "extra_params_dict": extra_params_dict,
-        }
+        },
+        "test2": {
+            "user_agent": "lalala",
+        },
     }
     user_agent = "test"
     Download.generate_downloaders(custom_configs, user_agent=user_agent)
