@@ -1107,7 +1107,6 @@ class Download(BaseDownload):
 
         Args:
             custom_configs (Mapping[str, Mapping]): Optional dictionary of custom configurations.
-            auths (Mapping[str, Mapping]): Optional dictionary of authorisations
             user_agent (Optional[str]): User agent string. HDXPythonUtilities/X.X.X- is prefixed.
             user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.
             user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
