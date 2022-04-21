@@ -44,7 +44,7 @@ class Download(BaseDownload):
         user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
         use_env (bool): Whether to read environment variables. Defaults to True.
         fail_on_missing_file (bool): Raise an exception if any specified configuration files are missing. Defaults to True.
-        rate_limit (Optional[Dict]): Rate limiting to use as a dict with calls and period. Defaults to None.
+        rate_limit (Optional[Dict]): Rate limiting per host eg. {"calls": 1, "period": 0.1}. Defaults to None.
         **kwargs: See below
         auth (Tuple[str, str]): Authorisation information in tuple form (user, pass) OR
         basic_auth (str): Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
@@ -1112,7 +1112,7 @@ class Download(BaseDownload):
             user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
             use_env (bool): Whether to read environment variables. Defaults to True.
             fail_on_missing_file (bool): Raise an exception if any specified configuration files are missing. Defaults to True.
-            rate_limit (Optional[Dict]): Rate limiting to use as a dict with calls and period. Defaults to None.
+            rate_limit (Optional[Dict]): Rate limiting per host eg. {"calls": 1, "period": 0.1}. Defaults to None.
             **kwargs: See below
             auth (Tuple[str, str]): Authorisation information in tuple form (user, pass) OR
             basic_auth (str): Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR

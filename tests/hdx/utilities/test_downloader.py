@@ -14,6 +14,7 @@ from hdx.utilities.base_downloader import DownloadError
 from hdx.utilities.downloader import Download
 from hdx.utilities.session import SessionError
 from hdx.utilities.useragent import UserAgent
+from tests.hdx.conftest import assert_downloaders
 
 
 @contextmanager
@@ -784,23 +785,7 @@ class TestDownloader:
             "c": 2,
         }
 
-    @staticmethod
-    def assert_downloaders(downloader1, downloader2, params):
-        user_agent, custom_user_agent, extra_params_dict = params
-        test_url = "http://www.lalala.com/lala"
-        assert downloader1.session.headers["User-Agent"].endswith(user_agent)
-        assert downloader1.session.auth is None
-        assert downloader1.get_full_url(test_url) == test_url
-        assert downloader2.session.headers["User-Agent"].endswith(
-            custom_user_agent
-        )
-        assert downloader2.session.auth == ("user", "pass")
-        key, value = next(iter(extra_params_dict.items()))
-        assert (
-            downloader2.get_full_url(test_url) == f"{test_url}?{key}={value}"
-        )
-
     def test_generate_downloaders(self, downloaders):
         downloader1 = Download.get_downloader()
         downloader2 = Download.get_downloader("test")
-        self.assert_downloaders(downloader1, downloader2, downloaders)
+        assert_downloaders(downloader1, downloader2, downloaders)

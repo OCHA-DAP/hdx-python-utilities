@@ -6,11 +6,11 @@ from os.path import join
 from shutil import rmtree
 
 import pytest
-from test_downloader import TestDownloader
 
 from hdx.utilities.downloader import Download, DownloadError
 from hdx.utilities.retriever import Retrieve
 from hdx.utilities.useragent import UserAgent
+from tests.hdx.conftest import assert_downloaders
 
 
 class TestRetriever:
@@ -38,6 +38,68 @@ class TestRetriever:
         rmtree(temp_dir, ignore_errors=True)
         mkdir(temp_dir)
         return saved_dir, temp_dir
+
+    def test_get_filename(self):
+        url = "http://api.worldbank.org/v2/en/indicator/SP.POP.TOTL?downloadformat=excel&dataformat=list"
+        assert Retrieve.get_filename(url) == "SP.POP.TOTL"
+        assert Retrieve.get_filename(url, "hello.xlsx") == "hello.xlsx"
+        assert (
+            Retrieve.get_filename(url, None, format="xlsx")
+            == "SP.POP.TOTL.xlsx"
+        )
+        assert (
+            Retrieve.get_filename(url, None, file_type="xlsx")
+            == "SP.POP.TOTL.xlsx"
+        )
+        assert (
+            Retrieve.get_filename(url, None, ("csv", "xls"))
+            == "SP.POP.TOTL.csv"
+        )
+        assert (
+            Retrieve.get_filename(
+                url, None, ("csv", "xls"), file_type="json", format="xlsx"
+            )
+            == "SP.POP.TOTL.xlsx"
+        )
+        url = "http://api.worldbank.org/v2/en/indicator/SP.POP.TOTL.xlsx?downloadformat=excel&dataformat=list"
+        assert Retrieve.get_filename(url) == "SP.POP.TOTL.xlsx"
+        assert Retrieve.get_filename(url, "hello.xlsx") == "hello.xlsx"
+        assert (
+            Retrieve.get_filename(url, None, format="xlsx")
+            == "SP.POP.TOTL.xlsx"
+        )
+        assert (
+            Retrieve.get_filename(url, None, file_type="xlsx")
+            == "SP.POP.TOTL.xlsx"
+        )
+        assert (
+            Retrieve.get_filename(url, None, ("csv", "xlsx"))
+            == "SP.POP.TOTL.xlsx"
+        )
+        assert (
+            Retrieve.get_filename(
+                url, None, ("csv", "xls"), file_type="json", format="xlsx"
+            )
+            == "SP.POP.TOTL.xlsx"
+        )
+        assert (
+            Retrieve.get_filename(url, None, format="xls")
+            == "SP.POP.TOTL.xlsx.xls"
+        )
+        assert (
+            Retrieve.get_filename(url, None, file_type="xls")
+            == "SP.POP.TOTL.xlsx.xls"
+        )
+        assert (
+            Retrieve.get_filename(url, None, ("csv", "xls"))
+            == "SP.POP.TOTL.xlsx.csv"
+        )
+        assert (
+            Retrieve.get_filename(
+                url, None, ("csv", "xls"), file_type="json", format="xls"
+            )
+            == "SP.POP.TOTL.xlsx.xls"
+        )
 
     def test_error(self, dirs, retrieverfolder, fallback_dir):
         saved_dir, temp_dir = dirs
@@ -338,8 +400,6 @@ class TestRetriever:
         )
         downloader1 = Retrieve.get_retriever().downloader
         downloader2 = Retrieve.get_retriever("test").downloader
-        TestDownloader.assert_downloaders(
-            downloader1, downloader2, downloaders
-        )
+        assert_downloaders(downloader1, downloader2, downloaders)
         downloader3 = Retrieve.get_retriever("test2").downloader
         assert downloader3 == downloader1

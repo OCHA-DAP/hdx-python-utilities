@@ -1,6 +1,6 @@
 import logging
 from os import mkdir
-from os.path import join
+from os.path import join, splitext
 from shutil import rmtree
 from typing import Any, Iterator, List, Optional, Tuple, Union
 
@@ -68,6 +68,36 @@ class Retrieve(BaseDownload):
             return f"{url[:100]}..."
         return url
 
+    @staticmethod
+    def get_filename(
+        url: str,
+        filename: Optional[str] = None,
+        extensions_from_fn: Tuple[str, ...] = tuple(),
+        **kwargs: Any,
+    ) -> str:
+        if filename:
+            return filename
+        filename = get_filename_from_url(url)
+        extensions = list()
+        extension = kwargs.get("format")
+        if extension:
+            extensions.append(extension)
+        extension = kwargs.get("file_type")
+        if extension:
+            extensions.append(extension)
+        if extensions_from_fn:
+            extensions.extend(extensions_from_fn)
+        if not extensions:
+            return filename
+        first_ext = f".{extensions[0].lower()}"
+        _, extension = splitext(filename)
+        if not extension:
+            return f"{filename}{first_ext}"
+        for candidate in extensions:
+            if candidate == extension[1:]:
+                return filename
+        return f"{filename}{first_ext}"
+
     def download_file(
         self,
         url: str,
@@ -89,8 +119,7 @@ class Retrieve(BaseDownload):
             str: Path to downloaded file
 
         """
-        if not filename:
-            filename = get_filename_from_url(url)
+        filename = self.get_filename(url, filename, **kwargs)
         if not logstr:
             logstr = filename
         if self.save:
@@ -140,8 +169,7 @@ class Retrieve(BaseDownload):
             str: The text from the file
 
         """
-        if not filename:
-            filename = get_filename_from_url(url)
+        filename = self.get_filename(url, filename, **kwargs)
         if not logstr:
             logstr = filename
         saved_path = join(self.saved_dir, filename)
@@ -188,8 +216,7 @@ class Retrieve(BaseDownload):
             Any: The data from the YAML file
 
         """
-        if not filename:
-            filename = get_filename_from_url(url)
+        filename = self.get_filename(url, filename, ("yaml", "yml"), **kwargs)
         if not logstr:
             logstr = filename
         saved_path = join(self.saved_dir, filename)
@@ -236,8 +263,7 @@ class Retrieve(BaseDownload):
             Any: The data from the JSON file
 
         """
-        if not filename:
-            filename = get_filename_from_url(url)
+        filename = self.get_filename(url, filename, ("json",), **kwargs)
         if not logstr:
             logstr = filename
         saved_path = join(self.saved_dir, filename)
