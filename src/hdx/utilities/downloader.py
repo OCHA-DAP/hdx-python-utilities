@@ -375,29 +375,22 @@ class Download(BaseDownload):
     def download_file(
         self,
         url: str,
-        folder: Optional[str] = None,
-        filename: Optional[str] = None,
-        path: Optional[str] = None,
-        overwrite: bool = False,
-        post: bool = False,
-        parameters: Optional[Dict] = None,
-        timeout: Optional[float] = None,
-        headers: Optional[Dict] = None,
-        encoding: Optional[str] = None,
+        **kwargs: Any,
     ) -> str:
         """Download file from url and store in provided folder or temporary folder if no folder supplied
 
         Args:
             url (str): URL or path to download
-            folder (Optional[str]): Folder to download it to. Defaults to None.
-            filename (Optional[str]): Filename to use for downloaded file. Defaults to None (derive from the url).
-            path (Optional[str]): Full path to use for downloaded file. Defaults to None (use folder and filename).
+            **kwargs: See below
+            folder (str): Folder to download it to. Defaults to temporary folder.
+            filename (str): Filename to use for downloaded file. Defaults to deriving from url.
+            path (str): Full path to use for downloaded file instead of folder and filename.
             overwrite (bool): Whether to overwrite existing file. Defaults to False.
             post (bool): Whether to use POST instead of GET. Defaults to False.
-            parameters (Optional[Dict]): Parameters to pass. Defaults to None.
-            timeout (Optional[float]): Timeout for connecting to URL. Defaults to None (no timeout).
-            headers (Optional[Dict]): Headers to pass. Defaults to None.
-            encoding (Optional[str]): Encoding to use for text response. Defaults to None (best guess).
+            parameters (Dict): Parameters to pass. Defaults to None.
+            timeout (float): Timeout for connecting to URL. Defaults to None (no timeout).
+            headers (Dict): Headers to pass. Defaults to None.
+            encoding (str): Encoding to use for text response. Defaults to None (best guess).
 
         Returns:
             str: Path of downloaded file
@@ -406,32 +399,31 @@ class Download(BaseDownload):
         self.setup(
             url,
             stream=True,
-            post=post,
-            parameters=parameters,
-            timeout=timeout,
-            headers=headers,
-            encoding=encoding,
+            post=kwargs.get("post", False),
+            parameters=kwargs.get("parameters"),
+            timeout=kwargs.get("timeout"),
+            headers=kwargs.get("headers"),
+            encoding=kwargs.get("encoding"),
         )
-        return self.stream_file(url, folder, filename, path, overwrite)
+        return self.stream_file(
+            url,
+            folder=kwargs.get("folder"),
+            filename=kwargs.get("filename"),
+            path=kwargs.get("path"),
+            overwrite=kwargs.get("overwrite", False),
+        )
 
-    def download(
-        self,
-        url: str,
-        post: bool = False,
-        parameters: Optional[Dict] = None,
-        timeout: Optional[float] = None,
-        headers: Optional[Dict] = None,
-        encoding: Optional[str] = None,
-    ) -> requests.Response:
+    def download(self, url: str, **kwargs: Any) -> requests.Response:
         """Download url
 
         Args:
             url (str): URL or path to download
+            **kwargs: See below
             post (bool): Whether to use POST instead of GET. Defaults to False.
-            parameters (Optional[Dict]): Parameters to pass. Defaults to None.
-            timeout (Optional[float]): Timeout for connecting to URL. Defaults to None (no timeout).
-            headers (Optional[Dict]): Headers to pass. Defaults to None.
-            encoding (Optional[str]): Encoding to use for text response. Defaults to None (best guess).
+            parameters (Dict): Parameters to pass. Defaults to None.
+            timeout (float): Timeout for connecting to URL. Defaults to None (no timeout).
+            headers (Dict): Headers to pass. Defaults to None.
+            encoding (str): Encoding to use for text response. Defaults to None (best guess).
 
         Returns:
             requests.Response: Response
@@ -440,11 +432,11 @@ class Download(BaseDownload):
         return self.setup(
             url,
             stream=False,
-            post=post,
-            parameters=parameters,
-            timeout=timeout,
-            headers=headers,
-            encoding=encoding,
+            post=kwargs.get("post", False),
+            parameters=kwargs.get("parameters"),
+            timeout=kwargs.get("timeout"),
+            headers=kwargs.get("headers"),
+            encoding=kwargs.get("encoding"),
         )
 
     def get_header(self, header: str) -> Any:
@@ -505,82 +497,61 @@ class Download(BaseDownload):
         """
         return self.response.json()
 
-    def download_text(
-        self,
-        url: str,
-        post: bool = False,
-        parameters: Optional[Dict] = None,
-        timeout: Optional[float] = None,
-        headers: Optional[Dict] = None,
-        encoding: Optional[str] = None,
-    ) -> str:
+    def download_text(self, url: str, **kwargs: Any) -> str:
         """Download url as text
 
         Args:
             url (str): URL or path to download
+            **kwargs: See below
             post (bool): Whether to use POST instead of GET. Defaults to False.
-            parameters (Optional[Dict]): Parameters to pass. Defaults to None.
-            timeout (Optional[float]): Timeout for connecting to URL. Defaults to None (no timeout).
-            headers (Optional[Dict]): Headers to pass. Defaults to None.
-            encoding (Optional[str]): Encoding to use for text response. Defaults to None (best guess).
+            parameters (Dict): Parameters to pass. Defaults to None.
+            timeout (float): Timeout for connecting to URL. Defaults to None (no timeout).
+            headers (Dict): Headers to pass. Defaults to None.
+            encoding (str): Encoding to use for text response. Defaults to None (best guess).
 
         Returns:
             str: Text content of download
 
         """
-        self.download(url, post, parameters, timeout, headers, encoding)
+        self.download(url, **kwargs)
         return self.get_text()
 
-    def download_yaml(
-        self,
-        url: str,
-        post: bool = False,
-        parameters: Optional[Dict] = None,
-        timeout: Optional[float] = None,
-        headers: Optional[Dict] = None,
-        encoding: Optional[str] = None,
-    ) -> Any:
+    def download_yaml(self, url: str, **kwargs: Any) -> Any:
         """Download url as YAML
 
         Args:
             url (str): URL or path to download
+            **kwargs: See below
             post (bool): Whether to use POST instead of GET. Defaults to False.
-            parameters (Optional[Dict]): Parameters to pass. Defaults to None.
-            timeout (Optional[float]): Timeout for connecting to URL. Defaults to None (no timeout).
-            headers (Optional[Dict]): Headers to pass. Defaults to None.
-            encoding (Optional[str]): Encoding to use for text response. Defaults to None (best guess).
+            parameters (Dict): Parameters to pass. Defaults to None.
+            timeout (float): Timeout for connecting to URL. Defaults to None (no timeout).
+            headers (Dict): Headers to pass. Defaults to None.
+            encoding (str): Encoding to use for text response. Defaults to None (best guess).
 
         Returns:
             str: YAML content of download
 
         """
-        self.download(url, post, parameters, timeout, headers, encoding)
+        self.download(url, **kwargs)
         return self.get_yaml()
 
-    def download_json(
-        self,
-        url: str,
-        post: bool = False,
-        parameters: Optional[Dict] = None,
-        timeout: Optional[float] = None,
-        headers: Optional[Dict] = None,
-        encoding: Optional[str] = None,
-    ) -> Any:
+    def download_json(self, url: str, **kwargs: Any) -> Any:
         """Download url as JSON
 
         Args:
             url (str): URL or path to download
+            **kwargs: See below
             post (bool): Whether to use POST instead of GET. Defaults to False.
-            parameters (Optional[Dict]): Parameters to pass. Defaults to None.
-            timeout (Optional[float]): Timeout for connecting to URL. Defaults to None (no timeout).
-            headers (Optional[Dict]): Headers to pass. Defaults to None.
-            encoding (Optional[str]): Encoding to use for text response. Defaults to None (best guess).
+            parameters (Dict): Parameters to pass. Defaults to None.
+            timeout (float): Timeout for connecting to URL. Defaults to None (no timeout).
+            headers (Dict): Headers to pass. Defaults to None.
+            encoding (str): Encoding to use for text response. Defaults to None (best guess).
 
         Returns:
             str: JSON content of download
 
         """
-        self.download(url, post, parameters, timeout, headers, encoding)
+        self.download(url, **kwargs)
         return self.get_json()
 
     def get_frictionless_resource(
