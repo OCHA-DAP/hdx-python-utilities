@@ -337,6 +337,7 @@ class Retrieve(BaseDownload):
 
         """
         path = self.download_file(url, filename, logstr, fallback, **kwargs)
+        kwargs.pop("prefix", None)
         return self.downloader.get_tabular_rows(
             path, headers, dict_form, **kwargs
         )
