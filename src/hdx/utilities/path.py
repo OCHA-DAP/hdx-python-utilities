@@ -11,6 +11,8 @@ from tempfile import gettempdir
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 from urllib.parse import urlsplit
 
+from slugify import slugify
+
 from hdx.utilities.loader import load_text
 from hdx.utilities.saver import save_text
 from hdx.utilities.uuid import get_uuid
@@ -415,12 +417,17 @@ def get_filename_from_url(url: str, second_last: bool = False) -> str:
         str: filename
 
     """
-    urlpath = urlsplit(url).path
+    split_url = urlsplit(url)
+    urlpath = split_url.path
+    if not urlpath or urlpath == "/":
+        last_part = slugify(split_url.query)
+    else:
+        last_part = basename(urlpath)
     if second_last:
         second_last_part = basename(dirname(urlpath))
         if second_last_part:
-            return f"{second_last_part}_{basename(urlpath)}"
-    return basename(urlpath)
+            return f"{second_last_part}_{last_part}"
+    return last_part
 
 
 def get_filename_extension_from_url(

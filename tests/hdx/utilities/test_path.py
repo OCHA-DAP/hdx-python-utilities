@@ -401,6 +401,11 @@ class TestPath:
         assert filename == "test.csv"
         filename = get_filename_from_url("http://test.com/test/test.csv", True)
         assert filename == "test_test.csv"
+        filename = get_filename_from_url(
+            "https://globalhealth5050.org/?_covid-data=dataset-fullvars&_extype=csv",
+            second_last=True,
+        )
+        assert filename == "covid-data-dataset-fullvars-extype-csv"
         filename = get_filename_from_url(fixtureurl)
         assert filename == "test_data.csv"
         filename = get_filename_from_url(fixtureurl, second_last=True)
