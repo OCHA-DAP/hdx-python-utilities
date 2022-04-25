@@ -54,23 +54,28 @@ class TestRetriever:
                 url = "http://api.worldbank.org/v2/en/indicator/SP.POP.TOTL?downloadformat=excel&dataformat=list"
                 assert (
                     retriever.get_filename(url)
-                    == "population_indicator-sp-pop.TOTL"
+                    == "population_indicator-sp-pop.TOTL",
+                    dict(),
                 )
                 assert (
                     retriever.get_filename(url, "hello.xlsx")
-                    == "population_hello.xlsx"
+                    == "population_hello.xlsx",
+                    dict(),
                 )
                 assert (
                     retriever.get_filename(url, None, format="xlsx")
-                    == "population_indicator-sp-pop-totl.xlsx"
+                    == "population_indicator-sp-pop-totl.xlsx",
+                    dict(),
                 )
                 assert (
                     retriever.get_filename(url, None, file_type="xlsx")
-                    == "population_indicator-sp-pop-totl.xlsx"
+                    == "population_indicator-sp-pop-totl.xlsx",
+                    dict(),
                 )
                 assert (
                     retriever.get_filename(url, None, ("csv", "xls"))
-                    == "population_indicator-sp-pop-totl.csv"
+                    == "population_indicator-sp-pop-totl.csv",
+                    dict(),
                 )
                 assert (
                     retriever.get_filename(
@@ -80,28 +85,34 @@ class TestRetriever:
                         file_type="json",
                         format="xlsx",
                     )
-                    == "population_indicator-sp-pop-totl.xlsx"
+                    == "population_indicator-sp-pop-totl.xlsx",
+                    dict(),
                 )
                 url = "http://api.worldbank.org/v2/en/indicator/SP.POP.TOTL.xlsx?downloadformat=excel&dataformat=list"
                 assert (
                     retriever.get_filename(url)
-                    == "population_indicator-sp-pop-totl.xlsx"
+                    == "population_indicator-sp-pop-totl.xlsx",
+                    dict(),
                 )
                 assert (
                     retriever.get_filename(url, "hello.xlsx")
-                    == "population_hello.xlsx"
+                    == "population_hello.xlsx",
+                    dict(),
                 )
                 assert (
                     retriever.get_filename(url, None, format="xlsx")
-                    == "population_indicator-sp-pop-totl.xlsx"
+                    == "population_indicator-sp-pop-totl.xlsx",
+                    dict(),
                 )
                 assert (
                     retriever.get_filename(url, None, file_type="xlsx")
-                    == "population_indicator-sp-pop-totl.xlsx"
+                    == "population_indicator-sp-pop-totl.xlsx",
+                    dict(),
                 )
                 assert (
                     retriever.get_filename(url, None, ("csv", "xlsx"))
-                    == "population_indicator-sp-pop-totl.xlsx"
+                    == "population_indicator-sp-pop-totl.xlsx",
+                    dict(),
                 )
                 assert (
                     retriever.get_filename(
@@ -111,19 +122,23 @@ class TestRetriever:
                         file_type="json",
                         format="xlsx",
                     )
-                    == "population_indicator-sp-pop-totl.xlsx"
+                    == "population_indicator-sp-pop-totl.xlsx",
+                    dict(),
                 )
                 assert (
                     retriever.get_filename(url, None, format="xls")
-                    == "population_indicator-sp-pop-totl-xlsx.xls"
+                    == "population_indicator-sp-pop-totl-xlsx.xls",
+                    dict(),
                 )
                 assert (
                     retriever.get_filename(url, None, file_type="xls")
-                    == "population_indicator-sp-pop-totl-xlsx.xls"
+                    == "population_indicator-sp-pop-totl-xlsx.xls",
+                    dict(),
                 )
                 assert (
                     retriever.get_filename(url, None, ("csv", "xls"))
-                    == "population_indicator-sp-pop-totl-xlsx.csv"
+                    == "population_indicator-sp-pop-totl-xlsx.csv",
+                    dict(),
                 )
                 assert (
                     retriever.get_filename(
@@ -133,7 +148,8 @@ class TestRetriever:
                         file_type="json",
                         format="xls",
                     )
-                    == "population_indicator-sp-pop-totl-xlsx.xls"
+                    == "population_indicator-sp-pop-totl-xlsx.xls",
+                    dict(),
                 )
 
     def test_error(self, dirs, retrieverfolder, fallback_dir):
