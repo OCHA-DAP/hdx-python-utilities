@@ -83,8 +83,9 @@ class Retrieve(BaseDownload):
         extensions_from_fn: Tuple[str, ...] = tuple(),
         **kwargs: Any,
     ) -> str:
+        prefix = kwargs.pop("prefix", self.prefix)
         if filename:
-            return f"{self.prefix}{filename}"
+            return f"{prefix}{filename}"
         filename, extension = get_filename_extension_from_url(
             url, second_last=True
         )
@@ -99,15 +100,15 @@ class Retrieve(BaseDownload):
         if extensions_from_fn:
             extensions.extend(extensions_from_fn)
         if not extensions:
-            return f"{self.prefix}{filename}{extension}"
+            return f"{prefix}{filename}{extension}"
         first_ext = f".{extensions[0].lower()}"
         if not extension:
-            return f"{self.prefix}{filename}{first_ext}"
+            return f"{prefix}{filename}{first_ext}"
         for candidate in extensions:
             if candidate == extension[1:]:
-                return f"{self.prefix}{filename}{extension}"
+                return f"{prefix}{filename}{extension}"
         filename = slugify(f"{filename}{extension}")
-        return f"{self.prefix}{filename}{first_ext}"
+        return f"{prefix}{filename}{first_ext}"
 
     def download_file(
         self,
@@ -174,7 +175,7 @@ class Retrieve(BaseDownload):
             filename (Optional[str]): Filename of saved file. Defaults to getting from url.
             logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
             fallback (bool): Whether to use static fallback if download fails. Defaults to False.
-            **kwargs: Parameters to pass to download call
+            **kwargs: Parameters to pass to download_text call
 
         Returns:
             str: The text from the file
@@ -221,7 +222,7 @@ class Retrieve(BaseDownload):
             filename (Optional[str]): Filename of saved file. Defaults to getting from url.
             logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
             fallback (bool): Whether to use static fallback if download fails. Defaults to False.
-            **kwargs: Parameters to pass to download call
+            **kwargs: Parameters to pass to download_yaml call
 
         Returns:
             Any: The data from the YAML file
@@ -268,7 +269,7 @@ class Retrieve(BaseDownload):
             filename (Optional[str]): Filename of saved file. Defaults to getting from url.
             logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
             fallback (bool): Whether to use static fallback if download fails. Defaults to False.
-            **kwargs: Parameters to pass to download call
+            **kwargs: Parameters to pass to download_json call
 
         Returns:
             Any: The data from the JSON file
@@ -325,7 +326,7 @@ class Retrieve(BaseDownload):
             filename (Optional[str]): Filename of saved file. Defaults to getting from url.
             logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
             fallback (bool): Whether to use static fallback if download fails. Defaults to False.
-            **kwargs: Parameters to pass to download call
+            **kwargs: Parameters to pass to download_file call
 
         Returns:
             Tuple[List[str],Iterator[ListDict]]: Tuple (headers, iterator where each row is a list or dictionary)
