@@ -52,104 +52,77 @@ class TestRetriever:
                 prefix="population",
             ) as retriever:
                 url = "http://api.worldbank.org/v2/en/indicator/SP.POP.TOTL?downloadformat=excel&dataformat=list"
-                assert (
-                    retriever.get_filename(url)
-                    == "population_indicator-sp-pop.TOTL",
-                    dict(),
+                result = retriever.get_filename(url)
+                expected = "population_indicator-sp-pop.TOTL"
+                assert result == (expected, dict())
+                result = retriever.get_filename(url, "hello.xlsx")
+                expected = "population_hello.xlsx"
+                assert result == (expected, dict())
+                result = retriever.get_filename(url, None, format="xlsx")
+                expected = "population_indicator-sp-pop-totl.xlsx"
+                assert result == (expected, {"format": "xlsx"})
+                result = retriever.get_filename(url, None, file_type="xlsx")
+                assert result == (expected, {"file_type": "xlsx"})
+                result = retriever.get_filename(url, None, ("csv", "xls"))
+                expected = "population_indicator-sp-pop-totl.csv"
+                assert result == (expected, dict())
+                result = retriever.get_filename(
+                    url,
+                    None,
+                    ("csv", "xls"),
+                    file_type="json",
+                    format="xlsx",
                 )
-                assert (
-                    retriever.get_filename(url, "hello.xlsx")
-                    == "population_hello.xlsx",
-                    dict(),
-                )
-                assert (
-                    retriever.get_filename(url, None, format="xlsx")
-                    == "population_indicator-sp-pop-totl.xlsx",
-                    dict(),
-                )
-                assert (
-                    retriever.get_filename(url, None, file_type="xlsx")
-                    == "population_indicator-sp-pop-totl.xlsx",
-                    dict(),
-                )
-                assert (
-                    retriever.get_filename(url, None, ("csv", "xls"))
-                    == "population_indicator-sp-pop-totl.csv",
-                    dict(),
-                )
-                assert (
-                    retriever.get_filename(
-                        url,
-                        None,
-                        ("csv", "xls"),
-                        file_type="json",
-                        format="xlsx",
-                    )
-                    == "population_indicator-sp-pop-totl.xlsx",
-                    dict(),
+                expected = "population_indicator-sp-pop-totl.xlsx"
+                assert result == (
+                    expected,
+                    {"file_type": "json", "format": "xlsx"},
                 )
                 url = "http://api.worldbank.org/v2/en/indicator/SP.POP.TOTL.xlsx?downloadformat=excel&dataformat=list"
-                assert (
-                    retriever.get_filename(url)
-                    == "population_indicator-sp-pop-totl.xlsx",
-                    dict(),
+                result = retriever.get_filename(url)
+                assert result == (expected, dict())
+                result = retriever.get_filename(url, "hello.xlsx")
+                expected = "population_hello.xlsx"
+                assert result == (expected, dict())
+                result = retriever.get_filename(url, None, format="xlsx")
+                expected = "population_indicator-sp-pop-totl.xlsx"
+                assert result == (expected, {"format": "xlsx"})
+                result = retriever.get_filename(url, None, file_type="xlsx")
+                assert result == (expected, {"file_type": "xlsx"})
+                result = retriever.get_filename(url, None, ("csv", "xlsx"))
+                expected = "population_indicator-sp-pop-totl.xlsx"
+                assert result == (expected, dict())
+                result = retriever.get_filename(
+                    url,
+                    None,
+                    ("csv", "xls"),
+                    file_type="json",
+                    format="xlsx",
                 )
-                assert (
-                    retriever.get_filename(url, "hello.xlsx")
-                    == "population_hello.xlsx",
-                    dict(),
+                expected = "population_indicator-sp-pop-totl.xlsx"
+                assert result == (
+                    expected,
+                    {"file_type": "json", "format": "xlsx"},
                 )
-                assert (
-                    retriever.get_filename(url, None, format="xlsx")
-                    == "population_indicator-sp-pop-totl.xlsx",
-                    dict(),
+                result = retriever.get_filename(url, None, format="xls")
+                expected = "population_indicator-sp-pop-totl-xlsx.xls"
+                assert result == (expected, {"format": "xls"})
+                result = retriever.get_filename(url, None, file_type="xls")
+                assert result == (expected, {"file_type": "xls"})
+                result = retriever.get_filename(url, None, ("csv", "xls"))
+                expected = "population_indicator-sp-pop-totl-xlsx.csv"
+                assert result == (expected, dict())
+                result = retriever.get_filename(
+                    url,
+                    None,
+                    ("csv", "xls"),
+                    file_type="json",
+                    format="xls",
                 )
-                assert (
-                    retriever.get_filename(url, None, file_type="xlsx")
-                    == "population_indicator-sp-pop-totl.xlsx",
-                    dict(),
-                )
-                assert (
-                    retriever.get_filename(url, None, ("csv", "xlsx"))
-                    == "population_indicator-sp-pop-totl.xlsx",
-                    dict(),
-                )
-                assert (
-                    retriever.get_filename(
-                        url,
-                        None,
-                        ("csv", "xls"),
-                        file_type="json",
-                        format="xlsx",
-                    )
-                    == "population_indicator-sp-pop-totl.xlsx",
-                    dict(),
-                )
-                assert (
-                    retriever.get_filename(url, None, format="xls")
-                    == "population_indicator-sp-pop-totl-xlsx.xls",
-                    dict(),
-                )
-                assert (
-                    retriever.get_filename(url, None, file_type="xls")
-                    == "population_indicator-sp-pop-totl-xlsx.xls",
-                    dict(),
-                )
-                assert (
-                    retriever.get_filename(url, None, ("csv", "xls"))
-                    == "population_indicator-sp-pop-totl-xlsx.csv",
-                    dict(),
-                )
-                assert (
-                    retriever.get_filename(
-                        url,
-                        None,
-                        ("csv", "xls"),
-                        file_type="json",
-                        format="xls",
-                    )
-                    == "population_indicator-sp-pop-totl-xlsx.xls",
-                    dict(),
+                expected = "population_indicator-sp-pop-totl-xlsx.xls"
+                assert result == (
+                    expected,
+                    {"file_type": "json", "format": "xls"},
                 )
 
     def test_error(self, dirs, retrieverfolder, fallback_dir):
