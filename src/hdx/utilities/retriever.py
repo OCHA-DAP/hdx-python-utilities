@@ -49,10 +49,7 @@ class Retrieve(BaseDownload):
         self.temp_dir = temp_dir
         self.save = save
         self.use_saved = use_saved
-        if prefix:
-            self.prefix = f"{prefix}_"
-        else:
-            self.prefix = ""
+        self.prefix = prefix
         if save:
             if use_saved:
                 raise ValueError(
@@ -84,6 +81,8 @@ class Retrieve(BaseDownload):
         **kwargs: Any,
     ) -> Tuple[str, Any]:
         prefix = kwargs.pop("prefix", self.prefix)
+        if prefix:
+            prefix = f"{prefix}_"
         if filename:
             return f"{prefix}{filename}", kwargs
         filename, extension = get_filename_extension_from_url(
