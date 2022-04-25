@@ -1,6 +1,6 @@
 import logging
 from os import mkdir
-from os.path import join, splitext
+from os.path import join
 from shutil import rmtree
 from typing import Any, Iterator, List, Optional, Tuple, Union
 
