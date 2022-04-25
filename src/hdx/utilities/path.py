@@ -404,28 +404,36 @@ def multiple_progress_storing_tempdir(
                     remove(progress_file)
 
 
-def get_filename_from_url(url: str) -> str:
+def get_filename_from_url(url: str, second_last: bool = False) -> str:
     """Get filename including extension from url
 
     Args:
         url (str): URL
+        second_last (bool): Get second last segment of url as well. Defaults to False.
 
     Returns:
         str: filename
 
     """
     urlpath = urlsplit(url).path
+    if second_last:
+        second_last_part = basename(dirname(urlpath))
+        if second_last_part:
+            return f"{second_last_part}_{basename(urlpath)}"
     return basename(urlpath)
 
 
-def get_filename_extension_from_url(url: str) -> Tuple[str, str]:
+def get_filename_extension_from_url(
+    url: str, second_last: bool = False
+) -> Tuple[str, str]:
     """Get separately filename and extension from url
 
     Args:
         url (str): URL to download
+        second_last (bool): Get second last segment of url as well. Defaults to False.
 
     Returns:
         Tuple[str,str]: Tuple of (filename, extension)
 
     """
-    return splitext(get_filename_from_url(url))
+    return splitext(get_filename_from_url(url, second_last))
