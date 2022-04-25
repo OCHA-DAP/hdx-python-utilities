@@ -131,13 +131,9 @@ class UserAgent:
 
         """
         kwargs = UserAgent._environment_variables(**kwargs)
-        if "user_agent" in kwargs:
-            user_agent = kwargs["user_agent"]
-            del kwargs["user_agent"]
-        prefix = kwargs.get("prefix")
-        if prefix:
-            del kwargs["prefix"]
-        else:
+        user_agent = kwargs.pop("user_agent", user_agent)
+        prefix = kwargs.pop("prefix", None)
+        if not prefix:
             prefix = f"HDXPythonUtilities/{__version__}"
         if not user_agent:
             ua = cls._load(prefix, user_agent_config_yaml, user_agent_lookup)
