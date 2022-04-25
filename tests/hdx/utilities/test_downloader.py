@@ -51,7 +51,7 @@ class TestDownloader:
 
     @pytest.fixture(scope="class")
     def fixtureurlexcel(self):
-        return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/base_downloader/tests/fixtures/downloader/test_data.xlsx"
+        return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/main/tests/fixtures/downloader/test_data.xlsx"
 
     @pytest.fixture(scope="class")
     def getfixtureurl(self):
@@ -339,7 +339,7 @@ class TestDownloader:
     ):
         tmpdir = str(tmpdir)
         with pytest.raises(DownloadError), Download() as downloader:
-            downloader.download_file("NOTEXIST://NOTEXIST.csv", tmpdir)
+            downloader.download_file("NOTEXIST://NOTEXIST.csv", folder=tmpdir)
         with pytest.raises(DownloadError), Download() as downloader:
             downloader.download_file(fixturenotexistsurl)
         filename = "myfilename.txt"

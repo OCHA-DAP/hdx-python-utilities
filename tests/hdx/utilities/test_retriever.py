@@ -39,67 +39,102 @@ class TestRetriever:
         mkdir(temp_dir)
         return saved_dir, temp_dir
 
-    def test_get_filename(self):
-        url = "http://api.worldbank.org/v2/en/indicator/SP.POP.TOTL?downloadformat=excel&dataformat=list"
-        assert Retrieve.get_filename(url) == "SP.POP.TOTL"
-        assert Retrieve.get_filename(url, "hello.xlsx") == "hello.xlsx"
-        assert (
-            Retrieve.get_filename(url, None, format="xlsx")
-            == "SP.POP.TOTL.xlsx"
-        )
-        assert (
-            Retrieve.get_filename(url, None, file_type="xlsx")
-            == "SP.POP.TOTL.xlsx"
-        )
-        assert (
-            Retrieve.get_filename(url, None, ("csv", "xls"))
-            == "SP.POP.TOTL.csv"
-        )
-        assert (
-            Retrieve.get_filename(
-                url, None, ("csv", "xls"), file_type="json", format="xlsx"
-            )
-            == "SP.POP.TOTL.xlsx"
-        )
-        url = "http://api.worldbank.org/v2/en/indicator/SP.POP.TOTL.xlsx?downloadformat=excel&dataformat=list"
-        assert Retrieve.get_filename(url) == "SP.POP.TOTL.xlsx"
-        assert Retrieve.get_filename(url, "hello.xlsx") == "hello.xlsx"
-        assert (
-            Retrieve.get_filename(url, None, format="xlsx")
-            == "SP.POP.TOTL.xlsx"
-        )
-        assert (
-            Retrieve.get_filename(url, None, file_type="xlsx")
-            == "SP.POP.TOTL.xlsx"
-        )
-        assert (
-            Retrieve.get_filename(url, None, ("csv", "xlsx"))
-            == "SP.POP.TOTL.xlsx"
-        )
-        assert (
-            Retrieve.get_filename(
-                url, None, ("csv", "xls"), file_type="json", format="xlsx"
-            )
-            == "SP.POP.TOTL.xlsx"
-        )
-        assert (
-            Retrieve.get_filename(url, None, format="xls")
-            == "SP.POP.TOTL.xlsx.xls"
-        )
-        assert (
-            Retrieve.get_filename(url, None, file_type="xls")
-            == "SP.POP.TOTL.xlsx.xls"
-        )
-        assert (
-            Retrieve.get_filename(url, None, ("csv", "xls"))
-            == "SP.POP.TOTL.xlsx.csv"
-        )
-        assert (
-            Retrieve.get_filename(
-                url, None, ("csv", "xls"), file_type="json", format="xls"
-            )
-            == "SP.POP.TOTL.xlsx.xls"
-        )
+    def test_get_filename(self, dirs, fallback_dir):
+        saved_dir, temp_dir = dirs
+        with Download() as downloader:
+            with Retrieve(
+                downloader,
+                fallback_dir,
+                saved_dir,
+                temp_dir,
+                save=False,
+                use_saved=False,
+                prefix="population",
+            ) as retriever:
+                url = "http://api.worldbank.org/v2/en/indicator/SP.POP.TOTL?downloadformat=excel&dataformat=list"
+                assert (
+                    retriever.get_filename(url)
+                    == "population_indicator-sp-pop.TOTL"
+                )
+                assert (
+                    retriever.get_filename(url, "hello.xlsx")
+                    == "population_hello.xlsx"
+                )
+                assert (
+                    retriever.get_filename(url, None, format="xlsx")
+                    == "population_indicator-sp-pop-totl.xlsx"
+                )
+                assert (
+                    retriever.get_filename(url, None, file_type="xlsx")
+                    == "population_indicator-sp-pop-totl.xlsx"
+                )
+                assert (
+                    retriever.get_filename(url, None, ("csv", "xls"))
+                    == "population_indicator-sp-pop-totl.csv"
+                )
+                assert (
+                    retriever.get_filename(
+                        url,
+                        None,
+                        ("csv", "xls"),
+                        file_type="json",
+                        format="xlsx",
+                    )
+                    == "population_indicator-sp-pop-totl.xlsx"
+                )
+                url = "http://api.worldbank.org/v2/en/indicator/SP.POP.TOTL.xlsx?downloadformat=excel&dataformat=list"
+                assert (
+                    retriever.get_filename(url)
+                    == "population_indicator-sp-pop-totl.xlsx"
+                )
+                assert (
+                    retriever.get_filename(url, "hello.xlsx")
+                    == "population_hello.xlsx"
+                )
+                assert (
+                    retriever.get_filename(url, None, format="xlsx")
+                    == "population_indicator-sp-pop-totl.xlsx"
+                )
+                assert (
+                    retriever.get_filename(url, None, file_type="xlsx")
+                    == "population_indicator-sp-pop-totl.xlsx"
+                )
+                assert (
+                    retriever.get_filename(url, None, ("csv", "xlsx"))
+                    == "population_indicator-sp-pop-totl.xlsx"
+                )
+                assert (
+                    retriever.get_filename(
+                        url,
+                        None,
+                        ("csv", "xls"),
+                        file_type="json",
+                        format="xlsx",
+                    )
+                    == "population_indicator-sp-pop-totl.xlsx"
+                )
+                assert (
+                    retriever.get_filename(url, None, format="xls")
+                    == "population_indicator-sp-pop-totl-xlsx.xls"
+                )
+                assert (
+                    retriever.get_filename(url, None, file_type="xls")
+                    == "population_indicator-sp-pop-totl-xlsx.xls"
+                )
+                assert (
+                    retriever.get_filename(url, None, ("csv", "xls"))
+                    == "population_indicator-sp-pop-totl-xlsx.csv"
+                )
+                assert (
+                    retriever.get_filename(
+                        url,
+                        None,
+                        ("csv", "xls"),
+                        file_type="json",
+                        format="xls",
+                    )
+                    == "population_indicator-sp-pop-totl-xlsx.xls"
+                )
 
     def test_error(self, dirs, retrieverfolder, fallback_dir):
         saved_dir, temp_dir = dirs

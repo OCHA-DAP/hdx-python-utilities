@@ -1,13 +1,15 @@
 import logging
 from os import mkdir
-from os.path import join, splitext
+from os.path import join
 from shutil import rmtree
 from typing import Any, Iterator, List, Optional, Tuple, Union
+
+from slugify import slugify
 
 from hdx.utilities.base_downloader import BaseDownload, DownloadError
 from hdx.utilities.downloader import Download
 from hdx.utilities.loader import load_json, load_text, load_yaml
-from hdx.utilities.path import get_filename_from_url
+from hdx.utilities.path import get_filename_extension_from_url
 from hdx.utilities.saver import save_json, save_text, save_yaml
 from hdx.utilities.typehint import ListDict, ListTuple
 
@@ -26,6 +28,7 @@ class Retrieve(BaseDownload):
         temp_dir (str): Temporary directory for when data is not needed after downloading
         save (bool): Whether to save downloaded data. Defaults to False.
         use_saved (bool): Whether to use saved data. Defaults to False.
+        prefix (str): Prefix to add to filenames. Defaults to "".
     """
 
     retrievers = dict()
@@ -38,6 +41,7 @@ class Retrieve(BaseDownload):
         temp_dir: str,
         save: bool = False,
         use_saved: bool = False,
+        prefix: str = "",
     ):
         self.downloader = downloader
         self.fallback_dir = fallback_dir
@@ -45,6 +49,10 @@ class Retrieve(BaseDownload):
         self.temp_dir = temp_dir
         self.save = save
         self.use_saved = use_saved
+        if prefix:
+            self.prefix = f"{prefix}_"
+        else:
+            self.prefix = ""
         if save:
             if use_saved:
                 raise ValueError(
@@ -68,35 +76,38 @@ class Retrieve(BaseDownload):
             return f"{url[:100]}..."
         return url
 
-    @staticmethod
     def get_filename(
+        self,
         url: str,
         filename: Optional[str] = None,
         extensions_from_fn: Tuple[str, ...] = tuple(),
         **kwargs: Any,
     ) -> str:
         if filename:
-            return filename
-        filename = get_filename_from_url(url)
+            return f"{self.prefix}{filename}"
+        filename, extension = get_filename_extension_from_url(
+            url, second_last=True
+        )
+        filename = slugify(filename)
         extensions = list()
-        extension = kwargs.get("format")
-        if extension:
-            extensions.append(extension)
-        extension = kwargs.get("file_type")
-        if extension:
-            extensions.append(extension)
+        format = kwargs.get("format")
+        if format:
+            extensions.append(format)
+        file_type = kwargs.get("file_type")
+        if file_type:
+            extensions.append(file_type)
         if extensions_from_fn:
             extensions.extend(extensions_from_fn)
         if not extensions:
-            return filename
+            return f"{self.prefix}{filename}{extension}"
         first_ext = f".{extensions[0].lower()}"
-        _, extension = splitext(filename)
         if not extension:
-            return f"{filename}{first_ext}"
+            return f"{self.prefix}{filename}{first_ext}"
         for candidate in extensions:
             if candidate == extension[1:]:
-                return filename
-        return f"{filename}{first_ext}"
+                return f"{self.prefix}{filename}{extension}"
+        filename = slugify(f"{filename}{extension}")
+        return f"{self.prefix}{filename}{first_ext}"
 
     def download_file(
         self,
@@ -356,7 +367,13 @@ class Retrieve(BaseDownload):
             if name in ignore:
                 continue
             cls.retrievers[name] = cls(
-                downloader, fallback_dir, saved_dir, temp_dir, save, use_saved
+                downloader,
+                fallback_dir,
+                saved_dir,
+                temp_dir,
+                save,
+                use_saved,
+                name,
             )
 
     @classmethod
