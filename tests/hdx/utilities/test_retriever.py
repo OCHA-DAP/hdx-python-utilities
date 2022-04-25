@@ -49,7 +49,7 @@ class TestRetriever:
                 temp_dir,
                 save=False,
                 use_saved=False,
-                prefix="population_",
+                prefix="population",
             ) as retriever:
                 url = "http://api.worldbank.org/v2/en/indicator/SP.POP.TOTL?downloadformat=excel&dataformat=list"
                 assert (

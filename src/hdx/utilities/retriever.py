@@ -49,7 +49,10 @@ class Retrieve(BaseDownload):
         self.temp_dir = temp_dir
         self.save = save
         self.use_saved = use_saved
-        self.prefix = prefix
+        if prefix:
+            self.prefix = f"{prefix}_"
+        else:
+            self.prefix = ""
         if save:
             if use_saved:
                 raise ValueError(
