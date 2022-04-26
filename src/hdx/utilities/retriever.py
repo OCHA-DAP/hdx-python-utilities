@@ -378,7 +378,6 @@ class Retrieve(BaseDownload):
                 temp_dir,
                 save,
                 use_saved,
-                name,
             )
 
     @classmethod
