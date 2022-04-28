@@ -73,13 +73,49 @@ class Retrieve(BaseDownload):
             return f"{url[:100]}..."
         return url
 
+    @classmethod
+    def clone(cls, retriever: "Retrieve", downloader: Download):
+        """Clone a given retriever but use teh given downloader
+
+        Args:
+            retriever (Retrieve): Retriever to clone
+            downloader (Download): Downloader to use
+
+        Returns:
+            Retrieve: Cloned retriever
+
+        """
+        return cls(
+            downloader,
+            fallback_dir=retriever.fallback_dir,
+            saved_dir=retriever.saved_dir,
+            temp_dir=retriever.temp_dir,
+            save=retriever.save,
+            use_saved=retriever.use_saved,
+            prefix=retriever.prefix,
+        )
+
     def get_filename(
         self,
         url: str,
         filename: Optional[str] = None,
-        extensions_from_fn: Tuple[str, ...] = tuple(),
+        possible_extensions: Tuple[str, ...] = tuple(),
         **kwargs: Any,
     ) -> Tuple[str, Any]:
+        """Get filename from url and given parameters
+
+        Args:
+            url (str): Url from which to get filename
+            filename (optional[str]): Filename to use. Defaults to None (infer from url).
+            possible_extensions (Tuple[str, ...]): Possible extensions to look for in url
+            **kwargs: See below
+            format (str): Given extension to look for in url
+            file_type (str): Given extension to look for in url
+
+        Returns:
+            Retrieve: Cloned retriever
+
+        """
         prefix = kwargs.pop("file_prefix", self.prefix)
         if prefix:
             prefix = f"{prefix}_"
@@ -96,8 +132,8 @@ class Retrieve(BaseDownload):
         file_type = kwargs.get("file_type")
         if file_type:
             extensions.append(file_type)
-        if extensions_from_fn:
-            extensions.extend(extensions_from_fn)
+        if possible_extensions:
+            extensions.extend(possible_extensions)
         if not extensions:
             return f"{prefix}{filename}{extension}", kwargs
         first_ext = f".{extensions[0].lower()}"

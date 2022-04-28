@@ -39,6 +39,24 @@ class TestRetriever:
         mkdir(temp_dir)
         return saved_dir, temp_dir
 
+    def test_clone(self, dirs, fallback_dir):
+        saved_dir, temp_dir = dirs
+        with Download() as downloader:
+            with Retrieve(
+                downloader,
+                fallback_dir,
+                saved_dir,
+                temp_dir,
+                save=False,
+                use_saved=False,
+                prefix="population",
+            ) as retriever:
+                clone_retriever = Retrieve.clone(retriever, downloader)
+                for property, value in vars(retriever).items():
+                    if property == "downloader":
+                        continue
+                    assert getattr(clone_retriever, property) == value
+
     def test_get_filename(self, dirs, fallback_dir):
         saved_dir, temp_dir = dirs
         with Download() as downloader:
