@@ -4,8 +4,15 @@ import inspect
 import logging
 import sys
 from os import getenv, makedirs, remove
-from os.path import abspath, dirname, exists, join, realpath, splitext
-from posixpath import basename
+from os.path import (
+    abspath,
+    basename,
+    dirname,
+    exists,
+    join,
+    realpath,
+    splitext,
+)
 from shutil import rmtree
 from tempfile import gettempdir
 from typing import Any, Dict, Iterable, List, Optional, Tuple
