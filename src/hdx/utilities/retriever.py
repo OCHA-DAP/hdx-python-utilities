@@ -29,6 +29,7 @@ class Retrieve(BaseDownload):
         save (bool): Whether to save downloaded data. Defaults to False.
         use_saved (bool): Whether to use saved data. Defaults to False.
         prefix (str): Prefix to add to filenames. Defaults to "".
+        delete (bool): Whether to delete saved_dir if save is True. Defaults to True.
     """
 
     retrievers = dict()
@@ -42,6 +43,7 @@ class Retrieve(BaseDownload):
         save: bool = False,
         use_saved: bool = False,
         prefix: str = "",
+        delete: bool = True,
     ):
         self.downloader = downloader
         self.fallback_dir = fallback_dir
@@ -50,13 +52,32 @@ class Retrieve(BaseDownload):
         self.save = save
         self.use_saved = use_saved
         self.prefix = prefix
+        self.check_flags(saved_dir, save, use_saved, delete)
+
+    @staticmethod
+    def check_flags(
+        saved_dir: str, save: bool, use_saved: bool, delete: bool
+    ) -> None:
+        """Check flags. Also delete saved_dir if save and delete are True
+
+        Args:
+            saved_dir (str): Directory to save or load downloaded data
+            save (bool): Whether to save downloaded data
+            use_saved (bool): Whether to use saved data
+            delete (bool): Whether to delete saved_dir if save is True
+
+        Returns:
+            None
+
+        """
         if save:
             if use_saved:
                 raise ValueError(
                     "Either the save or use_saved flags can be set to True!"
                 )
-            rmtree(saved_dir, ignore_errors=True)
-            mkdir(saved_dir)
+            if delete:
+                rmtree(saved_dir, ignore_errors=True)
+                mkdir(saved_dir)
 
     @staticmethod
     def get_url_logstr(url: str) -> str:
@@ -93,6 +114,7 @@ class Retrieve(BaseDownload):
             save=retriever.save,
             use_saved=retriever.use_saved,
             prefix=retriever.prefix,
+            delete=False,
         )
 
     def get_filename(
@@ -386,6 +408,7 @@ class Retrieve(BaseDownload):
         save: bool = False,
         use_saved: bool = False,
         ignore: ListTuple[str] = tuple(),
+        delete: bool = True,
     ) -> None:
         """Generate retrievers. Retrievers are generated from downloaders so
         Download.generate_downloaders() needs to have been called first. Each retriever
@@ -399,10 +422,12 @@ class Retrieve(BaseDownload):
             save (bool): Whether to save downloaded data. Defaults to False.
             use_saved (bool): Whether to use saved data. Defaults to False.
             ignore (ListTuple[str]): Don't generate retrievers for these downloaders
+            delete (bool): Whether to delete saved_dir if save is True. Defaults to True.
 
         Returns:
             None
         """
+        cls.check_flags(saved_dir, save, use_saved, delete)
         cls.retrievers = dict()
         for name, downloader in Download.downloaders.items():
             if name in ignore:
@@ -414,6 +439,7 @@ class Retrieve(BaseDownload):
                 temp_dir,
                 save,
                 use_saved,
+                delete=False,
             )
 
     @classmethod
