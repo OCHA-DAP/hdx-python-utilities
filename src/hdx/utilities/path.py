@@ -16,7 +16,7 @@ from os.path import (
 from shutil import rmtree
 from tempfile import gettempdir
 from typing import Any, Dict, Iterable, List, Optional, Tuple
-from urllib.parse import urlsplit
+from urllib.parse import unquote_plus, urlsplit
 
 from slugify import slugify
 
@@ -424,12 +424,11 @@ def get_filename_from_url(url: str, second_last: bool = False) -> str:
         str: filename
 
     """
-    split_url = urlsplit(url)
+    split_url = urlsplit(unquote_plus(url))
     urlpath = split_url.path
-    if not urlpath or urlpath == "/":
+    last_part = basename(urlpath)
+    if not last_part:
         last_part = slugify(split_url.query)
-    else:
-        last_part = basename(urlpath)
     if second_last:
         second_last_part = basename(dirname(urlpath))
         if second_last_part:
