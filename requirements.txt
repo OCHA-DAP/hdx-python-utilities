@@ -1,7 +1,7 @@
 basicauth==0.4.1
 beautifulsoup4==4.11.1
-email_validator==1.2.0
-frictionless[excel,json]==4.29.0
+email_validator==1.2.1
+frictionless[excel,json]==4.31.0
 html5lib==1.1
 loguru==0.6.0
 python-dateutil==2.8.2

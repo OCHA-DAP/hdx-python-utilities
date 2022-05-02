@@ -469,7 +469,6 @@ def write_list_to_csv(
                 rows = newrows
         resource = get_frictionless_resource(
             data=rows,
-            infer_types=True,
             has_header=has_header,
             headers=headers,
         )
