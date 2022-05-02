@@ -413,40 +413,54 @@ def multiple_progress_storing_tempdir(
                     remove(progress_file)
 
 
-def get_filename_from_url(url: str, second_last: bool = False) -> str:
-    """Get filename including extension from url
-
-    Args:
-        url (str): URL
-        second_last (bool): Get second last segment of url as well. Defaults to False.
-
-    Returns:
-        str: filename
-
-    """
-    split_url = urlsplit(unquote_plus(url))
-    urlpath = split_url.path
-    last_part = basename(urlpath)
-    if not last_part:
-        last_part = slugify(split_url.query)
-    if second_last:
-        second_last_part = basename(dirname(urlpath))
-        if second_last_part:
-            return f"{second_last_part}_{last_part}"
-    return last_part
-
-
 def get_filename_extension_from_url(
-    url: str, second_last: bool = False
+    url: str, second_last: bool = False, use_query: bool = False
 ) -> Tuple[str, str]:
     """Get separately filename and extension from url
 
     Args:
         url (str): URL to download
         second_last (bool): Get second last segment of url as well. Defaults to False.
+        use_query (bool): Include query parameters as well. Defaults to False.
 
     Returns:
         Tuple[str,str]: Tuple of (filename, extension)
 
     """
-    return splitext(get_filename_from_url(url, second_last))
+    split_url = urlsplit(unquote_plus(url))
+    urlpath = split_url.path
+    last_part = basename(urlpath)
+    second_last_part = basename(dirname(urlpath))
+    query_part = slugify(split_url.query)
+    filename, extension = splitext(last_part)
+    if query_part:
+        if not filename:
+            filename = query_part
+        elif use_query:
+            filename = f"{filename}_{query_part}"
+    if second_last_part:
+        if not filename:
+            filename = second_last_part
+        elif second_last:
+            filename = f"{second_last_part}_{filename}"
+    return filename, extension
+
+
+def get_filename_from_url(
+    url: str, second_last: bool = False, use_query: bool = False
+) -> str:
+    """Get filename including extension from url
+
+    Args:
+        url (str): URL
+        second_last (bool): Get second last segment of url as well. Defaults to False.
+        use_query (bool): Include query parameters as well. Defaults to False.
+
+    Returns:
+        str: filename
+
+    """
+    filename, extension = get_filename_extension_from_url(
+        url, second_last, use_query
+    )
+    return f"{filename}{extension}"
