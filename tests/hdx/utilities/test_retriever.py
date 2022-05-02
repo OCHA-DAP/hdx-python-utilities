@@ -71,18 +71,18 @@ class TestRetriever:
             ) as retriever:
                 url = "http://api.worldbank.org/v2/en/indicator/SP.POP.TOTL?downloadformat=excel&dataformat=list"
                 result = retriever.get_filename(url)
-                expected = "population_indicator-sp-pop.TOTL"
+                expected = "population_indicator-sp-pop-downloadformat-excel-dataformat-list.TOTL"
                 assert result == (expected, dict())
                 result = retriever.get_filename(url, "hello.xlsx")
                 expected = "population_hello.xlsx"
                 assert result == (expected, dict())
                 result = retriever.get_filename(url, None, format="xlsx")
-                expected = "population_indicator-sp-pop-totl.xlsx"
+                expected = "population_indicator-sp-pop-downloadformat-excel-dataformat-list-totl.xlsx"
                 assert result == (expected, {"format": "xlsx"})
                 result = retriever.get_filename(url, None, file_type="xlsx")
                 assert result == (expected, {"file_type": "xlsx"})
                 result = retriever.get_filename(url, None, ("csv", "xls"))
-                expected = "population_indicator-sp-pop-totl.csv"
+                expected = "population_indicator-sp-pop-downloadformat-excel-dataformat-list-totl.csv"
                 assert result == (expected, dict())
                 result = retriever.get_filename(
                     url,
@@ -91,24 +91,24 @@ class TestRetriever:
                     file_type="json",
                     format="xlsx",
                 )
-                expected = "population_indicator-sp-pop-totl.xlsx"
+                expected = "population_indicator-sp-pop-downloadformat-excel-dataformat-list-totl.xlsx"
                 assert result == (
                     expected,
                     {"file_type": "json", "format": "xlsx"},
                 )
                 url = "http://api.worldbank.org/v2/en/indicator/SP.POP.TOTL.xlsx?downloadformat=excel&dataformat=list"
                 result = retriever.get_filename(url)
+                expected = "population_indicator-sp-pop-totl-downloadformat-excel-dataformat-list.xlsx"
                 assert result == (expected, dict())
                 result = retriever.get_filename(url, "hello.xlsx")
                 expected = "population_hello.xlsx"
                 assert result == (expected, dict())
                 result = retriever.get_filename(url, None, format="xlsx")
-                expected = "population_indicator-sp-pop-totl.xlsx"
+                expected = "population_indicator-sp-pop-totl-downloadformat-excel-dataformat-list.xlsx"
                 assert result == (expected, {"format": "xlsx"})
                 result = retriever.get_filename(url, None, file_type="xlsx")
                 assert result == (expected, {"file_type": "xlsx"})
                 result = retriever.get_filename(url, None, ("csv", "xlsx"))
-                expected = "population_indicator-sp-pop-totl.xlsx"
                 assert result == (expected, dict())
                 result = retriever.get_filename(
                     url,
@@ -117,18 +117,17 @@ class TestRetriever:
                     file_type="json",
                     format="xlsx",
                 )
-                expected = "population_indicator-sp-pop-totl.xlsx"
                 assert result == (
                     expected,
                     {"file_type": "json", "format": "xlsx"},
                 )
                 result = retriever.get_filename(url, None, format="xls")
-                expected = "population_indicator-sp-pop-totl-xlsx.xls"
+                expected = "population_indicator-sp-pop-totl-downloadformat-excel-dataformat-list-xlsx.xls"
                 assert result == (expected, {"format": "xls"})
                 result = retriever.get_filename(url, None, file_type="xls")
                 assert result == (expected, {"file_type": "xls"})
                 result = retriever.get_filename(url, None, ("csv", "xls"))
-                expected = "population_indicator-sp-pop-totl-xlsx.csv"
+                expected = "population_indicator-sp-pop-totl-downloadformat-excel-dataformat-list-xlsx.csv"
                 assert result == (expected, dict())
                 result = retriever.get_filename(
                     url,
@@ -137,7 +136,7 @@ class TestRetriever:
                     file_type="json",
                     format="xls",
                 )
-                expected = "population_indicator-sp-pop-totl-xlsx.xls"
+                expected = "population_indicator-sp-pop-totl-downloadformat-excel-dataformat-list-xlsx.xls"
                 assert result == (
                     expected,
                     {"file_type": "json", "format": "xls"},

@@ -144,7 +144,7 @@ class Retrieve(BaseDownload):
         if filename:
             return f"{prefix}{filename}", kwargs
         filename, extension = get_filename_extension_from_url(
-            url, second_last=True
+            url, second_last=True, use_query=True
         )
         filename = slugify(filename)
         extensions = list()
