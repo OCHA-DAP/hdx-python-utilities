@@ -446,7 +446,8 @@ def write_list_to_csv(
                 for row in rows:
                     newrow = dict()
                     for column in columns:
-                        newrow[column] = row[column]
+                        if column in row:
+                            newrow[column] = row[column]
                     newrows.append(newrow)
                 rows = newrows
                 if headers is None:
