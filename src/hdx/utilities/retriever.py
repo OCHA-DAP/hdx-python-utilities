@@ -409,6 +409,7 @@ class Retrieve(BaseDownload):
         use_saved: bool = False,
         ignore: ListTuple[str] = tuple(),
         delete: bool = True,
+        **kwargs: Any,
     ) -> None:
         """Generate retrievers. Retrievers are generated from downloaders so
         Download.generate_downloaders() needs to have been called first. Each retriever
@@ -423,6 +424,7 @@ class Retrieve(BaseDownload):
             use_saved (bool): Whether to use saved data. Defaults to False.
             ignore (ListTuple[str]): Don't generate retrievers for these downloaders
             delete (bool): Whether to delete saved_dir if save is True. Defaults to True.
+            **kwargs (Any): Any other arguments to pass.
 
         Returns:
             None
@@ -440,6 +442,7 @@ class Retrieve(BaseDownload):
                 save,
                 use_saved,
                 delete=False,
+                **kwargs,
             )
 
     @classmethod
