@@ -51,7 +51,7 @@ class TestRetriever:
                 use_saved=False,
                 prefix="population",
             ) as retriever:
-                clone_retriever = Retrieve.clone(retriever, downloader)
+                clone_retriever = retriever.clone(downloader)
                 for property, value in vars(retriever).items():
                     if property == "downloader":
                         continue

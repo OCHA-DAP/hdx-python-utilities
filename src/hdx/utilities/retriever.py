@@ -94,26 +94,24 @@ class Retrieve(BaseDownload):
             return f"{url[:100]}..."
         return url
 
-    @classmethod
-    def clone(cls, retriever: "Retrieve", downloader: Download):
+    def clone(self, downloader: Download):
         """Clone a given retriever but use the given downloader
 
         Args:
-            retriever (Retrieve): Retriever to clone
             downloader (Download): Downloader to use
 
         Returns:
             Retrieve: Cloned retriever
 
         """
-        return cls(
+        return Retrieve(
             downloader,
-            fallback_dir=retriever.fallback_dir,
-            saved_dir=retriever.saved_dir,
-            temp_dir=retriever.temp_dir,
-            save=retriever.save,
-            use_saved=retriever.use_saved,
-            prefix=retriever.prefix,
+            fallback_dir=self.fallback_dir,
+            saved_dir=self.saved_dir,
+            temp_dir=self.temp_dir,
+            save=self.save,
+            use_saved=self.use_saved,
+            prefix=self.prefix,
             delete=False,
         )
 
@@ -135,7 +133,7 @@ class Retrieve(BaseDownload):
             file_type (str): Given extension to look for in url
 
         Returns:
-            Retrieve: Cloned retriever
+            Tuple[str, Any]: Tuple of (filename, kwargs)
 
         """
         prefix = kwargs.pop("file_prefix", self.prefix)
