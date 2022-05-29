@@ -94,7 +94,7 @@ class Retrieve(BaseDownload):
             return f"{url[:100]}..."
         return url
 
-    def clone(self, downloader: Download):
+    def clone(self, downloader: Download) -> "Retrieve":
         """Clone a given retriever but use the given downloader
 
         Args:
