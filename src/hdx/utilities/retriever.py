@@ -96,7 +96,7 @@ class Retrieve(BaseDownload):
 
     @classmethod
     def clone(cls, retriever: "Retrieve", downloader: Download):
-        """Clone a given retriever but use teh given downloader
+        """Clone a given retriever but use the given downloader
 
         Args:
             retriever (Retrieve): Retriever to clone
