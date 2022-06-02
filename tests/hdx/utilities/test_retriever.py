@@ -349,90 +349,90 @@ class TestRetriever:
         _, temp_dir = dirs
         saved_dir = retrieverfolder
         with Download() as downloader:
-            retriever = Retrieve(
+            with Retrieve(
                 downloader,
                 fallback_dir,
                 saved_dir,
                 temp_dir,
                 save=False,
                 use_saved=True,
-            )
-            filename = "test.txt"
-            url = join(retrieverfolder, filename)
-            path = retriever.download_file(
-                url, filename, logstr="test file", fallback=True
-            )
-            assert path == join(saved_dir, filename)
-            path = retriever.download_file(
-                "NOTEXIST", filename, logstr="test file", fallback=True
-            )
-            assert path == join(saved_dir, filename)
-            path = retriever.download_file(
-                "NOTEXIST", filename, fallback=False
-            )
-            assert path == join(saved_dir, filename)
-            text = retriever.download_text(
-                url, filename, logstr="test file", fallback=False
-            )
-            assert text == "hello"
-            text = retriever.download_text(
-                "NOTEXIST", filename, logstr="test file", fallback=True
-            )
-            assert text == "hello"
-            text = retriever.download_text(
-                "NOTEXIST", filename, fallback=False
-            )
-            assert text == "hello"
-            filename = "test.yaml"
-            url = join(retrieverfolder, filename)
-            data = retriever.download_yaml(
-                url, filename, logstr="test file", fallback=False
-            )
-            assert data["param_1"] == "ABC"
-            data = retriever.download_yaml(
-                "NOTEXIST", filename, logstr="test file", fallback=True
-            )
-            assert data["param_1"] == "ABC"
-            data = retriever.download_yaml(
-                "NOTEXIST", filename, fallback=False
-            )
-            assert data["param_1"] == "ABC"
-            filename = "test.json"
-            url = join(retrieverfolder, filename)
-            data = retriever.download_json(
-                url, filename, logstr="test file", fallback=False
-            )
-            assert data["my_param"] == "abc"
-            data = retriever.download_json(
-                "NOTEXIST", filename, logstr="test file", fallback=True
-            )
-            assert data["my_param"] == "abc"
-            data = retriever.download_json(
-                "NOTEXIST", filename, fallback=False
-            )
-            assert data["my_param"] == "abc"
-            filename = "test.csv"
-            url = join(retrieverfolder, filename)
-            headers, iterator = retriever.get_tabular_rows(
-                url, logstr="test file", fallback=False
-            )
-            assert headers == ["header1", "header2", "header3", "header4"]
-            headers, iterator = retriever.get_tabular_rows(
-                "NOTEXIST",
-                filename="test.csv",
-                logstr="test file",
-                fallback=True,
-            )
-            # Uses saved file so doesn't need fallback
-            assert headers == ["header1", "header2", "header3", "header4"]
-            headers, iterator = retriever.get_tabular_rows(
-                "NOTEXIST",
-                filename="test.csv",
-                logstr="test file",
-                fallback=False,
-            )
-            # Uses saved file
-            assert headers == ["header1", "header2", "header3", "header4"]
+            ) as retriever:
+                filename = "test.txt"
+                url = join(retrieverfolder, filename)
+                path = retriever.download_file(
+                    url, filename, logstr="test file", fallback=True
+                )
+                assert path == join(saved_dir, filename)
+                path = retriever.download_file(
+                    "NOTEXIST", filename, logstr="test file", fallback=True
+                )
+                assert path == join(saved_dir, filename)
+                path = retriever.download_file(
+                    "NOTEXIST", filename, fallback=False
+                )
+                assert path == join(saved_dir, filename)
+                text = retriever.download_text(
+                    url, filename, logstr="test file", fallback=False
+                )
+                assert text == "hello"
+                text = retriever.download_text(
+                    "NOTEXIST", filename, logstr="test file", fallback=True
+                )
+                assert text == "hello"
+                text = retriever.download_text(
+                    "NOTEXIST", filename, fallback=False
+                )
+                assert text == "hello"
+                filename = "test.yaml"
+                url = join(retrieverfolder, filename)
+                data = retriever.download_yaml(
+                    url, filename, logstr="test file", fallback=False
+                )
+                assert data["param_1"] == "ABC"
+                data = retriever.download_yaml(
+                    "NOTEXIST", filename, logstr="test file", fallback=True
+                )
+                assert data["param_1"] == "ABC"
+                data = retriever.download_yaml(
+                    "NOTEXIST", filename, fallback=False
+                )
+                assert data["param_1"] == "ABC"
+                filename = "test.json"
+                url = join(retrieverfolder, filename)
+                data = retriever.download_json(
+                    url, filename, logstr="test file", fallback=False
+                )
+                assert data["my_param"] == "abc"
+                data = retriever.download_json(
+                    "NOTEXIST", filename, logstr="test file", fallback=True
+                )
+                assert data["my_param"] == "abc"
+                data = retriever.download_json(
+                    "NOTEXIST", filename, fallback=False
+                )
+                assert data["my_param"] == "abc"
+                filename = "test.csv"
+                url = join(retrieverfolder, filename)
+                headers, iterator = retriever.get_tabular_rows(
+                    url, logstr="test file", fallback=False
+                )
+                assert headers == ["header1", "header2", "header3", "header4"]
+                headers, iterator = retriever.get_tabular_rows(
+                    "NOTEXIST",
+                    filename="test.csv",
+                    logstr="test file",
+                    fallback=True,
+                )
+                # Uses saved file so doesn't need fallback
+                assert headers == ["header1", "header2", "header3", "header4"]
+                headers, iterator = retriever.get_tabular_rows(
+                    "NOTEXIST",
+                    filename="test.csv",
+                    logstr="test file",
+                    fallback=False,
+                )
+                # Uses saved file
+                assert headers == ["header1", "header2", "header3", "header4"]
 
     def test_generate_retrievers(self, downloaders, dirs, fallback_dir):
         saved_dir, temp_dir = dirs
