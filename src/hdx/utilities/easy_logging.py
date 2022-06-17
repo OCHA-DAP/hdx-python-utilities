@@ -1,5 +1,6 @@
 """Configuration of logging"""
 import logging
+import logging.config
 from sys import stderr
 from typing import Optional
 
@@ -11,7 +12,7 @@ def setup_logging(
     log_file: Optional[str] = None,
     file_log_level: str = "ERROR",
 ) -> None:
-    """Setup logging configuration. intercepts standard logging and outputs errors to
+    """Setup logging configuration. Intercepts standard logging and outputs errors to
     a file.
 
     Args:
@@ -59,6 +60,8 @@ def setup_logging(
                 exception=record.exc_info,
             ).log(level, record.getMessage())
 
-    logging.basicConfig(
-        handlers=[InterceptHandler()], level=logging.NOTSET, force=True
-    )
+    root_logger = logging.getLogger()
+    while root_logger.hasHandlers():
+        root_logger.removeHandler(root_logger.handlers[0])
+    root_logger.setLevel(logging.NOTSET)
+    logging.basicConfig(handlers=[InterceptHandler()], level=logging.NOTSET)
