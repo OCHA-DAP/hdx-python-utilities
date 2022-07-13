@@ -2,6 +2,7 @@
 [![Coverage Status](https://codecov.io/gh/OCHA-DAP/hdx-python-utilities/branch/main/graph/badge.svg?token=JpWZc5js4y)](https://codecov.io/gh/OCHA-DAP/hdx-python-utilities)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 [![Imports: isort](https://img.shields.io/badge/%20imports-isort-%231674b1?style=flat&labelColor=ef8336)](https://pycqa.github.io/isort/)
+[![Downloads](https://pepy.tech/badge/hdx-python-utilities)](https://pepy.tech/project/hdx-python-utilities)
 
 The HDX Python Utilities Library provides a range of helpful utilities for Python developers.
 Note that these are not specific to HDX.
