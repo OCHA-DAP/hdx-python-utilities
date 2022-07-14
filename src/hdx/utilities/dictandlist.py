@@ -2,7 +2,16 @@
 
 import itertools
 from collections import UserDict
-from typing import Any, Callable, Dict, List, Mapping, MutableMapping, Union
+from typing import (
+    Any,
+    Callable,
+    Dict,
+    List,
+    Mapping,
+    MutableMapping,
+    Optional,
+    Union,
+)
 
 from hdx.utilities.frictionless_wrapper import get_frictionless_resource
 from hdx.utilities.typehint import ListDict, ListTuple
@@ -422,6 +431,7 @@ def write_list_to_csv(
     rows: List[ListDict],
     headers: Union[int, ListTuple[str], None] = None,
     columns: Union[ListTuple[int], ListTuple[str], None] = None,
+    encoding: Optional[str] = None,
 ) -> None:
     """Write a list of rows in dict or list form to a csv. (The headers argument is
     either a row number (rows start counting at 1), or the actual headers defined as a
@@ -432,6 +442,7 @@ def write_list_to_csv(
         rows (List[ListDict]): List of rows in dict or list form
         headers (Union[int, ListTuple[str], None]): Headers to write. Defaults to None.
         columns (Union[ListTuple[int], ListTuple[str], None]): Columns to write. Defaults to all.
+        encoding (Optional[str]): Encoding to use. Defaults to None (infer encoding).
 
     Returns:
         None
@@ -472,8 +483,9 @@ def write_list_to_csv(
             data=rows,
             has_header=has_header,
             headers=headers,
+            encoding=encoding,
         )
-        resource.write(filepath, format="csv")
+        resource.write(filepath, format="csv", encoding=encoding)
         resource.close()
 
 
