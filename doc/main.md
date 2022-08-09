@@ -7,6 +7,7 @@ Note that these are not specific to HDX.
 
 1. [Easy downloading of files with support for authentication, streaming and hashing](#downloading-files)
 1. [Retrieval of data from url with saving to file or from data previously saved](#retrieving-files)
+1. [Date parsing utilities](#date-parsing-utilities)
 1. [Loading and saving JSON and YAML (inc. with OrderedDict)](#loading-and-saving-json-and-yaml)
 1. [Dictionary and list utilities](#dictionary-and-list-utilities)
 1. [HTML utilities (inc. BeautifulSoup helper)](#html-utilities)
@@ -14,7 +15,6 @@ Note that these are not specific to HDX.
 1. [Simple emailing](#emailing)
 1. [Easy logging setup and error logging](#logging)
 1. [Path utilities](#path-utilities)
-1. [Date parsing utilities](#date-parsing-utilities)
 1. [Text processing](#text-processing)
 1. [Encoding utilities](#encoding-utilities)
 1. [Check valid UUID](#valid-uuid)
@@ -29,6 +29,9 @@ The code for the library is [here](https://github.com/OCHA-DAP/hdx-python-utilit
 The library has detailed API documentation which can be found in the menu at the top. 
 
 ## Breaking Changes
+
+From 3.3.7, improved parse_date and parse_date_range by default will attempt to parse 
+time zone if date format not given. 
 
 From 3.1.5, changed setup_logging parameters to console_log_level, log_file and 
 file_log_level.
@@ -197,6 +200,55 @@ Examples:
         # Uses previously downloaded JSON file in saved_dir returning the JSON data (with no fallback) 
         retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save=False, use_saved=True)
         data = retriever.retrieve_json(url, filename, logstr="test json", fallback=False)
+
+## Date parsing utilities
+
+Ambiguous dates are parsed as day first D/M/Y where there are values in front of the year and day last Y/M/D
+where there are values after the year.
+
+Examples:
+
+    # Parse dates
+    assert parse_date("20/02/2013") == datetime(2013, 2, 20, 0, 0)
+    assert parse_date("20/02/2013", "%d/%m/%Y") == datetime(2013, 2, 20, 0, 0)
+    parse_date("20/02/2013 01:30:20 IST")  # ==
+    # datetime(2013, 2, 20, 1, 30, 20, tzinfo=timezone(timedelta(hours=5, minutes=30)))
+    parse_date("20/02/2013 01:30:20 IST", zero_time=True)  # == 
+    # datetime(2013, 2, 20, 0, 0, 0, tzinfo=timezone(timedelta(hours=5, minutes=30)))
+    parse_date("20/02/2013 01:30:20 IST", convert_utc=True)  # == 
+    # datetime(2013, 2, 19, 20, 0, 20, tzinfo=timezone.utc)
+    parse_date("20/02/2013 01:30:20 IST", force_utc=True)  # == 
+    # datetime(2013, 2, 20, 1, 30, 20, tzinfo=timezone.utc)
+    parse_date("20/02/2013 01:30:20 IST", infer_timezone=False)  # == 
+    # datetime(2013, 2, 20, 1, 30, 20)
+    parse_date("20/02/2013 01:30:20 NUT", default_timezones="-11 X NUT SST")  # == 
+    # datetime(2013, 2, 20, 1, 30, 20, tzinfo=timezone(timedelta(hours=-11)))
+    
+    # Parse date ranges
+    parse_date_range("20/02/2013")
+    # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
+    parse_date_range("20/02/2013 10:00:00")
+    # == datetime(2013, 2, 20, 10, 0), datetime(2013, 2, 20, 10, 0)
+    parse_date_range("20/02/2013 10:00:00", zero_time=True)
+    # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
+    parse_date_range("20/02/2013", "%d/%m/%Y")
+    # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
+    parse_date_range("02/2013")
+    # == datetime(2013, 2, 1, 0, 0), datetime(2013, 2, 28, 0, 0)
+    parse_date_range("2013")
+    # == datetime(2013, 1, 1, 0, 0), datetime(2013, 12, 31, 0, 0)
+    
+    # Pass dict in fuzzy activates fuzzy matching that allows for looking for dates within a sentence
+    fuzzy = dict()
+    parse_date_range("date is 20/02/2013 for this test", fuzzy=fuzzy)
+    # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)    
+    assert fuzzy == {"startdate": datetime(2013, 2, 20, 0, 0), "enddate": datetime(2013, 2, 20, 0, 0), 
+                     "nondate": ("date is ", " for this test"), "date": ("20/02/2013",)}
+    fuzzy = dict()
+    parse_date_range("date is 02/2013 for this test", fuzzy=fuzzy)
+    # == datetime(2013, 2, 1, 0, 0), datetime(2013, 2, 28, 0, 0)
+    assert fuzzy == {"startdate": datetime(2013, 2, 1, 0, 0), "enddate": datetime(2013, 2, 28, 0, 0), 
+                     "nondate": ("date is ", " for this test"), "date": ("02/2013",)}
 
 ## Loading and saving JSON and YAML
 
@@ -484,43 +536,6 @@ Examples:
     filename, extension = get_filename_extension_from_url(fixtureurl)
     assert filename == "test_data"
     assert extension == ".csv"
-
-## Date parsing utilities
-
-Ambiguous dates are parsed as day first D/M/Y where there are values in front of the year and day last Y/M/D
-where there are values after the year.
-
-Examples:
-
-    # Parse dates
-    assert parse_date("20/02/2013") == datetime(2013, 2, 20, 0, 0)
-    assert parse_date("20/02/2013", "%d/%m/%Y") == datetime(2013, 2, 20, 0, 0)
-    
-    # Parse date ranges
-    parse_date_range("20/02/2013")
-    # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
-    parse_date_range("20/02/2013 10:00:00")
-    # == datetime(2013, 2, 20, 10, 0), datetime(2013, 2, 20, 10, 0)
-    parse_date_range("20/02/2013 10:00:00", zero_time=True)
-    # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
-    parse_date_range("20/02/2013", "%d/%m/%Y")
-    # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
-    parse_date_range("02/2013")
-    # == datetime(2013, 2, 1, 0, 0), datetime(2013, 2, 28, 0, 0)
-    parse_date_range("2013")
-    # == datetime(2013, 1, 1, 0, 0), datetime(2013, 12, 31, 0, 0)
-    
-    # Pass dict in fuzzy activates fuzzy matching that allows for looking for dates within a sentence
-    fuzzy = dict()
-    parse_date_range("date is 20/02/2013 for this test", fuzzy=fuzzy)
-    # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)    
-    assert fuzzy == {"startdate": datetime(2013, 2, 20, 0, 0), "enddate": datetime(2013, 2, 20, 0, 0), 
-                     "nondate": ("date is ", " for this test"), "date": ("20/02/2013",)}
-    fuzzy = dict()
-    parse_date_range("date is 02/2013 for this test", fuzzy=fuzzy)
-    # == datetime(2013, 2, 1, 0, 0), datetime(2013, 2, 28, 0, 0)
-    assert fuzzy == {"startdate": datetime(2013, 2, 1, 0, 0), "enddate": datetime(2013, 2, 28, 0, 0), 
-                     "nondate": ("date is ", " for this test"), "date": ("02/2013",)}
 
 ## Text processing
 

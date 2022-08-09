@@ -1,5 +1,5 @@
 """Date Parse Utility Tests"""
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 
 import pytest
 from dateutil.parser import ParserError
@@ -115,6 +115,82 @@ class TestDateParse:
         assert parse_date("20/02/2013") == datetime(2013, 2, 20, 0, 0)
         assert parse_date("20/02/2013", "%d/%m/%Y") == datetime(
             2013, 2, 20, 0, 0
+        )
+        assert parse_date("20/02/2013 01:30:20") == datetime(
+            2013, 2, 20, 1, 30, 20
+        )
+        assert parse_date("20/02/2013 01:30:20 IST") == datetime(
+            2013,
+            2,
+            20,
+            1,
+            30,
+            20,
+            tzinfo=timezone(timedelta(hours=5, minutes=30)),
+        )
+        assert parse_date(
+            "20/02/2013 01:30:20 IST", zero_time=True
+        ) == datetime(
+            2013,
+            2,
+            20,
+            0,
+            0,
+            0,
+            tzinfo=timezone(timedelta(hours=5, minutes=30)),
+        )
+        assert parse_date(
+            "20/02/2013 01:30:20 IST", convert_utc=True
+        ) == datetime(
+            2013,
+            2,
+            19,
+            20,
+            0,
+            20,
+            tzinfo=timezone.utc,
+        )
+        assert parse_date(
+            "20/02/2013 01:30:20 IST", force_utc=True
+        ) == datetime(
+            2013,
+            2,
+            20,
+            1,
+            30,
+            20,
+            tzinfo=timezone.utc,
+        )
+        assert parse_date(
+            "20/02/2013 01:30:20 IST", infer_timezone=False
+        ) == datetime(
+            2013,
+            2,
+            20,
+            1,
+            30,
+            20,
+        )
+        assert parse_date(
+            "20/02/2013 01:30:20 NUT", default_timezones="-11 X NUT SST",
+        ) == datetime(
+            2013,
+            2,
+            20,
+            1,
+            30,
+            20,
+            tzinfo=timezone(timedelta(hours=-11)),
+        )
+        assert parse_date(
+            "20/02/2013 01:30:20 IST", default_timezones="-11 X NUT SST",
+        ) == datetime(
+            2013,
+            2,
+            20,
+            1,
+            30,
+            20,
         )
         with pytest.raises(ParserError):
             parse_date("02/2013")
