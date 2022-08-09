@@ -171,7 +171,8 @@ class TestDateParse:
             20,
         )
         assert parse_date(
-            "20/02/2013 01:30:20 NUT", default_timezones="-11 X NUT SST",
+            "20/02/2013 01:30:20 NUT",
+            default_timezones="-11 X NUT SST",
         ) == datetime(
             2013,
             2,
@@ -182,7 +183,8 @@ class TestDateParse:
             tzinfo=timezone(timedelta(hours=-11)),
         )
         assert parse_date(
-            "20/02/2013 01:30:20 IST", default_timezones="-11 X NUT SST",
+            "20/02/2013 01:30:20 IST",
+            default_timezones="-11 X NUT SST",
         ) == datetime(
             2013,
             2,

@@ -824,7 +824,9 @@ def get_timestamp_from_datetime(date: datetime) -> float:
             + date.microsecond / 1e6
         )
     else:
-        return (date - datetime(1970, 1, 1, tzinfo=timezone.utc)).total_seconds()
+        return (
+            date - datetime(1970, 1, 1, tzinfo=timezone.utc)
+        ).total_seconds()
 
 
 def get_datetime_from_timestamp(
