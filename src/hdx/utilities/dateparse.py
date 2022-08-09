@@ -28,6 +28,8 @@ default_enddate = datetime(
     microsecond=0,
 )
 
+# Used https://stackoverflow.com/questions/1703546/parsing-date-time-string-with-timezone-abbreviated-name-in-python/4766400#4766400
+# with IST added
 default_timezone_info = """-12 Y
 -11 X NUT SST
 -10 W CKT HAST HST TAHT TKT
