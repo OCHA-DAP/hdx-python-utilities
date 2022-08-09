@@ -6,7 +6,6 @@ from typing import Dict, Optional, Tuple
 
 import dateutil
 from dateutil.parser import ParserError, _timelex, parserinfo
-from dateutil.tz import tzutc
 
 default_sd_year = 1
 default_date = datetime(
@@ -825,20 +824,20 @@ def get_timestamp_from_datetime(date: datetime) -> float:
             + date.microsecond / 1e6
         )
     else:
-        return (date - datetime(1970, 1, 1, tzinfo=tzutc())).total_seconds()
+        return (date - datetime(1970, 1, 1, tzinfo=timezone.utc)).total_seconds()
 
 
 def get_datetime_from_timestamp(
     timestamp: float,
-    timezone: datetime.tzinfo = tzutc,
-    today: datetime = datetime.now(tzutc()),
+    timezone: datetime.tzinfo = timezone.utc,
+    today: datetime = datetime.utcnow(),
 ) -> datetime:
     """Convert timestamp to datetime.
 
     Args:
         timestamp (float): Timestamp to convert
         timezone (datetime.tzinfo): Timezone to use
-        today (datetime): Today's date. Defaults to datetime.now().
+        today (datetime): Today's date. Defaults to datetime.utcnow.
 
     Returns:
         datetime: Date of timestamp

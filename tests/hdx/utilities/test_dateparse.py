@@ -3,7 +3,6 @@ from datetime import datetime, timedelta, timezone
 
 import pytest
 from dateutil.parser import ParserError
-from dateutil.tz import tzutc
 
 from hdx.utilities.dateparse import (
     get_datetime_from_timestamp,
@@ -199,14 +198,14 @@ class TestDateParse:
 
     def test_get_datetime_from_timestamp(self):
         expected_timestamp = 1596180834.0
-        expected_date = datetime(2020, 7, 31, 7, 33, 54, tzinfo=tzutc())
+        expected_date = datetime(2020, 7, 31, 7, 33, 54, tzinfo=timezone.utc)
         timestamp = get_timestamp_from_datetime(expected_date)
         assert timestamp == expected_timestamp
         date = get_datetime_from_timestamp(
-            expected_timestamp, timezone=tzutc()
+            expected_timestamp, timezone=timezone.utc
         )
         assert date == expected_date
         date = get_datetime_from_timestamp(
-            expected_timestamp * 1000, timezone=tzutc()
+            expected_timestamp * 1000, timezone=timezone.utc
         )
         assert date == expected_date
