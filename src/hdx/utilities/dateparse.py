@@ -765,6 +765,7 @@ def parse_date(
     date_format: Optional[str] = None,
     fuzzy: Optional[Dict] = None,
     zero_time: bool = False,
+    max_time: bool = False,
     convert_utc: bool = False,
     force_utc: bool = False,
     infer_timezone: bool = True,
@@ -777,13 +778,14 @@ def parse_date(
     in the fuzzy parameter. In this case, dateutil's fuzzy parsing is used and the
     results returned in the dictionary in keys startdate, enddate, date (the string
     elements used to make the date) and nondate (the non date part of the string). Any
-    time elements are set to 0 if zero_time is True. The time can be converted to UTC
-    using convert_utc. Alternatively, the time zone can be set to UTC regardless of
-    whether or not it is set to something in the input string using force_utc. When
-    parsing without supplying a date format or using fuzzy parsing, if infer_timezone is
-    True, then a datetime object with time zone will be returned if possible. A default
-    set of time zones will be used unless overridden by passing in default_timezones
-    which is a string of the form:
+    time elements are set to 0 if zero_time is True. If max_time is True, the time is
+    set to 23:59:59:999999. The time can be converted to UTC using convert_utc.
+    Alternatively, the time zone can be set to UTC regardless of whether or not it is
+    set to something in the input string using force_utc. When parsing without supplying
+    a date format or using fuzzy parsing, if infer_timezone is True, then a datetime
+    object with time zone will be returned if possible. A default set of time zones will
+    be used unless overridden by passing in default_timezones which is a string of the
+    form:
 
         -11 X NUT SST
         -10 W CKT HAST HST TAHT TKT
@@ -793,6 +795,7 @@ def parse_date(
         date_format (Optional[str]): Date format. If None is given, will attempt to guess. Defaults to None.
         fuzzy (Optional[Dict]): If dict supplied, fuzzy matching will be used and results returned in dict
         zero_time (bool): Zero time elements of datetime if True. Defaults to False.
+        max_time (bool): Make date time component 23:59:59:999999. Defaults to False.
         convert_utc (bool): Convert given time to UTC. Defaults to False.
         force_utc (bool): Force UTC timezone. Defaults to False.
         infer_timezone (bool): Whether to try to infer the timezone. Defaults to True.
@@ -801,11 +804,21 @@ def parse_date(
     Returns:
         datetime: The parsed date
     """
+    if max_time:
+        max_starttime = True
+        max_endtime = True
+        zero_time = False
+    else:
+        max_starttime = False
+        max_endtime = False
+
     startdate, enddate = parse_date_range(
         string,
         date_format=date_format,
         fuzzy=fuzzy,
         zero_time=zero_time,
+        max_starttime=max_starttime,
+        max_endtime=max_endtime,
         convert_utc=convert_utc,
         force_utc=force_utc,
         infer_timezone=infer_timezone,

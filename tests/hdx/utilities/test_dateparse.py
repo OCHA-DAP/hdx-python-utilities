@@ -153,6 +153,18 @@ class TestDateParse:
             tzinfo=timezone(timedelta(hours=5, minutes=30)),
         )
         assert parse_date(
+            "20/02/2013 01:30:20 IST", max_time=True
+        ) == datetime(
+            2013,
+            2,
+            20,
+            23,
+            59,
+            59,
+            999999,
+            tzinfo=timezone(timedelta(hours=5, minutes=30)),
+        )
+        assert parse_date(
             "20/02/2013 01:30:20 IST", convert_utc=True
         ) == datetime(
             2013,

@@ -215,6 +215,9 @@ Examples:
     # datetime(2013, 2, 20, 1, 30, 20, tzinfo=timezone(timedelta(hours=5, minutes=30)))
     parse_date("20/02/2013 01:30:20 IST", zero_time=True)  # == 
     # datetime(2013, 2, 20, 0, 0, 0, tzinfo=timezone(timedelta(hours=5, minutes=30)))
+    parse_date("20/02/2013 01:30:20 IST", max_time=True)  # == 
+    # datetime(2013, 2, 20, 23, 59, 59, 999999, tzinfo=timezone(timedelta(hours=5, minutes=30)))
+
     parse_date("20/02/2013 01:30:20 IST", convert_utc=True)  # == 
     # datetime(2013, 2, 19, 20, 0, 20, tzinfo=timezone.utc)
     parse_date("20/02/2013 01:30:20 IST", force_utc=True)  # == 
@@ -231,6 +234,8 @@ Examples:
     # == datetime(2013, 2, 20, 10, 0), datetime(2013, 2, 20, 10, 0)
     parse_date_range("20/02/2013 10:00:00", zero_time=True)
     # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
+    parse_date_range("20/02/2013 10:00:00", max_starttime=True, max_endtime=True)  # ==
+    # datetime(2013, 2, 20, 23, 59, 59, 999999), datetime(2013, 2, 20, 23, 59, 59, 999999)
     parse_date_range("20/02/2013", "%d/%m/%Y")
     # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
     parse_date_range("02/2013")
