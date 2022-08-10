@@ -672,7 +672,7 @@ def parse_date_range(
         Tuple[datetime,datetime]: Tuple containing start date and end date
     """
     if date_format is None or fuzzy is not None:
-        if infer_timezone:
+        if infer_timezone and not force_utc:
             tzinfos = {}
             for tz_descr in map(str.split, default_timezones.split("\n")):
                 tz_offset = int(float(tz_descr[0]) * 3600)
