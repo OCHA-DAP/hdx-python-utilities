@@ -28,19 +28,24 @@ class TestDateParse:
         assert (
             parse_date_range("20/02/2013 10:00:00", zero_time=True) == result
         )
+        result2 = datetime(2013, 2, 20, 0, 0), datetime(
+            2013, 2, 20, 23, 59, 59, 999999
+        )
         assert (
             parse_date_range(
                 "20/02/2013 10:00:00", zero_time=True, max_endtime=True
             )
-            == datetime(2013, 2, 20, 0, 0),
+            == result2
+        )
+        result2 = (
+            datetime(2013, 2, 20, 23, 59, 59, 999999),
             datetime(2013, 2, 20, 23, 59, 59, 999999),
         )
         assert (
             parse_date_range(
                 "20/02/2013 10:00:00", max_starttime=True, max_endtime=True
             )
-            == datetime(2013, 2, 20, 23, 59, 59, 999999),
-            datetime(2013, 2, 20, 23, 59, 59, 999999),
+            == result2
         )
         assert parse_date_range("20/02/2013", "%d/%m/%Y") == result
         assert (
