@@ -17,6 +17,16 @@ default_date = datetime(
     second=0,
     microsecond=0,
 )
+default_date_utc = datetime(
+    year=default_sd_year,
+    month=1,
+    day=1,
+    hour=0,
+    minute=0,
+    second=0,
+    microsecond=0,
+    tzinfo=timezone.utc,
+)
 default_ed_year = 9990
 default_enddate = datetime(
     year=default_ed_year,
@@ -26,6 +36,16 @@ default_enddate = datetime(
     minute=0,
     second=0,
     microsecond=0,
+)
+default_enddate_utc = datetime(
+    year=default_ed_year,
+    month=12,
+    day=31,
+    hour=0,
+    minute=0,
+    second=0,
+    microsecond=0,
+    tzinfo=timezone.utc,
 )
 
 # Used https://stackoverflow.com/questions/1703546/parsing-date-time-string-with-timezone-abbreviated-name-in-python/4766400#4766400
