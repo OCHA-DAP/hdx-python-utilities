@@ -209,8 +209,10 @@ functions have a parameter `timezone_handling` which should be changed from its 
 of 0. If it is 1, then no timezone information will be parsed and a naive datetime will 
 be returned. If it is 2 or more, then timezone information will be parsed. For 2, 
 failure to parse timezone will result in a naive datetime. For 3, failure to parse 
-timezone will result in the timezone being set to UTC. For 4, the time will be converted 
-from whatever timezone is identified to UTC.
+timezone will result in the timezone being set to UTC. For 4 and 5, the time will be 
+converted from whatever timezone is identified to UTC. For 4, failure to parse timezone 
+will result in a naive (local) datetime converted to UTC. For 5, failure to parse 
+timezone will result in the timezone being set to UTC.
 
 Ambiguous dates are parsed as day first D/M/Y where there are values in front of the 
 year and day last Y/M/D where there are values after the year.

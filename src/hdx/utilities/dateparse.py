@@ -665,8 +665,10 @@ def parse_date_range(
     from its default of 0. If it is 1, then no timezone information will be parsed and a
     naive datetime will be returned. If it is 2 or more, then timezone information will
     be parsed. For 2, failure to parse timezone will result in a naive datetime. For 3,
-    failure to parse timezone will result in the timezone being set to UTC. For 4, the
-    time will be converted from whatever timezone is identified to UTC.
+    failure to parse timezone will result in the timezone being set to UTC. For 4 and 5,
+    the time will be converted from whatever timezone is identified to UTC. For 4,
+    failure to parse timezone will result in a naive (local) datetime converted to UTC.
+    For 5, failure to parse timezone will result in the timezone being set to UTC.
 
     To parse a date within a string containing other text, you can supply a dictionary
     in the fuzzy parameter. In this case, dateutil's fuzzy parsing is used and the
@@ -805,6 +807,15 @@ def parse_date_range(
     elif timezone_handling == 4:
         startdate = startdate.astimezone(timezone.utc)
         enddate = enddate.astimezone(timezone.utc)
+    elif timezone_handling == 5:
+        if startdate.tzinfo is None:
+            startdate = startdate.replace(tzinfo=timezone.utc)
+        else:
+            startdate = startdate.astimezone(timezone.utc)
+        if enddate.tzinfo is None:
+            enddate = enddate.replace(tzinfo=timezone.utc)
+        else:
+            enddate = enddate.astimezone(timezone.utc)
     if not include_microseconds:
         startdate = startdate.replace(microsecond=0)
         enddate = enddate.replace(microsecond=0)
@@ -833,8 +844,10 @@ def parse_date(
     from its default of 0. If it is 1, then no timezone information will be parsed and a
     naive datetime will be returned. If it is 2 or more, then timezone information will
     be parsed. For 2, failure to parse timezone will result in a naive datetime. For 3,
-    failure to parse timezone will result in the timezone being set to UTC. For 4, the
-    time will be converted from whatever timezone is identified to UTC.
+    failure to parse timezone will result in the timezone being set to UTC. For 4 and 5,
+    the time will be converted from whatever timezone is identified to UTC. For 4,
+    failure to parse timezone will result in a naive (local) datetime converted to UTC.
+    For 5, failure to parse timezone will result in the timezone being set to UTC.
 
     To parse a date within a string containing other text, you can supply a dictionary
     in the fuzzy parameter. In this case, dateutil's fuzzy parsing is used and the

@@ -270,7 +270,7 @@ class TestDateParse:
         )
         assert parse_date(
             "20/02/2013 01:30:20 IST",
-            timezone_handling=4,
+            timezone_handling=5,
             default_timezones="-11 X NUT SST",
         ) == datetime(
             2013,
