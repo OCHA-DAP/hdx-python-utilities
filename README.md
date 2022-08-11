@@ -9,6 +9,7 @@ Note that these are not specific to HDX.
 
 1. Easy downloading of files with support for authentication, streaming and hashing
 1. Retrieval of data from url with saving to file or from data previously saved
+1. Date parsing utilities
 1. Loading and saving JSON and YAML (inc. with OrderedDict)
 1. Dictionary and list utilities
 1. HTML utilities (inc. BeautifulSoup helper)
@@ -16,7 +17,6 @@ Note that these are not specific to HDX.
 1. Simple emailing
 1. Easy logging setup and error logging
 1. Path utilities
-1. Date parsing utilities
 1. Text processing
 1. Encoding utilities
 1. Check valid UUID
