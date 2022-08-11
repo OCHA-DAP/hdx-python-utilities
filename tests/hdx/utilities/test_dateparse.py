@@ -7,12 +7,20 @@ from dateutil.parser import ParserError
 from hdx.utilities.dateparse import (
     get_datetime_from_timestamp,
     get_timestamp_from_datetime,
+    now_utc,
     parse_date,
     parse_date_range,
 )
 
 
 class TestDateParse:
+    def test_now_utc(self):
+        assert now_utc().replace(
+            second=0, microsecond=0
+        ) == datetime.utcnow().replace(
+            second=0, microsecond=0, tzinfo=timezone.utc
+        )
+
     def test_parse_date_range(self):
         result = datetime(2013, 2, 10, 0, 0, tzinfo=timezone.utc), datetime(
             2013, 2, 10, 0, 0, tzinfo=timezone.utc
