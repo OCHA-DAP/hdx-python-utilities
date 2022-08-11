@@ -31,7 +31,7 @@ The library has detailed API documentation which can be found in the menu at the
 ## Breaking Changes
 
 From 3.3.7, improved parse_date and parse_date_range by default will attempt to parse 
-time zone if date format not given. 
+time zone if date format not given. The default time zone is UTC (not no timezone). 
 
 From 3.1.5, changed setup_logging parameters to console_log_level, log_file and 
 file_log_level.
