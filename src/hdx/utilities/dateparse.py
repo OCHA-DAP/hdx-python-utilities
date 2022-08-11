@@ -645,6 +645,15 @@ def parse(
         return ret
 
 
+def now_utc() -> datetime:
+    """Return now with UTC timezone.
+
+    Returns:
+        datetime: Now with UTC timezone
+    """
+    return datetime.now(timezone.utc)
+
+
 def parse_date_range(
     string: str,
     date_format: Optional[str] = None,
@@ -937,14 +946,14 @@ def get_timestamp_from_datetime(date: datetime) -> float:
 def get_datetime_from_timestamp(
     timestamp: float,
     timezone: datetime.tzinfo = timezone.utc,
-    today: datetime = datetime.utcnow(),
+    today: datetime = now_utc(),
 ) -> datetime:
     """Convert timestamp to datetime.
 
     Args:
         timestamp (float): Timestamp to convert
         timezone (datetime.tzinfo): Timezone to use
-        today (datetime): Today's date. Defaults to datetime.utcnow.
+        today (datetime): Today's date. Defaults to now_utc.
 
     Returns:
         datetime: Date of timestamp
