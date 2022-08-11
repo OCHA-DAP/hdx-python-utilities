@@ -203,56 +203,70 @@ Examples:
 
 ## Date parsing utilities
 
-Ambiguous dates are parsed as day first D/M/Y where there are values in front of the year and day last Y/M/D
-where there are values after the year.
+There are utilities to parse dates. By default, *no timezone information will be parsed 
+and the returned datetime will have timezone set to UTC*. To change this behaviour, the 
+functions have a parameter `timezone_handling` which should be changed from its default 
+of 0. If it is 1, then no timezone information will be parsed and a naive datetime will 
+be returned. If it is 2 or more, then timezone information will be parsed. For 2, 
+failure to parse timezone will result in a naive datetime. For 3, failure to parse 
+timezone will result in the timezone being set to UTC. For 4, the time will be converted 
+from whatever timezone is identified to UTC.
+
+Ambiguous dates are parsed as day first D/M/Y where there are values in front of the 
+year and day last Y/M/D where there are values after the year.
 
 Examples:
 
     # Parse dates
-    assert parse_date("20/02/2013") == datetime(2013, 2, 20, 0, 0)
-    assert parse_date("20/02/2013", "%d/%m/%Y") == datetime(2013, 2, 20, 0, 0)
-    parse_date("20/02/2013 01:30:20 IST")  # ==
-    # datetime(2013, 2, 20, 1, 30, 20, tzinfo=timezone(timedelta(hours=5, minutes=30)))
-    parse_date("20/02/2013 01:30:20 IST", zero_time=True)  # == 
-    # datetime(2013, 2, 20, 0, 0, 0, tzinfo=timezone(timedelta(hours=5, minutes=30)))
-    parse_date("20/02/2013 01:30:20 IST", max_time=True)  # == 
-    # datetime(2013, 2, 20, 23, 59, 59, 999999, tzinfo=timezone(timedelta(hours=5, minutes=30)))
-
-    parse_date("20/02/2013 01:30:20 IST", convert_utc=True)  # == 
-    # datetime(2013, 2, 19, 20, 0, 20, tzinfo=timezone.utc)
-    parse_date("20/02/2013 01:30:20 IST", force_utc=True)  # == 
+    assert parse_date("20/02/2013") == datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc)
+    assert parse_date("20/02/2013", "%d/%m/%Y") == datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc)
+    parse_date("20/02/2013 01:30:20 IST")  # == 
     # datetime(2013, 2, 20, 1, 30, 20, tzinfo=timezone.utc)
-    parse_date("20/02/2013 01:30:20 IST", infer_timezone=False)  # == 
+    parse_date("20/02/2013 01:30:20 IST", timezone_handling=1)  # == 
     # datetime(2013, 2, 20, 1, 30, 20)
-    parse_date("20/02/2013 01:30:20 NUT", default_timezones="-11 X NUT SST")  # == 
+    parse_date("20/02/2013 01:30:20 IST", timezone_handling=2)  # ==
+    # datetime(2013, 2, 20, 1, 30, 20, tzinfo=timezone(timedelta(hours=5, minutes=30)))
+    parse_date("20/02/2013 01:30:20 IST", timezone_handling=3)  # ==
+    # datetime(2013, 2, 20, 1, 30, 20, tzinfo=timezone(timedelta(hours=5, minutes=30)))
+    parse_date("20/02/2013 01:30:20 IST", timezone_handling=4)  # == 
+    # datetime(2013, 2, 19, 20, 0, 20, tzinfo=timezone.utc)
+    parse_date("20/02/2013 01:30:20", zero_time=True)  # == 
+    # datetime(2013, 2, 20, 0, 0, 0, tzinfo=timezone.utc)
+    parse_date("20/02/2013 01:30:20 IST", max_time=True)  # == 
+    # datetime(2013, 2, 20, 23, 59, 59, tzinfo=timezone.utc)
+    parse_date("20/02/2013 01:30:20 IST", include_microseconds=True, max_time=True) 
+    # datetime(2013, 2, 20, 23, 59, 59, 999999, tzinfo=timezone.utc)
+    parse_date("20/02/2013 01:30:20 NUT", timezone_handling=2, default_timezones="-11 X NUT SST")  # == 
     # datetime(2013, 2, 20, 1, 30, 20, tzinfo=timezone(timedelta(hours=-11)))
     
     # Parse date ranges
     parse_date_range("20/02/2013")
-    # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
+    # == datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc), datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc)
     parse_date_range("20/02/2013 10:00:00")
-    # == datetime(2013, 2, 20, 10, 0), datetime(2013, 2, 20, 10, 0)
+    # == datetime(2013, 2, 20, 10, 0, tzinfo=timezone.utc), datetime(2013, 2, 20, 10, 0, tzinfo=timezone.utc)
     parse_date_range("20/02/2013 10:00:00", zero_time=True)
-    # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
+    # == datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc), datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc)
     parse_date_range("20/02/2013 10:00:00", max_starttime=True, max_endtime=True)  # ==
-    # datetime(2013, 2, 20, 23, 59, 59, 999999), datetime(2013, 2, 20, 23, 59, 59, 999999)
+    # datetime(2013, 2, 20, 23, 59, 59, tzinfo=timezone.utc), datetime(2013, 2, 20, 23, 59, 59, tzinfo=timezone.utc)
     parse_date_range("20/02/2013", "%d/%m/%Y")
-    # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
+    # == datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc), datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc)
     parse_date_range("02/2013")
-    # == datetime(2013, 2, 1, 0, 0), datetime(2013, 2, 28, 0, 0)
+    # == datetime(2013, 2, 1, 0, 0, tzinfo=timezone.utc), datetime(2013, 2, 28, 0, 0, tzinfo=timezone.utc)
     parse_date_range("2013")
-    # == datetime(2013, 1, 1, 0, 0), datetime(2013, 12, 31, 0, 0)
+    # == datetime(2013, 1, 1, 0, 0, tzinfo=timezone.utc), datetime(2013, 12, 31, 0, 0, tzinfo=timezone.utc)
     
     # Pass dict in fuzzy activates fuzzy matching that allows for looking for dates within a sentence
     fuzzy = dict()
     parse_date_range("date is 20/02/2013 for this test", fuzzy=fuzzy)
-    # == datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)    
-    assert fuzzy == {"startdate": datetime(2013, 2, 20, 0, 0), "enddate": datetime(2013, 2, 20, 0, 0), 
+    # == datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc), datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc)    
+    assert fuzzy == {"startdate": datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc), 
+                     "enddate": datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc), 
                      "nondate": ("date is ", " for this test"), "date": ("20/02/2013",)}
     fuzzy = dict()
     parse_date_range("date is 02/2013 for this test", fuzzy=fuzzy)
-    # == datetime(2013, 2, 1, 0, 0), datetime(2013, 2, 28, 0, 0)
-    assert fuzzy == {"startdate": datetime(2013, 2, 1, 0, 0), "enddate": datetime(2013, 2, 28, 0, 0), 
+    # == datetime(2013, 2, 1, 0, 0, tzinfo=timezone.utc), datetime(2013, 2, 28, 0, 0, tzinfo=timezone.utc)
+    assert fuzzy == {"startdate": datetime(2013, 2, 1, 0, 0, tzinfo=timezone.utc), 
+                     "enddate": datetime(2013, 2, 28, 0, 0, tzinfo=timezone.utc), 
                      "nondate": ("date is ", " for this test"), "date": ("02/2013",)}
 
 ## Loading and saving JSON and YAML

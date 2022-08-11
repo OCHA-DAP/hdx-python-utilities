@@ -660,14 +660,13 @@ def parse_date_range(
     date range in dictionary keys startdate and enddate. If no date_format is supplied,
     the function will guess, which for unambiguous formats, should work fine.
 
-    By default if no date format is supplied, no timezone information will be parsed and
-    the returned datetime will have timezone UTC. To change this behaviour,
-    timezone_handling should be changed from its default of 0. If it is 1, then no
-    timezone information will be parsed and a naive datetime will be returned. If it is
-    2 or more, then timezone information will be parsed. For 2, failure to parse
-    timezone will result in a naive datetime. For 3, failure to parse timezone will
-    result in the timezone being set to UTC. For 4, the time will be converted from
-    whatever timezone is identified to UTC.
+    By default, no timezone information will be parsed and the returned datetime will
+    have timezone UTC. To change this behaviour, timezone_handling should be changed
+    from its default of 0. If it is 1, then no timezone information will be parsed and a
+    naive datetime will be returned. If it is 2 or more, then timezone information will
+    be parsed. For 2, failure to parse timezone will result in a naive datetime. For 3,
+    failure to parse timezone will result in the timezone being set to UTC. For 4, the
+    time will be converted from whatever timezone is identified to UTC.
 
     To parse a date within a string containing other text, you can supply a dictionary
     in the fuzzy parameter. In this case, dateutil's fuzzy parsing is used and the
@@ -829,14 +828,13 @@ def parse_date(
     Raises exception for dates that are missing year, month or day. If no date_format is
     supplied, the function will guess, which for unambiguous formats, should work fine.
 
-    By default if no date format is supplied, no timezone information will be parsed and
-    the returned datetime will have timezone UTC. To change this behaviour,
-    timezone_handling should be changed from its default of 0. If it is 1, then no
-    timezone information will be parsed and a naive datetime will be returned. If it is
-    2 or more, then timezone information will be parsed. For 2, failure to parse
-    timezone will result in a naive datetime. For 3, failure to parse timezone will
-    result in the timezone being set to UTC. For 4, the time will be converted from
-    whatever timezone is identified to UTC.
+    By default, no timezone information will be parsed and the returned datetime will
+    have timezone UTC. To change this behaviour, timezone_handling should be changed
+    from its default of 0. If it is 1, then no timezone information will be parsed and a
+    naive datetime will be returned. If it is 2 or more, then timezone information will
+    be parsed. For 2, failure to parse timezone will result in a naive datetime. For 3,
+    failure to parse timezone will result in the timezone being set to UTC. For 4, the
+    time will be converted from whatever timezone is identified to UTC.
 
     To parse a date within a string containing other text, you can supply a dictionary
     in the fuzzy parameter. In this case, dateutil's fuzzy parsing is used and the
