@@ -14,36 +14,47 @@ from hdx.utilities.dateparse import (
 
 class TestDateParse:
     def test_parse_date_range(self):
-        result = datetime(2013, 2, 10, 0, 0), datetime(2013, 2, 10, 0, 0)
+        result = datetime(2013, 2, 10, 0, 0, tzinfo=timezone.utc), datetime(
+            2013, 2, 10, 0, 0, tzinfo=timezone.utc
+        )
         assert parse_date_range("10/02/2013") == result
         assert parse_date_range("2013/02/10") == result
-        result = datetime(2013, 2, 20, 10, 0), datetime(2013, 2, 20, 10, 0)
+        result = datetime(2013, 2, 20, 10, 0, tzinfo=timezone.utc), datetime(
+            2013, 2, 20, 10, 0, tzinfo=timezone.utc
+        )
         assert parse_date_range("20/02/2013 10:00:00") == result
         assert (
             parse_date_range("20/02/2013 10:00:00", "%d/%m/%Y %H:%M:%S")
             == result
         )
-        result = datetime(2013, 2, 20, 0, 0), datetime(2013, 2, 20, 0, 0)
+        result = datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc), datetime(
+            2013, 2, 20, 0, 0, tzinfo=timezone.utc
+        )
         assert parse_date_range("20/02/2013") == result
         assert (
             parse_date_range("20/02/2013 10:00:00", zero_time=True) == result
         )
-        result2 = datetime(2013, 2, 20, 0, 0), datetime(
-            2013, 2, 20, 23, 59, 59, 999999
+        result2 = datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc), datetime(
+            2013, 2, 20, 23, 59, 59, tzinfo=timezone.utc
         )
         assert (
             parse_date_range(
-                "20/02/2013 10:00:00", zero_time=True, max_endtime=True
+                "20/02/2013 10:00:00",
+                zero_time=True,
+                max_endtime=True,
             )
             == result2
         )
         result2 = (
-            datetime(2013, 2, 20, 23, 59, 59, 999999),
-            datetime(2013, 2, 20, 23, 59, 59, 999999),
+            datetime(2013, 2, 20, 23, 59, 59, 999999, tzinfo=timezone.utc),
+            datetime(2013, 2, 20, 23, 59, 59, 999999, tzinfo=timezone.utc),
         )
         assert (
             parse_date_range(
-                "20/02/2013 10:00:00", max_starttime=True, max_endtime=True
+                "20/02/2013 10:00:00",
+                include_microseconds=True,
+                max_starttime=True,
+                max_endtime=True,
             )
             == result2
         )
@@ -60,8 +71,8 @@ class TestDateParse:
             == result
         )
         fuzzyresult = {
-            "startdate": datetime(2013, 2, 20, 0, 0),
-            "enddate": datetime(2013, 2, 20, 0, 0),
+            "startdate": datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc),
+            "enddate": datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc),
             "nondate": ("date is ", " for this test"),
             "date": ("20/02/2013",),
         }
@@ -83,7 +94,9 @@ class TestDateParse:
         )
         fuzzyresult["nondate"] = None
         assert fuzzy == fuzzyresult
-        result = datetime(2013, 2, 1, 0, 0), datetime(2013, 2, 28, 0, 0)
+        result = datetime(2013, 2, 1, 0, 0, tzinfo=timezone.utc), datetime(
+            2013, 2, 28, 0, 0, tzinfo=timezone.utc
+        )
         assert parse_date_range("02/2013") == result
         assert parse_date_range("02/2013", "%m/%Y") == result
         fuzzy = dict()
@@ -92,16 +105,18 @@ class TestDateParse:
             == result
         )
         assert fuzzy == {
-            "startdate": datetime(2013, 2, 1, 0, 0),
-            "enddate": datetime(2013, 2, 28, 0, 0),
+            "startdate": datetime(2013, 2, 1, 0, 0, tzinfo=timezone.utc),
+            "enddate": datetime(2013, 2, 28, 0, 0, tzinfo=timezone.utc),
             "nondate": ("date is ", " for this test"),
             "date": ("02/2013",),
         }
-        result = datetime(2013, 1, 1, 0, 0), datetime(2013, 12, 31, 0, 0)
+        result = datetime(2013, 1, 1, 0, 0, tzinfo=timezone.utc), datetime(
+            2013, 12, 31, 0, 0, tzinfo=timezone.utc
+        )
         assert parse_date_range("2013") == result
         assert parse_date_range("2013", "%Y") == result
         fuzzy = dict()
-        date = datetime(2001, 12, 10, 0, 0)
+        date = datetime(2001, 12, 10, 0, 0, tzinfo=timezone.utc)
         result = date, date
         assert (
             parse_date_range(
@@ -130,12 +145,14 @@ class TestDateParse:
             parse_date_range("20/02", "%d/%m")
 
     def test_parse_date(self):
-        assert parse_date("20/02/2013") == datetime(2013, 2, 20, 0, 0)
+        assert parse_date("20/02/2013") == datetime(
+            2013, 2, 20, 0, 0, tzinfo=timezone.utc
+        )
         assert parse_date("20/02/2013", "%d/%m/%Y") == datetime(
-            2013, 2, 20, 0, 0
+            2013, 2, 20, 0, 0, tzinfo=timezone.utc
         )
         assert parse_date("20/02/2013 01:30:20") == datetime(
-            2013, 2, 20, 1, 30, 20
+            2013, 2, 20, 1, 30, 20, tzinfo=timezone.utc
         )
         assert parse_date("20/02/2013 01:30:20 IST") == datetime(
             2013,
@@ -144,7 +161,52 @@ class TestDateParse:
             1,
             30,
             20,
+            tzinfo=timezone.utc,
+        )
+        assert parse_date(
+            "20/02/2013 01:30:20 IST", timezone_handling=1
+        ) == datetime(
+            2013,
+            2,
+            20,
+            1,
+            30,
+            20,
+        )
+        assert parse_date(
+            "20/02/2013 01:30:20 IST",
+            timezone_handling=2,
+        ) == datetime(
+            2013,
+            2,
+            20,
+            1,
+            30,
+            20,
             tzinfo=timezone(timedelta(hours=5, minutes=30)),
+        )
+        assert parse_date(
+            "20/02/2013 01:30:20 IST",
+            timezone_handling=3,
+        ) == datetime(
+            2013,
+            2,
+            20,
+            1,
+            30,
+            20,
+            tzinfo=timezone(timedelta(hours=5, minutes=30)),
+        )
+        assert parse_date(
+            "20/02/2013 01:30:20 IST", timezone_handling=4
+        ) == datetime(
+            2013,
+            2,
+            19,
+            20,
+            00,
+            20,
+            tzinfo=timezone.utc,
         )
         assert parse_date(
             "20/02/2013 01:30:20 IST", zero_time=True
@@ -155,7 +217,7 @@ class TestDateParse:
             0,
             0,
             0,
-            tzinfo=timezone(timedelta(hours=5, minutes=30)),
+            tzinfo=timezone.utc,
         )
         assert parse_date(
             "20/02/2013 01:30:20 IST", max_time=True
@@ -166,43 +228,11 @@ class TestDateParse:
             23,
             59,
             59,
-            999999,
-            tzinfo=timezone(timedelta(hours=5, minutes=30)),
-        )
-        assert parse_date(
-            "20/02/2013 01:30:20 IST", convert_utc=True
-        ) == datetime(
-            2013,
-            2,
-            19,
-            20,
-            0,
-            20,
             tzinfo=timezone.utc,
-        )
-        assert parse_date(
-            "20/02/2013 01:30:20 IST", force_utc=True
-        ) == datetime(
-            2013,
-            2,
-            20,
-            1,
-            30,
-            20,
-            tzinfo=timezone.utc,
-        )
-        assert parse_date(
-            "20/02/2013 01:30:20 IST", infer_timezone=False
-        ) == datetime(
-            2013,
-            2,
-            20,
-            1,
-            30,
-            20,
         )
         assert parse_date(
             "20/02/2013 01:30:20 NUT",
+            timezone_handling=2,
             default_timezones="-11 X NUT SST",
         ) == datetime(
             2013,
@@ -215,6 +245,7 @@ class TestDateParse:
         )
         assert parse_date(
             "20/02/2013 01:30:20 IST",
+            timezone_handling=2,
             default_timezones="-11 X NUT SST",
         ) == datetime(
             2013,
@@ -223,6 +254,32 @@ class TestDateParse:
             1,
             30,
             20,
+        )
+        assert parse_date(
+            "20/02/2013 01:30:20 IST",
+            timezone_handling=3,
+            default_timezones="-11 X NUT SST",
+        ) == datetime(
+            2013,
+            2,
+            20,
+            1,
+            30,
+            20,
+            tzinfo=timezone.utc,
+        )
+        assert parse_date(
+            "20/02/2013 01:30:20 IST",
+            timezone_handling=4,
+            default_timezones="-11 X NUT SST",
+        ) == datetime(
+            2013,
+            2,
+            19,
+            12,
+            30,
+            20,
+            tzinfo=timezone.utc,
         )
         with pytest.raises(ParserError):
             parse_date("02/2013")

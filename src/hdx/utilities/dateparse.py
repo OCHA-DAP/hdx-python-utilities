@@ -90,6 +90,26 @@ default_timezone_info = """-12 Y
 -9.5 MART MIT"""
 
 
+def get_tzinfos(timezone_info: str) -> Dict[str, int]:
+    """Get tzinfos dictionary used by dateutil from timezone information string
+
+    Args:
+        timezone_info (str): Timezones information string
+
+    Returns:
+        Dict[str, int]: tzinfos dictionary
+    """
+    tzinfos = {}
+    for tz_descr in map(str.split, timezone_info.split("\n")):
+        tz_offset = int(float(tz_descr[0]) * 3600)
+        for tz_code in tz_descr[1:]:
+            tzinfos[tz_code] = tz_offset
+    return tzinfos
+
+
+default_tzinfos = get_tzinfos(default_timezone_info)
+
+
 # Ugly copy and paste from dateutil.parser._parser._ymd with dayfirst modified to mean day is outer value
 # ie. dayfirst prefers dmy or ymd where in dateutil it prefers dmy and ydm!
 class _ymd(list):  # pragma: no cover
@@ -628,29 +648,38 @@ def parse(
 def parse_date_range(
     string: str,
     date_format: Optional[str] = None,
+    timezone_handling: int = 0,
     fuzzy: Optional[Dict] = None,
+    include_microseconds: bool = False,
     zero_time: bool = False,
     max_starttime: bool = False,
     max_endtime: bool = False,
-    convert_utc: bool = False,
-    force_utc: bool = False,
-    infer_timezone: bool = True,
-    default_timezones: str = default_timezone_info,
+    default_timezones: Optional[str] = None,
 ) -> Tuple[datetime, datetime]:
-    """Parse date from string using specified format and return datetime date range in
-    dictionary keys startdate and enddate. If no date_format is supplied, the function
-    will guess, which for unambiguous formats, should work fine. To parse a date within
-    a string containing other text, you can supply a dictionary in the fuzzy parameter.
-    In this case, dateutil's fuzzy parsing is used and the results returned in the
-    dictionary in keys startdate, enddate, date (the string elements used to make the
-    date) and nondate (the non date part of the string). Any time elements are set to 0
-    if zero_time is True. If max_starttime is True, then the start date's time is set to
-    23:59:59:999999. If max_endtime is True, then the end date's time is set to
-    23:59:59:999999. The time can be converted to UTC using convert_utc. Alternatively,
-    the time zone can be set to UTC regardless of whether or not it is set to something
-    in the input string using force_utc. When parsing without supplying a date format or
-    using fuzzy parsing, if infer_timezone is True, then a datetime object with time
-    zone will be returned if possible. A default set of time zones will be used unless
+    """Parse date from string using specified date_format if given and return datetime
+    date range in dictionary keys startdate and enddate. If no date_format is supplied,
+    the function will guess, which for unambiguous formats, should work fine.
+
+    By default if no date format is supplied, no timezone information will be parsed and
+    the returned datetime will have timezone UTC. To change this behaviour,
+    timezone_handling should be changed from its default of 0. If it is 1, then no
+    timezone information will be parsed and a naive datetime will be returned. If it is
+    2 or more, then timezone information will be parsed. For 2, failure to parse
+    timezone will result in a naive datetime. For 3, failure to parse timezone will
+    result in the timezone being set to UTC. For 4, the time will be converted from
+    whatever timezone is identified to UTC.
+
+    To parse a date within a string containing other text, you can supply a dictionary
+    in the fuzzy parameter. In this case, dateutil's fuzzy parsing is used and the
+    results returned in the dictionary in keys startdate, enddate, date (the string
+    elements used to make the date) and nondate (the non date part of the string).
+
+    By default, microseconds are ignored (set to 0), but can be included by setting
+    include_microseconds to True. Any time elements are set to 0 if zero_time is True.
+    If max_starttime is True, then the start date's time is set to 23:59:59. If
+    max_endtime is True, then the end date's time is set to 23:59:59.
+
+    When inferring time zones, a default set of time zones will be used unless
     overridden by passing in default_timezones which is a string of the form:
 
         -11 X NUT SST
@@ -659,25 +688,23 @@ def parse_date_range(
     Args:
         string (str): Dataset date string
         date_format (Optional[str]): Date format. If None is given, will attempt to guess. Defaults to None.
+        timezone_handling (int): Timezone handling. See description. Defaults to 0 (ignore timezone, return UTC).
         fuzzy (Optional[Dict]): If dict supplied, fuzzy matching will be used and results returned in dict
+        include_microseconds (bool): Includes microseconds if True. Defaults to False.
         zero_time (bool): Zero time elements of datetime if True. Defaults to False.
         max_starttime (bool): Make start date time component 23:59:59:999999. Defaults to False.
         max_endtime (bool): Make end date time component 23:59:59:999999. Defaults to False.
-        convert_utc (bool): Convert given time to UTC. Defaults to False.
-        force_utc (bool): Force UTC timezone. Defaults to False.
-        infer_timezone (bool): Whether to try to infer the timezone. Defaults to True.
-        default_timezones (str): Time zone information. Defaults to internal default.
+        default_timezones (Optional[str]): Timezone information. Defaults to None. (Internal default).
 
     Returns:
         Tuple[datetime,datetime]: Tuple containing start date and end date
     """
     if date_format is None or fuzzy is not None:
-        if infer_timezone and not force_utc:
-            tzinfos = {}
-            for tz_descr in map(str.split, default_timezones.split("\n")):
-                tz_offset = int(float(tz_descr[0]) * 3600)
-                for tz_code in tz_descr[1:]:
-                    tzinfos[tz_code] = tz_offset
+        if timezone_handling >= 2:
+            if default_timezones is None:
+                tzinfos = default_tzinfos
+            else:
+                tzinfos = get_tzinfos(default_timezones)
             ignoretz = False
         else:
             ignoretz = True
@@ -768,12 +795,20 @@ def parse_date_range(
         enddate = enddate.replace(
             hour=23, minute=59, second=59, microsecond=999999
         )
-    if convert_utc:
-        startdate = startdate.astimezone(timezone.utc)
-        enddate = enddate.astimezone(timezone.utc)
-    if force_utc:
+    if timezone_handling == 0:
         startdate = startdate.replace(tzinfo=timezone.utc)
         enddate = enddate.replace(tzinfo=timezone.utc)
+    elif timezone_handling == 3:
+        if startdate.tzinfo is None:
+            startdate = startdate.replace(tzinfo=timezone.utc)
+        if enddate.tzinfo is None:
+            enddate = enddate.replace(tzinfo=timezone.utc)
+    elif timezone_handling == 4:
+        startdate = startdate.astimezone(timezone.utc)
+        enddate = enddate.astimezone(timezone.utc)
+    if not include_microseconds:
+        startdate = startdate.replace(microsecond=0)
+        enddate = enddate.replace(microsecond=0)
     if fuzzy is not None:
         fuzzy["startdate"] = startdate
         fuzzy["enddate"] = enddate
@@ -783,29 +818,38 @@ def parse_date_range(
 def parse_date(
     string: str,
     date_format: Optional[str] = None,
+    timezone_handling: int = 0,
     fuzzy: Optional[Dict] = None,
+    include_microseconds: bool = False,
     zero_time: bool = False,
     max_time: bool = False,
-    convert_utc: bool = False,
-    force_utc: bool = False,
-    infer_timezone: bool = True,
-    default_timezones: str = default_timezone_info,
+    default_timezones: Optional[str] = None,
 ) -> datetime:
-    """Parse date from string using specified format and return a datetime object.
+    """Parse date from string using specified date_format and return a datetime object.
     Raises exception for dates that are missing year, month or day. If no date_format is
     supplied, the function will guess, which for unambiguous formats, should work fine.
+
+    By default if no date format is supplied, no timezone information will be parsed and
+    the returned datetime will have timezone UTC. To change this behaviour,
+    timezone_handling should be changed from its default of 0. If it is 1, then no
+    timezone information will be parsed and a naive datetime will be returned. If it is
+    2 or more, then timezone information will be parsed. For 2, failure to parse
+    timezone will result in a naive datetime. For 3, failure to parse timezone will
+    result in the timezone being set to UTC. For 4, the time will be converted from
+    whatever timezone is identified to UTC.
+
     To parse a date within a string containing other text, you can supply a dictionary
     in the fuzzy parameter. In this case, dateutil's fuzzy parsing is used and the
     results returned in the dictionary in keys startdate, enddate, date (the string
-    elements used to make the date) and nondate (the non date part of the string). Any
-    time elements are set to 0 if zero_time is True. If max_time is True, the time is
-    set to 23:59:59:999999. The time can be converted to UTC using convert_utc.
-    Alternatively, the time zone can be set to UTC regardless of whether or not it is
-    set to something in the input string using force_utc. When parsing without supplying
-    a date format or using fuzzy parsing, if infer_timezone is True, then a datetime
-    object with time zone will be returned if possible. A default set of time zones will
-    be used unless overridden by passing in default_timezones which is a string of the
-    form:
+    elements used to make the date) and nondate (the non date part of the string).
+
+    By default, microseconds are ignored (set to 0), but can be included by setting
+    include_microseconds to True. Any time elements are set to 0 if zero_time is True.
+    If max_starttime is True, then the start date's time is set to 23:59:59. If
+    max_endtime is True, then the end date's time is set to 23:59:59.
+
+    When inferring time zones, a default set of time zones will be used unless
+    overridden by passing in default_timezones which is a string of the form:
 
         -11 X NUT SST
         -10 W CKT HAST HST TAHT TKT
@@ -813,13 +857,12 @@ def parse_date(
     Args:
         string (str): Dataset date string
         date_format (Optional[str]): Date format. If None is given, will attempt to guess. Defaults to None.
+        timezone_handling (int): Timezone handling. See description. Defaults to 0 (ignore timezone, return UTC).
         fuzzy (Optional[Dict]): If dict supplied, fuzzy matching will be used and results returned in dict
+        include_microseconds (bool): Includes microseconds if True. Defaults to False.
         zero_time (bool): Zero time elements of datetime if True. Defaults to False.
         max_time (bool): Make date time component 23:59:59:999999. Defaults to False.
-        convert_utc (bool): Convert given time to UTC. Defaults to False.
-        force_utc (bool): Force UTC timezone. Defaults to False.
-        infer_timezone (bool): Whether to try to infer the timezone. Defaults to True.
-        default_timezones (str): Time zone information. Defaults to internal default.
+        default_timezones (Optional[str]): Timezone information. Defaults to None. (Internal default).
 
     Returns:
         datetime: The parsed date
@@ -835,13 +878,12 @@ def parse_date(
     startdate, enddate = parse_date_range(
         string,
         date_format=date_format,
+        timezone_handling=timezone_handling,
         fuzzy=fuzzy,
+        include_microseconds=include_microseconds,
         zero_time=zero_time,
         max_starttime=max_starttime,
         max_endtime=max_endtime,
-        convert_utc=convert_utc,
-        force_utc=force_utc,
-        infer_timezone=infer_timezone,
         default_timezones=default_timezones,
     )
     if startdate != enddate:
