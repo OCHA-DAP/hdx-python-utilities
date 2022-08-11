@@ -8,7 +8,7 @@ import dateutil
 from dateutil.parser import ParserError, _timelex, parserinfo
 
 default_sd_year = 1
-default_date = datetime(
+default_date_notz = datetime(
     year=default_sd_year,
     month=1,
     day=1,
@@ -17,7 +17,7 @@ default_date = datetime(
     second=0,
     microsecond=0,
 )
-default_date_utc = datetime(
+default_date = datetime(
     year=default_sd_year,
     month=1,
     day=1,
@@ -28,7 +28,7 @@ default_date_utc = datetime(
     tzinfo=timezone.utc,
 )
 default_ed_year = 9990
-default_enddate = datetime(
+default_enddate_notz = datetime(
     year=default_ed_year,
     month=12,
     day=31,
@@ -37,7 +37,7 @@ default_enddate = datetime(
     second=0,
     microsecond=0,
 )
-default_enddate_utc = datetime(
+default_enddate = datetime(
     year=default_ed_year,
     month=12,
     day=31,
@@ -713,14 +713,14 @@ def parse_date_range(
             parsed_string1 = parse(
                 string,
                 fuzzy_with_tokens=True,
-                default=default_date,
+                default=default_date_notz,
                 ignoretz=ignoretz,
                 tzinfos=tzinfos,
             )
             parsed_string2 = parse(
                 string,
                 fuzzy_with_tokens=True,
-                default=default_enddate,
+                default=default_enddate_notz,
                 ignoretz=ignoretz,
                 tzinfos=tzinfos,
             )
@@ -735,13 +735,13 @@ def parse_date_range(
         else:
             startdate = parse(
                 string,
-                default=default_date,
+                default=default_date_notz,
                 ignoretz=ignoretz,
                 tzinfos=tzinfos,
             )
             enddate = parse(
                 string,
-                default=default_enddate,
+                default=default_enddate_notz,
                 ignoretz=ignoretz,
                 tzinfos=tzinfos,
             )
