@@ -14,7 +14,7 @@ from typing import (
 )
 
 from hdx.utilities.frictionless_wrapper import get_frictionless_resource
-from hdx.utilities.typehint import ListDict, ListTuple
+from hdx.utilities.typehint import ListDict, ListTuple, ListTupleDict
 
 
 def merge_two_dictionaries(
@@ -171,13 +171,13 @@ def dict_of_dicts_add(
 
 
 def list_distribute_contents_simple(
-    input_list: List, function: Callable[[Any], Any] = lambda x: x
+    input_list: ListTuple, function: Callable[[Any], Any] = lambda x: x
 ) -> List:
     """Distribute the contents of a list eg. [1, 1, 1, 2, 2, 3] -> [1, 2, 3, 1, 2, 1]. List can contain complex types
     like dictionaries in which case the function can return the appropriate value eg.  lambda x: x[KEY]
 
     Args:
-        input_list (List): List to distribute values
+        input_list (ListTuple): List to distribute values
         function (Callable[[Any], Any]): Return value to use for distributing. Defaults to lambda x: x.
 
     Returns:
@@ -204,13 +204,13 @@ def list_distribute_contents_simple(
 
 
 def list_distribute_contents(
-    input_list: List, function: Callable[[Any], Any] = lambda x: x
+    input_list: ListTuple, function: Callable[[Any], Any] = lambda x: x
 ) -> List:
     """Distribute the contents of a list eg. [1, 1, 1, 2, 2, 3] -> [1, 2, 1, 2, 1, 3]. List can contain complex types
     like dictionaries in which case the function can return the appropriate value eg.  lambda x: x[KEY]
 
     Args:
-        input_list (List): List to distribute values
+        input_list (ListTuple): List to distribute values
         function (Callable[[Any], Any]): Return value to use for distributing. Defaults to lambda x: x.
 
     Returns:
@@ -428,7 +428,7 @@ def read_list_from_csv(
 
 def write_list_to_csv(
     filepath: str,
-    rows: ListTuple[ListDict],
+    rows: List[ListTupleDict],
     headers: Union[int, ListTuple[str], None] = None,
     columns: Union[ListTuple[int], ListTuple[str], None] = None,
     encoding: Optional[str] = None,
@@ -439,7 +439,7 @@ def write_list_to_csv(
 
     Args:
         filepath (str): Path to write to
-        rows (ListTuple[ListDict]): List of rows in dict or list form
+        rows (List[ListTupleDict]): List of rows in dict or list form
         headers (Union[int, ListTuple[str], None]): Headers to write. Defaults to None.
         columns (Union[ListTuple[int], ListTuple[str], None]): Columns to write. Defaults to all.
         encoding (Optional[str]): Encoding to use. Defaults to None (infer encoding).

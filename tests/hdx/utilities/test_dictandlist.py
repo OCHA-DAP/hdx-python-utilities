@@ -265,6 +265,7 @@ class TestDictAndList:
         }
 
     def test_read_write_list_to_csv(self):
+        list_of_tuples = [(1, 2, 3, "a"), (4, 5, 6, "b"), (7, 8, 9, "c")]
         list_of_lists = [[1, 2, 3, "a"], [4, 5, 6, "b"], [7, 8, 9, "c"]]
         with temp_dir(
             "TestReadWriteList",
@@ -275,6 +276,23 @@ class TestDictAndList:
             filepath = join(tempdir, filename)
             write_list_to_csv(
                 filepath, list_of_lists, headers=["h1", "h2", "h3", "h4"]
+            )
+            newll = read_list_from_csv(filepath)
+            newld = read_list_from_csv(filepath, headers=1, dict_form=True)
+            remove(filepath)
+            assert newll == [
+                ["h1", "h2", "h3", "h4"],
+                ["1", "2", "3", "a"],
+                ["4", "5", "6", "b"],
+                ["7", "8", "9", "c"],
+            ]
+            assert newld == [
+                {"h1": "1", "h2": "2", "h4": "a", "h3": "3"},
+                {"h1": "4", "h2": "5", "h4": "b", "h3": "6"},
+                {"h1": "7", "h2": "8", "h4": "c", "h3": "9"},
+            ]
+            write_list_to_csv(
+                filepath, list_of_tuples, headers=["h1", "h2", "h3", "h4"]
             )
             newll = read_list_from_csv(filepath)
             newld = read_list_from_csv(filepath, headers=1, dict_form=True)
