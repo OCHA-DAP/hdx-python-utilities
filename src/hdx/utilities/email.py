@@ -7,6 +7,8 @@ from email.mime.text import MIMEText
 from os.path import expanduser, join
 from typing import Any, List, Optional, Union
 
+from hdx.utilities.typehint import ListTuple
+
 try:
     from email_validator import validate_email
 except ImportError:
@@ -157,19 +159,21 @@ class Email:
         self.server.quit()
 
     @staticmethod
-    def get_normalised_emails(recipients: Union[str, List[str]]) -> List[str]:
+    def get_normalised_emails(
+        recipients: Union[str, ListTuple[str]]
+    ) -> List[str]:
         """
         Get list of normalised emails
 
         Args:
-            recipients (Union[str, List[str]]): Email recipient(s)
+            recipients (Union[str, ListTuple[str]]): Email recipient(s)
 
         Returns:
             List[str]: Normalised emails
 
         """
         if isinstance(recipients, str):
-            recipients = [recipients]
+            recipients = (recipients,)
         if validate_email is None:
             return recipients
         normalised_recipients = list()
@@ -184,13 +188,13 @@ class Email:
 
     def send(
         self,
-        to: Union[str, List[str]],
+        to: Union[str, ListTuple[str]],
         subject: str,
         text_body: str,
         html_body: Optional[str] = None,
         sender: Optional[str] = None,
-        cc: Union[str, List[str], None] = None,
-        bcc: Union[str, List[str], None] = None,
+        cc: Union[str, ListTuple[str], None] = None,
+        bcc: Union[str, ListTuple[str], None] = None,
         **kwargs: Any,
     ) -> None:
         """
@@ -198,13 +202,13 @@ class Email:
         string email addresses. cc and bcc default to None.
 
         Args:
-            to (Union[str, List[str]]): Email recipient(s)
+            to (Union[str, ListTuple[str]]): Email recipient(s)
             subject (str): Email subject
             text_body (str): Plain text email body
             html_body (Optional[str]): HTML email body
             sender (Optional[str]): Email sender. Defaults to global sender.
-            cc (Union[str, List[str], None]): Email cc. Defaults to None.
-            bcc (Union[str, List[str], None]): Email bcc. Defaults to None.
+            cc (Union[str, ListTuple[str], None]): Email cc. Defaults to None.
+            bcc (Union[str, ListTuple[str], None]): Email bcc. Defaults to None.
             **kwargs: See below
             mail_options (List): Mail options (see smtplib documentation)
             rcpt_options (List): Recipient options (see smtplib documentation)

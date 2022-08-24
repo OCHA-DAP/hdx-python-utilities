@@ -80,7 +80,7 @@ def merge_dictionaries(
     """Merges all dictionaries in dicts into a single dictionary and returns result
 
     Args:
-        dicts (List[MutableMapping]): Dictionaries to merge into the first one in the list
+        dicts (ListTuple[MutableMapping]): Dictionaries to merge into the first one in the list
         merge_lists (bool): Whether to merge lists (True) or replace lists (False). Default is False.
 
     Returns:
@@ -253,12 +253,12 @@ def list_distribute_contents(
 
 
 def extract_list_from_list_of_dict(
-    list_of_dict: List[Mapping], key: Any
+    list_of_dict: ListTuple[Mapping], key: Any
 ) -> List:
     """Extract a list by looking up key in each member of a list of dictionaries
 
     Args:
-        list_of_dict (List[Mapping]): List of dictionaries
+        list_of_dict (ListTuple[Mapping]): List of dictionaries
         key (Any): Key to find in each dictionary
 
     Returns:
@@ -428,7 +428,7 @@ def read_list_from_csv(
 
 def write_list_to_csv(
     filepath: str,
-    rows: List[ListDict],
+    rows: ListTuple[ListDict],
     headers: Union[int, ListTuple[str], None] = None,
     columns: Union[ListTuple[int], ListTuple[str], None] = None,
     encoding: Optional[str] = None,
@@ -439,7 +439,7 @@ def write_list_to_csv(
 
     Args:
         filepath (str): Path to write to
-        rows (List[ListDict]): List of rows in dict or list form
+        rows (ListTuple[ListDict]): List of rows in dict or list form
         headers (Union[int, ListTuple[str], None]): Headers to write. Defaults to None.
         columns (Union[ListTuple[int], ListTuple[str], None]): Columns to write. Defaults to all.
         encoding (Optional[str]): Encoding to use. Defaults to None (infer encoding).

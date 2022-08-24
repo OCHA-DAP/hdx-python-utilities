@@ -6,6 +6,8 @@ import string
 from string import punctuation
 from typing import Any, Dict, List, Optional, Set
 
+from hdx.utilities.typehint import ListTuple
+
 logger = logging.getLogger(__name__)
 
 PUNCTUATION_MINUS_BRACKETS = r"""!"#$%&'*+,-./:;<=>?@\^_`|~"""
@@ -415,13 +417,13 @@ def get_numeric_if_possible(value: Any) -> Any:
 
 
 def earliest_index(
-    string_to_search: str, strings_to_try: List[str]
+    string_to_search: str, strings_to_try: ListTuple[str]
 ) -> Optional[int]:
     """Search a string for each of a list of strings and return the earliest index.
 
     Args:
         string_to_search (str): String to search
-        strings_to_try (List[str]): Strings to try
+        strings_to_try (ListTuple[str]): Strings to try
 
     Returns:
         Optional[int]: Earliest index of the strings to try in string to search or None

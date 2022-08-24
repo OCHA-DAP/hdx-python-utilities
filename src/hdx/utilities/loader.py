@@ -2,7 +2,7 @@
 
 import json
 from os import linesep
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, Optional
 
 from ruamel.yaml import YAML
 
@@ -10,6 +10,7 @@ from hdx.utilities.dictandlist import (
     merge_dictionaries,
     merge_two_dictionaries,
 )
+from hdx.utilities.typehint import ListTuple
 
 
 class LoadError(Exception):
@@ -81,12 +82,14 @@ def load_json(path: str, encoding: str = "utf-8") -> Dict:
     return jsonobj
 
 
-def load_and_merge_yaml(paths: List[str], encoding: str = "utf-8") -> Dict:
+def load_and_merge_yaml(
+    paths: ListTuple[str], encoding: str = "utf-8"
+) -> Dict:
     """Load multiple YAML files that are in dictionary form and merge into one
     dictionary
 
     Args:
-        paths (List[str]): Paths to YAML files
+        paths (ListTuple[str]): Paths to YAML files
         encoding (str): Encoding of file. Defaults to utf-8.
 
     Returns:
@@ -97,12 +100,14 @@ def load_and_merge_yaml(paths: List[str], encoding: str = "utf-8") -> Dict:
     return merge_dictionaries(configs)
 
 
-def load_and_merge_json(paths: List[str], encoding: str = "utf-8") -> Dict:
+def load_and_merge_json(
+    paths: ListTuple[str], encoding: str = "utf-8"
+) -> Dict:
     """Load multiple JSON files that are in dictionary form and merge into one
     dictionary
 
     Args:
-        paths (List[str]): Paths to JSON files
+        paths (ListTuple[str]): Paths to JSON files
         encoding (str): Encoding of file. Defaults to utf-8.
 
     Returns:

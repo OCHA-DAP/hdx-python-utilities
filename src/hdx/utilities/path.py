@@ -15,13 +15,14 @@ from os.path import (
 )
 from shutil import rmtree
 from tempfile import gettempdir
-from typing import Any, Dict, Iterable, List, Optional, Tuple
+from typing import Any, Dict, Iterable, Optional, Tuple
 from urllib.parse import unquote_plus, urlsplit
 
 from slugify import slugify
 
 from hdx.utilities.loader import load_text
 from hdx.utilities.saver import save_text
+from hdx.utilities.typehint import ListTuple
 from hdx.utilities.uuid import get_uuid
 
 logger = logging.getLogger(__name__)
@@ -345,8 +346,8 @@ def progress_storing_tempdir(
 
 def multiple_progress_storing_tempdir(
     folder: str,
-    iterators: List[Iterable[Dict]],
-    keys: List[str],
+    iterators: ListTuple[Iterable[Dict]],
+    keys: ListTuple[str],
     batch: Optional[str] = None,
 ) -> Tuple[Dict, Dict]:
     """Store progress in temporary directory. The folder persists until the final iteration of the last iterator
@@ -360,8 +361,8 @@ def multiple_progress_storing_tempdir(
 
     Args:
         folder (str): Folder to create in temporary folder
-        iterators (List[Iterable[Dict]): Iterate over each iterator in the list consecutively persisting progress
-        keys (List[str]): Key to examine from dictionary from each iterator in the above list
+        iterators (ListTuple[Iterable[Dict]): Iterate over each iterator in the list consecutively persisting progress
+        keys (ListTuple[str]): Key to examine from dictionary from each iterator in the above list
         batch (Optional[str]): Batch to use if there isn't one in a file already.
 
     Returns:

@@ -54,7 +54,7 @@ class Download(BaseDownload):
         extra_params_yaml (str): Path to YAML file containing extra parameters to put on end of url
         extra_params_lookup (str): Lookup key for parameters. If not given assumes parameters are at root of the dict.
         headers (Dict): Additional headers to add to request.
-        status_forcelist (List[int]): HTTP statuses for which to force retry
+        status_forcelist (ListTuple[int]): HTTP statuses for which to force retry
         allowed_methods (iterable): HTTP methods for which to force retry. Defaults t0 frozenset(['GET']).
     """
 
@@ -231,13 +231,15 @@ class Download(BaseDownload):
 
     @staticmethod
     def hxl_row(
-        headers: List[str], hxltags: Dict[str, str], dict_form: bool = False
+        headers: ListTuple[str],
+        hxltags: Dict[str, str],
+        dict_form: bool = False,
     ) -> Union[List[str], Dict[str, str]]:
         """Return HXL tag row for header row given list of headers and dictionary with header to HXL hashtag mappings.
         Return list or dictionary depending upon the dict_form argument.
 
         Args:
-            headers (List[str]): Headers for which to get HXL hashtags
+            headers (ListTuple[str]): Headers for which to get HXL hashtags
             hxltags (Dict[str,str]): Header to HXL hashtag mapping
             dict_form (bool): Return dict or list. Defaults to False (list)
 
@@ -583,7 +585,7 @@ class Download(BaseDownload):
             columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
             default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
-            null_values (List[Any]): What gets treated as null. Defaults to [""].
+            null_values (List[Any]): Values that will return None. Defaults to [""].
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
             detector (Detector): This can be set to override the above. See Frictionless docs.
             layout (Layout): This can be set to override the above. See Frictionless docs.
@@ -610,7 +612,7 @@ class Download(BaseDownload):
         include_headers: bool = False,
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
-        header_insertions: Optional[List[Tuple[int, str]]] = None,
+        header_insertions: Optional[ListTuple[Tuple[int, str]]] = None,
         row_function: Optional[
             Callable[[List[str], ListDict], ListDict]
         ] = None,
@@ -638,7 +640,7 @@ class Download(BaseDownload):
             include_headers (bool): Whether to include headers in iterator. Defaults to False.
             ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
             infer_types (bool): Whether to infer types. Defaults to False (strings).
-            header_insertions (Optional[List[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
+            header_insertions (Optional[ListTuple[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
             row_function (Optional[Callable[[List[str],ListDict],ListDict]]): Function to call for each row. Defaults to None.
             **kwargs:
             format (Optional[str]): Type of file. Defaults to inferring.
@@ -653,7 +655,7 @@ class Download(BaseDownload):
             columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
             default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
-            null_values (List[Any]): What gets treated as null. Defaults to [""].
+            null_values (List[Any]): Values that will return None. Defaults to [""].
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
             detector (Detector): This can be set to override the above. See Frictionless docs.
             layout (Layout): This can be set to override the above. See Frictionless docs.
@@ -706,7 +708,7 @@ class Download(BaseDownload):
         include_headers: bool = True,
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
-        header_insertions: Optional[List[Tuple[int, str]]] = None,
+        header_insertions: Optional[ListTuple[Tuple[int, str]]] = None,
         row_function: Optional[
             Callable[[List[str], ListDict], ListDict]
         ] = None,
@@ -731,7 +733,7 @@ class Download(BaseDownload):
             include_headers (bool): Whether to include headers in iterator. Defaults to True.
             ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
             infer_types (bool): Whether to infer types. Defaults to False (strings).
-            header_insertions (Optional[List[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
+            header_insertions (Optional[ListTuple[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
             row_function (Optional[Callable[[List[str],ListDict],ListDict]]): Function to call for each row. Defaults to None.
             **kwargs:
             format (Optional[str]): Type of file. Defaults to inferring.
@@ -746,7 +748,7 @@ class Download(BaseDownload):
             columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
             default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
-            null_values (List[Any]): What gets treated as null. Defaults to [""].
+            null_values (List[Any]): Values that will return None. Defaults to [""].
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
             detector (Detector): This can be set to override the above. See Frictionless docs.
             layout (Layout): This can be set to override the above. See Frictionless docs.
@@ -776,7 +778,7 @@ class Download(BaseDownload):
         headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
-        header_insertions: Optional[List[Tuple[int, str]]] = None,
+        header_insertions: Optional[ListTuple[Tuple[int, str]]] = None,
         row_function: Optional[
             Callable[[List[str], ListDict], ListDict]
         ] = None,
@@ -800,7 +802,7 @@ class Download(BaseDownload):
             headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
             infer_types (bool): Whether to infer types. Defaults to False (strings).
-            header_insertions (Optional[List[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
+            header_insertions (Optional[ListTuple[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
             row_function (Optional[Callable[[List[str],ListDict],ListDict]]): Function to call for each row. Defaults to None.
             **kwargs:
             format (Optional[str]): Type of file. Defaults to inferring.
@@ -815,7 +817,7 @@ class Download(BaseDownload):
             columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
             default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
-            null_values (List[Any]): What gets treated as null. Defaults to [""].
+            null_values (List[Any]): Values that will return None. Defaults to [""].
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
             detector (Detector): This can be set to override the above. See Frictionless docs.
             layout (Layout): This can be set to override the above. See Frictionless docs.
@@ -846,7 +848,7 @@ class Download(BaseDownload):
         include_headers: bool = True,
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
-        header_insertions: Optional[List[Tuple[int, str]]] = None,
+        header_insertions: Optional[ListTuple[Tuple[int, str]]] = None,
         row_function: Optional[
             Callable[[List[str], ListDict], ListDict]
         ] = None,
@@ -860,7 +862,7 @@ class Download(BaseDownload):
             include_headers (bool): Whether to include headers in iterator. Defaults to True.
             ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
             infer_types (bool): Whether to infer types. Defaults to False (strings).
-            header_insertions (Optional[List[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
+            header_insertions (Optional[ListTuple[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
             row_function (Optional[Callable[[List[str],ListDict],ListDict]]): Function to call for each row. Defaults to None.
             **kwargs:
             format (Optional[str]): Type of file. Defaults to inferring.
@@ -875,7 +877,7 @@ class Download(BaseDownload):
             columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
             default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
-            null_values (List[Any]): What gets treated as null. Defaults to [""].
+            null_values (List[Any]): Values that will return None. Defaults to [""]
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
             detector (Detector): This can be set to override the above. See Frictionless docs.
             layout (Layout): This can be set to override the above. See Frictionless docs.
@@ -909,7 +911,7 @@ class Download(BaseDownload):
         keycolumn: int = 1,
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
-        header_insertions: Optional[List[Tuple[int, str]]] = None,
+        header_insertions: Optional[ListTuple[Tuple[int, str]]] = None,
         row_function: Optional[
             Callable[[List[str], ListDict], ListDict]
         ] = None,
@@ -924,7 +926,7 @@ class Download(BaseDownload):
             keycolumn (int): Number of column to be used for key. Defaults to 1.
             ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
             infer_types (bool): Whether to infer types. Defaults to False (strings).
-            header_insertions (Optional[List[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
+            header_insertions (Optional[ListTuple[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
             row_function (Optional[Callable[[List[str],ListDict],ListDict]]): Function to call for each row. Defaults to None.
             **kwargs:
             format (Optional[str]): Type of file. Defaults to inferring.
@@ -939,7 +941,7 @@ class Download(BaseDownload):
             columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
             default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
-            null_values (List[Any]): What gets treated as null. Defaults to [""].
+            null_values (List[Any]): Values that will return None. Defaults to [""].
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
             detector (Detector): This can be set to override the above. See Frictionless docs.
             layout (Layout): This can be set to override the above. See Frictionless docs.
@@ -978,7 +980,7 @@ class Download(BaseDownload):
         keycolumn: int = 1,
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
-        header_insertions: Optional[List[Tuple[int, str]]] = None,
+        header_insertions: Optional[ListTuple[Tuple[int, str]]] = None,
         row_function: Optional[
             Callable[[List[str], ListDict], ListDict]
         ] = None,
@@ -993,7 +995,7 @@ class Download(BaseDownload):
             keycolumn (int): Number of column to be used for key. Defaults to 1.
             ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
             infer_types (bool): Whether to infer types. Defaults to False (strings).
-            header_insertions (Optional[List[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
+            header_insertions (Optional[ListTuple[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
             row_function (Optional[Callable[[List[str],ListDict],ListDict]]): Function to call for each row. Defaults to None.
             **kwargs:
             format (Optional[str]): Type of file. Defaults to inferring.
@@ -1008,7 +1010,7 @@ class Download(BaseDownload):
             columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
             default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
-            null_values (List[Any]): What gets treated as null. Defaults to [""].
+            null_values (List[Any]): Values that will return None. Defaults to [""].
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
             detector (Detector): This can be set to override the above. See Frictionless docs.
             layout (Layout): This can be set to override the above. See Frictionless docs.
@@ -1042,11 +1044,11 @@ class Download(BaseDownload):
         return output_dict
 
     @staticmethod
-    def get_column_positions(headers: List[str]) -> Dict[str, int]:
+    def get_column_positions(headers: ListTuple[str]) -> Dict[str, int]:
         """Get mapping of headers to column positions
 
         Args:
-            headers (List[str]): List of headers
+            headers (ListTuple[str]): List of headers
 
         Returns:
             Dict[str,int]: Dictionary where keys are header names and values are header positions
@@ -1093,8 +1095,8 @@ class Download(BaseDownload):
             extra_params_yaml (str): Path to YAML file containing extra parameters to put on end of url
             extra_params_lookup (str): Lookup key for parameters. If not given assumes parameters are at root of the dict.
             headers (Dict): Additional headers to add to request.
-            status_forcelist (List[int]): HTTP statuses for which to force retry
-            allowed_methods (iterable): HTTP methods for which to force retry. Defaults t0 frozenset(['GET']).
+            status_forcelist (ListTuple[int]): HTTP statuses for which to force retry. Defaults to (429, 500, 502, 503, 504).
+            allowed_methods (ListTuple[str]): HTTP methods for which to force retry. Defaults to ("HEAD", "TRACE", "GET", "PUT", "OPTIONS", "DELETE").
 
         Returns:
             None
