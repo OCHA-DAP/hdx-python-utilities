@@ -292,7 +292,7 @@ class TestDictAndList:
                 {"h1": "7", "h2": "8", "h4": "c", "h3": "9"},
             ]
             write_list_to_csv(
-                filepath, list_of_tuples, headers=["h1", "h2", "h3", "h4"]
+                filepath, list_of_tuples, headers=("h1", "h2", "h3", "h4")
             )
             newll = read_list_from_csv(filepath)
             newld = read_list_from_csv(filepath, headers=1, dict_form=True)
