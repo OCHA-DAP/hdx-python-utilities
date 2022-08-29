@@ -98,10 +98,6 @@ class TestLoader:
         return join(fixturesfolder, "saver")
 
     @pytest.fixture(scope="class")
-    def saverfolder(self, fixturesfolder):
-        return join(fixturesfolder, "saver")
-
-    @pytest.fixture(scope="class")
     def json_csv_configuration(self, fixturesfolder):
         return load_yaml(join(fixturesfolder, "config", "json_csv.yml"))
 

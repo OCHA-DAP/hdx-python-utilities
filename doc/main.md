@@ -9,7 +9,7 @@ Note that these are not specific to HDX.
 1. [Retrieval of data from url with saving to file or from data previously saved](#retrieving-files)
 1. [Date parsing utilities](#date-parsing-utilities)
 1. [Loading and saving JSON and YAML (maintaining order)](#loading-and-saving-json-and-yaml)
-1. [Loading and saving HXLated csvs and/or JSON](#loading-and-saving-HXLated-csvs-and/or-JSON)
+1. [Loading and saving HXLated csv and/or JSON](#loading-and-saving-hxlated-csv-andor-json)
 1. [Dictionary and list utilities](#dictionary-and-list-utilities)
 1. [HTML utilities (inc. BeautifulSoup helper)](#html-utilities)
 1. [Compare files (eg. for testing)](#comparing-files)
@@ -309,7 +309,7 @@ Examples:
     # sorting the keys
     save_json(mydict, "mypath.json", pretty=False, sortkeys=False)
 
-## Loading and saving HXLated csvs and/or JSON
+## Loading and saving HXLated csv and/or JSON
 
 `save_hxlated_output` is a utility to save HXLated output (currently JSON and/or csv are
 supported) based on a given configuration. Here is an example YAML configuration:
