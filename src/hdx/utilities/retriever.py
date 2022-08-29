@@ -6,12 +6,12 @@ from typing import Any, Iterator, List, Optional, Tuple, Union
 
 from slugify import slugify
 
-from hdx.utilities.base_downloader import BaseDownload, DownloadError
-from hdx.utilities.downloader import Download
-from hdx.utilities.loader import load_json, load_text, load_yaml
-from hdx.utilities.path import get_filename_extension_from_url
-from hdx.utilities.saver import save_json, save_text, save_yaml
-from hdx.utilities.typehint import ListDict, ListTuple
+from .base_downloader import BaseDownload, DownloadError
+from .downloader import Download
+from .loader import load_json, load_text, load_yaml
+from .path import get_filename_extension_from_url
+from .saver import save_json, save_text, save_yaml
+from .typehint import ListDict, ListTuple
 
 logger = logging.getLogger(__name__)
 

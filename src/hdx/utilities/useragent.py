@@ -4,8 +4,8 @@ import os
 from os.path import expanduser, isfile, join
 from typing import Any, Dict, Optional
 
-from hdx.utilities import __version__
-from hdx.utilities.loader import load_yaml
+from . import __version__
+from .loader import load_yaml
 
 logger = logging.getLogger(__name__)
 

@@ -8,7 +8,8 @@ Note that these are not specific to HDX.
 1. [Easy downloading of files with support for authentication, streaming and hashing](#downloading-files)
 1. [Retrieval of data from url with saving to file or from data previously saved](#retrieving-files)
 1. [Date parsing utilities](#date-parsing-utilities)
-1. [Loading and saving JSON and YAML (inc. with OrderedDict)](#loading-and-saving-json-and-yaml)
+1. [Loading and saving JSON and YAML (maintaining order)](#loading-and-saving-json-and-yaml)
+1. [Loading and saving HXLated csvs and/or JSON](#loading-and-saving-HXLated-csvs-and/or-JSON)
 1. [Dictionary and list utilities](#dictionary-and-list-utilities)
 1. [HTML utilities (inc. BeautifulSoup helper)](#html-utilities)
 1. [Compare files (eg. for testing)](#comparing-files)
@@ -73,8 +74,9 @@ For example, given YAML file extraparams.yml:
         basic_auth: "XXXXXXXX"
         locale: "en"
 
-We can create a downloader as shown below that will use the authentication defined in basic\_auth and add the parameter 
-locale=en to each request (eg. for get request <http://myurl/lala?param1=p1&locale=en>):
+We can create a downloader as shown below that will use the authentication defined in 
+`basic\_auth` and add the parameter `locale=en` to each request (eg. for get request 
+<http://myurl/lala?param1=p1&locale=en>):
 
     with Download(user_agent="test", extra_params_yaml="extraparams.yml", extra_params_lookup="mykey") as downloader:
         response = downloader.download(url)  # get requests library response
@@ -90,21 +92,22 @@ locale=en to each request (eg. for get request <http://myurl/lala?param1=p1&loca
         for row in downloader.get_tabular_rows("http://myurl/my.csv", dict_rows=True, headers=1)
             a = row["col"]
 
-If we want to limit the rate of get and post requests to say 1 per 0.1 seconds, then the rate_limit parameter can be 
-passed:
+If we want to limit the rate of get and post requests to say 1 per 0.1 seconds, then the 
+`rate_limit` parameter can be passed:
 
     with Download(rate_limit={"calls": 1, "period": 0.1}) as downloader:
         response = downloader.download(url)  # get requests library response
 
-If we want a user agent that will be used in all relevant HDX Python Utilities methods (and all HDX Python API ones too 
-if that library is included), then it can be configured once and used automatically:
+If we want a user agent that will be used in all relevant HDX Python Utilities methods 
+(and all HDX Python API ones too if that library is included), then it can be configured 
+once and used automatically:
 
     UserAgent.set_global("test")
     with Download() as downloader:
         response = downloader.download(url)  # get requests library response
 
-The response is of the form produced by the requests library. It may not be needed as there are functions directly on 
-the Download object eg.
+The response is of the form produced by the requests library. It may not be needed as 
+there are functions directly on the Download object eg.
 
     assert downloader.get_status() == 200
     assert len(downloader.get_headers()) == 24
@@ -113,17 +116,22 @@ the Download object eg.
     assert downloader.get_json() == {...}
     assert downloader.get_yaml() == {...}
 
-The get_tabular_rows method enables iteration through tabular data. It returns the header of tabular file pointed to by 
-the url and an iterator where each row is returned as a list or dictionary depending on the dict_rows argument.
+The `get_tabular_rows` method enables iteration through tabular data. It returns the 
+header of tabular file pointed to by the url and an iterator where each row is returned 
+as a list or dictionary depending on the dict_rows argument.
 
-The headers argument is either a row number or list of row numbers (in case of multi-line headers) to be considered as 
-headers (rows start counting at 1), or the actual headers defined a list of strings. It defaults to 1 and cannot be 
-None. The dict_form arguments specifies if each row should be returned as a dictionary or a list, defaulting to a list.  
+The headers argument is either a row number or list of row numbers (in case of 
+multi-line headers) to be considered as headers (rows start counting at 1), or the 
+actual headers defined a list of strings. It defaults to 1 and cannot be None. 
+The `dict_form` arguments specifies if each row should be returned as a dictionary or a 
+list, defaulting to a list.  
 
-Optionally, headers can be inserted at specific positions. This is achieved using the header_insertions argument. If 
-supplied, it is a list of tuples of the form (position, header) to be inserted. Optionally a function can be called on 
-each row. If supplied, it takes as arguments: headers (prior to any insertions) and row (which will be in dict or list 
-form depending upon the dict_rows argument) and outputs a modified row. Example:
+Optionally, headers can be inserted at specific positions. This is achieved using the 
+header_insertions argument. If supplied, it is a list of tuples of the form 
+`(position, header)` to be inserted. Optionally a function can be called on each row. 
+If supplied, it takes as arguments: headers (prior to any insertions) and row (which 
+will be in dict or list form depending upon the dict_rows argument) and outputs a 
+modified row. Example:
 
     def testfn(headers, row):
         row["la"] = "lala"
@@ -169,17 +177,17 @@ constructing the Retrieve object.
 
     retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save, use_saved)
 
-- save=False, use_saved=False  - download from web as normal (files will go in temp_folder and be discarded)
-- save=True, use_saved=False - download from web as normal (files will go in saved_dir and will be kept)
-- save=False, use_saved=True - use files from saved_dir (don't download at all)
+- `save=False, use_saved=False`  - download from web as normal (files will go in temp_folder and be discarded)
+- `save=True, use_saved=False` - download from web as normal (files will go in saved_dir and will be kept)
+- `save=False, use_saved=True` - use files from saved_dir (don't download at all)
 
 fallback_dir is a folder containing static fallback files which can optionally be used if the download fails.
 
 Methods in the Retrieve class are: 
-- retrieve_file returns a path to a file
-- retrieve_text returns the text in a file
-- retrieve_json returns the JSON in a Python dict
-- retrieve_yaml returns the YAML in a Python dict.
+- `retrieve_file` returns a path to a file
+- `retrieve_text` returns the text in a file
+- `retrieve_json` returns the JSON in a Python dictionary
+- `retrieve_yaml` returns the YAML in a Python dictionary
 
 Examples:
 
@@ -300,6 +308,89 @@ Examples:
     # Save dictionary to JSON file in compact form
     # sorting the keys
     save_json(mydict, "mypath.json", pretty=False, sortkeys=False)
+
+## Loading and saving HXLated csvs and/or JSON
+
+`save_hxlated_output` is a utility to save HXLated output (currently JSON and/or csv are
+supported) based on a given configuration. Here is an example YAML configuration:
+
+    input:
+      headers:
+        - "Col1"
+        - "Col2"
+        - "Col3"
+      hxltags:
+        - "#tag1"
+        - "#tag2"
+        - "#tag3"
+    output:
+      csv:
+        filename: "out.csv"
+        hxltags:
+          - "#tag2"
+          - "#tag3"
+      json:
+        filename: "out.json"
+        data: "results"
+        metadata:
+          "#date": "{{today}}"
+          "#mytag": 123
+        hxltags:
+          - "#tag1"
+          - "#tag2"
+
+The `input` section is needed if the rows of data that are passed in are missing either
+headers or HXL hashtags. The `output` section defines what files will be created. If
+`hxltags` are specified, then only those columns are output. CSV output would look like 
+this:
+
+    Col2,Col3
+    #tag2,#tag3
+    2,3
+    5,6
+
+
+For JSON output, if no `metadata` or `data` is specified, the output will look like 
+this:
+
+    [
+    {"#tag1":1,"#tag2":2},
+    {"#tag1":4,"#tag2":5}
+    ]
+
+If only `metadata` was specified, not `data`, then output is like this:
+
+    {"metadata":{"#date":"today!","#mytag":123},"data":[
+    {"#tag1":1,"#tag2":"2"},
+    {"#tag1":4,"#tag2":"5"}
+    ]}
+
+Otherwise, the result is like this:
+
+    {"metadata":{"#date":"today!","#mytag":123},"results":[
+    {"#tag1":1,"#tag2":"2"},
+    {"#tag1":4,"#tag2":"5"}
+    ]}
+
+The utility is called as follows:
+
+    save_hxlated_output(
+        configuration,
+        rows,
+        includes_header=True,
+        includes_hxltags=True,
+        output_dir=output_dir,
+        today="today!",
+    )
+
+The first parameter is the configuration which can come from a YAML file for example.
+The second parameter, `rows` is the data. That data can be a list of lists, tuples or 
+dictionaries. If `includes_header` is `True`, headers are taken from `rows`, otherwise
+they must be given by the configuration. If `includes_hxltags` is `True`, HXL hashtags 
+are taken from `rows`, otherwise they must be given by the configuration. `output_dir`
+specifies where the output should go and defaults to "". Any other parameters (such as
+`today` in the example above) are used to populate template variables given in the
+configuration for the metadata.
 
 ## Dictionary and list utilities
 
@@ -510,47 +601,64 @@ the code will not exit and execution will continue after the `with` block (ie.
 
 Examples:
 
-    # Gets temporary directory from environment variable
-    # TEMP_DIR and falls back to os function
+Gets temporary directory from environment variable `TEMP_DIR` and falls back to the
+temporary folder created by the os function `gettempdir`.
+    
     temp_folder = get_temp_dir()
 
-    # Gets temporary directory from environment variable
-    # TEMP_DIR and falls back to os function,
-    # optionally appends the given folder, creates the
-    # folder and deletes the folder if exiting 
-    # successfully else keeps the folder if there was
-    # an exception
+Gets temporary directory from environment variable `TEMP_DIR` and falls back to the
+temporary folder created by the os function `gettempdir`.  It (optionally) appends the 
+given folder name, creates the folder and deletes the folder if exiting successfully 
+else keeps the folder if there was an exception.
+
     with temp_dir("papa", delete_on_success=True, delete_on_failure=False) as tempdir:
         ...
-    # Sometimes it is necessary to be able to resume runs if they fail. The following
-    # example creates a temporary folder and iterates through a list of items.
-    # On each iteration, the current state of progress is stored in the temporary
-    # folder. If the iteration were to fail, the temporary folder is not deleted and
-    # on the next run, it will resume where it failed. Once the whole list is iterated
-    # through, the temporary folder is deleted.
-    # What is returned each iteration is a tuple with 2 dictionaries. The first contains 
-    # key folder which is the temporary directory optionally with folder appended (and 
-    # created if it doesn't exist). In key progress is held the current position in the 
-    # iterator. It also contains the key batch containing a batch code to be passed as
-    # the batch parameter in create_in_hdx or update_in_hdx calls. The second dictionary 
-    # is the next dictionary in the iterator.
-    # The environment variable WHERETOSTART can be set to the starting value for example
-    # iso3=SDN in the example below. If it is
-    # set to RESET, then the temporary folder is deleted before the run starts to ensure
-    # it starts from the beginning.    
+
+Sometimes it is necessary to be able to resume runs if they fail. The following example 
+creates a temporary folder and iterates through a list of items. On each iteration, the 
+current state of progress is stored in the temporary folder. If the iteration were to 
+fail, the temporary folder is not deleted and on the next run, it will resume where it 
+failed. Once the whole list is iterated through, the temporary folder is deleted.
+
+What is returned each iteration is a tuple with 2 dictionaries. The first (`info`) 
+contains key `folder` which is the temporary directory optionally with folder appended 
+(and created if it doesn't exist). In key `progress` is held the current position in the 
+iterator. It also contains the key `batch` containing a batch code to be passed as the 
+`batch` parameter in `create_in_hdx` or `update_in_hdx` calls. The second dictionary is 
+the next dictionary in the iterator. The environment variable `WHERETOSTART` can be set 
+to the starting value for example `iso3=SDN` in the example below. If it is set to 
+`RESET`, then the temporary folder is deleted before the run starts to ensure it starts 
+from the beginning.
+
     iterator = [{"iso3": "AFG", "name": "Afghanistan"}, {"iso3": "SDN", "name": "Sudan"},
                 {"iso3": "YEM", "name": "Yemen"}, {"iso3": "ZAM", "name": "Zambia"}]
     result = list()
     for info, nextdict in progress_storing_tempdir(tempfolder, iterator, "iso3"):
         ...
 
-    # Get current directory of script
+Sometimes, it may be necessary to create the folder and batch code for use by parts of 
+the code outside of the iterator. This can be achieved as follows:
+
+    with wheretostart_tempdir_batch(tempfolder) as info:
+        folder = info["folder"]
+        ...
+        for info, country in progress_storing_folder(info, iterator, "iso3"):
+            ...
+
+The batch code can be passed into `wheretostart_tempdir_batch` in the `batch` parameter.
+If not given, the batch code is generated. The folder to use will be a generated 
+temporary folder unless `tempdir` is given. 
+
+Get current directory of script
+
     dir = script_dir(ANY_PYTHON_OBJECT_IN_SCRIPT)
 
-    # Get current directory of script with filename appended
+Get current directory of script with filename appended
+
     path = script_dir_plus_file("myfile.txt", ANY_PYTHON_OBJECT_IN_SCRIPT)
 
-    # Get filename or (filename, extension) from url
+Get filename or (filename, extension) from url
+
     url = "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/test_data.csv"
     filename = get_filename_from_url(fixtureurl)
     assert filename == "test_data.csv"
@@ -596,6 +704,9 @@ Examples:
 
     # Search a string for each of a list of strings and return the earliest index
     assert earliest_index(a, ["dog", "lala", "fox", "haha", "quick"]) == 4
+
+    # Look for template variables in a string (ie. {{XXX}})
+    assert match_template_variables("dasdda{{abc}}gff") == ("{{abc}}", "abc")
 
 ## Encoding utilities
 

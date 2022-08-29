@@ -9,7 +9,7 @@ except ImportError:
     BeautifulSoup = None
     Tag = None
 
-from hdx.utilities.downloader import Download
+from .downloader import Download
 
 logger = logging.getLogger(__name__)
 

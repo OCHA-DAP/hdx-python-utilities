@@ -12,6 +12,7 @@ from hdx.utilities.text import (
     get_matching_then_nonmatching_text,
     get_numeric_if_possible,
     get_words_in_sentence,
+    match_template_variables,
     multiple_replace,
     number_format,
     only_allowed_in_str,
@@ -216,4 +217,11 @@ Contains data from IDMC's [data portal](https://github.com/idmc-labs/IDMC-Platfo
         assert (
             earliest_index(self.a, ["dog", "lala", "fox", "haha", "quick"])
             == 4
+        )
+
+    def test_match_template_variables(self):
+        assert match_template_variables("dasdda") == (None, None)
+        assert match_template_variables("dasdda{{abc}}gff") == (
+            "{{abc}}",
+            "abc",
         )

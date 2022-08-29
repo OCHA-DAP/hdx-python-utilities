@@ -2,35 +2,26 @@
 
 import itertools
 from collections import UserDict
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    List,
-    Mapping,
-    MutableMapping,
-    Optional,
-    Union,
-)
+from typing import Any, Callable, Dict, List, Optional, Union
 
-from hdx.utilities.frictionless_wrapper import get_frictionless_resource
-from hdx.utilities.typehint import ListDict, ListTuple, ListTupleDict
+from .frictionless_wrapper import get_frictionless_resource
+from .typehint import ListDict, ListTuple, ListTupleDict
 
 
 def merge_two_dictionaries(
-    a: MutableMapping, b: Mapping, merge_lists: bool = False
-) -> MutableMapping:
+    a: Dict, b: Dict, merge_lists: bool = False
+) -> Dict:
     """Merges b into a and returns merged result
 
     NOTE: tuples and arbitrary objects are not handled as it is totally ambiguous what should happen
 
     Args:
-        a (MutableMapping): dictionary to merge into
-        b (Mapping): dictionary to merge from
+        a (Dict): dictionary to merge into
+        b (Dict): dictionary to merge from
         merge_lists (bool): Whether to merge lists (True) or replace lists (False). Default is False.
 
     Returns:
-        MutableMapping: Merged dictionary
+        Dict: Merged dictionary
     """
     key = None
     # ## debug output
@@ -75,16 +66,16 @@ def merge_two_dictionaries(
 
 
 def merge_dictionaries(
-    dicts: ListTuple[MutableMapping], merge_lists: bool = False
-) -> MutableMapping:
+    dicts: ListTuple[Dict], merge_lists: bool = False
+) -> Dict:
     """Merges all dictionaries in dicts into a single dictionary and returns result
 
     Args:
-        dicts (ListTuple[MutableMapping]): Dictionaries to merge into the first one in the list
+        dicts (ListTuple[Dict]): Dictionaries to merge into the first one in the list
         merge_lists (bool): Whether to merge lists (True) or replace lists (False). Default is False.
 
     Returns:
-        MutableMapping: Merged dictionary
+        Dict: Merged dictionary
 
     """
     dict1 = dicts[0]
@@ -93,12 +84,12 @@ def merge_dictionaries(
     return dict1
 
 
-def dict_diff(d1: Mapping, d2: Mapping, no_key: str = "<KEYNOTFOUND>") -> Dict:
+def dict_diff(d1: Dict, d2: Dict, no_key: str = "<KEYNOTFOUND>") -> Dict:
     """Compares two dictionaries
 
     Args:
-        d1 (Mapping): First dictionary to compare
-        d2 (Mapping): Second dictionary to compare
+        d1 (Dict): First dictionary to compare
+        d2 (Dict): Second dictionary to compare
         no_key (str): What value to use if key is not found Defaults to '<KEYNOTFOUND>'.
 
     Returns:
@@ -114,13 +105,11 @@ def dict_diff(d1: Mapping, d2: Mapping, no_key: str = "<KEYNOTFOUND>") -> Dict:
     return diff
 
 
-def dict_of_lists_add(
-    dictionary: MutableMapping, key: Any, value: Any
-) -> None:
+def dict_of_lists_add(dictionary: Dict, key: Any, value: Any) -> None:
     """Add value to a list in a dictionary by key
 
     Args:
-        dictionary (MutableMapping): Dictionary to which to add values
+        dictionary (Dict): Dictionary to which to add values
         key (Any): Key within dictionary
         value (Any): Value to add to list in dictionary
 
@@ -133,11 +122,11 @@ def dict_of_lists_add(
     dictionary[key] = list_objs
 
 
-def dict_of_sets_add(dictionary: MutableMapping, key: Any, value: Any) -> None:
+def dict_of_sets_add(dictionary: Dict, key: Any, value: Any) -> None:
     """Add value to a set in a dictionary by key
 
     Args:
-        dictionary (MutableMapping): Dictionary to which to add values
+        dictionary (Dict): Dictionary to which to add values
         key (Any): Key within dictionary
         value (Any): Value to add to set in dictionary
 
@@ -151,12 +140,12 @@ def dict_of_sets_add(dictionary: MutableMapping, key: Any, value: Any) -> None:
 
 
 def dict_of_dicts_add(
-    dictionary: MutableMapping, parent_key: Any, key: Any, value: Any
+    dictionary: Dict, parent_key: Any, key: Any, value: Any
 ) -> None:
     """Add key value pair to a dictionary within a dictionary by key
 
     Args:
-        dictionary (MutableMapping): Dictionary to which to add values
+        dictionary (Dict): Dictionary to which to add values
         parent_key (Any): Key within parent dictionary
         key (Any): Key within dictionary
         value (Any): Value to add to set in dictionary
@@ -253,12 +242,12 @@ def list_distribute_contents(
 
 
 def extract_list_from_list_of_dict(
-    list_of_dict: ListTuple[Mapping], key: Any
+    list_of_dict: ListTuple[Dict], key: Any
 ) -> List:
     """Extract a list by looking up key in each member of a list of dictionaries
 
     Args:
-        list_of_dict (ListTuple[Mapping]): List of dictionaries
+        list_of_dict (ListTuple[Dict]): List of dictionaries
         key (Any): Key to find in each dictionary
 
     Returns:
@@ -272,7 +261,7 @@ def extract_list_from_list_of_dict(
 
 
 def key_value_convert(
-    dictin: Mapping,
+    dictin: Dict,
     keyfn: Callable[[Any], Any] = lambda x: x,
     valuefn: Callable[[Any], Any] = lambda x: x,
     dropfailedkeys: bool = False,
@@ -282,7 +271,7 @@ def key_value_convert(
     """Convert keys and/or values of dictionary using functions passed in as parameters
 
     Args:
-        dictin (Mapping): Input dictionary
+        dictin (Dict): Input dictionary
         keyfn (Callable[[Any], Any]): Function to convert keys. Defaults to lambda x: x
         valuefn (Callable[[Any], Any]): Function to convert values. Defaults to lambda x: x
         dropfailedkeys (bool): Whether to drop dictionary entries where key conversion fails. Defaults to False.
@@ -312,11 +301,11 @@ def key_value_convert(
     return dictout
 
 
-def integer_key_convert(dictin: Mapping, dropfailedkeys: bool = False) -> Dict:
+def integer_key_convert(dictin: Dict, dropfailedkeys: bool = False) -> Dict:
     """Convert keys of dictionary to integers
 
     Args:
-        dictin (Mapping): Input dictionary
+        dictin (Dict): Input dictionary
         dropfailedkeys (bool): Whether to drop dictionary entries where key conversion fails. Defaults to False.
 
     Returns:
@@ -327,12 +316,12 @@ def integer_key_convert(dictin: Mapping, dropfailedkeys: bool = False) -> Dict:
 
 
 def integer_value_convert(
-    dictin: Mapping, dropfailedvalues: bool = False
+    dictin: Dict, dropfailedvalues: bool = False
 ) -> Dict:
     """Convert values of dictionary to integers
 
     Args:
-        dictin (Mapping): Input dictionary
+        dictin (Dict): Input dictionary
         dropfailedvalues (bool): Whether to drop dictionary entries where key conversion fails. Defaults to False.
 
     Returns:
@@ -344,13 +333,11 @@ def integer_value_convert(
     )
 
 
-def float_value_convert(
-    dictin: Mapping, dropfailedvalues: bool = False
-) -> Dict:
+def float_value_convert(dictin: Dict, dropfailedvalues: bool = False) -> Dict:
     """Convert values of dictionary to floats
 
     Args:
-        dictin (Mapping): Input dictionary
+        dictin (Dict): Input dictionary
         dropfailedvalues (bool): Whether to drop dictionary entries where key conversion fails. Defaults to False.
 
     Returns:
@@ -362,14 +349,12 @@ def float_value_convert(
     )
 
 
-def avg_dicts(
-    dictin1: Mapping, dictin2: Mapping, dropmissing: bool = True
-) -> Dict:
+def avg_dicts(dictin1: Dict, dictin2: Dict, dropmissing: bool = True) -> Dict:
     """Create a new dictionary from two dictionaries by averaging values
 
     Args:
-        dictin1 (Mapping): First input dictionary
-        dictin2 (Mapping): Second input dictionary
+        dictin1 (Dict): First input dictionary
+        dictin2 (Dict): Second input dictionary
         dropmissing (bool): Whether to drop keys missing in one dictionary. Defaults to True.
 
     Returns:

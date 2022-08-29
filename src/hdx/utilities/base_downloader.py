@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Any, Iterator, List, Tuple, Union
 
-from hdx.utilities.typehint import ListDict, ListTuple
+from .typehint import ListDict, ListTuple
 
 
 class DownloadError(Exception):

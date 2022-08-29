@@ -20,10 +20,10 @@ from urllib.parse import unquote_plus, urlsplit
 
 from slugify import slugify
 
-from hdx.utilities.loader import load_text
-from hdx.utilities.saver import save_text
-from hdx.utilities.typehint import ListTuple
-from hdx.utilities.uuid import get_uuid
+from .loader import load_text
+from .saver import save_text
+from .typehint import ListTuple
+from .uuid import get_uuid
 
 logger = logging.getLogger(__name__)
 

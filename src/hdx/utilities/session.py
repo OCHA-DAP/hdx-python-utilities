@@ -9,8 +9,8 @@ from requests.adapters import HTTPAdapter
 from requests_file import FileAdapter
 from urllib3.util import Retry
 
-from hdx.utilities.loader import load_json, load_text, load_yaml
-from hdx.utilities.useragent import UserAgent
+from .loader import load_json, load_text, load_yaml
+from .useragent import UserAgent
 
 logger = logging.getLogger(__name__)
 

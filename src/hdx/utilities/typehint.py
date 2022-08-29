@@ -1,6 +1,6 @@
-from typing import Dict, List, Tuple, TypeVar, Union
+from typing import Any, Dict, List, Tuple, TypeVar, Union
 
 T = TypeVar("T")
 ListTuple = Union[List[T], Tuple[T, ...]]
-ListDict = Union[List[T], Dict[T, T]]
-ListTupleDict = Union[ListTuple[T], Dict[T, T]]
+ListDict = Union[List, Dict]
+ListTupleDict = Union[List, Tuple, Dict]

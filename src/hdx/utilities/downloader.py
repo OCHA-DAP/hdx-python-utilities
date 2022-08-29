@@ -5,17 +5,7 @@ import logging
 from os import remove
 from os.path import exists, isfile, join, split, splitext
 from pathlib import Path
-from typing import (
-    Any,
-    Callable,
-    Dict,
-    Iterator,
-    List,
-    Mapping,
-    Optional,
-    Tuple,
-    Union,
-)
+from typing import Any, Callable, Dict, Iterator, List, Optional, Tuple, Union
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import frictionless
@@ -25,11 +15,11 @@ from ratelimit import RateLimitDecorator, sleep_and_retry
 from requests import Request
 from ruamel.yaml import YAML
 
-from hdx.utilities.base_downloader import BaseDownload, DownloadError
-from hdx.utilities.frictionless_wrapper import get_frictionless_resource
-from hdx.utilities.path import get_filename_from_url, get_temp_dir
-from hdx.utilities.session import get_session
-from hdx.utilities.typehint import ListDict, ListTuple
+from .base_downloader import BaseDownload, DownloadError
+from .frictionless_wrapper import get_frictionless_resource
+from .path import get_filename_from_url, get_temp_dir
+from .session import get_session
+from .typehint import ListDict, ListTuple
 
 logger = logging.getLogger(__name__)
 
@@ -1062,7 +1052,7 @@ class Download(BaseDownload):
     @classmethod
     def generate_downloaders(
         cls,
-        custom_configs: Mapping[str, Mapping],
+        custom_configs: Dict[str, Dict],
         user_agent: Optional[str] = None,
         user_agent_config_yaml: Optional[str] = None,
         user_agent_lookup: Optional[str] = None,
@@ -1079,7 +1069,7 @@ class Download(BaseDownload):
         __init__ (or the other arguments of this method).
 
         Args:
-            custom_configs (Mapping[str, Mapping]): Optional dictionary of custom configurations.
+            custom_configs (Dict[str, Dict]): Optional dictionary of custom configurations.
             user_agent (Optional[str]): User agent string. HDXPythonUtilities/X.X.X- is prefixed.
             user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.
             user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.

@@ -1,0 +1,85 @@
+test1:
+  input:
+    headers:
+      - "Col1"
+      - "Col2"
+      - "Col3"
+    hxltags:
+      - "#tag1"
+      - "#tag2"
+      - "#tag3"
+  output:
+    csv:
+      filename: "out.csv"
+    json:
+      filename: "out.json"
+      hxltags:
+        - "#tag1"
+        - "#tag3"
+
+test2:
+  output:
+    csv:
+      filename: "out2.csv"
+      hxltags:
+        - "#tag2"
+        - "#tag3"
+    json:
+      filename: "out2.json"
+
+test3:
+  output:
+    csv:
+      filename: "out3.csv"
+
+test4:
+  output:
+    json:
+      filename: "out4.json"
+
+test5:
+  output:
+    csv:
+      filename: "out5.csv"
+      hxltags:
+        - "#tag2"
+        - "#tag3"
+    json:
+      filename: "out5.json"
+      data: "results"
+      hxltags:
+        - "#tag1"
+        - "#tag2"
+
+test6:
+  output:
+    csv:
+      filename: "out6.csv"
+      hxltags:
+        - "#tag2"
+        - "#tag3"
+    json:
+      filename: "out6.json"
+      data: "results"
+      metadata:
+        "#date": "{{today}}"
+        "#mytag": 123
+      hxltags:
+        - "#tag1"
+        - "#tag2"
+
+test7:
+  output:
+    csv:
+      filename: "out7.csv"
+      hxltags:
+        - "#tag2"
+        - "#tag3"
+    json:
+      filename: "out7.json"
+      metadata:
+        "#date": "{{today}}"
+        "#mytag": 123
+      hxltags:
+        - "#tag1"
+        - "#tag2"

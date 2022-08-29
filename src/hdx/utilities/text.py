@@ -4,13 +4,15 @@ import logging
 import re
 import string
 from string import punctuation
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Set, Tuple
 
 from hdx.utilities.typehint import ListTuple
 
 logger = logging.getLogger(__name__)
 
+
 PUNCTUATION_MINUS_BRACKETS = r"""!"#$%&'*+,-./:;<=>?@\^_`|~"""
+TEMPLATE_VARIABLES = re.compile("{{.*?}}")
 
 
 def remove_end_characters(
@@ -441,3 +443,21 @@ def earliest_index(
         return None
     else:
         return earliest_index
+
+
+def match_template_variables(
+    string: str,
+) -> Tuple[Optional[str], Optional[str]]:
+    """Try to match {{XXX}} in input string
+
+    Args:
+        string (str): String in which to look for template
+
+    Returns:
+        Tuple[Optional[str], Optional[str]]: (Matched string with brackets, matched string without brackets)
+    """
+    match = TEMPLATE_VARIABLES.search(string)
+    if match:
+        template_string = match.group()
+        return template_string, template_string[2:-2]
+    return None, None

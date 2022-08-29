@@ -7,14 +7,13 @@ from email.mime.text import MIMEText
 from os.path import expanduser, join
 from typing import Any, List, Optional, Union
 
-from hdx.utilities.typehint import ListTuple
+from .loader import load_json, load_yaml
+from .typehint import ListTuple
 
 try:
     from email_validator import validate_email
 except ImportError:
     validate_email = None
-
-from hdx.utilities.loader import load_json, load_yaml
 
 logger = logging.getLogger(__name__)
 

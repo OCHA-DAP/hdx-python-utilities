@@ -6,11 +6,8 @@ from typing import Any, Dict, Optional
 
 from ruamel.yaml import YAML
 
-from hdx.utilities.dictandlist import (
-    merge_dictionaries,
-    merge_two_dictionaries,
-)
-from hdx.utilities.typehint import ListTuple
+from .dictandlist import merge_dictionaries, merge_two_dictionaries
+from .typehint import ListTuple
 
 
 class LoadError(Exception):
