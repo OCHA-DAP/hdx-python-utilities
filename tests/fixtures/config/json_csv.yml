@@ -83,3 +83,26 @@ test7:
       hxltags:
         - "#tag1"
         - "#tag2"
+
+test8:
+  process:
+    - header: "tag4"
+      hxltag: "#tag4"
+      expression: "#tag1 * 10"
+
+  output:
+    csv:
+      filename: "out8.csv"
+      hxltags:
+        - "#tag2"
+        - "#tag3"
+        - "#tag4"
+    json:
+      filename: "out8.json"
+      metadata:
+        "#date": "{{today}}"
+        "#mytag": 123
+      hxltags:
+        - "#tag1"
+        - "#tag2"
+        - "#tag4"

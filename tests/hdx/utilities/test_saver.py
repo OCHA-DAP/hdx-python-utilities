@@ -312,3 +312,20 @@ class TestLoader:
         assert_files_same(
             join(saverfolder, filename), join(output_dir, filename)
         )
+
+        save_hxlated_output(
+            json_csv_configuration["test8"],
+            rowsdict,
+            includes_header=True,
+            includes_hxltags=True,
+            output_dir=output_dir,
+            today="today!",
+        )
+        filename = "out8.csv"
+        assert_files_same(
+            join(saverfolder, filename), join(output_dir, filename)
+        )
+        filename = "out8.json"
+        assert_files_same(
+            join(saverfolder, filename), join(output_dir, filename)
+        )

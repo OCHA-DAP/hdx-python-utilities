@@ -184,7 +184,13 @@ def save_hxlated_output(
             rows = rows[1:]
     else:
         hxltags = configuration["input"]["hxltags"]
-    process = configuration.get("process", dict())
+    expressions = dict()
+    for process in configuration.get("process", list()):
+        headers.append(process["header"])
+        hxltag = process["hxltag"]
+        hxltags.append(hxltag)
+        expressions[hxltag] = process["expression"]
+
     hxltag_to_header = dict(zip(hxltags, headers))
     csv_configuration = configuration["output"].get("csv")
     if csv_configuration:
@@ -252,7 +258,7 @@ def save_hxlated_output(
         def get_outrow(file_hxltags):
             outrow = dict()
             for file_hxltag in file_hxltags:
-                expression = process.get(file_hxltag)
+                expression = expressions.get(file_hxltag)
                 if expression:
                     for i, hxltag in enumerate(hxltags):
                         expression = expression.replace(hxltag, f"inrow[{i}]")

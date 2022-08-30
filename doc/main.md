@@ -323,6 +323,10 @@ supported) based on a given configuration. Here is an example YAML configuration
         - "#tag1"
         - "#tag2"
         - "#tag3"
+    process:
+      - header: "tag4"
+        hxltag: "#tag4"
+        expression: "#tag1 * 10"
     output:
       csv:
         filename: "out.csv"
@@ -344,32 +348,32 @@ headers or HXL hashtags. The `output` section defines what files will be created
 `hxltags` are specified, then only those columns are output. CSV output would look like 
 this:
 
-    Col2,Col3
-    #tag2,#tag3
-    2,3
-    5,6
+    Col2,Col3,tag4
+    #tag2,#tag3,#tag4
+    2,3,10
+    5,6,40
 
 
 For JSON output, if no `metadata` or `data` is specified, the output will look like 
 this:
 
     [
-    {"#tag1":1,"#tag2":2},
-    {"#tag1":4,"#tag2":5}
+    {"#tag1":1,"#tag2":"2","#tag4":10},
+    {"#tag1":4,"#tag2":"5","#tag4":40}
     ]
 
 If only `metadata` was specified, not `data`, then output is like this:
 
     {"metadata":{"#date":"today!","#mytag":123},"data":[
-    {"#tag1":1,"#tag2":"2"},
-    {"#tag1":4,"#tag2":"5"}
+    {"#tag1":1,"#tag2":"2","#tag4":10},
+    {"#tag1":4,"#tag2":"5","#tag4":40}
     ]}
 
 Otherwise, the result is like this:
 
     {"metadata":{"#date":"today!","#mytag":123},"results":[
-    {"#tag1":1,"#tag2":"2"},
-    {"#tag1":4,"#tag2":"5"}
+    {"#tag1":1,"#tag2":"2","#tag4":10},
+    {"#tag1":4,"#tag2":"5","#tag4":40}
     ]}
 
 The utility is called as follows:
