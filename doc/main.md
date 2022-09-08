@@ -194,7 +194,7 @@ Examples:
     with Download() as downloader:
         # Downloads file returning the path to the downloaded file and using a fallback file if the download 
         # fails. Since saved is False, the file will be saved with name filename in temp_dir
-        retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save=False, use_saved=False) 
+        retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save=False, use_saved=False, log_level=logging.DEBUG) 
         path = retriever.retrieve_file(url, filename, logstr="my file", fallback=True)
 
         # Downloads text file saving it for future usage and returning the text data (with no fallback) 

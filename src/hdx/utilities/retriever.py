@@ -263,9 +263,7 @@ class Retrieve(BaseDownload):
                 )
                 text = self.downloader.download_text(url, **kwargs)
                 if self.save:
-                    logger.log(
-                        log_level, f"Saving {logstr} in {saved_path}"
-                    )
+                    logger.log(log_level, f"Saving {logstr} in {saved_path}")
                     save_text(text, saved_path)
             except DownloadError:
                 if not fallback:
@@ -319,9 +317,7 @@ class Retrieve(BaseDownload):
                 )
                 ryaml = self.downloader.download_yaml(url, **kwargs)
                 if self.save:
-                    logger.log(
-                        log_level, f"Saving {logstr} in {saved_path}"
-                    )
+                    logger.log(log_level, f"Saving {logstr} in {saved_path}")
                     save_yaml(ryaml, saved_path)
             except DownloadError:
                 if not fallback:
@@ -375,9 +371,7 @@ class Retrieve(BaseDownload):
                 )
                 rjson = self.downloader.download_json(url, **kwargs)
                 if self.save:
-                    logger.log(
-                        log_level, f"Saving {logstr} in {saved_path}"
-                    )
+                    logger.log(log_level, f"Saving {logstr} in {saved_path}")
                     save_json(rjson, saved_path)
             except DownloadError:
                 if not fallback:
