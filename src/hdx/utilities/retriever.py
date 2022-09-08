@@ -174,6 +174,7 @@ class Retrieve(BaseDownload):
         filename: Optional[str] = None,
         logstr: Optional[str] = None,
         fallback: bool = False,
+        log_level: int = None,
         **kwargs: Any,
     ) -> str:
         """Retrieve file
@@ -183,12 +184,15 @@ class Retrieve(BaseDownload):
             filename (Optional[str]): Filename of saved file. Defaults to getting from url.
             logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
             fallback (bool): Whether to use static fallback if download fails. Defaults to False.
+            log_level (int): Level at which to log messages. Overrides level from constructor.
             **kwargs: Parameters to pass to download_file call
 
         Returns:
             str: Path to downloaded file
 
         """
+        if log_level is None:
+            log_level = self.log_level
         filename, kwargs = self.get_filename(url, filename, **kwargs)
         if not logstr:
             logstr = filename
@@ -199,12 +203,12 @@ class Retrieve(BaseDownload):
         output_path = join(folder, filename)
         saved_path = join(self.saved_dir, filename)
         if self.use_saved:
-            logger.log(self.log_level, f"Using saved {logstr} in {saved_path}")
+            logger.log(log_level, f"Using saved {logstr} in {saved_path}")
             return saved_path
         else:
             try:
                 logger.log(
-                    self.log_level,
+                    log_level,
                     f"Downloading {logstr} from {self.get_url_logstr(url)} into {output_path}",
                 )
                 return self.downloader.download_file(
@@ -225,6 +229,7 @@ class Retrieve(BaseDownload):
         filename: Optional[str] = None,
         logstr: Optional[str] = None,
         fallback: bool = False,
+        log_level: int = None,
         **kwargs: Any,
     ) -> str:
         """Download text
@@ -234,29 +239,32 @@ class Retrieve(BaseDownload):
             filename (Optional[str]): Filename of saved file. Defaults to getting from url.
             logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
             fallback (bool): Whether to use static fallback if download fails. Defaults to False.
+            log_level (int): Level at which to log messages. Overrides level from constructor.
             **kwargs: Parameters to pass to download_text call
 
         Returns:
             str: The text from the file
 
         """
+        if log_level is None:
+            log_level = self.log_level
         filename, kwargs = self.get_filename(url, filename, **kwargs)
         if not logstr:
             logstr = filename
         saved_path = join(self.saved_dir, filename)
         if self.use_saved:
-            logger.log(self.log_level, f"Using saved {logstr} in {saved_path}")
+            logger.log(log_level, f"Using saved {logstr} in {saved_path}")
             text = load_text(saved_path)
         else:
             try:
                 logger.log(
-                    self.log_level,
+                    log_level,
                     f"Downloading {logstr} from {self.get_url_logstr(url)}",
                 )
                 text = self.downloader.download_text(url, **kwargs)
                 if self.save:
                     logger.log(
-                        self.log_level, f"Saving {logstr} in {saved_path}"
+                        log_level, f"Saving {logstr} in {saved_path}"
                     )
                     save_text(text, saved_path)
             except DownloadError:
@@ -275,6 +283,7 @@ class Retrieve(BaseDownload):
         filename: Optional[str] = None,
         logstr: Optional[str] = None,
         fallback: bool = False,
+        log_level: int = None,
         **kwargs: Any,
     ) -> Any:
         """Retrieve YAML
@@ -284,12 +293,15 @@ class Retrieve(BaseDownload):
             filename (Optional[str]): Filename of saved file. Defaults to getting from url.
             logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
             fallback (bool): Whether to use static fallback if download fails. Defaults to False.
+            log_level (int): Level at which to log messages. Overrides level from constructor.
             **kwargs: Parameters to pass to download_yaml call
 
         Returns:
             Any: The data from the YAML file
 
         """
+        if log_level is None:
+            log_level = self.log_level
         filename, kwargs = self.get_filename(
             url, filename, ("yaml", "yml"), **kwargs
         )
@@ -297,18 +309,18 @@ class Retrieve(BaseDownload):
             logstr = filename
         saved_path = join(self.saved_dir, filename)
         if self.use_saved:
-            logger.log(self.log_level, f"Using saved {logstr} in {saved_path}")
+            logger.log(log_level, f"Using saved {logstr} in {saved_path}")
             ryaml = load_yaml(saved_path)
         else:
             try:
                 logger.log(
-                    self.log_level,
+                    log_level,
                     f"Downloading {logstr} from {self.get_url_logstr(url)}",
                 )
                 ryaml = self.downloader.download_yaml(url, **kwargs)
                 if self.save:
                     logger.log(
-                        self.log_level, f"Saving {logstr} in {saved_path}"
+                        log_level, f"Saving {logstr} in {saved_path}"
                     )
                     save_yaml(ryaml, saved_path)
             except DownloadError:
@@ -327,6 +339,7 @@ class Retrieve(BaseDownload):
         filename: Optional[str] = None,
         logstr: Optional[str] = None,
         fallback: bool = False,
+        log_level: int = None,
         **kwargs: Any,
     ) -> Any:
         """Retrieve JSON
@@ -336,12 +349,15 @@ class Retrieve(BaseDownload):
             filename (Optional[str]): Filename of saved file. Defaults to getting from url.
             logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
             fallback (bool): Whether to use static fallback if download fails. Defaults to False.
+            log_level (int): Level at which to log messages. Overrides level from constructor.
             **kwargs: Parameters to pass to download_json call
 
         Returns:
             Any: The data from the JSON file
 
         """
+        if log_level is None:
+            log_level = self.log_level
         filename, kwargs = self.get_filename(
             url, filename, ("json",), **kwargs
         )
@@ -349,18 +365,18 @@ class Retrieve(BaseDownload):
             logstr = filename
         saved_path = join(self.saved_dir, filename)
         if self.use_saved:
-            logger.log(self.log_level, f"Using saved {logstr} in {saved_path}")
+            logger.log(log_level, f"Using saved {logstr} in {saved_path}")
             rjson = load_json(saved_path)
         else:
             try:
                 logger.log(
-                    self.log_level,
+                    log_level,
                     f"Downloading {logstr} from {self.get_url_logstr(url)}",
                 )
                 rjson = self.downloader.download_json(url, **kwargs)
                 if self.save:
                     logger.log(
-                        self.log_level, f"Saving {logstr} in {saved_path}"
+                        log_level, f"Saving {logstr} in {saved_path}"
                     )
                     save_json(rjson, saved_path)
             except DownloadError:
