@@ -207,7 +207,7 @@ Examples:
 
         # Uses previously downloaded JSON file in saved_dir returning the JSON data (with no fallback) 
         retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save=False, use_saved=True)
-        data = retriever.retrieve_json(url, filename, logstr="test json", fallback=False)
+        data = retriever.retrieve_json(url, filename, logstr="test json", fallback=False, log_level=logging.DEBUG)
 
 ## Date parsing utilities
 

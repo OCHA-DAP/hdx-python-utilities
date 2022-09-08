@@ -30,6 +30,7 @@ class Retrieve(BaseDownload):
         use_saved (bool): Whether to use saved data. Defaults to False.
         prefix (str): Prefix to add to filenames. Defaults to "".
         delete (bool): Whether to delete saved_dir if save is True. Defaults to True.
+        log_level (int): Level at which to log messages. Defaults to logging.INFO.
     """
 
     retrievers = dict()
@@ -44,6 +45,7 @@ class Retrieve(BaseDownload):
         use_saved: bool = False,
         prefix: str = "",
         delete: bool = True,
+        log_level: int = logging.INFO,
     ):
         self.downloader = downloader
         self.fallback_dir = fallback_dir
@@ -53,6 +55,7 @@ class Retrieve(BaseDownload):
         self.use_saved = use_saved
         self.prefix = prefix
         self.check_flags(saved_dir, save, use_saved, delete)
+        self.log_level = log_level
 
     @staticmethod
     def check_flags(
@@ -196,12 +199,13 @@ class Retrieve(BaseDownload):
         output_path = join(folder, filename)
         saved_path = join(self.saved_dir, filename)
         if self.use_saved:
-            logger.info(f"Using saved {logstr} in {saved_path}")
+            logger.log(self.log_level, f"Using saved {logstr} in {saved_path}")
             return saved_path
         else:
             try:
-                logger.info(
-                    f"Downloading {logstr} from {self.get_url_logstr(url)} into {output_path}"
+                logger.log(
+                    self.log_level,
+                    f"Downloading {logstr} from {self.get_url_logstr(url)} into {output_path}",
                 )
                 return self.downloader.download_file(
                     url, path=output_path, **kwargs
@@ -241,16 +245,19 @@ class Retrieve(BaseDownload):
             logstr = filename
         saved_path = join(self.saved_dir, filename)
         if self.use_saved:
-            logger.info(f"Using saved {logstr} in {saved_path}")
+            logger.log(self.log_level, f"Using saved {logstr} in {saved_path}")
             text = load_text(saved_path)
         else:
             try:
-                logger.info(
-                    f"Downloading {logstr} from {self.get_url_logstr(url)}"
+                logger.log(
+                    self.log_level,
+                    f"Downloading {logstr} from {self.get_url_logstr(url)}",
                 )
                 text = self.downloader.download_text(url, **kwargs)
                 if self.save:
-                    logger.info(f"Saving {logstr} in {saved_path}")
+                    logger.log(
+                        self.log_level, f"Saving {logstr} in {saved_path}"
+                    )
                     save_text(text, saved_path)
             except DownloadError:
                 if not fallback:
@@ -290,16 +297,19 @@ class Retrieve(BaseDownload):
             logstr = filename
         saved_path = join(self.saved_dir, filename)
         if self.use_saved:
-            logger.info(f"Using saved {logstr} in {saved_path}")
+            logger.log(self.log_level, f"Using saved {logstr} in {saved_path}")
             ryaml = load_yaml(saved_path)
         else:
             try:
-                logger.info(
-                    f"Downloading {logstr} from {self.get_url_logstr(url)}"
+                logger.log(
+                    self.log_level,
+                    f"Downloading {logstr} from {self.get_url_logstr(url)}",
                 )
                 ryaml = self.downloader.download_yaml(url, **kwargs)
                 if self.save:
-                    logger.info(f"Saving {logstr} in {saved_path}")
+                    logger.log(
+                        self.log_level, f"Saving {logstr} in {saved_path}"
+                    )
                     save_yaml(ryaml, saved_path)
             except DownloadError:
                 if not fallback:
@@ -339,16 +349,19 @@ class Retrieve(BaseDownload):
             logstr = filename
         saved_path = join(self.saved_dir, filename)
         if self.use_saved:
-            logger.info(f"Using saved {logstr} in {saved_path}")
+            logger.log(self.log_level, f"Using saved {logstr} in {saved_path}")
             rjson = load_json(saved_path)
         else:
             try:
-                logger.info(
-                    f"Downloading {logstr} from {self.get_url_logstr(url)}"
+                logger.log(
+                    self.log_level,
+                    f"Downloading {logstr} from {self.get_url_logstr(url)}",
                 )
                 rjson = self.downloader.download_json(url, **kwargs)
                 if self.save:
-                    logger.info(f"Saving {logstr} in {saved_path}")
+                    logger.log(
+                        self.log_level, f"Saving {logstr} in {saved_path}"
+                    )
                     save_json(rjson, saved_path)
             except DownloadError:
                 if not fallback:
