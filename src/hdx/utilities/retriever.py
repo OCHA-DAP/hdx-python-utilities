@@ -458,7 +458,7 @@ class Retrieve(BaseDownload):
             paths.append(path)
         kwargs.pop("file_prefix", None)
         temp_kwargs = deepcopy(kwargs)
-        headers, iterator1 = self.downloader.get_tabular_rows(
+        outheaders, iterator1 = self.downloader.get_tabular_rows(
             paths[0], headers, dict_form, **temp_kwargs
         )
 
@@ -474,8 +474,8 @@ class Retrieve(BaseDownload):
                     next(iterator)
                 for row in iterator:
                     yield row
-        return headers, make_iterator()
 
+        return outheaders, make_iterator()
 
     @classmethod
     def generate_retrievers(

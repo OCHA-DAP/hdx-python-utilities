@@ -254,16 +254,18 @@ class TestRetriever:
                         fallback=False,
                     )
 
-    def test_get_tabular_rows_multi_url(self, dirs, retrieverfolder, fallback_dir):
+    def test_get_tabular_rows_multi_url(
+        self, dirs, retrieverfolder, fallback_dir
+    ):
         saved_dir, temp_dir = dirs
         with Download() as downloader:
             with Retrieve(
-                    downloader,
-                    fallback_dir,
-                    saved_dir,
-                    temp_dir,
-                    save=False,
-                    use_saved=False,
+                downloader,
+                fallback_dir,
+                saved_dir,
+                temp_dir,
+                save=False,
+                use_saved=False,
             ) as retriever:
                 filename = "test.csv"
                 url = join(retrieverfolder, filename)
@@ -271,14 +273,28 @@ class TestRetriever:
                     [url, url], logstr="test file", fallback=False
                 )
                 assert headers == ["header1", "header2", "header3", "header4"]
-                assert list(iterator) == []
-                # filename = "test_hxl.csv"
-                # url = join(retrieverfolder, filename)
-                # headers, iterator = retriever.get_tabular_rows_multi_url(
-                #     [url, url], logstr="test file", fallback=False
-                # )
-                # assert headers == ["header1", "header2", "header3", "header4"]
-                # assert list(iterator) == []
+                assert list(iterator) == [
+                    ["coal", "3", "7.4", "'needed'"],
+                    ["gas", "2", "6.5", "'n/a'"],
+                    ["coal", "3", "7.4", "'needed'"],
+                    ["gas", "2", "6.5", "'n/a'"],
+                ]
+                filename = "test_hxl.csv"
+                url = join(retrieverfolder, filename)
+                headers, iterator = retriever.get_tabular_rows_multi_url(
+                    [url, url],
+                    has_hxl=True,
+                    logstr="test file",
+                    fallback=False,
+                )
+                assert headers == ["header1", "header2", "header3", "header4"]
+                assert list(iterator) == [
+                    ["#h1", "#h2", "#h3", "#h4"],
+                    ["coal", "3", "7.4", "'needed'"],
+                    ["gas", "2", "6.5", "'n/a'"],
+                    ["coal", "3", "7.4", "'needed'"],
+                    ["gas", "2", "6.5", "'n/a'"],
+                ]
 
     def test_download_save(self, dirs, retrieverfolder, fallback_dir):
         saved_dir, temp_dir = dirs
