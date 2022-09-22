@@ -236,7 +236,7 @@ class TestRetriever:
                 assert headers == ["header1", "header2", "header3", "header4"]
                 headers, iterator = retriever.get_tabular_rows(
                     "NOTEXIST",
-                    filename="test.csv",
+                    filename=filename,
                     logstr="test file",
                     fallback=True,
                 )
@@ -249,10 +249,36 @@ class TestRetriever:
                 with pytest.raises(DownloadError):
                     retriever.get_tabular_rows(
                         "NOTEXIST",
-                        filename="test.csv",
+                        filename=filename,
                         logstr="test file",
                         fallback=False,
                     )
+
+    def test_get_tabular_rows_multi_url(self, dirs, retrieverfolder, fallback_dir):
+        saved_dir, temp_dir = dirs
+        with Download() as downloader:
+            with Retrieve(
+                    downloader,
+                    fallback_dir,
+                    saved_dir,
+                    temp_dir,
+                    save=False,
+                    use_saved=False,
+            ) as retriever:
+                filename = "test.csv"
+                url = join(retrieverfolder, filename)
+                headers, iterator = retriever.get_tabular_rows_multi_url(
+                    [url, url], logstr="test file", fallback=False
+                )
+                assert headers == ["header1", "header2", "header3", "header4"]
+                assert list(iterator) == []
+                # filename = "test_hxl.csv"
+                # url = join(retrieverfolder, filename)
+                # headers, iterator = retriever.get_tabular_rows_multi_url(
+                #     [url, url], logstr="test file", fallback=False
+                # )
+                # assert headers == ["header1", "header2", "header3", "header4"]
+                # assert list(iterator) == []
 
     def test_download_save(self, dirs, retrieverfolder, fallback_dir):
         saved_dir, temp_dir = dirs

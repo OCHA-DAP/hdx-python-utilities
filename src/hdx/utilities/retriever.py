@@ -1,4 +1,5 @@
 import logging
+from copy import deepcopy
 from os import mkdir
 from os.path import join
 from shutil import rmtree
@@ -419,6 +420,62 @@ class Retrieve(BaseDownload):
         return self.downloader.get_tabular_rows(
             path, headers, dict_form, **kwargs
         )
+
+    def get_tabular_rows_multi_url(
+        self,
+        urls: ListTuple[str],
+        headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
+        dict_form: bool = False,
+        has_hxl: bool = False,
+        logstr: Optional[str] = None,
+        fallback: bool = False,
+        **kwargs: Any,
+    ) -> Tuple[List[str], Iterator[ListDict]]:
+        """Returns header of tabular file pointed to by url and an iterator where each
+        row is returned as a list or dictionary depending on the dict_rows argument.
+        The headers argument is either a row number or list of row numbers (in case of
+        multi-line headers) to be considered as headers (rows start counting at 1), or
+        the actual headers defined as a list of strings. It defaults to 1.
+        The dict_form arguments specifies if each row should be returned as a dictionary
+        or a list, defaulting to a list.
+
+        Args:
+            urls (ListTuple[str]): URLs or paths to read from
+            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            dict_form (bool): Return dict or list for each row. Defaults to False (list)
+            has_hxl (bool): Whether files have HXL hashtags. Defaults to False.
+            logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
+            fallback (bool): Whether to use static fallback if download fails. Defaults to False.
+            **kwargs: Parameters to pass to download_file call
+
+        Returns:
+            Tuple[List[str],Iterator[ListDict]]: Tuple (headers, iterator where each row is a list or dictionary)
+
+        """
+        paths = list()
+        for url in urls:
+            path = self.download_file(url, None, logstr, fallback, **kwargs)
+            paths.append(path)
+        kwargs.pop("file_prefix", None)
+        temp_kwargs = deepcopy(kwargs)
+        headers, iterator1 = self.downloader.get_tabular_rows(
+            paths[0], headers, dict_form, **temp_kwargs
+        )
+
+        def make_iterator():
+            for row in iterator1:
+                yield row
+            for path in paths[1:]:
+                temp_kwargs = deepcopy(kwargs)
+                _, iterator = self.downloader.get_tabular_rows(
+                    path, headers, dict_form, **temp_kwargs
+                )
+                if has_hxl:
+                    next(iterator)
+                for row in iterator:
+                    yield row
+        return headers, make_iterator()
+
 
     @classmethod
     def generate_retrievers(
