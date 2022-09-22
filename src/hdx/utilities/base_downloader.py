@@ -97,7 +97,7 @@ class BaseDownload(ABC):
     @abstractmethod
     def get_tabular_rows(
         self,
-        url: str,
+        url: Union[str, ListTuple[str]],
         headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
         dict_form: bool = False,
         *args: Any,
@@ -112,7 +112,7 @@ class BaseDownload(ABC):
         or a list, defaulting to a list.
 
         Args:
-            url (str): URL or path to read from
+            url (Union[str, ListTuple[str]]): A single or list of URLs or paths to read from
             headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             dict_form (bool): Return dict or list for each row. Defaults to False (list)
             *args (Any): Positional arguments

@@ -1,7 +1,7 @@
 """Downloading utilities for urls"""
-import copy
 import hashlib
 import logging
+from copy import deepcopy
 from os import remove
 from os.path import exists, isfile, join, split, splitext
 from pathlib import Path
@@ -594,7 +594,7 @@ class Download(BaseDownload):
             raise DownloadError(str(e)) from e
         return self.response
 
-    def get_tabular_rows(
+    def _get_tabular_rows(
         self,
         url: str,
         headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
@@ -668,7 +668,7 @@ class Download(BaseDownload):
         if header_insertions is None or origheaders is None:
             headers = origheaders
         else:
-            headers = copy.deepcopy(origheaders)
+            headers = deepcopy(origheaders)
             for position, header in header_insertions:
                 headers.insert(position, header)
 
@@ -690,6 +690,116 @@ class Download(BaseDownload):
                     yield row
 
         return headers, get_next()
+
+    def get_tabular_rows(
+        self,
+        url: Union[str, ListTuple[str]],
+        headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
+        dict_form: bool = False,
+        include_headers: bool = False,
+        ignore_blank_rows: bool = True,
+        infer_types: bool = False,
+        header_insertions: Optional[ListTuple[Tuple[int, str]]] = None,
+        row_function: Optional[
+            Callable[[List[str], ListDict], ListDict]
+        ] = None,
+        has_hxl: bool = False,
+        **kwargs: Any,
+    ) -> Tuple[List[str], Iterator[ListDict]]:
+        """Returns header of tabular file(s) pointed to by url and an iterator where
+        each row is returned as a list or dictionary depending on the dict_rows argument.
+        When a list of urls is supplied (in url), then the has_hxl flag indicates if the
+        files are HXLated so that the HXL row is only included from the first file.
+
+        The headers argument is either a row number or list of row numbers (in case of
+        multi-line headers) to be considered as headers (rows start counting at 1), or
+        the actual headers defined as a list of strings. It defaults to 1. The dict_form
+        argument specifies if each row should be returned as a dictionary or a list,
+        defaulting to a list.
+
+        Optionally, headers can be inserted at specific positions. This is achieved
+        using the header_insertions argument. If supplied, it is a list of tuples of the
+        form (position, header) to be inserted. A function is called for each row. If
+        supplied, it takes as arguments: headers (prior to any insertions) and row
+        (which will be in dict or list form depending upon the dict_rows argument) and
+        outputs a modified row or None to ignore the row.
+
+        Args:
+            url (Union[str, ListTuple[str]]): A single or list of URLs or paths to read from
+            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            dict_form (bool): Return dict or list for each row. Defaults to False (list)
+            include_headers (bool): Whether to include headers in iterator. Defaults to False.
+            ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
+            infer_types (bool): Whether to infer types. Defaults to False (strings).
+            header_insertions (Optional[ListTuple[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
+            row_function (Optional[Callable[[List[str],ListDict],ListDict]]): Function to call for each row. Defaults to None.
+            has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
+            **kwargs:
+            format (Optional[str]): Type of file. Defaults to inferring.
+            file_type (Optional[str]): Type of file. Defaults to inferring.
+            encoding (Optional[str]): Type of encoding. Defaults to inferring.
+            compression (Optional[str]): Type of compression. Defaults to inferring.
+            delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
+            skip_initial_space (bool): Ignore whitespace straight after delimiter. Defaults to False.
+            sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
+            fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
+            http_session (Session): Session object to use. Defaults to downloader session.
+            columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
+            default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
+            float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
+            null_values (List[Any]): Values that will return None. Defaults to [""].
+            dialect (Dialect): This can be set to override the above. See Frictionless docs.
+            detector (Detector): This can be set to override the above. See Frictionless docs.
+            layout (Layout): This can be set to override the above. See Frictionless docs.
+            schema (Schema): This can be set to override the above. See Frictionless docs.
+
+        Returns:
+            Tuple[List[str],Iterator[ListDict]]: Tuple (headers, iterator where each row is a list or dictionary)
+
+        """
+        if isinstance(url, list):
+            is_list = True
+            orig_kwargs = deepcopy(kwargs)
+            urls = url
+            url = urls[0]
+        else:
+            is_list = False
+        outheaders, iterator1 = self._get_tabular_rows(
+            url,
+            headers,
+            dict_form,
+            include_headers,
+            ignore_blank_rows,
+            infer_types,
+            header_insertions,
+            row_function,
+            **kwargs,
+        )
+        if not is_list:
+            return outheaders, iterator1
+
+        def make_iterator():
+            for row in iterator1:
+                yield row
+            for url in urls[1:]:
+                temp_kwargs = deepcopy(orig_kwargs)
+                _, iterator = self._get_tabular_rows(
+                    url,
+                    headers,
+                    dict_form,
+                    include_headers,
+                    ignore_blank_rows,
+                    infer_types,
+                    header_insertions,
+                    row_function,
+                    **temp_kwargs,
+                )
+                if has_hxl:
+                    next(iterator)
+                for row in iterator:
+                    yield row
+
+        return outheaders, make_iterator()
 
     def get_tabular_rows_as_list(
         self,
@@ -1100,7 +1210,7 @@ class Download(BaseDownload):
 
         cls.downloaders = {"default": cls(**kwargs)}
         for name in custom_configs:
-            args_copy = copy.deepcopy(kwargs)
+            args_copy = deepcopy(kwargs)
             args_copy.update(custom_configs[name])
             cls.downloaders[name] = cls(**args_copy)
 

@@ -269,7 +269,7 @@ class TestRetriever:
             ) as retriever:
                 filename = "test.csv"
                 url = join(retrieverfolder, filename)
-                headers, iterator = retriever.get_tabular_rows_multi_url(
+                headers, iterator = retriever.get_tabular_rows(
                     [url, url], logstr="test file", fallback=False
                 )
                 assert headers == ["header1", "header2", "header3", "header4"]
@@ -281,7 +281,7 @@ class TestRetriever:
                 ]
                 filename = "test_hxl.csv"
                 url = join(retrieverfolder, filename)
-                headers, iterator = retriever.get_tabular_rows_multi_url(
+                headers, iterator = retriever.get_tabular_rows(
                     [url, url],
                     has_hxl=True,
                     logstr="test file",

@@ -67,6 +67,9 @@ Arguments about choosing between dict and list are all made consistent - dict_fo
 ## Downloading files
 
 Various utilities to help with downloading files. Includes retrying by default.
+The `Download` class inherits from `BaseDownload` which specifies a number of standard
+methods that all downloaders should have: `download_file`, `download_text`, 
+`download_yaml`, `download_json` and `get_tabular_rows`.
 
 For example, given YAML file extraparams.yml:
 
@@ -163,25 +166,31 @@ Other useful functions:
     Download.get_column_positions(["a", "b", "c"])
     # == {"a": 0, "b": 1, "c": 2}
 
-For more detail and additional functions, check the API docs mentioned earlier in the [usage section](#usage).
+For more detail and additional functions, check the API docs mentioned earlier in the 
+[usage section](#usage).
 
 ## Retrieving files
 
-When you download a file, you can opt to download from the web as usual or download from the web and and save for future
-reuse or use the previously downloaded file. The advantage is this is all handled in the class so you don't need to do 
-lots of if-else conditions for the different cases for each download in your code. This is helpful for example when 
-trying to generate test data. 
+When you download a file, you can opt to download from the web as usual or download from 
+the web and and save for future reuse or use the previously downloaded file. The 
+advantage is this is all handled in the class so you don't need to do lots of if-else 
+conditions for the different cases for each download in your code. This is helpful for 
+example when trying to generate test data. 
 
-All the downloads in your code can be switched between the different modes by setting the save and use_saved flags when 
+All the downloads in your code can be switched between the different modes by setting 
+the save and use_saved flags when 
 constructing the Retrieve object.
 
     retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save, use_saved)
 
-- `save=False, use_saved=False`  - download from web as normal (files will go in temp_folder and be discarded)
-- `save=True, use_saved=False` - download from web as normal (files will go in saved_dir and will be kept)
+- `save=False, use_saved=False`  - download from web as normal (files will go in 
+temp_folder and be discarded)
+- `save=True, use_saved=False` - download from web as normal (files will go in saved_dir 
+and will be kept)
 - `save=False, use_saved=True` - use files from saved_dir (don't download at all)
 
-fallback_dir is a folder containing static fallback files which can optionally be used if the download fails.
+fallback_dir is a folder containing static fallback files which can optionally be used 
+if the download fails.
 
 Methods in the Retrieve class are: 
 - `retrieve_file` returns a path to a file

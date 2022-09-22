@@ -386,16 +386,20 @@ class Retrieve(BaseDownload):
 
     def get_tabular_rows(
         self,
-        url: str,
+        url: Union[str, ListTuple[str]],
         headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
         dict_form: bool = False,
+        has_hxl: bool = False,
         filename: Optional[str] = None,
         logstr: Optional[str] = None,
         fallback: bool = False,
         **kwargs: Any,
     ) -> Tuple[List[str], Iterator[ListDict]]:
-        """Returns header of tabular file pointed to by url and an iterator where each
-        row is returned as a list or dictionary depending on the dict_rows argument.
+        """Returns header of tabular file(s) pointed to by url and an iterator where
+        each row is returned as a list or dictionary depending on the dict_rows argument.
+        When a list of urls is supplied (in url), then the has_hxl flag indicates if the
+        files are HXLated so that the HXL row is only included from the first file.
+
         The headers argument is either a row number or list of row numbers (in case of
         multi-line headers) to be considered as headers (rows start counting at 1), or
         the actual headers defined as a list of strings. It defaults to 1.
@@ -403,9 +407,10 @@ class Retrieve(BaseDownload):
         or a list, defaulting to a list.
 
         Args:
-            url (str): URL or path to read from
+            url (Union[str, ListTuple[str]]): A single or list of URLs or paths to read from
             headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             dict_form (bool): Return dict or list for each row. Defaults to False (list)
+            has_hxl (bool): Whether files have HXL hashtags. Defaults to False.
             filename (Optional[str]): Filename of saved file. Defaults to getting from url.
             logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
             fallback (bool): Whether to use static fallback if download fails. Defaults to False.
@@ -415,70 +420,27 @@ class Retrieve(BaseDownload):
             Tuple[List[str],Iterator[ListDict]]: Tuple (headers, iterator where each row is a list or dictionary)
 
         """
+        if isinstance(url, list):
+            is_list = True
+            orig_kwargs = deepcopy(kwargs)
+            urls = url
+            url = urls[0]
+        else:
+            is_list = False
         path = self.download_file(url, filename, logstr, fallback, **kwargs)
+        if is_list:
+            path = [path]
+            for url in urls[1:]:
+                temp_kwargs = deepcopy(orig_kwargs)
+                pth = self.download_file(
+                    url, None, logstr, fallback, **temp_kwargs
+                )
+                path.append(pth)
+
         kwargs.pop("file_prefix", None)
         return self.downloader.get_tabular_rows(
-            path, headers, dict_form, **kwargs
+            path, headers, dict_form, has_hxl=has_hxl, **kwargs
         )
-
-    def get_tabular_rows_multi_url(
-        self,
-        urls: ListTuple[str],
-        headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
-        dict_form: bool = False,
-        has_hxl: bool = False,
-        logstr: Optional[str] = None,
-        fallback: bool = False,
-        **kwargs: Any,
-    ) -> Tuple[List[str], Iterator[ListDict]]:
-        """Returns header of tabular file pointed to by url and an iterator where each
-        row is returned as a list or dictionary depending on the dict_rows argument.
-        The headers argument is either a row number or list of row numbers (in case of
-        multi-line headers) to be considered as headers (rows start counting at 1), or
-        the actual headers defined as a list of strings. It defaults to 1.
-        The dict_form arguments specifies if each row should be returned as a dictionary
-        or a list, defaulting to a list.
-
-        Args:
-            urls (ListTuple[str]): URLs or paths to read from
-            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
-            dict_form (bool): Return dict or list for each row. Defaults to False (list)
-            has_hxl (bool): Whether files have HXL hashtags. Defaults to False.
-            logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
-            fallback (bool): Whether to use static fallback if download fails. Defaults to False.
-            **kwargs: Parameters to pass to download_file call
-
-        Returns:
-            Tuple[List[str],Iterator[ListDict]]: Tuple (headers, iterator where each row is a list or dictionary)
-
-        """
-        paths = list()
-        for url in urls:
-            temp_kwargs = deepcopy(kwargs)
-            path = self.download_file(
-                url, None, logstr, fallback, **temp_kwargs
-            )
-            paths.append(path)
-        kwargs.pop("file_prefix", None)
-        temp_kwargs = deepcopy(kwargs)
-        outheaders, iterator1 = self.downloader.get_tabular_rows(
-            paths[0], headers, dict_form, **temp_kwargs
-        )
-
-        def make_iterator():
-            for row in iterator1:
-                yield row
-            for path in paths[1:]:
-                temp_kwargs = deepcopy(kwargs)
-                _, iterator = self.downloader.get_tabular_rows(
-                    path, headers, dict_form, **temp_kwargs
-                )
-                if has_hxl:
-                    next(iterator)
-                for row in iterator:
-                    yield row
-
-        return outheaders, make_iterator()
 
     @classmethod
     def generate_retrievers(
