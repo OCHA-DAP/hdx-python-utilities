@@ -455,7 +455,9 @@ class Retrieve(BaseDownload):
         paths = list()
         for url in urls:
             temp_kwargs = deepcopy(kwargs)
-            path = self.download_file(url, None, logstr, fallback, **temp_kwargs)
+            path = self.download_file(
+                url, None, logstr, fallback, **temp_kwargs
+            )
             paths.append(path)
         kwargs.pop("file_prefix", None)
         temp_kwargs = deepcopy(kwargs)
