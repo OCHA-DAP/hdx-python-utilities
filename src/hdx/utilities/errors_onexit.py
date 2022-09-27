@@ -41,18 +41,11 @@ class ErrorsOnExit:
         if self.errors:
             sys.exit(1)
 
-    def log_exit_on_error(self) -> None:
-        """Log errors and exit with a 1 code if there are errors
-
-        Returns:
-            None
-        """
-        self.log()
-        self.exit_on_error()
-
     def __enter__(self) -> "ErrorsOnExit":
         logging.errors_on_exit = self
         return self
 
     def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
-        self.log_exit_on_error()
+        self.log()
+        if exc_type is None:
+            self.exit_on_error()
