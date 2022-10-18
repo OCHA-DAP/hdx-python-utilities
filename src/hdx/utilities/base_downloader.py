@@ -98,6 +98,7 @@ class BaseDownload(ABC):
     def get_tabular_rows(
         self,
         url: Union[str, ListTuple[str]],
+        has_hxl: bool = False,
         headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
         dict_form: bool = False,
         *args: Any,
@@ -105,6 +106,9 @@ class BaseDownload(ABC):
     ) -> Tuple[List[str], Iterator[ListDict]]:
         """Returns header of tabular file pointed to by url and an iterator where each
         row is returned as a list or dictionary depending on the dict_rows argument.
+
+        When a list of urls is supplied (in url), then the has_hxl flag indicates if the
+        files are HXLated so that the HXL row is only included from the first file.
         The headers argument is either a row number or list of row numbers (in case of
         multi-line headers) to be considered as headers (rows start counting at 1), or
         the actual headers defined as a list of strings. It defaults to 1.
@@ -113,6 +117,7 @@ class BaseDownload(ABC):
 
         Args:
             url (Union[str, ListTuple[str]]): A single or list of URLs or paths to read from
+            has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
             headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             dict_form (bool): Return dict or list for each row. Defaults to False (list)
             *args (Any): Positional arguments

@@ -387,9 +387,9 @@ class Retrieve(BaseDownload):
     def get_tabular_rows(
         self,
         url: Union[str, ListTuple[str]],
+        has_hxl: bool = False,
         headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
         dict_form: bool = False,
-        has_hxl: bool = False,
         filename: Optional[str] = None,
         logstr: Optional[str] = None,
         fallback: bool = False,
@@ -397,9 +397,9 @@ class Retrieve(BaseDownload):
     ) -> Tuple[List[str], Iterator[ListDict]]:
         """Returns header of tabular file(s) pointed to by url and an iterator where
         each row is returned as a list or dictionary depending on the dict_rows argument.
+
         When a list of urls is supplied (in url), then the has_hxl flag indicates if the
         files are HXLated so that the HXL row is only included from the first file.
-
         The headers argument is either a row number or list of row numbers (in case of
         multi-line headers) to be considered as headers (rows start counting at 1), or
         the actual headers defined as a list of strings. It defaults to 1.
@@ -408,9 +408,9 @@ class Retrieve(BaseDownload):
 
         Args:
             url (Union[str, ListTuple[str]]): A single or list of URLs or paths to read from
+            has_hxl (bool): Whether files have HXL hashtags. Defaults to False.
             headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             dict_form (bool): Return dict or list for each row. Defaults to False (list)
-            has_hxl (bool): Whether files have HXL hashtags. Defaults to False.
             filename (Optional[str]): Filename of saved file. Defaults to getting from url.
             logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
             fallback (bool): Whether to use static fallback if download fails. Defaults to False.
@@ -439,7 +439,7 @@ class Retrieve(BaseDownload):
 
         kwargs.pop("file_prefix", None)
         return self.downloader.get_tabular_rows(
-            path, headers, dict_form, has_hxl=has_hxl, **kwargs
+            path, has_hxl, headers, dict_form, **kwargs
         )
 
     @classmethod

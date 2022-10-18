@@ -694,6 +694,7 @@ class Download(BaseDownload):
     def get_tabular_rows(
         self,
         url: Union[str, ListTuple[str]],
+        has_hxl: bool = False,
         headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
         dict_form: bool = False,
         include_headers: bool = False,
@@ -703,14 +704,13 @@ class Download(BaseDownload):
         row_function: Optional[
             Callable[[List[str], ListDict], ListDict]
         ] = None,
-        has_hxl: bool = False,
         **kwargs: Any,
     ) -> Tuple[List[str], Iterator[ListDict]]:
         """Returns header of tabular file(s) pointed to by url and an iterator where
         each row is returned as a list or dictionary depending on the dict_rows argument.
+
         When a list of urls is supplied (in url), then the has_hxl flag indicates if the
         files are HXLated so that the HXL row is only included from the first file.
-
         The headers argument is either a row number or list of row numbers (in case of
         multi-line headers) to be considered as headers (rows start counting at 1), or
         the actual headers defined as a list of strings. It defaults to 1. The dict_form
@@ -726,6 +726,7 @@ class Download(BaseDownload):
 
         Args:
             url (Union[str, ListTuple[str]]): A single or list of URLs or paths to read from
+            has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
             headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             dict_form (bool): Return dict or list for each row. Defaults to False (list)
             include_headers (bool): Whether to include headers in iterator. Defaults to False.
@@ -733,7 +734,6 @@ class Download(BaseDownload):
             infer_types (bool): Whether to infer types. Defaults to False (strings).
             header_insertions (Optional[ListTuple[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
             row_function (Optional[Callable[[List[str],ListDict],ListDict]]): Function to call for each row. Defaults to None.
-            has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
             **kwargs:
             format (Optional[str]): Type of file. Defaults to inferring.
             file_type (Optional[str]): Type of file. Defaults to inferring.
@@ -803,7 +803,8 @@ class Download(BaseDownload):
 
     def get_tabular_rows_as_list(
         self,
-        url: str,
+        url: Union[str, ListTuple[str]],
+        has_hxl: bool = False,
         headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
         include_headers: bool = True,
         ignore_blank_rows: bool = True,
@@ -814,21 +815,25 @@ class Download(BaseDownload):
         ] = None,
         **kwargs: Any,
     ) -> Tuple[List[str], Iterator[List]]:
-        """Returns headers and an iterator where each row is returned as a list. The
-        headers argument is either a row number or list of row numbers (in case of
+        """Returns headers and an iterator where each row is returned as a list.
+
+        When a list of urls is supplied (in url), then the has_hxl flag indicates if the
+        files are HXLated so that the HXL row is only included from the first file.
+        The headers argument is either a row number or list of row numbers (in case of
         multi-line headers) to be considered as headers (rows start counting at 1), or
         the actual headers defined as a list of strings. It defaults to 1 and cannot be
         None.
 
-        Optionally, headers can be inserted at specific positions. This is achieved
-        using the header_insertions argument. If supplied, it is a list of tuples of the
-        form (position, header) to be inserted. A function is called for each row. If
-        supplied, it takes as arguments: headers (prior to any insertions) and row
-        (which will be in dict or list form depending upon the dict_rows argument) and
-        outputs a modified row or None to ignore the row.
+        Optionally, headers can be inserted at specific positions. This is
+        achieved using the header_insertions argument. If supplied, it is a list of
+        tuples of the form (position, header) to be inserted. A function is called for
+        each row. If supplied, it takes as arguments: headers (prior to any insertions)
+        and row (which will be in dict or list form depending upon the dict_rows
+        argument) and outputs a modified row or None to ignore the row.
 
         Args:
-            url (str): URL or path to read from
+            url (Union[str, ListTuple[str]]): A single or list of URLs or paths to read from
+            has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
             headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             include_headers (bool): Whether to include headers in iterator. Defaults to True.
             ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
@@ -861,6 +866,7 @@ class Download(BaseDownload):
 
         headers, iterator = self.get_tabular_rows(
             url,
+            has_hxl,
             headers,
             False,
             include_headers,
@@ -874,7 +880,8 @@ class Download(BaseDownload):
 
     def get_tabular_rows_as_dict(
         self,
-        url: str,
+        url: Union[str, ListTuple[str]],
+        has_hxl: bool = False,
         headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
@@ -885,20 +892,24 @@ class Download(BaseDownload):
         **kwargs: Any,
     ) -> Tuple[List[str], Iterator[Dict]]:
         """Returns headers and an iterator where each row is returned as a dictionary.
+
+        When a list of urls is supplied (in url), then the has_hxl flag indicates if the
+        files are HXLated so that the HXL row is only included from the first file.
         The headers argument is either a row number or list of row numbers (in case of
         multi-line headers) to be considered as headers (rows start counting at 1), or
         the actual headers defined as a list of strings. It defaults to 1 and cannot be
         None.
 
-        Optionally, headers can be inserted at specific positions. This is achieved
-        using the header_insertions argument. If supplied, it is a list of tuples of the
-        form (position, header) to be inserted. A function is called for each row. If
-        supplied, it takes as arguments: headers (prior to any insertions) and row
-        (which will be in dict or list form depending upon the dict_rows argument) and
-        outputs a modified row or None to ignore the row.
+        Optionally, headers can be inserted at specific positions. This is
+        achieved using the header_insertions argument. If supplied, it is a list of
+        tuples of the form (position, header) to be inserted. A function is called for
+        each row. If supplied, it takes as arguments: headers (prior to any insertions)
+        and row (which will be in dict or list form depending upon the dict_rows
+        argument) and outputs a modified row or None to ignore the row.
 
         Args:
-            url (str): URL or path to read from
+            url (Union[str, ListTuple[str]]): A single or list of URLs or paths to read from
+            has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
             headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
             infer_types (bool): Whether to infer types. Defaults to False (strings).
@@ -930,6 +941,7 @@ class Download(BaseDownload):
 
         headers, iterator = self.get_tabular_rows(
             url,
+            has_hxl,
             headers,
             True,
             False,
@@ -943,7 +955,8 @@ class Download(BaseDownload):
 
     def download_tabular_key_value(
         self,
-        url: str,
+        url: Union[str, ListTuple[str]],
+        has_hxl: bool = False,
         headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
         include_headers: bool = True,
         ignore_blank_rows: bool = True,
@@ -954,10 +967,27 @@ class Download(BaseDownload):
         ] = None,
         **kwargs: Any,
     ) -> Dict:
-        """Download 2 column csv from url and return a dictionary of keys (first column) and values (second column)
+        """Download 2 column csv from url and return a dictionary of keys (first column)
+        and values (second column).
+
+        When a list of urls is supplied (in url), then the has_hxl flag indicates if the
+        files are HXLated so that the HXL row is only included from the first file.
+        The headers argument is either a row number or list of row numbers (in case of
+        multi-line headers) to be considered as headers (rows start counting at 1), or
+        the actual headers defined as a list of strings. It defaults to 1 and cannot be
+        None.
+
+        Optionally, headers can be inserted at specific positions. This is
+        achieved using the header_insertions argument. If supplied, it is a list of
+        tuples of the form (position, header) to be inserted. A function is called for
+        each row. If supplied, it takes as arguments: headers (prior to any insertions)
+        and row (which will be in dict or list form depending upon the dict_rows
+        argument) and outputs a modified row or None to ignore the row.
+
 
         Args:
-            url (str): URL or path to download
+            url (Union[str, ListTuple[str]]): A single or list of URLs or paths to read from
+            has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
             headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             include_headers (bool): Whether to include headers in iterator. Defaults to True.
             ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
@@ -990,6 +1020,7 @@ class Download(BaseDownload):
         output_dict = dict()
         _, rows = self.get_tabular_rows_as_list(
             url,
+            has_hxl,
             headers,
             include_headers,
             ignore_blank_rows,
@@ -1006,7 +1037,8 @@ class Download(BaseDownload):
 
     def download_tabular_rows_as_dicts(
         self,
-        url: str,
+        url: Union[str, ListTuple[str]],
+        has_hxl: bool = False,
         headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
         keycolumn: int = 1,
         ignore_blank_rows: bool = True,
@@ -1017,11 +1049,27 @@ class Download(BaseDownload):
         ] = None,
         **kwargs: Any,
     ) -> Dict[str, Dict]:
-        """Download multicolumn csv from url and return dictionary where keys are first column and values are
-        dictionaries with keys from column headers and values from columns beneath
+        """Download multicolumn csv from url and return dictionary where keys are first
+        column and values are dictionaries with keys from column headers and values from
+        columns beneath.
+
+        When a list of urls is supplied (in url), then the has_hxl flag indicates if the
+        files are HXLated so that the HXL row is only included from the first file.
+        The headers argument is either a row number or list of row numbers (in case of
+        multi-line headers) to be considered as headers (rows start counting at 1), or
+        the actual headers defined as a list of strings. It defaults to 1 and cannot be
+        None.
+
+        Optionally, headers can be inserted at specific positions. This is
+        achieved using the header_insertions argument. If supplied, it is a list of
+        tuples of the form (position, header) to be inserted. A function is called for
+        each row. If supplied, it takes as arguments: headers (prior to any insertions)
+        and row (which will be in dict or list form depending upon the dict_rows
+        argument) and outputs a modified row or None to ignore the row.
 
         Args:
-            url (str): URL or path to download
+            url (Union[str, ListTuple[str]]): A single or list of URLs or paths to read from
+            has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
             headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             keycolumn (int): Number of column to be used for key. Defaults to 1.
             ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
@@ -1054,6 +1102,7 @@ class Download(BaseDownload):
         """
         headers, iterator = self.get_tabular_rows_as_dict(
             url,
+            has_hxl,
             headers,
             ignore_blank_rows,
             infer_types,
@@ -1075,7 +1124,8 @@ class Download(BaseDownload):
 
     def download_tabular_cols_as_dicts(
         self,
-        url: str,
+        url: Union[str, ListTuple[str]],
+        has_hxl: bool = False,
         headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
         keycolumn: int = 1,
         ignore_blank_rows: bool = True,
@@ -1086,11 +1136,27 @@ class Download(BaseDownload):
         ] = None,
         **kwargs: Any,
     ) -> Dict[str, Dict]:
-        """Download multicolumn csv from url and return dictionary where keys are header names and values are
-        dictionaries with keys from first column and values from other columns
+        """Download multicolumn csv from url and return dictionary where keys are header
+        names and values are dictionaries with keys from first column and values from
+        other columns.
+
+        When a list of urls is supplied (in url), then the has_hxl flag indicates if the
+        files are HXLated so that the HXL row is only included from the first file.
+        The headers argument is either a row number or list of row numbers (in case of
+        multi-line headers) to be considered as headers (rows start counting at 1), or
+        the actual headers defined as a list of strings. It defaults to 1 and cannot be
+        None.
+
+        Optionally, headers can be inserted at specific positions. This is
+        achieved using the header_insertions argument. If supplied, it is a list of
+        tuples of the form (position, header) to be inserted. A function is called for
+        each row. If supplied, it takes as arguments: headers (prior to any insertions)
+        and row (which will be in dict or list form depending upon the dict_rows
+        argument) and outputs a modified row or None to ignore the row.
 
         Args:
-            url (str): URL or path to download
+            url (Union[str, ListTuple[str]]): A single or list of URLs or paths to read from
+            has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
             headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             keycolumn (int): Number of column to be used for key. Defaults to 1.
             ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
@@ -1123,6 +1189,7 @@ class Download(BaseDownload):
         """
         headers, iterator = self.get_tabular_rows_as_dict(
             url,
+            has_hxl,
             headers,
             ignore_blank_rows,
             infer_types,
