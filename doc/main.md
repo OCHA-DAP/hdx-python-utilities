@@ -69,7 +69,16 @@ Arguments about choosing between dict and list are all made consistent - dict_fo
 Various utilities to help with downloading files. Includes retrying by default.
 The `Download` class inherits from `BaseDownload` which specifies a number of standard
 methods that all downloaders should have: `download_file`, `download_text`, 
-`download_yaml`, `download_json` and `get_tabular_rows`.
+`download_yaml`, `download_json` and `get_tabular_rows`. 
+
+- `download_file` returns a path to a file
+- `download_text` returns the text in a file
+- `download_json` returns the JSON in a Python dictionary
+- `download_yaml` returns the YAML in a Python dictionary
+- `get_tabular_rows` returns headers and an iterator (through rows)
+
+Note that a single `Download` object cannot be used in parallel: each download operation 
+must be completed before starting the next. 
 
 For example, given YAML file extraparams.yml:
 
@@ -92,8 +101,13 @@ We can create a downloader as shown below that will use the authentication defin
         filepath = abspath(f)
 
         # Read row by row from tabular file
-        for row in downloader.get_tabular_rows("http://myurl/my.csv", dict_rows=True, headers=1)
+        headers, iterator = downloader.get_tabular_rows("http://myurl/my.csv", dict_rows=True, headers=1) 
+        for row in iterator:
             a = row["col"]
+
+You will get an error if you try to call `get_tabular_rows` twice with different urls to 
+get two iterators, then afterwards iterate through those iterators. The first iteration
+must be completed before obtaining another iterator.
 
 If we want to limit the rate of get and post requests to say 1 per 0.1 seconds, then the 
 `rate_limit` parameter can be passed:
@@ -147,7 +161,8 @@ modified row. Example:
 Other useful functions:
 
     # Iterate through tabular file returning lists for each row
-    for row in downloader.get_tabular_rows_as_list(url):
+    headers, iterator = downloader.get_tabular_rows_as_list(url) 
+    for row in iterator:
         ...
     # Get hxl row
     assert Download.hxl_row(["a", "b", "c"], {"b": "#b", "c": "#c"}, dict_form=True)
@@ -171,6 +186,17 @@ For more detail and additional functions, check the API docs mentioned earlier i
 
 ## Retrieving files
 
+The `Retrieve` class inherits from `BaseDownload` which specifies a number of standard
+methods that all downloaders should have: `download_file`, `download_text`, 
+`download_yaml`, `download_json` and `get_tabular_rows`. 
+
+Note that a single `Retrieve` object cannot be used in parallel: each download operation 
+must be completed before starting the next. For example, you will get an error if you 
+try to call `get_tabular_rows` twice with different urls to get two iterators, then 
+afterwards iterate through those iterators. The first iteration must be completed before 
+obtaining another iterator.
+
+
 When you download a file, you can opt to download from the web as usual or download from 
 the web and and save for future reuse or use the previously downloaded file. The 
 advantage is this is all handled in the class so you don't need to do lots of if-else 
@@ -192,31 +218,25 @@ and will be kept)
 fallback_dir is a folder containing static fallback files which can optionally be used 
 if the download fails.
 
-Methods in the Retrieve class are: 
-- `retrieve_file` returns a path to a file
-- `retrieve_text` returns the text in a file
-- `retrieve_json` returns the JSON in a Python dictionary
-- `retrieve_yaml` returns the YAML in a Python dictionary
-
 Examples:
 
     with Download() as downloader:
         # Downloads file returning the path to the downloaded file and using a fallback file if the download 
         # fails. Since saved is False, the file will be saved with name filename in temp_dir
         retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save=False, use_saved=False, log_level=logging.DEBUG) 
-        path = retriever.retrieve_file(url, filename, logstr="my file", fallback=True)
+        path = retriever.download_file(url, filename, logstr="my file", fallback=True)
 
         # Downloads text file saving it for future usage and returning the text data (with no fallback) 
         # Since saved is True, the file will be saved with name filename in saved_dir
         retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save=True, use_saved=False)
-        text = retriever.retrieve_text(url, filename, logstr="test text", fallback=False)
+        text = retriever.download_text(url, filename, logstr="test text", fallback=False)
         # Downloads YAML file saving it for future usage and returning the YAML data with fallback taken
         # from fallback_dir if needed.
-        data = retriever.retrieve_yaml(url, filename, logstr="test yaml", fallback=True)
+        data = retriever.download_yaml(url, filename, logstr="test yaml", fallback=True)
 
         # Uses previously downloaded JSON file in saved_dir returning the JSON data (with no fallback) 
         retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save=False, use_saved=True)
-        data = retriever.retrieve_json(url, filename, logstr="test json", fallback=False, log_level=logging.DEBUG)
+        data = retriever.download_json(url, filename, logstr="test json", fallback=False, log_level=logging.DEBUG)
 
 ## Date parsing utilities
 
