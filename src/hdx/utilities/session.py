@@ -171,7 +171,7 @@ def get_session(
         total=5,
         backoff_factor=0.4,
         status_forcelist=status_forcelist,
-        allowed_methods=allowed_methods,
+#         allowed_methods=allowed_methods,
         raise_on_redirect=True,
         raise_on_status=True,
     )
