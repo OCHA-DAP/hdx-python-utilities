@@ -1,10 +1,11 @@
 """Session utilities for urls"""
+from base64 import b64decode
 import logging
 import os
 from typing import Any, Optional
+from urllib.parse import unquote
 
 import requests
-from basicauth import decode
 from requests.adapters import HTTPAdapter
 from requests_file import FileAdapter
 from urllib3.util import Retry
@@ -156,7 +157,7 @@ def get_session(
         )
     if "headers" not in auths_found:
         if basic_auth:
-            auth = decode(basic_auth)
+            auth = _decode(basic_auth)
         s.auth = auth
 
     status_forcelist = kwargs.get(
@@ -189,3 +190,22 @@ def get_session(
         ),
     )
     return s
+
+
+def _decode(encoded_string):
+    """Decode an encrypted HTTP basic authentication string.
+
+    Inspired by: https://github.com/rdegges/python-basicauth/blob/master/basicauth.py#L27 
+    """
+    split_encoded_string = encoded_string.strip().split(' ')
+
+    if len(split_encoded_string) == 1:
+        info_index = 0
+    elif len(split_encoded_string) == 2 and split_encoded_string[0].strip().lower() == 'basic':
+        info_index = 1
+    else:
+        raise ValueError(f'Authorization string {encoded_string} should have format '
+                         f'"xxxxxxxxxxxx" or "Basic xxxxxxxxxxxx"')
+
+    username, password = b64decode(split_encoded_string[info_index]).decode().split(':', 1)
+    return unquote(username), unquote(password)
