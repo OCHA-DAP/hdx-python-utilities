@@ -749,6 +749,10 @@ Examples:
     a = "The quick brown fox jumped over the lazy dog. It was so fast!"
     b = str_to_base64(a)
     c = base64_to_str(b)
+    user = "user"
+    password = "password"
+    a = basicauth_encode(user, password)
+    b = basicauth_decode(a)
 
 ## Valid UUID
 

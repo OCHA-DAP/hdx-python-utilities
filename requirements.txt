@@ -1,4 +1,3 @@
-basicauth==0.4.1
 beautifulsoup4==4.11.1
 email_validator==1.3.0
 frictionless[excel,json]==4.40.8
