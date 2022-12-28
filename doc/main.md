@@ -7,7 +7,7 @@ Note that these are not specific to HDX.
 
 1. [Easy downloading of files with support for authentication, streaming and hashing](#downloading-files)
 1. [Retrieval of data from url with saving to file or from data previously saved](#retrieving-files)
-1. [Date parsing utilities](#date-parsing-utilities)
+1. [Date utilities](#date-utilities)
 1. [Loading and saving JSON and YAML (maintaining order)](#loading-and-saving-json-and-yaml)
 1. [Loading and saving HXLated csv and/or JSON](#loading-and-saving-hxlated-csv-andor-json)
 1. [Dictionary and list utilities](#dictionary-and-list-utilities)
@@ -181,6 +181,10 @@ Other useful functions:
     Download.get_column_positions(["a", "b", "c"])
     # == {"a": 0, "b": 1, "c": 2}
 
+    # Get unique filename from url and join to provided folder or temporary folder 
+    # if no folder supplied
+    # path = Download.get_path_for_url(url, folder)
+
 For more detail and additional functions, check the API docs mentioned earlier in the 
 [usage section](#usage).
 
@@ -238,7 +242,7 @@ Examples:
         retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save=False, use_saved=True)
         data = retriever.download_json(url, filename, logstr="test json", fallback=False, log_level=logging.DEBUG)
 
-## Date parsing utilities
+## Date utilities
 
 There are utilities to parse dates. By default, *no timezone information will be parsed 
 and the returned datetime will have timezone set to UTC*. To change this behaviour, the 
@@ -256,6 +260,13 @@ year and day last Y/M/D where there are values after the year.
 
 Examples:
 
+    # Standard dates
+    now_in_utc = now_utc()
+    date = default_date  # a very early date for avoiding date comparison with None
+    date = default_date_notz  # as above with no timezone info
+    date = default_end_date  # a very late date for avoiding date comparison with None
+    date = default_end_date_notz  # as above with no timezone info
+    
     # Parse dates
     assert parse_date("20/02/2013") == datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc)
     assert parse_date("20/02/2013", "%d/%m/%Y") == datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc)
@@ -307,6 +318,20 @@ Examples:
     assert fuzzy == {"startdate": datetime(2013, 2, 1, 0, 0, tzinfo=timezone.utc), 
                      "enddate": datetime(2013, 2, 28, 0, 0, tzinfo=timezone.utc), 
                      "nondate": ("date is ", " for this test"), "date": ("02/2013",)}
+
+    # Convert between datetime and timestamp
+    expected_timestamp = 1596180834.0
+    expected_date = datetime(2020, 7, 31, 7, 33, 54, tzinfo=timezone.utc)
+    timestamp = get_timestamp_from_datetime(expected_date)
+    assert timestamp == expected_timestamp
+    date = get_datetime_from_timestamp(
+        expected_timestamp, timezone=timezone.utc
+    )
+    assert date == expected_date
+    date = get_datetime_from_timestamp(
+        expected_timestamp * 1000, timezone=timezone.utc
+    )
+    assert date == expected_date
 
 ## Loading and saving JSON and YAML
 
