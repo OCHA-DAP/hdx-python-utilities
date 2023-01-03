@@ -363,6 +363,7 @@ def get_numeric_if_possible(value: Any) -> Any:
     Returns:
         Any: Value
     """
+
     def get_int_value(val, denominator):
         val = int(val)
         if denominator != 1:

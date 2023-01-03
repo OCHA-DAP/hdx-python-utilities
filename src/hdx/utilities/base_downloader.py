@@ -45,6 +45,7 @@ class BaseDownload(ABC):
         Returns:
             str: Path of downloaded file
         """
+
     @abstractmethod
     def download_text(self, url: str, *args: Any, **kwargs: Any) -> str:
         """Download text from url.
@@ -57,6 +58,7 @@ class BaseDownload(ABC):
         Returns:
             str: The text from the file
         """
+
     @abstractmethod
     def download_yaml(self, url: str, *args: Any, **kwargs: Any) -> Any:
         """Download YAML from url.
@@ -69,6 +71,7 @@ class BaseDownload(ABC):
         Returns:
             Any: The data from the YAML file
         """
+
     @abstractmethod
     def download_json(self, url: str, *args: Any, **kwargs: Any) -> Any:
         """Download JSON from url.
@@ -81,6 +84,7 @@ class BaseDownload(ABC):
         Returns:
             Any: The data from the JSON file
         """
+
     @abstractmethod
     def get_tabular_rows(
         self,

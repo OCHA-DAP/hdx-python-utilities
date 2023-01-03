@@ -109,6 +109,7 @@ class Email:
         Returns:
             None
         """
+
     def connect(self) -> None:
         """Connect to server.
 
