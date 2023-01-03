@@ -1,4 +1,4 @@
-"""Text processing utilities"""
+"""Text processing utilities."""
 import difflib
 import logging
 import re
@@ -18,7 +18,7 @@ TEMPLATE_VARIABLES = re.compile("{{.*?}}")
 def remove_end_characters(
     string: str, characters_to_remove: str = punctuation
 ) -> str:
-    """Remove any characters at end of string that are in characters_to_remove
+    """Remove any characters at end of string that are in characters_to_remove.
 
     Args:
         string (str): Input string
@@ -26,7 +26,6 @@ def remove_end_characters(
 
     Returns:
         str: String with any characters at end of string that are in characters_to_remove removed
-
     """
     while string[-1] in characters_to_remove:
         string = string[:-1]
@@ -39,7 +38,7 @@ def remove_from_end(
     logging_text: Optional[str] = None,
     whole_words: bool = True,
 ) -> str:
-    """Remove list of items from end of string, stripping any whitespace
+    """Remove list of items from end of string, stripping any whitespace.
 
     Args:
         string (str): Input string
@@ -49,7 +48,6 @@ def remove_from_end(
 
     Returns:
         str: String with text removed
-
     """
     for thing in things_to_remove:
         thing_len = len(thing)
@@ -93,7 +91,7 @@ def remove_string(
 
 
 def multiple_replace(string: str, replacements: Dict[str, str]) -> str:
-    """Simultaneously replace multiple strings in a string
+    """Simultaneously replace multiple strings in a string.
 
     Args:
         string (str): Input string
@@ -101,7 +99,6 @@ def multiple_replace(string: str, replacements: Dict[str, str]) -> str:
 
     Returns:
         str: String with replacements
-
     """
     if not replacements:
         return string
@@ -115,14 +112,13 @@ def multiple_replace(string: str, replacements: Dict[str, str]) -> str:
 
 
 def get_words_in_sentence(sentence: str) -> List[str]:
-    """Returns list of words in a sentence
+    """Returns list of words in a sentence.
 
     Args:
         sentence (str): Sentence
 
     Returns:
         List[str]: List of words in sentence
-
     """
     return re.sub(
         "[" + punctuation.replace("'", "") + "]", " ", sentence
@@ -136,7 +132,7 @@ def get_matching_text_in_strs(
     ignore: str = "",
     end_characters: str = "",
 ) -> List[str]:
-    """Returns a list of matching blocks of text in a and b
+    """Returns a list of matching blocks of text in a and b.
 
     Args:
         a (str): First string to match
@@ -147,7 +143,6 @@ def get_matching_text_in_strs(
 
     Returns:
         List[str]: List of matching blocks of text
-
     """
     compare = difflib.SequenceMatcher(lambda x: x in ignore)
     compare.set_seqs(a=a, b=b)
@@ -175,7 +170,8 @@ def get_matching_text(
     ignore: str = "",
     end_characters: str = ".!\r\n",
 ) -> str:
-    """Returns a string containing matching blocks of text in a list of strings followed by non-matching.
+    """Returns a string containing matching blocks of text in a list of strings
+    followed by non-matching.
 
     Args:
         string_list (List[str]): List of strings to match
@@ -185,7 +181,6 @@ def get_matching_text(
 
     Returns:
         str: String containing matching blocks of text followed by non-matching
-
     """
     a = string_list[0]
     for i in range(1, len(string_list)):
@@ -208,7 +203,8 @@ def get_matching_then_nonmatching_text(
     ignore: str = "",
     end_characters: str = ".!\r\n",
 ) -> str:
-    """Returns a string containing matching blocks of text in a list of strings followed by non-matching.
+    """Returns a string containing matching blocks of text in a list of strings
+    followed by non-matching.
 
     Args:
         string_list (List[str]): List of strings to match
@@ -219,7 +215,6 @@ def get_matching_then_nonmatching_text(
 
     Returns:
         str: String containing matching blocks of text followed by non-matching
-
     """
 
     def add_separator_if_needed(text_list):
@@ -292,7 +287,7 @@ def get_matching_then_nonmatching_text(
 def number_format(
     val: Any, format: str = "%.4f", trailing_zeros: bool = True
 ) -> str:
-    """Format float-castable input as string
+    """Format float-castable input as string.
 
     Args:
         val (float): Number to format
@@ -316,8 +311,8 @@ def get_fraction_str(
     format: str = "%.4f",
     trailing_zeros: bool = True,
 ) -> str:
-    """Given float-castable numerator and optional float-castable denominator, format as string, returning '' for
-    invalid numerator or 0 denominator.
+    """Given float-castable numerator and optional float-castable denominator,
+    format as string, returning '' for invalid numerator or 0 denominator.
 
     Args:
         numerator (float): Numerator
@@ -342,7 +337,8 @@ def get_fraction_str(
 
 
 def only_allowed_in_str(test_str: str, allowed_chars: Set) -> bool:
-    """Returns True if test string contains only allowed characters, False if not.
+    """Returns True if test string contains only allowed characters, False if
+    not.
 
     Args:
         test_str (str): Test string
@@ -358,8 +354,8 @@ allowed_numeric = set(string.digits + "." + "," + "%" + "-")
 
 
 def get_numeric_if_possible(value: Any) -> Any:
-    """Return val if it is not a string, otherwise see if it can be cast to float or int,
-    taking into account commas and periods.
+    """Return val if it is not a string, otherwise see if it can be cast to
+    float or int, taking into account commas and periods.
 
     Args:
         value (Any): Value
@@ -367,7 +363,6 @@ def get_numeric_if_possible(value: Any) -> Any:
     Returns:
         Any: Value
     """
-
     def get_int_value(val, denominator):
         val = int(val)
         if denominator != 1:
@@ -421,7 +416,8 @@ def get_numeric_if_possible(value: Any) -> Any:
 def earliest_index(
     string_to_search: str, strings_to_try: ListTuple[str]
 ) -> Optional[int]:
-    """Search a string for each of a list of strings and return the earliest index.
+    """Search a string for each of a list of strings and return the earliest
+    index.
 
     Args:
         string_to_search (str): String to search
@@ -448,7 +444,7 @@ def earliest_index(
 def match_template_variables(
     string: str,
 ) -> Tuple[Optional[str], Optional[str]]:
-    """Try to match {{XXX}} in input string
+    """Try to match {{XXX}} in input string.
 
     Args:
         string (str): String in which to look for template

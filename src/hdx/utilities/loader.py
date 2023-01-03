@@ -20,8 +20,7 @@ def load_text(
     strip: bool = False,
     replace_newlines: Optional[str] = None,
 ) -> str:
-    """
-    Load file into a string removing newlines
+    """Load file into a string removing newlines.
 
     Args:
         path (str): Path to file
@@ -31,7 +30,6 @@ def load_text(
 
     Returns:
         str: String contents of file
-
     """
     with open(path, encoding=encoding) as f:
         string = f.read()
@@ -45,7 +43,7 @@ def load_text(
 
 
 def load_yaml(path: str, encoding: str = "utf-8") -> Any:
-    """Load YAML file into an ordered dictionary
+    """Load YAML file into an ordered dictionary.
 
     Args:
         path (str): Path to YAML file
@@ -83,7 +81,7 @@ def load_and_merge_yaml(
     paths: ListTuple[str], encoding: str = "utf-8"
 ) -> Dict:
     """Load multiple YAML files that are in dictionary form and merge into one
-    dictionary
+    dictionary.
 
     Args:
         paths (ListTuple[str]): Paths to YAML files
@@ -91,7 +89,6 @@ def load_and_merge_yaml(
 
     Returns:
         Dict: Dictionary of merged YAML files
-
     """
     configs = [load_yaml(path, encoding=encoding) for path in paths]
     return merge_dictionaries(configs)
@@ -101,7 +98,7 @@ def load_and_merge_json(
     paths: ListTuple[str], encoding: str = "utf-8"
 ) -> Dict:
     """Load multiple JSON files that are in dictionary form and merge into one
-    dictionary
+    dictionary.
 
     Args:
         paths (ListTuple[str]): Paths to JSON files
@@ -109,7 +106,6 @@ def load_and_merge_json(
 
     Returns:
         Dict: Dictionary of merged JSON files
-
     """
     configs = [load_json(path, encoding=encoding) for path in paths]
     return merge_dictionaries(configs)
@@ -118,7 +114,7 @@ def load_and_merge_json(
 def load_yaml_into_existing_dict(
     data: dict, path: str, encoding: str = "utf-8"
 ) -> Dict:
-    """Merge YAML file that is in dictionary form into existing dictionary
+    """Merge YAML file that is in dictionary form into existing dictionary.
 
     Args:
         data (dict): Dictionary to merge into
@@ -135,7 +131,7 @@ def load_yaml_into_existing_dict(
 def load_json_into_existing_dict(
     data: dict, path: str, encoding: str = "utf-8"
 ) -> Dict:
-    """Merge JSON file that is in dictionary form into existing dictionary
+    """Merge JSON file that is in dictionary form into existing dictionary.
 
     Args:
         data (dict): Dictionary to merge into

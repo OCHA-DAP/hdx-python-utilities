@@ -1,4 +1,4 @@
-"""Configuration of logging"""
+"""Configuration of logging."""
 import logging
 import logging.config
 from sys import stderr
@@ -12,8 +12,8 @@ def setup_logging(
     log_file: Optional[str] = None,
     file_log_level: str = "ERROR",
 ) -> None:
-    """Setup logging configuration. Intercepts standard logging and outputs errors to
-    a file.
+    """Setup logging configuration. Intercepts standard logging and outputs
+    errors to a file.
 
     Args:
         console_log_level (str): Log level to use for console output. Defaults to INFO.

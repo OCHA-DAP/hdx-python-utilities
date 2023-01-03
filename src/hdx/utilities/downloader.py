@@ -1,4 +1,4 @@
-"""Downloading utilities for urls"""
+"""Downloading utilities for urls."""
 import hashlib
 import logging
 from copy import deepcopy
@@ -25,8 +25,9 @@ logger = logging.getLogger(__name__)
 
 
 class Download(BaseDownload):
-    """Download class with various download operations. Requires either global user agent to be set or appropriate
-    user agent parameter(s) to be completed.
+    """Download class with various download operations. Requires either global
+    user agent to be set or appropriate user agent parameter(s) to be
+    completed.
 
     Args:
         user_agent (Optional[str]): User agent string. HDXPythonUtilities/X.X.X- is prefixed.
@@ -83,11 +84,10 @@ class Download(BaseDownload):
             self.setup = self.normal_setup
 
     def close_response(self) -> None:
-        """Close response
+        """Close response.
 
         Returns:
             None
-
         """
         if self.response:
             try:
@@ -96,18 +96,16 @@ class Download(BaseDownload):
                 pass
 
     def close(self) -> None:
-        """Close response and session
+        """Close response and session.
 
         Returns:
             None
-
         """
         self.close_response()
         self.session.close()
 
     def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
-        """
-        Allow usage of with
+        """Allow usage of with.
 
         Args:
             exc_type (Any): Exception type
@@ -116,7 +114,6 @@ class Download(BaseDownload):
 
         Returns:
             None
-
         """
         self.close()
 
@@ -128,7 +125,8 @@ class Download(BaseDownload):
         path: Optional[str] = None,
         overwrite: bool = False,
     ) -> str:
-        """Get filename from url and join to provided folder or temporary folder if no folder supplied, ensuring uniqueness
+        """Get filename from url and join to provided folder or temporary
+        folder if no folder supplied, ensuring uniqueness.
 
         Args:
             url (str): URL to download
@@ -139,7 +137,6 @@ class Download(BaseDownload):
 
         Returns:
             str: Path of downloaded file
-
         """
         if path:
             if folder or filename:
@@ -166,7 +163,7 @@ class Download(BaseDownload):
         return path
 
     def get_full_url(self, url: str) -> str:
-        """Get full url including any additional parameters
+        """Get full url including any additional parameters.
 
         Args:
             url (str): URL for which to get full url
@@ -180,7 +177,7 @@ class Download(BaseDownload):
 
     @staticmethod
     def get_url_for_get(url: str, parameters: Optional[Dict] = None) -> str:
-        """Get full url for GET request including parameters
+        """Get full url for GET request including parameters.
 
         Args:
             url (str): URL to download
@@ -188,7 +185,6 @@ class Download(BaseDownload):
 
         Returns:
             str: Full url
-
         """
         spliturl = urlsplit(url)
         getparams = dict(parse_qsl(spliturl.query))
@@ -201,7 +197,8 @@ class Download(BaseDownload):
     def get_url_params_for_post(
         url: str, parameters: Optional[Dict] = None
     ) -> Tuple[str, Dict]:
-        """Get full url for POST request and all parameters including any in the url
+        """Get full url for POST request and all parameters including any in
+        the url.
 
         Args:
             url (str): URL to download
@@ -209,7 +206,6 @@ class Download(BaseDownload):
 
         Returns:
             Tuple[str, Dict]: (Full url, parameters)
-
         """
         spliturl = urlsplit(url)
         getparams = dict(parse_qsl(spliturl.query))
@@ -225,8 +221,9 @@ class Download(BaseDownload):
         hxltags: Dict[str, str],
         dict_form: bool = False,
     ) -> Union[List[str], Dict[str, str]]:
-        """Return HXL tag row for header row given list of headers and dictionary with header to HXL hashtag mappings.
-        Return list or dictionary depending upon the dict_form argument.
+        """Return HXL tag row for header row given list of headers and
+        dictionary with header to HXL hashtag mappings. Return list or
+        dictionary depending upon the dict_form argument.
 
         Args:
             headers (ListTuple[str]): Headers for which to get HXL hashtags
@@ -235,7 +232,6 @@ class Download(BaseDownload):
 
         Returns:
             Union[List[str],Dict[str,str]]: Return either a list or dictionary conating HXL hashtags
-
         """
         if dict_form:
             return {header: hxltags.get(header, "") for header in headers}
@@ -252,7 +248,7 @@ class Download(BaseDownload):
         headers: Optional[Dict] = None,
         encoding: Optional[str] = None,
     ) -> requests.Response:
-        """Setup download from provided url returning the response
+        """Setup download from provided url returning the response.
 
         Args:
             url (str): URL or path to download
@@ -265,7 +261,6 @@ class Download(BaseDownload):
 
         Returns:
             requests.Response: requests.Response object
-
         """
         self.close_response()
         self.response = None
@@ -305,14 +300,14 @@ class Download(BaseDownload):
         return self.response
 
     def hash_stream(self, url: str) -> str:
-        """Stream file from url and hash it using MD5. Must call setup method first.
+        """Stream file from url and hash it using MD5. Must call setup method
+        first.
 
         Args:
             url (str): URL or path to download
 
         Returns:
             str: MD5 hash of file
-
         """
         md5hash = hashlib.md5()
         try:
@@ -333,8 +328,8 @@ class Download(BaseDownload):
         path: Optional[str] = None,
         overwrite: bool = False,
     ) -> str:
-        """Stream file from url and store in provided folder or temporary folder if no folder supplied.
-        Must call setup method first.
+        """Stream file from url and store in provided folder or temporary
+        folder if no folder supplied. Must call setup method first.
 
         Args:
             url (str): URL or path to download
@@ -345,7 +340,6 @@ class Download(BaseDownload):
 
         Returns:
             str: Path of downloaded file
-
         """
         path = self.get_path_for_url(url, folder, filename, path, overwrite)
         f = None
@@ -369,7 +363,8 @@ class Download(BaseDownload):
         url: str,
         **kwargs: Any,
     ) -> str:
-        """Download file from url and store in provided folder or temporary folder if no folder supplied
+        """Download file from url and store in provided folder or temporary
+        folder if no folder supplied.
 
         Args:
             url (str): URL or path to download
@@ -386,7 +381,6 @@ class Download(BaseDownload):
 
         Returns:
             str: Path of downloaded file
-
         """
         self.setup(
             url,
@@ -406,7 +400,7 @@ class Download(BaseDownload):
         )
 
     def download(self, url: str, **kwargs: Any) -> requests.Response:
-        """Download url
+        """Download url.
 
         Args:
             url (str): URL or path to download
@@ -419,7 +413,6 @@ class Download(BaseDownload):
 
         Returns:
             requests.Response: Response
-
         """
         return self.setup(
             url,
@@ -432,65 +425,59 @@ class Download(BaseDownload):
         )
 
     def get_header(self, header: str) -> Any:
-        """Get a particular response header of download
+        """Get a particular response header of download.
 
         Args:
             header (str): Header for which to get value
 
         Returns:
             Any: Response header's value
-
         """
         return self.response.headers.get(header)
 
     def get_headers(self) -> Any:
-        """Get response headers of download
+        """Get response headers of download.
 
         Returns:
             Any: Response headers
-
         """
         return self.response.headers
 
     def get_status(self) -> int:
-        """Get response status code
+        """Get response status code.
 
         Returns:
             int: Response status code
-
         """
         return self.response.status_code
 
     def get_text(self) -> str:
-        """Get text content of download
+        """Get text content of download.
 
         Returns:
             str: Text content of download
-
         """
         return self.response.text
 
     def get_yaml(self) -> Any:
-        """Get YAML content of download
+        """Get YAML content of download.
 
         Returns:
             Any: YAML content of download
-
         """
         with YAML() as yaml:
             return yaml.load(self.response.text)
 
     def get_json(self) -> Any:
-        """Get JSON content of download
+        """Get JSON content of download.
 
         Returns:
             Any: JSON content of download
-
         """
         return self.response.json()
 
     def download_text(self, url: str, **kwargs: Any) -> str:
-        """Download url as text
+        """Download url as text.
 
         Args:
             url (str): URL or path to download
@@ -503,13 +490,12 @@ class Download(BaseDownload):
 
         Returns:
             str: Text content of download
-
         """
         self.download(url, **kwargs)
         return self.get_text()
 
     def download_yaml(self, url: str, **kwargs: Any) -> Any:
-        """Download url as YAML
+        """Download url as YAML.
 
         Args:
             url (str): URL or path to download
@@ -522,13 +508,12 @@ class Download(BaseDownload):
 
         Returns:
             str: YAML content of download
-
         """
         self.download(url, **kwargs)
         return self.get_yaml()
 
     def download_json(self, url: str, **kwargs: Any) -> Any:
-        """Download url as JSON
+        """Download url as JSON.
 
         Args:
             url (str): URL or path to download
@@ -541,7 +526,6 @@ class Download(BaseDownload):
 
         Returns:
             str: JSON content of download
-
         """
         self.download(url, **kwargs)
         return self.get_json()
@@ -553,7 +537,7 @@ class Download(BaseDownload):
         infer_types: bool = False,
         **kwargs: Any,
     ) -> frictionless.Resource:
-        """Get Frictionless Resource
+        """Get Frictionless Resource.
 
         Args:
             url (str): URL or path to download
@@ -583,7 +567,6 @@ class Download(BaseDownload):
 
         Returns:
             frictionless.Resource: frictionless Resource object
-
         """
         self.close_response()
         try:
@@ -608,15 +591,16 @@ class Download(BaseDownload):
         ] = None,
         **kwargs: Any,
     ) -> Tuple[List[str], Iterator[ListDict]]:
-        """Returns header of tabular file pointed to by url and an iterator where each
-        row is returned as a list or dictionary depending on the dict_form argument. The
-        headers argument is either a row number or list of row numbers (in case of
-        multi-line headers) to be considered as headers (rows start counting at 1), or
-        the actual headers defined as a list of strings. It defaults to 1 and cannot be
-        None. The dict_form arguments specifies if each row should be returned as a
-        dictionary or a list, defaulting to a list.
+        """Returns header of tabular file pointed to by url and an iterator
+        where each row is returned as a list or dictionary depending on the
+        dict_form argument. The headers argument is either a row number or list
+        of row numbers (in case of multi-line headers) to be considered as
+        headers (rows start counting at 1), or the actual headers defined as a
+        list of strings. It defaults to 1 and cannot be None. The dict_form
+        arguments specifies if each row should be returned as a dictionary or a
+        list, defaulting to a list.
 
-        Optionally, headers can be inserted at specific positions. This is achieved
+        Optionally, headers can be inserted at specific positions. This is achieved blah blah blah blah blah blah
         using the header_insertions argument. If supplied, it is a list of tuples of the
         form (position, header) to be inserted. A function is called for each row. If
         supplied, it takes as arguments: headers (prior to any insertions) and row
@@ -653,7 +637,6 @@ class Download(BaseDownload):
 
         Returns:
             Tuple[List[str],Iterator[ListDict]]: Tuple (headers, iterator where each row is a list or dictionary)
-
         """
         if headers is None:
             raise DownloadError("Argument headers cannot be None!")
@@ -706,8 +689,9 @@ class Download(BaseDownload):
         ] = None,
         **kwargs: Any,
     ) -> Tuple[List[str], Iterator[ListDict]]:
-        """Returns header of tabular file(s) pointed to by url and an iterator where
-        each row is returned as a list or dictionary depending on the dict_rows argument.
+        """Returns header of tabular file(s) pointed to by url and an iterator
+        where each row is returned as a list or dictionary depending on the
+        dict_rows argument.
 
         When a list of urls is supplied (in url), then the has_hxl flag indicates if the
         files are HXLated so that the HXL row is only included from the first file.
@@ -755,7 +739,6 @@ class Download(BaseDownload):
 
         Returns:
             Tuple[List[str],Iterator[ListDict]]: Tuple (headers, iterator where each row is a list or dictionary)
-
         """
         if isinstance(url, list):
             is_list = True
@@ -815,7 +798,8 @@ class Download(BaseDownload):
         ] = None,
         **kwargs: Any,
     ) -> Tuple[List[str], Iterator[List]]:
-        """Returns headers and an iterator where each row is returned as a list.
+        """Returns headers and an iterator where each row is returned as a
+        list.
 
         When a list of urls is supplied (in url), then the has_hxl flag indicates if the
         files are HXLated so that the HXL row is only included from the first file.
@@ -861,7 +845,6 @@ class Download(BaseDownload):
 
         Returns:
             Tuple[List[str],Iterator[List]]: Tuple (headers, iterator where each row is a list)
-
         """
 
         headers, iterator = self.get_tabular_rows(
@@ -891,7 +874,8 @@ class Download(BaseDownload):
         ] = None,
         **kwargs: Any,
     ) -> Tuple[List[str], Iterator[Dict]]:
-        """Returns headers and an iterator where each row is returned as a dictionary.
+        """Returns headers and an iterator where each row is returned as a
+        dictionary.
 
         When a list of urls is supplied (in url), then the has_hxl flag indicates if the
         files are HXLated so that the HXL row is only included from the first file.
@@ -936,7 +920,6 @@ class Download(BaseDownload):
 
         Returns:
             Tuple[List[str], Iterator[Dict]]: Tuple (headers, iterator where each row is a dictionary)
-
         """
 
         headers, iterator = self.get_tabular_rows(
@@ -967,8 +950,8 @@ class Download(BaseDownload):
         ] = None,
         **kwargs: Any,
     ) -> Dict:
-        """Download 2 column csv from url and return a dictionary of keys (first column)
-        and values (second column).
+        """Download 2 column csv from url and return a dictionary of keys
+        (first column) and values (second column).
 
         When a list of urls is supplied (in url), then the has_hxl flag indicates if the
         files are HXLated so that the HXL row is only included from the first file.
@@ -1015,7 +998,6 @@ class Download(BaseDownload):
 
         Returns:
             Dict: Dictionary keys (first column) and values (second column)
-
         """
         output_dict = dict()
         _, rows = self.get_tabular_rows_as_list(
@@ -1049,9 +1031,9 @@ class Download(BaseDownload):
         ] = None,
         **kwargs: Any,
     ) -> Dict[str, Dict]:
-        """Download multicolumn csv from url and return dictionary where keys are first
-        column and values are dictionaries with keys from column headers and values from
-        columns beneath.
+        """Download multicolumn csv from url and return dictionary where keys
+        are first column and values are dictionaries with keys from column
+        headers and values from columns beneath.
 
         When a list of urls is supplied (in url), then the has_hxl flag indicates if the
         files are HXLated so that the HXL row is only included from the first file.
@@ -1098,7 +1080,6 @@ class Download(BaseDownload):
         Returns:
             Dict[str,Dict]: Dictionary where keys are first column and values are dictionaries with keys from column
             headers and values from columns beneath
-
         """
         headers, iterator = self.get_tabular_rows_as_dict(
             url,
@@ -1136,9 +1117,9 @@ class Download(BaseDownload):
         ] = None,
         **kwargs: Any,
     ) -> Dict[str, Dict]:
-        """Download multicolumn csv from url and return dictionary where keys are header
-        names and values are dictionaries with keys from first column and values from
-        other columns.
+        """Download multicolumn csv from url and return dictionary where keys
+        are header names and values are dictionaries with keys from first
+        column and values from other columns.
 
         When a list of urls is supplied (in url), then the has_hxl flag indicates if the
         files are HXLated so that the HXL row is only included from the first file.
@@ -1185,7 +1166,6 @@ class Download(BaseDownload):
         Returns:
             Dict[str,Dict]: Dictionary where keys are header names and values are dictionaries with keys from first column
             and values from other columns
-
         """
         headers, iterator = self.get_tabular_rows_as_dict(
             url,
@@ -1212,14 +1192,13 @@ class Download(BaseDownload):
 
     @staticmethod
     def get_column_positions(headers: ListTuple[str]) -> Dict[str, int]:
-        """Get mapping of headers to column positions
+        """Get mapping of headers to column positions.
 
         Args:
             headers (ListTuple[str]): List of headers
 
         Returns:
             Dict[str,int]: Dictionary where keys are header names and values are header positions
-
         """
         columnpositions = dict()
         for i, header in enumerate(headers):
@@ -1240,10 +1219,11 @@ class Download(BaseDownload):
     ) -> None:
         """Generate downloaders. Requires either global user agent to be set or
         appropriate user agent parameter(s) to be completed. The custom_configs
-        dictionary is a mapping from name to a dictionary of custom configuration
-        parameters that is added to the underlying session's params or headers. It can
-        have keys that correspond to the input arguments of Download's constructor
-        __init__ (or the other arguments of this method).
+        dictionary is a mapping from name to a dictionary of custom
+        configuration parameters that is added to the underlying session's
+        params or headers. It can have keys that correspond to the input
+        arguments of Download's constructor __init__ (or the other arguments of
+        this method).
 
         Args:
             custom_configs (Dict[str, Dict]): Optional dictionary of custom configurations.
@@ -1283,8 +1263,8 @@ class Download(BaseDownload):
 
     @classmethod
     def get_downloader(cls, name: Optional[str] = None) -> "Download":
-        """Get a generated downloader given a name. If name is not supplied, the default
-        one will be returned.
+        """Get a generated downloader given a name. If name is not supplied,
+        the default one will be returned.
 
         Args:
             name (Optional[str]): Name of downloader. Defaults to None (get default).

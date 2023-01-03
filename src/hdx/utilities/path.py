@@ -1,4 +1,4 @@
-"""Directory Path Utilities"""
+"""Directory Path Utilities."""
 import contextlib
 import inspect
 import logging
@@ -33,7 +33,7 @@ class NotFoundError(Exception):
 
 
 def script_dir(pyobject: Any, follow_symlinks: bool = True) -> str:
-    """Get current script's directory
+    """Get current script's directory.
 
     Args:
         pyobject (Any): Any Python object in the script
@@ -54,7 +54,7 @@ def script_dir(pyobject: Any, follow_symlinks: bool = True) -> str:
 def script_dir_plus_file(
     filename: str, pyobject: Any, follow_symlinks: bool = True
 ) -> str:
-    """Get current script's directory and then append a filename
+    """Get current script's directory and then append a filename.
 
     Args:
         filename (str): Filename to append to directory path
@@ -72,9 +72,10 @@ def get_temp_dir(
     delete_if_exists: bool = False,
     tempdir: Optional[str] = None,
 ) -> str:
-    """Get a temporary directory. Looks for environment variable TEMP_DIR and falls
-    back on os.gettempdir if a root temporary directory is not supplied. If a folder is supplied, creates that folder
-    within the temporary directory. Optionally deletes and recreates it if it already exists.
+    """Get a temporary directory. Looks for environment variable TEMP_DIR and
+    falls back on os.gettempdir if a root temporary directory is not supplied.
+    If a folder is supplied, creates that folder within the temporary
+    directory. Optionally deletes and recreates it if it already exists.
 
     Args:
         folder (Optional[str]): Folder to create in temporary folder. Defaults to None.
@@ -105,7 +106,8 @@ def temp_dir(
     delete_on_failure: bool = True,
     tempdir: Optional[str] = None,
 ) -> str:
-    """Get a temporary directory optionally with folder appended (and created if it doesn't exist)
+    """Get a temporary directory optionally with folder appended (and created
+    if it doesn't exist)
 
     Args:
         folder (Optional[str]): Folder to create in temporary folder. Defaults to None.
@@ -132,7 +134,7 @@ def temp_dir(
 
 
 def read_or_create_batch(folder: str, batch: Optional[str] = None) -> str:
-    """Get batch or create it if it doesn't exist
+    """Get batch or create it if it doesn't exist.
 
     Args:
         folder (str): Folder in which to look for or create batch file.
@@ -162,9 +164,10 @@ def temp_dir_batch(
     batch: Optional[str] = None,
     tempdir: Optional[str] = None,
 ) -> Dict:
-    """Get a temporary directory and batch id. Yields a dictionary with key folder which is the temporary directory
-    optionally with folder appended (and created if it doesn't exist). In key batch is a batch code to be passed as
-    the batch parameter in create_in_hdx or update_in_hdx calls.
+    """Get a temporary directory and batch id. Yields a dictionary with key
+    folder which is the temporary directory optionally with folder appended
+    (and created if it doesn't exist). In key batch is a batch code to be
+    passed as the batch parameter in create_in_hdx or update_in_hdx calls.
 
     Args:
         folder (Optional[str]): Folder to create in temporary folder. Defaults to None.
@@ -218,11 +221,13 @@ def progress_storing_folder(
     key: str,
     wheretostart: Optional[str] = None,
 ) -> Tuple[Dict, Dict]:
-    """Store progress in folder in key folder of info dictionary parameter. Yields 2 dictionaries. The first is the
-    info dictionary. It contains in key folder the folder being used to store progress and in key progress the current
-    position in the iterator. If store_batch is True, that dictionary will also contain the key batch containing a batch
-    code to be passed as the batch parameter in create_in_hdx or update_in_hdx calls. The second dictionary is the next
-    dictionary in the iterator.
+    """Store progress in folder in key folder of info dictionary parameter.
+    Yields 2 dictionaries. The first is the info dictionary. It contains in key
+    folder the folder being used to store progress and in key progress the
+    current position in the iterator. If store_batch is True, that dictionary
+    will also contain the key batch containing a batch code to be passed as the
+    batch parameter in create_in_hdx or update_in_hdx calls. The second
+    dictionary is the next dictionary in the iterator.
 
     Args:
         info (Dict): Dictionary containing folder and anything else to be yielded
@@ -281,10 +286,11 @@ def progress_storing_folder(
 def wheretostart_tempdir_batch(
     folder: str, batch: Optional[str] = None, tempdir: Optional[str] = None
 ) -> Dict:
-    """Get a temporary directory and batch id. Deletes any existing folder if WHERETOSTART environment variable is set
-    to RESET. Yields a dictionary with key folder which is the temporary directory optionally with folder appended
-    (and created if it doesn't exist). In key batch is a batch code to be passed as the batch parameter in
-    create_in_hdx or update_in_hdx calls.
+    """Get a temporary directory and batch id. Deletes any existing folder if
+    WHERETOSTART environment variable is set to RESET. Yields a dictionary with
+    key folder which is the temporary directory optionally with folder appended
+    (and created if it doesn't exist). In key batch is a batch code to be
+    passed as the batch parameter in create_in_hdx or update_in_hdx calls.
 
     Args:
         folder (str): Folder to create in temporary folder
@@ -320,13 +326,17 @@ def progress_storing_tempdir(
     batch: Optional[str] = None,
     tempdir: Optional[str] = None,
 ) -> Tuple[Dict, Dict]:
-    """Store progress in temporary directory. The folder persists until the final iteration allowing which iteration to
-    start at and the batch code to be persisted between runs. Yields 2 dictionaries. The first contains key folder which
-    is the temporary directory optionally with folder appended (and created if it doesn't exist). In key progress is
-    held the current position in the iterator. It also contains the key batch containing a batch code to be passed as
-    the batch parameter in create_in_hdx or update_in_hdx calls. The second dictionary is the next dictionary in the
-    iterator. The WHERETOSTART environment variable can be set to RESET to force the deletion and recreation of the
-    temporary directory or to a key value pair in the form key=value eg. iso3=PAK indicating where to start.
+    """Store progress in temporary directory. The folder persists until the
+    final iteration allowing which iteration to start at and the batch code to
+    be persisted between runs. Yields 2 dictionaries. The first contains key
+    folder which is the temporary directory optionally with folder appended
+    (and created if it doesn't exist). In key progress is held the current
+    position in the iterator. It also contains the key batch containing a batch
+    code to be passed as the batch parameter in create_in_hdx or update_in_hdx
+    calls. The second dictionary is the next dictionary in the iterator. The
+    WHERETOSTART environment variable can be set to RESET to force the deletion
+    and recreation of the temporary directory or to a key value pair in the
+    form key=value eg. iso3=PAK indicating where to start.
 
     Args:
         folder (str): Folder to create in temporary folder
@@ -350,14 +360,18 @@ def multiple_progress_storing_tempdir(
     keys: ListTuple[str],
     batch: Optional[str] = None,
 ) -> Tuple[Dict, Dict]:
-    """Store progress in temporary directory. The folder persists until the final iteration of the last iterator
-    allowing which iteration to start at and the batch code to be persisted between runs. Yields 2 dictionaries. The
-    first contains key folder which is the temporary directory optionally with folder appended (and created if it
-    doesn't exist). In key progress is held the current position in the iterator. It also contains the key batch
-    containing a batch code to be passed as the batch parameter in create_in_hdx or update_in_hdx calls. The second
-    dictionary is the next dictionary in the iterator. The WHERETOSTART environment variable can be set to RESET to
-    force the deletion and recreation of the temporary directory or to a key value pair in the form key=value eg.
-    iso3=PAK indicating where to start.
+    """Store progress in temporary directory. The folder persists until the
+    final iteration of the last iterator allowing which iteration to start at
+    and the batch code to be persisted between runs. Yields 2 dictionaries. The
+    first contains key folder which is the temporary directory optionally with
+    folder appended (and created if it doesn't exist). In key progress is held
+    the current position in the iterator. It also contains the key batch
+    containing a batch code to be passed as the batch parameter in
+    create_in_hdx or update_in_hdx calls. The second dictionary is the next
+    dictionary in the iterator. The WHERETOSTART environment variable can be
+    set to RESET to force the deletion and recreation of the temporary
+    directory or to a key value pair in the form key=value eg. iso3=PAK
+    indicating where to start.
 
     Args:
         folder (str): Folder to create in temporary folder
@@ -417,7 +431,7 @@ def multiple_progress_storing_tempdir(
 def get_filename_extension_from_url(
     url: str, second_last: bool = False, use_query: bool = False
 ) -> Tuple[str, str]:
-    """Get separately filename and extension from url
+    """Get separately filename and extension from url.
 
     Args:
         url (str): URL to download
@@ -426,7 +440,6 @@ def get_filename_extension_from_url(
 
     Returns:
         Tuple[str,str]: Tuple of (filename, extension)
-
     """
     split_url = urlsplit(unquote_plus(url))
     urlpath = split_url.path
@@ -450,7 +463,7 @@ def get_filename_extension_from_url(
 def get_filename_from_url(
     url: str, second_last: bool = False, use_query: bool = False
 ) -> str:
-    """Get filename including extension from url
+    """Get filename including extension from url.
 
     Args:
         url (str): URL
@@ -459,7 +472,6 @@ def get_filename_from_url(
 
     Returns:
         str: filename
-
     """
     filename, extension = get_filename_extension_from_url(
         url, second_last, use_query

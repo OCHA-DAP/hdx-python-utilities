@@ -55,7 +55,7 @@ representers = {
 
 
 def save_text(string: str, path: str, encoding: str = "utf-8") -> None:
-    """Save text string to file
+    """Save text string to file.
 
     Args:
         string (str): String to save
@@ -76,7 +76,7 @@ def save_yaml(
     pretty: bool = False,
     sortkeys: bool = False,
 ) -> None:
-    """Save dictionary to YAML file preserving order if it is an OrderedDict
+    """Save dictionary to YAML file preserving order if it is an OrderedDict.
 
     Args:
         object (Any): Python object to save
@@ -112,7 +112,7 @@ def save_json(
     pretty: bool = False,
     sortkeys: bool = False,
 ) -> None:
-    """Save dictionary to JSON file preserving order if it is an OrderedDict
+    """Save dictionary to JSON file preserving order if it is an OrderedDict.
 
     Args:
         object (Any): Python object to save
@@ -148,12 +148,12 @@ def save_hxlated_output(
     output_dir: str = "",
     **kwargs: Any,
 ) -> None:
-    """Save rows with header and HXL hashtags. Currently, JSON and/or csv outputs are
-    supported. An output directory (which defaults to "") can be given. The utility
-    expects a configuration containing definitions of input headers and HXLtags if
-    these are not included in the rows, and output files with desired HXL hashtags.
-    Keyword arguments are used to pass in any variables needed by the metadata defined
-    in the configuration.
+    """Save rows with header and HXL hashtags. Currently, JSON and/or csv
+    outputs are supported. An output directory (which defaults to "") can be
+    given. The utility expects a configuration containing definitions of input
+    headers and HXLtags if these are not included in the rows, and output files
+    with desired HXL hashtags. Keyword arguments are used to pass in any
+    variables needed by the metadata defined in the configuration.
 
     Args:
         configuration (Dict): Configuration for input and output

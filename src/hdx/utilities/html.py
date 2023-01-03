@@ -1,4 +1,4 @@
-"""HTML parsing utilities"""
+"""HTML parsing utilities."""
 
 import logging
 from typing import Any, Dict, List, Optional
@@ -24,9 +24,8 @@ if BeautifulSoup is not None:
         user_agent_lookup: Optional[str] = None,
         **kwargs: Any,
     ) -> BeautifulSoup:
-        """
-        Get BeautifulSoup object for a url. Requires either global user agent to be set or appropriate user agent
-        parameter(s) to be completed.
+        """Get BeautifulSoup object for a url. Requires either global user
+        agent to be set or appropriate user agent parameter(s) to be completed.
 
         Args:
             url (str): url to read
@@ -37,7 +36,6 @@ if BeautifulSoup is not None:
 
         Returns:
             BeautifulSoup: The BeautifulSoup object for a url
-
         """
         if not downloader:
             downloader = Download(
@@ -47,28 +45,25 @@ if BeautifulSoup is not None:
         return BeautifulSoup(response.text, "html.parser")
 
     def get_text(tag: Tag) -> str:
-        """
-        Get text of tag stripped of leading and trailing whitespace and newlines and with &nbsp replaced with space
+        """Get text of tag stripped of leading and trailing whitespace and
+        newlines and with &nbsp replaced with space.
 
         Args:
             tag (Tag): BeautifulSoup tag
 
         Returns:
             str: Text of tag stripped of leading and trailing whitespace and newlines and with &nbsp replaced with space
-
         """
         return tag.get_text().strip(" \t\n\r").replace("\xa0", " ")
 
     def extract_table(tabletag: Tag) -> List[Dict]:
-        """
-        Extract HTML table as list of dictionaries
+        """Extract HTML table as list of dictionaries.
 
         Args:
             tabletag (Tag): BeautifulSoup tag
 
         Returns:
             str: Text of tag stripped of leading and trailing whitespace and newlines and with &nbsp replaced with space
-
         """
         theadtag = tabletag.find_next("thead")
 

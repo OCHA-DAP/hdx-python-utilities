@@ -2,8 +2,7 @@ from uuid import UUID, uuid4
 
 
 def get_uuid() -> str:
-    """
-    Get an UUID.
+    """Get an UUID.
 
     Returns:
         str: A UUID
@@ -12,8 +11,7 @@ def get_uuid() -> str:
 
 
 def is_valid_uuid(uuid_to_test: str, version: int = 4) -> bool:
-    """
-    Check if uuid_to_test is a valid UUID.
+    """Check if uuid_to_test is a valid UUID.
 
     Args:
         uuid_to_test (str): UUID to test for validity

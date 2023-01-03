@@ -1,4 +1,4 @@
-"""Session utilities for urls"""
+"""Session utilities for urls."""
 import logging
 import os
 from typing import Any, Optional
@@ -27,8 +27,9 @@ def get_session(
     fail_on_missing_file: bool = True,
     **kwargs: Any,
 ) -> requests.Session:
-    """Set up and return Session object that is set up with retrying. Requires either global user agent to be set or
-    appropriate user agent parameter(s) to be completed. If the EXTRA_PARAMS or BASIC_AUTH environment variable is
+    """Set up and return Session object that is set up with retrying. Requires
+    either global user agent to be set or appropriate user agent parameter(s)
+    to be completed. If the EXTRA_PARAMS or BASIC_AUTH environment variable is
     supplied, the extra_params* parameters will be ignored.
 
     Args:

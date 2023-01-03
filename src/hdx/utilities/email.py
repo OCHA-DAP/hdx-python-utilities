@@ -1,4 +1,4 @@
-"""Utility class to simplify sending emails"""
+"""Utility class to simplify sending emails."""
 
 import logging
 import smtplib
@@ -23,8 +23,8 @@ class EmailConfigurationError(Exception):
 
 
 class Email:
-    """
-    Emailer utility. Parameters in dictionary or file (eg. yaml below):
+    """Emailer utility. Parameters in dictionary or file (eg. yaml below):
+
      | connection_type: "ssl"   ("ssl" for smtp ssl or "lmtp", otherwise basic smtp is assumed)
      | host: "localhost"
      | port: 123
@@ -93,34 +93,27 @@ class Email:
         self.server = None
 
     def __enter__(self) -> "Email":
-        """
-        Return Email object for with statement
+        """Return Email object for with statement.
 
         Returns:
             None
-
         """
         return self
 
     def __exit__(self, *args: Any) -> None:
-        """
-        Close Email object for end of with statement
+        """Close Email object for end of with statement.
 
         Args:
             *args: Not used
 
         Returns:
             None
-
         """
-
     def connect(self) -> None:
-        """
-        Connect to server
+        """Connect to server.
 
         Returns:
             None
-
         """
         if self.connection_type.lower() == "ssl":
             self.server = smtplib.SMTP_SSL(
@@ -148,12 +141,10 @@ class Email:
         self.server.login(self.username, self.password)
 
     def close(self) -> None:
-        """
-        Close connection to email server
+        """Close connection to email server.
 
         Returns:
             None
-
         """
         self.server.quit()
 
@@ -161,15 +152,13 @@ class Email:
     def get_normalised_emails(
         recipients: Union[str, ListTuple[str]]
     ) -> List[str]:
-        """
-        Get list of normalised emails
+        """Get list of normalised emails.
 
         Args:
             recipients (Union[str, ListTuple[str]]): Email recipient(s)
 
         Returns:
             List[str]: Normalised emails
-
         """
         if isinstance(recipients, str):
             recipients = (recipients,)
@@ -196,9 +185,8 @@ class Email:
         bcc: Union[str, ListTuple[str], None] = None,
         **kwargs: Any,
     ) -> None:
-        """
-        Send email. to, cc and bcc take either a string email address or a list of
-        string email addresses. cc and bcc default to None.
+        """Send email. to, cc and bcc take either a string email address or a
+        list of string email addresses. cc and bcc default to None.
 
         Args:
             to (Union[str, ListTuple[str]]): Email recipient(s)
@@ -214,7 +202,6 @@ class Email:
 
         Returns:
             None
-
         """
         if sender is None:
             sender = self.sender

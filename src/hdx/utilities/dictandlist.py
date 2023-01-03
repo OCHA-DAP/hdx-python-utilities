@@ -1,4 +1,4 @@
-"""Dict and List utilities"""
+"""Dict and List utilities."""
 
 import itertools
 from collections import UserDict
@@ -11,7 +11,7 @@ from .typehint import ListDict, ListTuple, ListTupleDict
 def merge_two_dictionaries(
     a: Dict, b: Dict, merge_lists: bool = False
 ) -> Dict:
-    """Merges b into a and returns merged result
+    """Merges b into a and returns merged result.
 
     NOTE: tuples and arbitrary objects are not handled as it is totally ambiguous what should happen
 
@@ -68,7 +68,8 @@ def merge_two_dictionaries(
 def merge_dictionaries(
     dicts: ListTuple[Dict], merge_lists: bool = False
 ) -> Dict:
-    """Merges all dictionaries in dicts into a single dictionary and returns result
+    """Merges all dictionaries in dicts into a single dictionary and returns
+    result.
 
     Args:
         dicts (ListTuple[Dict]): Dictionaries to merge into the first one in the list
@@ -76,7 +77,6 @@ def merge_dictionaries(
 
     Returns:
         Dict: Merged dictionary
-
     """
     dict1 = dicts[0]
     for other_dict in dicts[1:]:
@@ -85,7 +85,7 @@ def merge_dictionaries(
 
 
 def dict_diff(d1: Dict, d2: Dict, no_key: str = "<KEYNOTFOUND>") -> Dict:
-    """Compares two dictionaries
+    """Compares two dictionaries.
 
     Args:
         d1 (Dict): First dictionary to compare
@@ -94,7 +94,6 @@ def dict_diff(d1: Dict, d2: Dict, no_key: str = "<KEYNOTFOUND>") -> Dict:
 
     Returns:
         Dict: Comparison dictionary
-
     """
     d1keys = set(d1.keys())
     d2keys = set(d2.keys())
@@ -106,7 +105,7 @@ def dict_diff(d1: Dict, d2: Dict, no_key: str = "<KEYNOTFOUND>") -> Dict:
 
 
 def dict_of_lists_add(dictionary: Dict, key: Any, value: Any) -> None:
-    """Add value to a list in a dictionary by key
+    """Add value to a list in a dictionary by key.
 
     Args:
         dictionary (Dict): Dictionary to which to add values
@@ -115,7 +114,6 @@ def dict_of_lists_add(dictionary: Dict, key: Any, value: Any) -> None:
 
     Returns:
         None
-
     """
     list_objs = dictionary.get(key, list())
     list_objs.append(value)
@@ -123,7 +121,7 @@ def dict_of_lists_add(dictionary: Dict, key: Any, value: Any) -> None:
 
 
 def dict_of_sets_add(dictionary: Dict, key: Any, value: Any) -> None:
-    """Add value to a set in a dictionary by key
+    """Add value to a set in a dictionary by key.
 
     Args:
         dictionary (Dict): Dictionary to which to add values
@@ -132,7 +130,6 @@ def dict_of_sets_add(dictionary: Dict, key: Any, value: Any) -> None:
 
     Returns:
         None
-
     """
     set_objs = dictionary.get(key, set())
     set_objs.add(value)
@@ -142,7 +139,7 @@ def dict_of_sets_add(dictionary: Dict, key: Any, value: Any) -> None:
 def dict_of_dicts_add(
     dictionary: Dict, parent_key: Any, key: Any, value: Any
 ) -> None:
-    """Add key value pair to a dictionary within a dictionary by key
+    """Add key value pair to a dictionary within a dictionary by key.
 
     Args:
         dictionary (Dict): Dictionary to which to add values
@@ -152,7 +149,6 @@ def dict_of_dicts_add(
 
     Returns:
         None
-
     """
     dict_objs = dictionary.get(parent_key, dict())
     dict_objs[key] = value
@@ -162,8 +158,9 @@ def dict_of_dicts_add(
 def list_distribute_contents_simple(
     input_list: ListTuple, function: Callable[[Any], Any] = lambda x: x
 ) -> List:
-    """Distribute the contents of a list eg. [1, 1, 1, 2, 2, 3] -> [1, 2, 3, 1, 2, 1]. List can contain complex types
-    like dictionaries in which case the function can return the appropriate value eg.  lambda x: x[KEY]
+    """Distribute the contents of a list eg. [1, 1, 1, 2, 2, 3] -> [1, 2, 3, 1,
+    2, 1]. List can contain complex types like dictionaries in which case the
+    function can return the appropriate value eg.  lambda x: x[KEY]
 
     Args:
         input_list (ListTuple): List to distribute values
@@ -171,7 +168,6 @@ def list_distribute_contents_simple(
 
     Returns:
         List: Distributed list
-
     """
     dictionary = dict()
     for obj in input_list:
@@ -195,8 +191,9 @@ def list_distribute_contents_simple(
 def list_distribute_contents(
     input_list: ListTuple, function: Callable[[Any], Any] = lambda x: x
 ) -> List:
-    """Distribute the contents of a list eg. [1, 1, 1, 2, 2, 3] -> [1, 2, 1, 2, 1, 3]. List can contain complex types
-    like dictionaries in which case the function can return the appropriate value eg.  lambda x: x[KEY]
+    """Distribute the contents of a list eg. [1, 1, 1, 2, 2, 3] -> [1, 2, 1, 2,
+    1, 3]. List can contain complex types like dictionaries in which case the
+    function can return the appropriate value eg.  lambda x: x[KEY]
 
     Args:
         input_list (ListTuple): List to distribute values
@@ -204,7 +201,6 @@ def list_distribute_contents(
 
     Returns:
         List: Distributed list
-
     """
 
     def riffle_shuffle(piles_list):
@@ -244,7 +240,8 @@ def list_distribute_contents(
 def extract_list_from_list_of_dict(
     list_of_dict: ListTuple[Dict], key: Any
 ) -> List:
-    """Extract a list by looking up key in each member of a list of dictionaries
+    """Extract a list by looking up key in each member of a list of
+    dictionaries.
 
     Args:
         list_of_dict (ListTuple[Dict]): List of dictionaries
@@ -252,7 +249,6 @@ def extract_list_from_list_of_dict(
 
     Returns:
         List: List containing values returned from each dictionary
-
     """
     result = list()
     for dictionary in list_of_dict:
@@ -268,7 +264,8 @@ def key_value_convert(
     dropfailedvalues: bool = False,
     exception: Exception = ValueError,
 ) -> Dict:
-    """Convert keys and/or values of dictionary using functions passed in as parameters
+    """Convert keys and/or values of dictionary using functions passed in as
+    parameters.
 
     Args:
         dictin (Dict): Input dictionary
@@ -280,7 +277,6 @@ def key_value_convert(
 
     Returns:
         Dict: New dictionary with converted keys and/or values
-
     """
     dictout = dict()
     for key in dictin:
@@ -302,7 +298,7 @@ def key_value_convert(
 
 
 def integer_key_convert(dictin: Dict, dropfailedkeys: bool = False) -> Dict:
-    """Convert keys of dictionary to integers
+    """Convert keys of dictionary to integers.
 
     Args:
         dictin (Dict): Input dictionary
@@ -310,7 +306,6 @@ def integer_key_convert(dictin: Dict, dropfailedkeys: bool = False) -> Dict:
 
     Returns:
         Dict: Dictionary with keys converted to integers
-
     """
     return key_value_convert(dictin, keyfn=int, dropfailedkeys=dropfailedkeys)
 
@@ -318,7 +313,7 @@ def integer_key_convert(dictin: Dict, dropfailedkeys: bool = False) -> Dict:
 def integer_value_convert(
     dictin: Dict, dropfailedvalues: bool = False
 ) -> Dict:
-    """Convert values of dictionary to integers
+    """Convert values of dictionary to integers.
 
     Args:
         dictin (Dict): Input dictionary
@@ -326,7 +321,6 @@ def integer_value_convert(
 
     Returns:
         Dict: Dictionary with values converted to integers
-
     """
     return key_value_convert(
         dictin, valuefn=int, dropfailedvalues=dropfailedvalues
@@ -334,7 +328,7 @@ def integer_value_convert(
 
 
 def float_value_convert(dictin: Dict, dropfailedvalues: bool = False) -> Dict:
-    """Convert values of dictionary to floats
+    """Convert values of dictionary to floats.
 
     Args:
         dictin (Dict): Input dictionary
@@ -342,7 +336,6 @@ def float_value_convert(dictin: Dict, dropfailedvalues: bool = False) -> Dict:
 
     Returns:
         Dict: Dictionary with values converted to floats
-
     """
     return key_value_convert(
         dictin, valuefn=float, dropfailedvalues=dropfailedvalues
@@ -350,7 +343,7 @@ def float_value_convert(dictin: Dict, dropfailedvalues: bool = False) -> Dict:
 
 
 def avg_dicts(dictin1: Dict, dictin2: Dict, dropmissing: bool = True) -> Dict:
-    """Create a new dictionary from two dictionaries by averaging values
+    """Create a new dictionary from two dictionaries by averaging values.
 
     Args:
         dictin1 (Dict): First input dictionary
@@ -359,7 +352,6 @@ def avg_dicts(dictin1: Dict, dictin2: Dict, dropmissing: bool = True) -> Dict:
 
     Returns:
         Dict: Dictionary with values being average of 2 input dictionaries
-
     """
     dictout = dict()
     for key in dictin1:
@@ -380,10 +372,11 @@ def read_list_from_csv(
     dict_form: bool = False,
     **kwargs: Any,
 ) -> List[ListDict]:
-    """Read a list of rows in dict or list form from a csv. The headers argument is
-    either a row number or list of row numbers (in case of multi-line headers) to be
-    considered as headers (rows start counting at 1), or the actual headers defined as
-    a list of strings. If not set, all rows will be treated as containing values.
+    """Read a list of rows in dict or list form from a csv. The headers
+    argument is either a row number or list of row numbers (in case of multi-
+    line headers) to be considered as headers (rows start counting at 1), or
+    the actual headers defined as a list of strings. If not set, all rows will
+    be treated as containing values.
 
     Args:
         url (str): URL or path to read from
@@ -393,7 +386,6 @@ def read_list_from_csv(
 
     Returns:
         List[ListDict]: List of rows in dict or list form
-
     """
     if dict_form and headers is None:
         raise ValueError("If dict_form is True, headers must not be None!")
@@ -418,9 +410,10 @@ def write_list_to_csv(
     columns: Union[ListTuple[int], ListTuple[str], None] = None,
     encoding: Optional[str] = None,
 ) -> None:
-    """Write a list of rows in dict or list form to a csv. (The headers argument is
-    either a row number (rows start counting at 1), or the actual headers defined as a
-    list of strings. If not set, all rows will be treated as containing values.)
+    """Write a list of rows in dict or list form to a csv. (The headers
+    argument is either a row number (rows start counting at 1), or the actual
+    headers defined as a list of strings. If not set, all rows will be treated
+    as containing values.)
 
     Args:
         filepath (str): Path to write to
@@ -431,7 +424,6 @@ def write_list_to_csv(
 
     Returns:
         None
-
     """
     if len(rows) != 0:
         row = rows[0]
@@ -475,14 +467,14 @@ def write_list_to_csv(
 
 
 def args_to_dict(args: str) -> Dict:
-    """Convert command line arguments in a comma separated string to a dictionary
+    """Convert command line arguments in a comma separated string to a
+    dictionary.
 
     Args:
         args (str): Command line arguments
 
     Returns:
         Dict: Dictionary of arguments
-
     """
     arguments = dict()
     for arg in args.split(","):

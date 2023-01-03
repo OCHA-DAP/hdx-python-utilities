@@ -1,4 +1,4 @@
-"""User agent utilities"""
+"""User agent utilities."""
 import logging
 import os
 from os.path import expanduser, isfile, join
@@ -20,8 +20,7 @@ class UserAgent:
 
     @staticmethod
     def _environment_variables(**kwargs: Any) -> Any:
-        """
-        Overwrite keyword arguments with environment variables
+        """Overwrite keyword arguments with environment variables.
 
         Args:
             **kwargs: See below
@@ -29,7 +28,6 @@ class UserAgent:
 
         Returns:
             kwargs: Changed keyword arguments
-
         """
         user_agent = os.getenv("USER_AGENT")
         if user_agent is not None:
@@ -41,8 +39,7 @@ class UserAgent:
 
     @staticmethod
     def _construct(configdict: Dict, prefix: str, ua: str) -> str:
-        """
-        Construct user agent
+        """Construct user agent.
 
         Args:
             configdict (str): Additional configuration for user agent
@@ -51,7 +48,6 @@ class UserAgent:
 
         Returns:
             str: Full user agent string
-
         """
         if not ua:
             raise UserAgentError(
@@ -74,8 +70,7 @@ class UserAgent:
         user_agent_config_yaml: str,
         user_agent_lookup: Optional[str] = None,
     ) -> str:
-        """
-        Load user agent YAML file
+        """Load user agent YAML file.
 
         Args:
             prefix (str): Text to put at start of user agent
@@ -84,7 +79,6 @@ class UserAgent:
 
         Returns:
             str: user agent
-
         """
         if not user_agent_config_yaml:
             user_agent_config_yaml = cls.default_user_agent_config_yaml
@@ -118,8 +112,7 @@ class UserAgent:
         user_agent_lookup: Optional[str] = None,
         **kwargs: Any,
     ) -> str:
-        """
-        Get full user agent string
+        """Get full user agent string.
 
         Args:
             user_agent (Optional[str]): User agent string. HDXPythonLibrary/X.X.X- is prefixed.
@@ -128,7 +121,6 @@ class UserAgent:
 
         Returns:
             str: Full user agent string
-
         """
         kwargs = UserAgent._environment_variables(**kwargs)
         user_agent = kwargs.pop("user_agent", user_agent)
@@ -143,12 +135,10 @@ class UserAgent:
 
     @classmethod
     def clear_global(cls) -> None:
-        """
-        Clear stored user agent string
+        """Clear stored user agent string.
 
         Returns:
             None
-
         """
         cls.user_agent = None
 
@@ -160,8 +150,7 @@ class UserAgent:
         user_agent_lookup: Optional[str] = None,
         **kwargs: Any,
     ) -> None:
-        """
-        Set global user agent string
+        """Set global user agent string.
 
         Args:
             user_agent (Optional[str]): User agent string. HDXPythonLibrary/X.X.X- is prefixed.
@@ -183,8 +172,8 @@ class UserAgent:
         user_agent_lookup: Optional[str] = None,
         **kwargs: Any,
     ) -> str:
-        """
-        Get full user agent string from parameters if supplied falling back on global user agent if set.
+        """Get full user agent string from parameters if supplied falling back
+        on global user agent if set.
 
         Args:
             user_agent (Optional[str]): User agent string. HDXPythonLibrary/X.X.X- is prefixed.
@@ -193,7 +182,6 @@ class UserAgent:
 
         Returns:
             str: Full user agent string
-
         """
         if (
             user_agent

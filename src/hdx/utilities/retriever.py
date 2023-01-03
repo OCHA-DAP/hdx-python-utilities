@@ -18,9 +18,9 @@ logger = logging.getLogger(__name__)
 
 
 class Retrieve(BaseDownload):
-    """Retrieve class which takes in a Download object and can either download, download
-    and save or use previously downloaded and saved data. It also allows the use of a
-    static fallback when downloading fails.
+    """Retrieve class which takes in a Download object and can either download,
+    download and save or use previously downloaded and saved data. It also
+    allows the use of a static fallback when downloading fails.
 
     Args:
         downloader (Download): Download object
@@ -62,7 +62,7 @@ class Retrieve(BaseDownload):
     def check_flags(
         saved_dir: str, save: bool, use_saved: bool, delete: bool
     ) -> None:
-        """Check flags. Also delete saved_dir if save and delete are True
+        """Check flags. Also delete saved_dir if save and delete are True.
 
         Args:
             saved_dir (str): Directory to save or load downloaded data
@@ -72,7 +72,6 @@ class Retrieve(BaseDownload):
 
         Returns:
             None
-
         """
         if save:
             if use_saved:
@@ -85,28 +84,27 @@ class Retrieve(BaseDownload):
 
     @staticmethod
     def get_url_logstr(url: str) -> str:
-        """Url string that will be logged. It is limited to 100 characters if necessary.
+        """Url string that will be logged. It is limited to 100 characters if
+        necessary.
 
         Args:
             url (str): URL to download
 
         Returns:
             str: Url string to use in logs
-
         """
         if len(url) > 100:
             return f"{url[:100]}..."
         return url
 
     def clone(self, downloader: Download) -> "Retrieve":
-        """Clone a given retriever but use the given downloader
+        """Clone a given retriever but use the given downloader.
 
         Args:
             downloader (Download): Downloader to use
 
         Returns:
             Retrieve: Cloned retriever
-
         """
         return Retrieve(
             downloader,
@@ -126,7 +124,7 @@ class Retrieve(BaseDownload):
         possible_extensions: Tuple[str, ...] = tuple(),
         **kwargs: Any,
     ) -> Tuple[str, Any]:
-        """Get filename from url and given parameters
+        """Get filename from url and given parameters.
 
         Args:
             url (str): Url from which to get filename
@@ -138,7 +136,6 @@ class Retrieve(BaseDownload):
 
         Returns:
             Tuple[str, Any]: Tuple of (filename, kwargs)
-
         """
         prefix = kwargs.pop("file_prefix", self.prefix)
         if prefix:
@@ -178,7 +175,7 @@ class Retrieve(BaseDownload):
         log_level: int = None,
         **kwargs: Any,
     ) -> str:
-        """Retrieve file
+        """Retrieve file.
 
         Args:
             url (str): URL to download
@@ -190,7 +187,6 @@ class Retrieve(BaseDownload):
 
         Returns:
             str: Path to downloaded file
-
         """
         if log_level is None:
             log_level = self.log_level
@@ -233,7 +229,7 @@ class Retrieve(BaseDownload):
         log_level: int = None,
         **kwargs: Any,
     ) -> str:
-        """Download text
+        """Download text.
 
         Args:
             url (str): URL to download
@@ -245,7 +241,6 @@ class Retrieve(BaseDownload):
 
         Returns:
             str: The text from the file
-
         """
         if log_level is None:
             log_level = self.log_level
@@ -285,7 +280,7 @@ class Retrieve(BaseDownload):
         log_level: int = None,
         **kwargs: Any,
     ) -> Any:
-        """Retrieve YAML
+        """Retrieve YAML.
 
         Args:
             url (str): URL to download
@@ -297,7 +292,6 @@ class Retrieve(BaseDownload):
 
         Returns:
             Any: The data from the YAML file
-
         """
         if log_level is None:
             log_level = self.log_level
@@ -339,7 +333,7 @@ class Retrieve(BaseDownload):
         log_level: int = None,
         **kwargs: Any,
     ) -> Any:
-        """Retrieve JSON
+        """Retrieve JSON.
 
         Args:
             url (str): URL to download
@@ -351,7 +345,6 @@ class Retrieve(BaseDownload):
 
         Returns:
             Any: The data from the JSON file
-
         """
         if log_level is None:
             log_level = self.log_level
@@ -395,8 +388,9 @@ class Retrieve(BaseDownload):
         fallback: bool = False,
         **kwargs: Any,
     ) -> Tuple[List[str], Iterator[ListDict]]:
-        """Returns header of tabular file(s) pointed to by url and an iterator where
-        each row is returned as a list or dictionary depending on the dict_rows argument.
+        """Returns header of tabular file(s) pointed to by url and an iterator
+        where each row is returned as a list or dictionary depending on the
+        dict_rows argument.
 
         When a list of urls is supplied (in url), then the has_hxl flag indicates if the
         files are HXLated so that the HXL row is only included from the first file.
@@ -418,7 +412,6 @@ class Retrieve(BaseDownload):
 
         Returns:
             Tuple[List[str],Iterator[ListDict]]: Tuple (headers, iterator where each row is a list or dictionary)
-
         """
         if isinstance(url, list):
             is_list = True
@@ -455,9 +448,10 @@ class Retrieve(BaseDownload):
         **kwargs: Any,
     ) -> None:
         """Generate retrievers. Retrievers are generated from downloaders so
-        Download.generate_downloaders() needs to have been called first. Each retriever
-        can either download, download and save or use previously downloaded and saved
-        data. It also allows the use of a static fallback when downloading fails.
+        Download.generate_downloaders() needs to have been called first. Each
+        retriever can either download, download and save or use previously
+        downloaded and saved data. It also allows the use of a static fallback
+        when downloading fails.
 
         Args:
             fallback_dir (str): Directory containing static fallback data
@@ -490,8 +484,8 @@ class Retrieve(BaseDownload):
 
     @classmethod
     def get_retriever(cls, name: Optional[str] = None) -> "Retrieve":
-        """Get a generated retriever given a name. If name is not supplied, the default
-        one will be returned.
+        """Get a generated retriever given a name. If name is not supplied, the
+        default one will be returned.
 
         Args:
             name (Optional[str]): Name of retriever. Defaults to None (get default).

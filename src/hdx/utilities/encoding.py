@@ -1,4 +1,4 @@
-"""Encoding utilities"""
+"""Encoding utilities."""
 
 import base64
 from typing import Tuple
@@ -6,35 +6,32 @@ from urllib.parse import quote, unquote
 
 
 def str_to_base64(string: str) -> str:
-    """
-    Base 64 encode string
+    """Base 64 encode string.
 
     Args:
         string (str): String to encode
 
     Returns:
         str: Base 64 encoded string
-
     """
     return base64.urlsafe_b64encode(string.encode("utf-8")).decode("utf-8")
 
 
 def base64_to_str(bstring: str) -> str:
-    """
-    Base 64 decode string
+    """Base 64 decode string.
 
     Args:
         bstring (str): Base 64 encoded string to encode
 
     Returns:
         str: Decoded string
-
     """
     return base64.urlsafe_b64decode(bstring.encode("utf-8")).decode("utf-8")
 
 
 def basicauth_encode(username: str, password: str) -> str:
-    """Returns an HTTP basic authentication string given a username and password.
+    """Returns an HTTP basic authentication string given a username and
+    password.
 
     Inspired by: https://github.com/rdegges/python-basicauth/blob/master/basicauth.py#L16
 
@@ -53,8 +50,8 @@ def basicauth_encode(username: str, password: str) -> str:
 
 
 def basicauth_decode(encoded_string: str) -> Tuple[str, str]:
-    """Decode a HTTP basic authentication string. Returns a tuple of the form (username, password), and raises
-    ValueError if decoding fails.
+    """Decode a HTTP basic authentication string. Returns a tuple of the form
+    (username, password), and raises ValueError if decoding fails.
 
     Inspired by: https://github.com/rdegges/python-basicauth/blob/master/basicauth.py#L27
 

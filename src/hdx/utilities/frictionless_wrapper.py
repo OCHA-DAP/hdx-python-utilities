@@ -47,7 +47,6 @@ def get_frictionless_resource(
 
     Returns:
         frictionless.Resource: frictionless Resource object
-
     """
     if not url and not data:
         error = ResourceError(note="Neither url or data supplied!")

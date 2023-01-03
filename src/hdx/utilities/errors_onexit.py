@@ -1,4 +1,4 @@
-"""Collect and log errors on exit"""
+"""Collect and log errors on exit."""
 import logging
 import sys
 from typing import Any
@@ -7,13 +7,14 @@ logger = logging.getLogger(__name__)
 
 
 class ErrorsOnExit:
-    """Class that enables recording of errors with logging of those errors on exit"""
+    """Class that enables recording of errors with logging of those errors on
+    exit."""
 
     def __init__(self) -> None:
         self.errors = list()
 
     def add(self, message: str) -> None:
-        """Add error to be logged later
+        """Add error to be logged later.
 
         Args:
             message (str): Error message
@@ -24,7 +25,7 @@ class ErrorsOnExit:
         self.errors.append(message)
 
     def log(self) -> None:
-        """Log errors
+        """Log errors.
 
         Returns:
             None
@@ -33,7 +34,7 @@ class ErrorsOnExit:
             logger.error(error)
 
     def exit_on_error(self) -> None:
-        """Exit with a 1 code if there are errors
+        """Exit with a 1 code if there are errors.
 
         Returns:
             None

@@ -1,4 +1,4 @@
-"""Date parsing utilities"""
+"""Date parsing utilities."""
 import time
 from calendar import monthrange
 from datetime import datetime, timezone
@@ -91,7 +91,8 @@ default_timezone_info = """-12 Y
 
 
 def get_tzinfos(timezone_info: str) -> Dict[str, int]:
-    """Get tzinfos dictionary used by dateutil from timezone information string
+    """Get tzinfos dictionary used by dateutil from timezone information
+    string.
 
     Args:
         timezone_info (str): Timezones information string
@@ -175,10 +176,8 @@ class _ymd(list):  # pragma: no cover
             self.ystridx = len(self) - 1
 
     def _resolve_from_stridxs(self, strids):
-        """
-        Try to resolve the identities of year/month/day elements using
-        ystridx, mstridx, and dstridx, if enough of these are specified.
-        """
+        """Try to resolve the identities of year/month/day elements using
+        ystridx, mstridx, and dstridx, if enough of these are specified."""
         if len(self) == 3 and len(strids) == 2:
             # we can back out the remaining stridx value
             missing = [x for x in range(3) if x not in strids.values()]
@@ -301,9 +300,8 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
         fuzzy=False,
         fuzzy_with_tokens=False,
     ):
-        """
-        Private method which performs the heavy lifting of parsing, called from
-        ``parse()``, which passes on its ``kwargs`` to this function.
+        """Private method which performs the heavy lifting of parsing, called
+        from ``parse()``, which passes on its ``kwargs`` to this function.
 
         :param timestr:
             The string to parse.
@@ -338,7 +336,6 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
                 >>> from dateutil.parser import parse
                 >>> parse("Today is January 1, 2047 at 8:21:00AM", fuzzy_with_tokens=True)
                 (datetime.datetime(2047, 1, 1, 8, 21), (u'Today is ', u' ', u'at '))
-
         """
         if fuzzy_with_tokens:
             fuzzy = True
@@ -556,8 +553,7 @@ DEFAULTPARSER = DateParser(parserinfo(dayfirst=True))
 def parse(
     timestr, default=None, ignoretz=False, tzinfos=None, **kwargs
 ):  # pragma: no cover
-    """
-    Parse the date/time string into a :class:`datetime.datetime` object.
+    """Parse the date/time string into a :class:`datetime.datetime` object.
 
     :param timestr:
         Any date/time string using the supported formats.
@@ -665,9 +661,10 @@ def parse_date_range(
     max_endtime: bool = False,
     default_timezones: Optional[str] = None,
 ) -> Tuple[datetime, datetime]:
-    """Parse date from string using specified date_format if given and return datetime
-    date range in dictionary keys startdate and enddate. If no date_format is supplied,
-    the function will guess, which for unambiguous formats, should work fine.
+    """Parse date from string using specified date_format if given and return
+    datetime date range in dictionary keys startdate and enddate. If no
+    date_format is supplied, the function will guess, which for unambiguous
+    formats, should work fine.
 
     By default, no timezone information will be parsed and the returned datetime will
     have timezone UTC. To change this behaviour, timezone_handling should be changed
@@ -844,9 +841,10 @@ def parse_date(
     max_time: bool = False,
     default_timezones: Optional[str] = None,
 ) -> datetime:
-    """Parse date from string using specified date_format and return a datetime object.
-    Raises exception for dates that are missing year, month or day. If no date_format is
-    supplied, the function will guess, which for unambiguous formats, should work fine.
+    """Parse date from string using specified date_format and return a datetime
+    object. Raises exception for dates that are missing year, month or day. If
+    no date_format is supplied, the function will guess, which for unambiguous
+    formats, should work fine.
 
     By default, no timezone information will be parsed and the returned datetime will
     have timezone UTC. To change this behaviour, timezone_handling should be changed

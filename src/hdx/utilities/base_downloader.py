@@ -9,23 +9,19 @@ class DownloadError(Exception):
 
 
 class BaseDownload(ABC):
-    """Base download class with various download operations that subclasses should
-    implement.
-    """
+    """Base download class with various download operations that subclasses
+    should implement."""
 
     def __enter__(self) -> "BaseDownload":
-        """
-        Allow usage of with
+        """Allow usage of with.
 
         Returns:
             BaseDownload: Download object
-
         """
         return self
 
     def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
-        """
-        Subclasses should define this to allow with usage
+        """Subclasses should define this to allow with usage.
 
         Args:
             exc_type (Any): Exception type
@@ -34,13 +30,12 @@ class BaseDownload(ABC):
 
         Returns:
             None
-
         """
         pass
 
     @abstractmethod
     def download_file(self, url: str, *args: Any, **kwargs: Any) -> str:
-        """Download file from url
+        """Download file from url.
 
         Args:
             url (str): URL or path to download
@@ -49,12 +44,10 @@ class BaseDownload(ABC):
 
         Returns:
             str: Path of downloaded file
-
         """
-
     @abstractmethod
     def download_text(self, url: str, *args: Any, **kwargs: Any) -> str:
-        """Download text from url
+        """Download text from url.
 
         Args:
             url (str): URL or path to download
@@ -63,12 +56,10 @@ class BaseDownload(ABC):
 
         Returns:
             str: The text from the file
-
         """
-
     @abstractmethod
     def download_yaml(self, url: str, *args: Any, **kwargs: Any) -> Any:
-        """Download YAML from url
+        """Download YAML from url.
 
         Args:
             url (str): URL or path to download
@@ -77,12 +68,10 @@ class BaseDownload(ABC):
 
         Returns:
             Any: The data from the YAML file
-
         """
-
     @abstractmethod
     def download_json(self, url: str, *args: Any, **kwargs: Any) -> Any:
-        """Download JSON from url
+        """Download JSON from url.
 
         Args:
             url (str): URL or path to download
@@ -91,9 +80,7 @@ class BaseDownload(ABC):
 
         Returns:
             Any: The data from the JSON file
-
         """
-
     @abstractmethod
     def get_tabular_rows(
         self,
@@ -104,8 +91,9 @@ class BaseDownload(ABC):
         *args: Any,
         **kwargs: Any,
     ) -> Tuple[List[str], Iterator[ListDict]]:
-        """Returns header of tabular file pointed to by url and an iterator where each
-        row is returned as a list or dictionary depending on the dict_rows argument.
+        """Returns header of tabular file pointed to by url and an iterator
+        where each row is returned as a list or dictionary depending on the
+        dict_rows argument.
 
         When a list of urls is supplied (in url), then the has_hxl flag indicates if the
         files are HXLated so that the HXL row is only included from the first file.
@@ -125,5 +113,4 @@ class BaseDownload(ABC):
 
         Returns:
             Tuple[List[str],Iterator[ListDict]]: Tuple (headers, iterator where each row is a list or dictionary)
-
         """
