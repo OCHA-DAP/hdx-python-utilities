@@ -15,22 +15,12 @@ profile = "black"
 line_length = 79
 multi_line_output = 3
 
-[tool.flakeheaven]
-# make output nice
-format = "grouped"
-max_line_length = 79
-# show line of source code in output
-show_source = true
+[tool.flake8]
+ignore = ["E203", "E501", "W503"]
+max-line-length = 79
 exclude = ["_version.py"]
-
-    # list of plugins and rules for them
-    [tool.flakeheaven.plugins]
-    mccabe = ["+*"]
-    pycodestyle = ["+*", "-E203", "-E501", "-W503"]
-    pyflakes = ["+*"]
-    pylint = ["+*"]
-    flake8-isort = ["+*"]
-    flake8-black = ["+*"]
+count = true
+show_source = true
 
 [tool.pytest.ini_options]
 pythonpath = "src"
@@ -154,11 +144,11 @@ output_directory = "docs"
 legacy_tox_ini = """
 [tox]
 isolated_build = true
-envlist = py311, lint
+envlist = py310, lint
 
 [gh-actions]
 python =
-    3: py311, lint
+    3: py310, lint
 
 [testenv]
 recreate = true
@@ -170,24 +160,24 @@ commands =
     pytest --cov=hdx --no-cov-on-fail --junitxml=.tox/test-results.xml --cov-report=xml --cov-report=term-missing
 
 [testenv:lint]
-wheel_build_env = py311
+wheel_build_env = py310
 deps =
-    flakeheaven
-    flake8==4.0.1
+    flake8
     flake8-isort
     flake8-black
+    flake8-pyproject
 commands =
-    flakeheaven lint src tests
+    flake8 src tests
 
 [testenv:docs]
-wheel_build_env = py311
+wheel_build_env = py310
 deps =
     pydoc-markdown
 commands =
     pydoc-markdown
 
 [testenv:publish]
-wheel_build_env = py311
+wheel_build_env = py310
 passenv = SSH_AUTH_SOCK TWINE_USERNAME TWINE_PASSWORD
 deps =
     twine
