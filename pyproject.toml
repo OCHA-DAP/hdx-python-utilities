@@ -16,9 +16,9 @@ line_length = 79
 multi_line_output = 3
 
 [tool.flake8]
+exclude = ["_version.py"]
 ignore = ["E203", "E501", "W503"]
 max-line-length = 79
-exclude = ["_version.py"]
 count = true
 show_source = true
 
