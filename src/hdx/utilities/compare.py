@@ -15,7 +15,9 @@ def compare_files(path1: str, path2: str) -> List[str]:
     Returns:
         List[str]: Delta between the two files
     """
-    diff = difflib.ndiff(open(path1).read().splitlines(), open(path2).read().splitlines())
+    diff = difflib.ndiff(
+        open(path1).read().splitlines(), open(path2).read().splitlines()
+    )
     return [x for x in diff if x[0] in ["-", "+", "?"]]
 
 
