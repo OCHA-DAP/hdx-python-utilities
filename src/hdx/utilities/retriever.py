@@ -34,7 +34,7 @@ class Retrieve(BaseDownload):
         log_level (int): Level at which to log messages. Defaults to logging.INFO.
     """
 
-    retrievers = dict()
+    retrievers = {}
 
     def __init__(
         self,
@@ -146,7 +146,7 @@ class Retrieve(BaseDownload):
             url, second_last=True, use_query=True
         )
         filename = slugify(filename)
-        extensions = list()
+        extensions = []
         format = kwargs.get("format")
         if format:
             extensions.append(format)
@@ -202,23 +202,22 @@ class Retrieve(BaseDownload):
         if self.use_saved:
             logger.log(log_level, f"Using saved {logstr} in {saved_path}")
             return saved_path
-        else:
-            try:
-                logger.log(
-                    log_level,
-                    f"Downloading {logstr} from {self.get_url_logstr(url)} into {output_path}",
-                )
-                return self.downloader.download_file(
-                    url, path=output_path, **kwargs
-                )
-            except DownloadError:
-                if not fallback:
-                    raise
-                fallback_path = join(self.fallback_dir, filename)
-                logger.exception(
-                    f"{logstr} download failed, using static data {fallback_path}!"
-                )
-                return fallback_path
+        try:
+            logger.log(
+                log_level,
+                f"Downloading {logstr} from {self.get_url_logstr(url)} into {output_path}",
+            )
+            return self.downloader.download_file(
+                url, path=output_path, **kwargs
+            )
+        except DownloadError:
+            if not fallback:
+                raise
+            fallback_path = join(self.fallback_dir, filename)
+            logger.exception(
+                f"{logstr} download failed, using static data {fallback_path}!"
+            )
+            return fallback_path
 
     def download_text(
         self,
@@ -467,7 +466,7 @@ class Retrieve(BaseDownload):
             None
         """
         cls.check_flags(saved_dir, save, use_saved, delete)
-        cls.retrievers = dict()
+        cls.retrievers = {}
         for name, downloader in Download.downloaders.items():
             if name in ignore:
                 continue

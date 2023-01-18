@@ -11,7 +11,7 @@ class ErrorsOnExit:
     exit."""
 
     def __init__(self) -> None:
-        self.errors = list()
+        self.errors = []
 
     def add(self, message: str) -> None:
         """Add error to be logged later.

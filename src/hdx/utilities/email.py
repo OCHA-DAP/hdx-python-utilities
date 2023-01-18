@@ -165,7 +165,7 @@ class Email:
             recipients = (recipients,)
         if validate_email is None:
             return recipients
-        normalised_recipients = list()
+        normalised_recipients = []
         for recipient in recipients:
             v = validate_email(
                 recipient, check_deliverability=True

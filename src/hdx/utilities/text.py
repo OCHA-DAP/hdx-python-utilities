@@ -146,7 +146,7 @@ def get_matching_text_in_strs(
     """
     compare = difflib.SequenceMatcher(lambda x: x in ignore)
     compare.set_seqs(a=a, b=b)
-    matching_text = list()
+    matching_text = []
 
     for match in compare.get_matching_blocks():
         start = match.a
@@ -259,7 +259,7 @@ def get_matching_then_nonmatching_text(
             pos_1 = pos_a
             text_2 = new_b
             pos_2 = pos_b
-        output = list()
+        output = []
         pos = 0
         for text in result:
             output.append(text)
@@ -428,7 +428,7 @@ def earliest_index(
         Optional[int]: Earliest index of the strings to try in string to search or None
     """
     after_string = len(string_to_search) + 1
-    indices = list()
+    indices = []
     for string_to_try in strings_to_try:
         try:
             index = string_to_search.index(string_to_try)

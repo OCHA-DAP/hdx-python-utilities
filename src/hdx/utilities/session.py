@@ -59,7 +59,7 @@ def get_session(
         )
     s.headers["User-Agent"] = ua
 
-    auths_found = list()
+    auths_found = []
     headers = kwargs.get("headers")
     if headers is not None:
         s.headers.update(headers)
@@ -77,7 +77,7 @@ def get_session(
         extra_params = os.getenv("EXTRA_PARAMS")
         if extra_params:
             if "=" in extra_params:
-                extra_params_dict = dict()
+                extra_params_dict = {}
                 logger.info(
                     "Loading extra parameters from environment variable"
                 )

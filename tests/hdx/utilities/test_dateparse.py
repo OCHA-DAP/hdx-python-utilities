@@ -73,7 +73,7 @@ class TestDateParse:
             )
             == result
         )
-        fuzzy = dict()
+        fuzzy = {}
         assert (
             parse_date_range("date is 20/02/2013 for this test", fuzzy=fuzzy)
             == result
@@ -85,7 +85,7 @@ class TestDateParse:
             "date": ("20/02/2013",),
         }
         assert fuzzy == fuzzyresult
-        fuzzy = dict()
+        fuzzy = {}
         assert (
             parse_date_range(
                 "date is 20/02/2013 for this test",
@@ -95,7 +95,7 @@ class TestDateParse:
             == result
         )
         assert fuzzy == fuzzyresult
-        fuzzy = dict()
+        fuzzy = {}
         assert (
             parse_date_range("20/02/2013", date_format="%d/%m/%Y", fuzzy=fuzzy)
             == result
@@ -107,7 +107,7 @@ class TestDateParse:
         )
         assert parse_date_range("02/2013") == result
         assert parse_date_range("02/2013", "%m/%Y") == result
-        fuzzy = dict()
+        fuzzy = {}
         assert (
             parse_date_range("date is 02/2013 for this test", fuzzy=fuzzy)
             == result
@@ -123,7 +123,7 @@ class TestDateParse:
         )
         assert parse_date_range("2013") == result
         assert parse_date_range("2013", "%Y") == result
-        fuzzy = dict()
+        fuzzy = {}
         date = datetime(2001, 12, 10, 0, 0, tzinfo=timezone.utc)
         result = date, date
         assert (
@@ -143,7 +143,7 @@ class TestDateParse:
         with pytest.raises(ParserError):
             parse_date_range("State_Village_Tract_Boundaries", fuzzy=dict())
         with pytest.raises(ParserError):
-            fuzzy = dict()
+            fuzzy = {}
             parse_date_range("Mon_State_Village_Tract_Boundaries", fuzzy=fuzzy)
         with pytest.raises(ParserError):
             parse_date_range("20/02")

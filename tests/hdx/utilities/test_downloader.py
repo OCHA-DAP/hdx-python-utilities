@@ -364,10 +364,21 @@ class TestDownloader:
                 fixtureurl, folder=tmpdir, filename=filename
             )
             fpath = abspath(f)
-            remove(f)
             assert fpath == abspath(join(tmpdir, filename))
             f = downloader.download_file(
                 fixtureurl, path=join(tmpdir, filename), overwrite=True
+            )
+            fpath = abspath(f)
+            assert fpath == abspath(join(tmpdir, filename))
+            f = downloader.download_file(
+                fixtureurl, path=join(tmpdir, filename), overwrite=False
+            )
+            fpath = abspath(f)
+            assert fpath == abspath(
+                join(tmpdir, filename.replace(".txt", "1.txt"))
+            )
+            f = downloader.download_file(
+                fixtureurl, path=join(tmpdir, filename), keep=True
             )
             fpath = abspath(f)
             remove(f)

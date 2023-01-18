@@ -49,7 +49,7 @@ class Download(BaseDownload):
         allowed_methods (iterable): HTTP methods for which to force retry. Defaults t0 frozenset(['GET']).
     """
 
-    downloaders = dict()
+    downloaders = {}
 
     def __init__(
         self,
@@ -235,8 +235,7 @@ class Download(BaseDownload):
         """
         if dict_form:
             return {header: hxltags.get(header, "") for header in headers}
-        else:
-            return [hxltags.get(header, "") for header in headers]
+        return [hxltags.get(header, "") for header in headers]
 
     def normal_setup(
         self,
@@ -327,6 +326,7 @@ class Download(BaseDownload):
         filename: Optional[str] = None,
         path: Optional[str] = None,
         overwrite: bool = False,
+        keep: bool = False,
     ) -> str:
         """Stream file from url and store in provided folder or temporary
         folder if no folder supplied. Must call setup method first.
@@ -337,11 +337,16 @@ class Download(BaseDownload):
             filename (Optional[str]): Filename to use for downloaded file. Defaults to None (derive from the url).
             path (Optional[str]): Full path to use for downloaded file. Defaults to None (use folder and filename).
             overwrite (bool): Whether to overwrite existing file. Defaults to False.
+            keep (bool): Whether to keep already downloaded file. Defaults to False.
 
         Returns:
             str: Path of downloaded file
         """
+        if keep:
+            overwrite = True
         path = self.get_path_for_url(url, folder, filename, path, overwrite)
+        if keep and exists(path):
+            return path
         f = None
         try:
             f = open(path, "wb")
@@ -373,6 +378,7 @@ class Download(BaseDownload):
             filename (str): Filename to use for downloaded file. Defaults to deriving from url.
             path (str): Full path to use for downloaded file instead of folder and filename.
             overwrite (bool): Whether to overwrite existing file. Defaults to False.
+            keep (bool): Whether to keep already downloaded file. Defaults to False.
             post (bool): Whether to use POST instead of GET. Defaults to False.
             parameters (Dict): Parameters to pass. Defaults to None.
             timeout (float): Timeout for connecting to URL. Defaults to None (no timeout).
@@ -397,6 +403,7 @@ class Download(BaseDownload):
             filename=kwargs.get("filename"),
             path=kwargs.get("path"),
             overwrite=kwargs.get("overwrite", False),
+            keep=kwargs.get("keep", False),
         )
 
     def download(self, url: str, **kwargs: Any) -> requests.Response:
@@ -999,7 +1006,7 @@ class Download(BaseDownload):
         Returns:
             Dict: Dictionary keys (first column) and values (second column)
         """
-        output_dict = dict()
+        output_dict = {}
         _, rows = self.get_tabular_rows_as_list(
             url,
             has_hxl,
@@ -1091,16 +1098,15 @@ class Download(BaseDownload):
             row_function,
             **kwargs,
         )
-        output_dict = dict()
+        output_dict = {}
         key_header = headers[keycolumn - 1]
         for row in iterator:
             first_val = row[key_header]
-            output_dict[first_val] = dict()
+            output_dict[first_val] = {}
             for header in row:
                 if header == key_header:
                     continue
-                else:
-                    output_dict[first_val][header] = row[header]
+                output_dict[first_val][header] = row[header]
         return output_dict
 
     def download_tabular_cols_as_dicts(
@@ -1177,12 +1183,12 @@ class Download(BaseDownload):
             row_function,
             **kwargs,
         )
-        output_dict = dict()
+        output_dict = {}
         key_header = headers[keycolumn - 1]
         for header in headers:
             if header == key_header:
                 continue
-            output_dict[header] = dict()
+            output_dict[header] = {}
         for row in iterator:
             for header in row:
                 if header == key_header:
@@ -1200,7 +1206,7 @@ class Download(BaseDownload):
         Returns:
             Dict[str,int]: Dictionary where keys are header names and values are header positions
         """
-        columnpositions = dict()
+        columnpositions = {}
         for i, header in enumerate(headers):
             columnpositions[header] = i
         return columnpositions

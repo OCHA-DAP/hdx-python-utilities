@@ -9,7 +9,7 @@ version_scheme = "python-simplified-semver"
 
 [tool.autohooks]
 mode = "pythonpath"
-pre-commit = ["autohooks.plugins.black", "autohooks.plugins.flake8", "autohooks.plugins.isort", "autohooks.plugins.pylint"]
+pre-commit = ["autohooks.plugins.black", "autohooks.plugins.flake8", "autohooks.plugins.isort"]
 
 [tool.black]
 line-length = 79

@@ -76,7 +76,7 @@ class TestDictAndList:
         assert diff == {4: ("<KEYNOTFOUND>", {"a": 1, "b": "c"})}
 
     def test_dict_of_lists_add(self):
-        d = dict()
+        d = {}
         dict_of_lists_add(d, "a", 1)
         assert d == {"a": [1]}
         dict_of_lists_add(d, 2, "b")
@@ -89,7 +89,7 @@ class TestDictAndList:
         assert d == {"a": [1, 2], 2: ["b", "c", "b"]}
 
     def test_dict_of_sets_add(self):
-        d = dict()
+        d = {}
         dict_of_sets_add(d, "a", 1)
         assert d == {"a": {1}}
         dict_of_sets_add(d, 2, "b")
@@ -102,7 +102,7 @@ class TestDictAndList:
         assert d == {"a": {1, 2}, 2: {"b", "c"}}
 
     def test_dict_of_dicts_add(self):
-        d = dict()
+        d = {}
         dict_of_dicts_add(d, "a", 1, 3.0)
         assert d == {"a": {1: 3.0}}
         dict_of_dicts_add(d, 2, "b", 5.0)

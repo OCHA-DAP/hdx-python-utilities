@@ -77,9 +77,9 @@ if BeautifulSoup is not None:
         tbodytag = tabletag.find_next("tbody")
         trtags = tbodytag.find_all("tr")
 
-        table = list()
+        table = []
         for trtag in trtags:
-            row = dict()
+            row = {}
             tdtags = trtag.find_all("td")
             for i, tag in enumerate(tdtags):
                 row[headers[i]] = get_text(tag)

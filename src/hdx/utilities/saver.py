@@ -184,8 +184,8 @@ def save_hxlated_output(
             rows = rows[1:]
     else:
         hxltags = configuration["input"]["hxltags"]
-    expressions = dict()
-    for process in configuration.get("process", list()):
+    expressions = {}
+    for process in configuration.get("process", []):
         headers.append(process["header"])
         hxltag = process["hxltag"]
         hxltags.append(hxltag)
@@ -214,7 +214,7 @@ def save_hxlated_output(
         json_hxltags = json_configuration.get("hxltags", hxltags)
         metadata_configuration = json_configuration.get("metadata")
         if metadata_configuration:
-            metadata = dict()
+            metadata = {}
             for metadata_name, value in metadata_configuration.items():
                 if isinstance(value, str):
                     template_string, match_string = match_template_variables(
@@ -256,7 +256,7 @@ def save_hxlated_output(
             inrow = list(inrow.values())
 
         def get_outrow(file_hxltags):
-            outrow = dict()
+            outrow = {}
             for file_hxltag in file_hxltags:
                 expression = expressions.get(file_hxltag)
                 if expression:

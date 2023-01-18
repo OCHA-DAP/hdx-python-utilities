@@ -115,7 +115,7 @@ def dict_of_lists_add(dictionary: Dict, key: Any, value: Any) -> None:
     Returns:
         None
     """
-    list_objs = dictionary.get(key, list())
+    list_objs = dictionary.get(key, [])
     list_objs.append(value)
     dictionary[key] = list_objs
 
@@ -150,7 +150,7 @@ def dict_of_dicts_add(
     Returns:
         None
     """
-    dict_objs = dictionary.get(parent_key, dict())
+    dict_objs = dictionary.get(parent_key, {})
     dict_objs[key] = value
     dictionary[parent_key] = dict_objs
 
@@ -169,10 +169,10 @@ def list_distribute_contents_simple(
     Returns:
         List: Distributed list
     """
-    dictionary = dict()
+    dictionary = {}
     for obj in input_list:
         dict_of_lists_add(dictionary, function(obj), obj)
-    output_list = list()
+    output_list = []
     i = 0
     done = False
     while not done:
@@ -228,10 +228,10 @@ def list_distribute_contents(
         ]
         return shuffled_pile
 
-    dictionary = dict()
+    dictionary = {}
     for obj in input_list:
         dict_of_lists_add(dictionary, function(obj), obj)
-    intermediate_list = list()
+    intermediate_list = []
     for key in sorted(dictionary):
         intermediate_list.append(dictionary[key])
     return riffle_shuffle(intermediate_list)
@@ -250,7 +250,7 @@ def extract_list_from_list_of_dict(
     Returns:
         List: List containing values returned from each dictionary
     """
-    result = list()
+    result = []
     for dictionary in list_of_dict:
         result.append(dictionary[key])
     return result
@@ -278,7 +278,7 @@ def key_value_convert(
     Returns:
         Dict: New dictionary with converted keys and/or values
     """
-    dictout = dict()
+    dictout = {}
     for key in dictin:
         try:
             new_key = keyfn(key)
@@ -353,7 +353,7 @@ def avg_dicts(dictin1: Dict, dictin2: Dict, dropmissing: bool = True) -> Dict:
     Returns:
         Dict: Dictionary with values being average of 2 input dictionaries
     """
-    dictout = dict()
+    dictout = {}
     for key in dictin1:
         if key in dictin2:
             dictout[key] = (dictin1[key] + dictin2[key]) / 2
@@ -390,7 +390,7 @@ def read_list_from_csv(
     if dict_form and headers is None:
         raise ValueError("If dict_form is True, headers must not be None!")
     resource = get_frictionless_resource(url, headers=headers, **kwargs)
-    result = list()
+    result = []
     if not dict_form:
         result.append(resource.header)
     for inrow in resource.row_stream:
@@ -430,9 +430,9 @@ def write_list_to_csv(
         if isinstance(row, dict):
             has_header = True
             if columns:
-                newrows = list()
+                newrows = []
                 for row in rows:
-                    newrow = dict()
+                    newrow = {}
                     for column in columns:
                         if column in row:
                             newrow[column] = row[column]
@@ -449,9 +449,9 @@ def write_list_to_csv(
                 rows = rows[rowno:]
             has_header = False
             if columns:
-                newrows = list()
+                newrows = []
                 for row in rows:
-                    newrow = list()
+                    newrow = []
                     for column in columns:
                         newrow.append(row[column - 1])
                     newrows.append(newrow)
@@ -476,7 +476,7 @@ def args_to_dict(args: str) -> Dict:
     Returns:
         Dict: Dictionary of arguments
     """
-    arguments = dict()
+    arguments = {}
     for arg in args.split(","):
         key, value = arg.split("=")
         arguments[key] = value
