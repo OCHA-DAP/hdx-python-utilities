@@ -22,7 +22,7 @@ class ErrorsOnExit:
         Returns:
             None
         """
-        self.errors.append(message)
+        self.errors.append(message.strip())
 
     def log(self) -> None:
         """Log errors.
