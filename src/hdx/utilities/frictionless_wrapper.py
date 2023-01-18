@@ -11,7 +11,7 @@ from frictionless import (
     system,
 )
 from frictionless.errors import ResourceError
-from frictionless.formats import CsvControl, ExcelControl
+from frictionless.formats import CsvControl, ExcelControl, JsonControl
 
 
 def get_frictionless_control(**kwargs: Any) -> Tuple[Control, Any]:
@@ -25,6 +25,9 @@ def get_frictionless_control(**kwargs: Any) -> Tuple[Control, Any]:
         skip_initial_space (bool): Ignore whitespace straight after delimiter. Defaults to False.
         sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
         fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
+        keyed (bool): Whether JSON is keyed. Defaults to True.
+        keys (Optional[List[str]]): JSON keys to get. Defaults to None (all of them).
+        property (Optional[str]): Path to table in JSON. Defaults to None.
         control (Control): This can be set to override the above. See Frictionless docs.
 
     Returns:
@@ -51,6 +54,17 @@ def get_frictionless_control(**kwargs: Any) -> Tuple[Control, Any]:
                     control.sheet = sheet
                 fill_merged_cells = kwargs.pop("fill_merged_cells", True)
                 control.fill_merged_cells = fill_merged_cells
+            elif file_format == "json":
+                control = JsonControl()
+                keyed = kwargs.pop("keyed", True)
+                control.keyed = keyed
+                keys = kwargs.pop("keys", None)
+                if keys is not None:
+                    control.keys = keys
+                property = kwargs.pop("property", None)
+                if property is not None:
+                    control.property = property
+                kwargs["type"] = "table"
     return control, kwargs
 
 
@@ -134,6 +148,9 @@ def get_frictionless_resource(
         skip_initial_space (bool): Ignore whitespace straight after delimiter. Defaults to False.
         sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
         fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
+        keyed (bool): Whether JSON is keyed. Defaults to True.
+        keys (Optional[List[str]]): JSON keys to get. Defaults to None (all of them).
+        property (Optional[str]): Path to table in JSON. Defaults to None.
         http_session (Session): Session object to use. Defaults to downloader session.
         default_type (Optional[str]): Default field type if infer_types False. Defaults to any.
         float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.

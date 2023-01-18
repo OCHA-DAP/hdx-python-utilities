@@ -73,6 +73,10 @@ class TestDownloader:
     def fixtureprocessurlblank(self):
         return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/main/tests/fixtures/downloader/test_csv_processing_blanks.csv?a=1"
 
+    @pytest.fixture(scope="class")
+    def fixturejsonurl(self):
+        return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/main/tests/fixtures/downloader/test_json_processing.json?a=1"
+
     def test_get_path_for_url(
         self, tmpdir, fixtureurl, configfolder, downloaderfolder
     ):
@@ -744,6 +748,17 @@ class TestDownloader:
 
             with pytest.raises(DownloadError):
                 downloader.get_tabular_rows(fixtureprocessurl, headers=None)
+
+    def test_get_tabular_rows_json(self, fixturejsonurl):
+        with Download() as downloader:
+            headers, iterator = downloader.get_tabular_rows(
+                fixturejsonurl, format="json"
+            )
+            assert headers == ["Country Code", "Country Name", "Population"]
+            assert list(iterator) == [
+                ["#country+code", "#country+name", "#population"],
+                ["AFG", "Afghanistan", 38041754],
+            ]
 
     def test_download_tabular_rows_as_dicts(self, fixtureprocessurl):
         with Download() as downloader:
