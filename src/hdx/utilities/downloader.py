@@ -769,8 +769,7 @@ class Download(BaseDownload):
             return outheaders, iterator1
 
         def make_iterator():
-            for row in iterator1:
-                yield row
+            yield from iterator1
             for url in urls[1:]:
                 temp_kwargs = deepcopy(orig_kwargs)
                 _, iterator = self._get_tabular_rows(
@@ -786,8 +785,7 @@ class Download(BaseDownload):
                 )
                 if has_hxl:
                     next(iterator)
-                for row in iterator:
-                    yield row
+                yield from iterator
 
         return outheaders, make_iterator()
 

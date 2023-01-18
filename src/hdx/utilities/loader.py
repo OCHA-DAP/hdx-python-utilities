@@ -56,7 +56,7 @@ def load_yaml(path: str, encoding: str = "utf-8") -> Any:
         yaml = YAML()
         yamlobj = yaml.load(f.read())
     if not yamlobj:
-        raise (LoadError(f"YAML file: {path} is empty!"))
+        raise LoadError(f"YAML file: {path} is empty!")
     return yamlobj
 
 
@@ -73,7 +73,7 @@ def load_json(path: str, encoding: str = "utf-8") -> Dict:
     with open(path, encoding=encoding) as f:
         jsonobj = json.loads(f.read())
     if not jsonobj:
-        raise (LoadError(f"JSON file: {path} is empty!"))
+        raise LoadError(f"JSON file: {path} is empty!")
     return jsonobj
 
 

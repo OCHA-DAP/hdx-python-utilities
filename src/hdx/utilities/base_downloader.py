@@ -31,7 +31,6 @@ class BaseDownload(ABC):
         Returns:
             None
         """
-        pass
 
     @abstractmethod
     def download_file(self, url: str, *args: Any, **kwargs: Any) -> str:

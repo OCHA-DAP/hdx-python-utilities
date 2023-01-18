@@ -45,7 +45,7 @@ def basicauth_encode(username: str, password: str) -> str:
     if ":" in username:
         raise ValueError
 
-    username_password = "%s:%s" % (quote(username), quote(password))
+    username_password = f"{quote(username)}:{quote(password)}"
     return "Basic " + str_to_base64(username_password)
 
 
