@@ -183,9 +183,10 @@ def get_frictionless_resource(
     if has_header is None:
         has_header = True
     dialect.header = has_header
-    kwargs["control"] = control
     kwargs["detector"] = detector
     kwargs["dialect"] = dialect
+    if control:
+        dialect.add_control(control)
     http_session = kwargs.pop("http_session", session)
     with system.use_context(http_session=http_session):
         if url:
