@@ -319,6 +319,31 @@ class Download(BaseDownload):
                 f"Download of {url} failed in retrieval of stream!" % url
             )
 
+    def stream_path(self, path: str, errormsg: str):
+        """Stream file from url and store in provided path. Must call setup
+        method first.
+
+        Args:
+            path (str): Path for downloaded file
+            errormsg (str): Error message to display if there is a problem
+
+        Returns:
+            str: Path of downloaded file
+        """
+        f = None
+        try:
+            f = open(path, "wb")
+            for chunk in self.response.iter_content(chunk_size=10240):
+                if chunk:  # filter out keep-alive new chunks
+                    f.write(chunk)
+                    f.flush()
+            return f.name
+        except Exception as e:
+            raise DownloadError(errormsg) from e
+        finally:
+            if f:
+                f.close()
+
     def stream_file(
         self,
         url: str,
@@ -347,21 +372,9 @@ class Download(BaseDownload):
         path = self.get_path_for_url(url, folder, filename, path, overwrite)
         if keep and exists(path):
             return path
-        f = None
-        try:
-            f = open(path, "wb")
-            for chunk in self.response.iter_content(chunk_size=10240):
-                if chunk:  # filter out keep-alive new chunks
-                    f.write(chunk)
-                    f.flush()
-            return f.name
-        except Exception as e:
-            raise DownloadError(
-                f"Download of {url} failed in retrieval of stream!"
-            ) from e
-        finally:
-            if f:
-                f.close()
+        return self.stream_path(
+            path, f"Download of {url} failed in retrieval of stream!"
+        )
 
     def download_file(
         self,
@@ -388,6 +401,17 @@ class Download(BaseDownload):
         Returns:
             str: Path of downloaded file
         """
+        keep = kwargs.get("keep", False)
+        if keep:
+            overwrite = True
+        else:
+            overwrite = kwargs.get("overwrite", False)
+        folder = kwargs.get("folder")
+        filename = kwargs.get("filename")
+        path = kwargs.get("path")
+        path = self.get_path_for_url(url, folder, filename, path, overwrite)
+        if keep and exists(path):
+            return path
         self.setup(
             url,
             stream=True,
@@ -397,13 +421,8 @@ class Download(BaseDownload):
             headers=kwargs.get("headers"),
             encoding=kwargs.get("encoding"),
         )
-        return self.stream_file(
-            url,
-            folder=kwargs.get("folder"),
-            filename=kwargs.get("filename"),
-            path=kwargs.get("path"),
-            overwrite=kwargs.get("overwrite", False),
-            keep=kwargs.get("keep", False),
+        return self.stream_path(
+            path, f"Download of {url} failed in retrieval of stream!"
         )
 
     def download(self, url: str, **kwargs: Any) -> requests.Response:
