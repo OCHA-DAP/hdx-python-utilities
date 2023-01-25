@@ -124,6 +124,7 @@ class Download(BaseDownload):
         filename: Optional[str] = None,
         path: Optional[str] = None,
         overwrite: bool = False,
+        keep: bool = False,
     ) -> str:
         """Get filename from url and join to provided folder or temporary
         folder if no folder supplied, ensuring uniqueness.
@@ -134,6 +135,7 @@ class Download(BaseDownload):
             filename (Optional[str]): Filename to use for downloaded file. Defaults to None (derive from the url).
             path (Optional[str]): Full path to use for downloaded file. Defaults to None (use folder and filename).
             overwrite (bool): Whether to overwrite existing file. Defaults to False.
+            keep (bool): Whether to keep already downloaded file. Defaults to False.
 
         Returns:
             str: Path of downloaded file
@@ -155,7 +157,7 @@ class Download(BaseDownload):
                 remove(path)
             except OSError:
                 pass
-        else:
+        elif not keep:
             count = 0
             while exists(path):
                 count += 1
@@ -367,9 +369,9 @@ class Download(BaseDownload):
         Returns:
             str: Path of downloaded file
         """
-        if keep:
-            overwrite = True
-        path = self.get_path_for_url(url, folder, filename, path, overwrite)
+        path = self.get_path_for_url(
+            url, folder, filename, path, overwrite, keep
+        )
         if keep and exists(path):
             return path
         return self.stream_path(
@@ -401,15 +403,14 @@ class Download(BaseDownload):
         Returns:
             str: Path of downloaded file
         """
-        keep = kwargs.get("keep", False)
-        if keep:
-            overwrite = True
-        else:
-            overwrite = kwargs.get("overwrite", False)
         folder = kwargs.get("folder")
         filename = kwargs.get("filename")
         path = kwargs.get("path")
-        path = self.get_path_for_url(url, folder, filename, path, overwrite)
+        overwrite = kwargs.get("overwrite", False)
+        keep = kwargs.get("keep", False)
+        path = self.get_path_for_url(
+            url, folder, filename, path, overwrite, keep
+        )
         if keep and exists(path):
             return path
         self.setup(
