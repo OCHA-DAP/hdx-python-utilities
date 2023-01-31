@@ -25,6 +25,7 @@ def get_session(
     user_agent_lookup: Optional[str] = None,
     use_env: bool = True,
     fail_on_missing_file: bool = True,
+    verify: bool = True,
     **kwargs: Any,
 ) -> requests.Session:
     """Set up and return Session object that is set up with retrying. Requires
@@ -38,6 +39,7 @@ def get_session(
         user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
         use_env (bool): Whether to read environment variables. Defaults to True.
         fail_on_missing_file (bool): Raise an exception if any specified configuration files are missing. Defaults to True.
+        verify (bool): Whether to verify SSL certificates. Defaults to True.
         **kwargs: See below
         auth (Tuple[str, str]): Authorisation information in tuple form (user, pass) OR
         basic_auth (str): Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
@@ -51,7 +53,7 @@ def get_session(
         allowed_methods (ListTuple[str]): HTTP methods for which to force retry. Defaults to ("HEAD", "TRACE", "GET", "PUT", "OPTIONS", "DELETE").
     """
     s = requests.Session()
-
+    s.verify = verify
     ua = kwargs.get("full_agent")
     if not ua:
         ua = UserAgent.get(

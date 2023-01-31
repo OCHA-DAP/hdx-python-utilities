@@ -35,6 +35,7 @@ class Download(BaseDownload):
         user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
         use_env (bool): Whether to read environment variables. Defaults to True.
         fail_on_missing_file (bool): Raise an exception if any specified configuration files are missing. Defaults to True.
+        verify (bool): Whether to verify SSL certificates. Defaults to True.
         rate_limit (Optional[Dict]): Rate limiting per host eg. {"calls": 1, "period": 0.1}. Defaults to None.
         **kwargs: See below
         auth (Tuple[str, str]): Authorisation information in tuple form (user, pass) OR
@@ -58,6 +59,7 @@ class Download(BaseDownload):
         user_agent_lookup: Optional[str] = None,
         use_env: bool = True,
         fail_on_missing_file: bool = True,
+        verify: bool = True,
         rate_limit: Optional[Dict] = None,
         **kwargs: Any,
     ) -> None:
@@ -71,6 +73,7 @@ class Download(BaseDownload):
                 user_agent_lookup,
                 use_env,
                 fail_on_missing_file,
+                verify,
                 **kwargs,
             )
         self.response = None
