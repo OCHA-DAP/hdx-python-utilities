@@ -5,6 +5,6 @@ autohooks-plugin-flake8==23.1.0
 autohooks-plugin-pylint==22.8.1
 pytest==7.2.1
 pytest-cov==4.0.0
-tox==4.3.5
+tox==4.4.4
 pytest-loguru==0.2.0
 -r requirements.txt
