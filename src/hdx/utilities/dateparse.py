@@ -360,7 +360,6 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
         i = 0
         try:
             while i < len_l:
-
                 # Check if it's a number
                 value_repr = l[i]
                 try:
