@@ -30,6 +30,7 @@ The code for the library is [here](https://github.com/OCHA-DAP/hdx-python-utilit
 The library has detailed API documentation which can be found in the menu at the top. 
 
 ## Breaking Changes
+From 3.5.5, Python 3.7 no longer supported
 
 From 3.3.7, improved parse_date and parse_date_range by default will attempt to parse 
 time zone if date format not given. The default time zone is UTC (not no timezone). 
