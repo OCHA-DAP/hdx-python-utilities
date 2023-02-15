@@ -1,7 +1,7 @@
 # Summary
 
-The HDX Python Utilities Library provides a range of helpful utilities for Python developers.
-Note that these are not specific to HDX.
+The HDX Python Utilities Library provides a range of helpful utilities for 
+Python developers. Note that these are not specific to HDX.
 
 # Contents
 
@@ -15,6 +15,7 @@ Note that these are not specific to HDX.
 1. [Compare files (eg. for testing)](#comparing-files)
 1. [Simple emailing](#emailing)
 1. [Easy logging setup and error logging](#logging)
+1. [State utility](#state-utility)
 1. [Path utilities](#path-utilities)
 1. [Text processing](#text-processing)
 1. [Encoding utilities](#encoding-utilities)
@@ -656,57 +657,34 @@ exit with the error code 1 (ie. `sys.exit(1)` will be called). If there are no e
 the code will not exit and execution will continue after the `with` block (ie.
 `sys.exit(1)` will not be called).
 
+## State utility
+
+The State class allows the reading and writing of state to a given path. Input 
+and output state transformations can be supplied in read_fn and write_fn 
+respectively. The input state transformation takes in a string while the output 
+transformation outputs a string. It is used as follows: 
+
+        with temp_dir(folder="test_state") as tmpdir:
+            statepath = join(tmpdir, statefile)
+            copyfile(join(statefolder, statefile), statepath)
+            date1 = datetime(2020, 9, 23, 0, 0, tzinfo=timezone.utc)
+            date2 = datetime(2022, 5, 12, 10, 15, tzinfo=timezone.utc)
+            with State(
+                statepath, parse_date, iso_string_from_datetime
+            ) as state:
+                assert state.get() == date1
+                state.set(date2)
+            with State(
+                statepath, parse_date, iso_string_from_datetime
+            ) as state:
+                assert state.get() == date2.replace(hour=0, minute=0)
+
+If run inside a GitHub Action, the saved state file could be committed to 
+GitHub so that on the next run the state is available in the repository.
+
 ## Path utilities
 
 Examples:
-
-Gets temporary directory from environment variable `TEMP_DIR` and falls back to the
-temporary folder created by the os function `gettempdir`.
-    
-    temp_folder = get_temp_dir()
-
-Gets temporary directory from environment variable `TEMP_DIR` and falls back to the
-temporary folder created by the os function `gettempdir`.  It (optionally) appends the 
-given folder name, creates the folder and deletes the folder if exiting successfully 
-else keeps the folder if there was an exception.
-
-    with temp_dir("papa", delete_on_success=True, delete_on_failure=False) as tempdir:
-        ...
-
-Sometimes it is necessary to be able to resume runs if they fail. The following example 
-creates a temporary folder and iterates through a list of items. On each iteration, the 
-current state of progress is stored in the temporary folder. If the iteration were to 
-fail, the temporary folder is not deleted and on the next run, it will resume where it 
-failed. Once the whole list is iterated through, the temporary folder is deleted.
-
-What is returned each iteration is a tuple with 2 dictionaries. The first (`info`) 
-contains key `folder` which is the temporary directory optionally with folder appended 
-(and created if it doesn't exist). In key `progress` is held the current position in the 
-iterator. It also contains the key `batch` containing a batch code to be passed as the 
-`batch` parameter in `create_in_hdx` or `update_in_hdx` calls. The second dictionary is 
-the next dictionary in the iterator. The environment variable `WHERETOSTART` can be set 
-to the starting value for example `iso3=SDN` in the example below. If it is set to 
-`RESET`, then the temporary folder is deleted before the run starts to ensure it starts 
-from the beginning.
-
-    iterator = [{"iso3": "AFG", "name": "Afghanistan"}, {"iso3": "SDN", "name": "Sudan"},
-                {"iso3": "YEM", "name": "Yemen"}, {"iso3": "ZAM", "name": "Zambia"}]
-    result = list()
-    for info, nextdict in progress_storing_tempdir(tempfolder, iterator, "iso3"):
-        ...
-
-Sometimes, it may be necessary to create the folder and batch code for use by parts of 
-the code outside of the iterator. This can be achieved as follows:
-
-    with wheretostart_tempdir_batch(tempfolder) as info:
-        folder = info["folder"]
-        ...
-        for info, country in progress_storing_folder(info, iterator, "iso3"):
-            ...
-
-The batch code can be passed into `wheretostart_tempdir_batch` in the `batch` parameter.
-If not given, the batch code is generated. The folder to use will be a generated 
-temporary folder unless `tempdir` is given. 
 
 Get current directory of script
 
@@ -724,6 +702,58 @@ Get filename or (filename, extension) from url
     filename, extension = get_filename_extension_from_url(fixtureurl)
     assert filename == "test_data"
     assert extension == ".csv"
+
+Gets temporary directory from environment variable `TEMP_DIR` and falls back to 
+the temporary folder created by the os function `gettempdir`.
+    
+    temp_folder = get_temp_dir()
+
+Gets temporary directory from environment variable `TEMP_DIR` and falls back to 
+the temporary folder created by the os function `gettempdir`.  It (optionally) 
+appends the given folder name, creates the folder and deletes the folder if 
+exiting successfully else keeps the folder if there was an exception.
+
+    with temp_dir("papa", delete_on_success=True, delete_on_failure=False) as tempdir:
+        ...
+
+Sometimes it is necessary to be able to resume runs if they fail. The following 
+example creates a temporary folder and iterates through a list of items. On 
+each iteration, the current state of progress is stored in the temporary 
+folder. If the iteration were to fail, the temporary folder is not deleted and 
+on the next run, it will resume where it failed assuming that the new run does
+not recreate the environment (eg. this would work with a dedicated server but 
+not GitHub Actions). Once the whole list is iterated through, the temporary 
+folder is deleted.
+
+What is returned each iteration is a tuple with 2 dictionaries. The first 
+(`info`) contains key `folder` which is the temporary directory optionally with 
+folder appended (and created if it doesn't exist). In key `progress` is held 
+the current position in the iterator. It also contains the key `batch` 
+containing a batch code to be passed as the `batch` parameter in 
+`create_in_hdx` or `update_in_hdx` calls. The second dictionary is the next 
+dictionary in the iterator. The environment variable `WHERETOSTART` can be set 
+to the starting value for example `iso3=SDN` in the example below. If it is set 
+to `RESET`, then the temporary folder is deleted before the run starts to 
+ensure it starts from the beginning.
+
+    iterator = [{"iso3": "AFG", "name": "Afghanistan"}, {"iso3": "SDN", "name": "Sudan"},
+                {"iso3": "YEM", "name": "Yemen"}, {"iso3": "ZAM", "name": "Zambia"}]
+    result = list()
+    for info, nextdict in progress_storing_tempdir(tempfolder, iterator, "iso3"):
+        ...
+
+Sometimes, it may be necessary to create the folder and batch code for use by 
+parts of the code outside of the iterator. This can be achieved as follows:
+
+    with wheretostart_tempdir_batch(tempfolder) as info:
+        folder = info["folder"]
+        ...
+        for info, country in progress_storing_folder(info, iterator, "iso3"):
+            ...
+
+The batch code can be passed into `wheretostart_tempdir_batch` in the `batch` 
+parameter. If not given, the batch code is generated. The folder to use will be 
+a generated temporary folder unless `tempdir` is given. 
 
 ## Text processing
 
@@ -789,5 +819,5 @@ Examples:
 
 ## Easy building and packaging
 
-The pyproject.toml, setup.cfg, .readthedocs.yml and GitHub Actions workflows provide a 
-template that can be used by other projects or libraries.
+The pyproject.toml, setup.cfg, .readthedocs.yml and GitHub Actions workflows 
+provide a template that can be used by other projects or libraries.

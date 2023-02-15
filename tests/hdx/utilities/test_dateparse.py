@@ -7,6 +7,7 @@ from dateutil.parser import ParserError
 from hdx.utilities.dateparse import (
     get_datetime_from_timestamp,
     get_timestamp_from_datetime,
+    iso_string_from_datetime,
     now_utc,
     parse_date,
     parse_date_range,
@@ -307,3 +308,8 @@ class TestDateParse:
             expected_timestamp * 1000, timezone=timezone.utc
         )
         assert date == expected_date
+
+    def test_iso_string_from_datetime(self):
+        date = datetime(2020, 7, 31, 7, 33, 54, tzinfo=timezone.utc)
+        string = iso_string_from_datetime(date)
+        assert string == "2020-07-31"

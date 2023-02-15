@@ -958,3 +958,15 @@ def get_datetime_from_timestamp(
     if timestamp > get_timestamp_from_datetime(today):
         timestamp = timestamp / 1000
     return datetime.fromtimestamp(timestamp, tz=timezone)
+
+
+def iso_string_from_datetime(date: datetime) -> str:
+    """Convert datetime to ISO formatted date without any time elements
+
+    Args:
+        date (datetime): Date to convert to string
+
+    Returns:
+        str: ISO formatted date without any time elements
+    """
+    return date.date().isoformat()
