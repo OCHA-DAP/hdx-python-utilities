@@ -58,7 +58,7 @@ class State:
         """Read state from file
 
         Returns:
-            None
+            Any: State
         """
         value = self.read_fn(load_text(self.path))
         logger.info(f"State read from {self.path} = {value}")
