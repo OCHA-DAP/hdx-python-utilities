@@ -54,11 +54,12 @@ def setup_logging(
                 frame = frame.f_back
                 depth += 1
 
+            msg = record.getMessage().replace("<locals>", "\\<locals>")
             logger.opt(
                 colors=True,
                 depth=depth,
                 exception=record.exc_info,
-            ).log(level, record.getMessage())
+            ).log(level, msg)
 
     root_logger = logging.getLogger()
     while root_logger.hasHandlers():

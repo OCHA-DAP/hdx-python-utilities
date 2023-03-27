@@ -14,7 +14,7 @@ standard_logger = logging.getLogger(__name__)
 class TestLogging:
     def test_setup_logging(self, caplog):
         with caplog.at_level(logging.ERROR):
-            text = "This is an error!"
+            text = "This is an error in function '__main__.main.<locals>.process_country'!"
             standard_logger.error(text)
             assert text in caplog.text
 
