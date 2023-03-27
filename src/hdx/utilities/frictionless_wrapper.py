@@ -12,6 +12,7 @@ from frictionless import (
 )
 from frictionless.errors import ResourceError
 from frictionless.formats import CsvControl, ExcelControl, JsonControl
+from frictionless.resources import TableResource
 
 
 def get_frictionless_control(**kwargs: Any) -> Tuple[Control, Any]:
@@ -64,7 +65,6 @@ def get_frictionless_control(**kwargs: Any) -> Tuple[Control, Any]:
                 property = kwargs.pop("property", None)
                 if property is not None:
                     control.property = property
-                kwargs["type"] = "table"
     return control, kwargs
 
 
@@ -186,12 +186,12 @@ def get_frictionless_resource(
     kwargs["detector"] = detector
     kwargs["dialect"] = dialect
     if control:
-        dialect.add_control(control)
+        kwargs["control"] = control
     http_session = kwargs.pop("http_session", session)
     with system.use_context(http_session=http_session):
         if url:
-            resource = Resource(path=url, **kwargs)
+            resource = TableResource(path=url, **kwargs)
         else:
-            resource = Resource(data=data, **kwargs)
+            resource = TableResource(data=data, **kwargs)
         resource.open()
         return resource
