@@ -8,15 +8,15 @@ from pathlib import Path
 from typing import Any, Callable, Dict, Iterator, List, Optional, Tuple, Union
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
-import frictionless
 import requests
 from frictionless import FrictionlessException
+from frictionless.resources import TableResource
 from ratelimit import RateLimitDecorator, sleep_and_retry
 from requests import Request
 from ruamel.yaml import YAML
 
 from .base_downloader import BaseDownload, DownloadError
-from .frictionless_wrapper import get_frictionless_resource
+from .frictionless_wrapper import get_frictionless_tableresource
 from .path import get_filename_from_url, get_temp_dir
 from .session import get_session
 from .typehint import ListDict, ListTuple
@@ -560,14 +560,14 @@ class Download(BaseDownload):
         self.download(url, **kwargs)
         return self.get_json()
 
-    def get_frictionless_resource(
+    def get_frictionless_tableresource(
         self,
         url: str,
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
         **kwargs: Any,
-    ) -> frictionless.Resource:
-        """Get Frictionless Resource.
+    ) -> TableResource:
+        """Get Frictionless TableResource.
 
         Args:
             url (str): URL or path to download
@@ -596,11 +596,11 @@ class Download(BaseDownload):
             schema (Schema): This can be set to override the above. See Frictionless docs.
 
         Returns:
-            frictionless.Resource: frictionless Resource object
+            TableResource: frictionless TableResource object
         """
         self.close_response()
         try:
-            self.response = get_frictionless_resource(
+            self.response = get_frictionless_tableresource(
                 url, ignore_blank_rows, infer_types, self.session, **kwargs
             )
         except FrictionlessException as e:
@@ -670,7 +670,7 @@ class Download(BaseDownload):
         """
         if headers is None:
             raise DownloadError("Argument headers cannot be None!")
-        resource = self.get_frictionless_resource(
+        resource = self.get_frictionless_tableresource(
             url,
             ignore_blank_rows=ignore_blank_rows,
             infer_types=infer_types,

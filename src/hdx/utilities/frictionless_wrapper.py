@@ -7,7 +7,6 @@ from frictionless import (
     Detector,
     Dialect,
     FrictionlessException,
-    Resource,
     system,
 )
 from frictionless.errors import ResourceError
@@ -120,15 +119,15 @@ def get_frictionless_dialect(
     return dialect, kwargs
 
 
-def get_frictionless_resource(
+def get_frictionless_tableresource(
     url: Optional[str] = None,
     ignore_blank_rows: bool = True,
     infer_types: bool = False,
     session: Optional[requests.Session] = None,
     data: Optional[Any] = None,
     **kwargs: Any,
-) -> Resource:
-    """Get Frictionless Resource. Either url or data must be supplied.
+) -> TableResource:
+    """Get Frictionless Table Resource. Either url or data must be supplied.
 
     Args:
         url (Optional[str]): URL or path to download. Defaults to None.
@@ -161,7 +160,7 @@ def get_frictionless_resource(
         schema (Schema): This can be set to override the above. See Frictionless docs.
 
     Returns:
-        Resource: frictionless Resource object
+        TableResource: frictionless TableResource object
     """
     if not url and not data:
         error = ResourceError(note="Neither url or data supplied!")

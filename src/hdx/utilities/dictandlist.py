@@ -4,7 +4,7 @@ import itertools
 from collections import UserDict
 from typing import Any, Callable, Dict, List, Optional, Union
 
-from .frictionless_wrapper import get_frictionless_resource
+from .frictionless_wrapper import get_frictionless_tableresource
 from .typehint import ListDict, ListTuple, ListTupleDict
 
 
@@ -389,7 +389,7 @@ def read_list_from_csv(
     """
     if dict_form and headers is None:
         raise ValueError("If dict_form is True, headers must not be None!")
-    resource = get_frictionless_resource(url, headers=headers, **kwargs)
+    resource = get_frictionless_tableresource(url, headers=headers, **kwargs)
     result = []
     if not dict_form:
         result.append(resource.header)
@@ -456,7 +456,7 @@ def write_list_to_csv(
                         newrow.append(row[column - 1])
                     newrows.append(newrow)
                 rows = newrows
-        resource = get_frictionless_resource(
+        resource = get_frictionless_tableresource(
             data=rows,
             has_header=has_header,
             headers=headers,
