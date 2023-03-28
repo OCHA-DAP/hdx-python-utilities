@@ -127,7 +127,7 @@ def get_frictionless_tableresource(
     data: Optional[Any] = None,
     **kwargs: Any,
 ) -> TableResource:
-    """Get Frictionless Table Resource. Either url or data must be supplied.
+    """Get Frictionless TableResource. Either url or data must be supplied.
 
     Args:
         url (Optional[str]): URL or path to download. Defaults to None.
