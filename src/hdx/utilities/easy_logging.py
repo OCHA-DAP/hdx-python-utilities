@@ -55,10 +55,15 @@ def setup_logging(
                 frame = frame.f_back
                 depth += 1
 
-            msg = record.getMessage().replace("<locals>", "\\<locals>")
-            logger.opt(
-                colors=True, depth=depth, exception=record.exc_info
-            ).log(level, msg)
+            msg = record.getMessage()
+            try:
+                logger.opt(
+                    colors=True, depth=depth, exception=record.exc_info
+                ).log(level, msg)
+            except ValueError:
+                logger.opt(
+                    colors=False, depth=depth, exception=record.exc_info
+                ).log(level, msg)
 
     root_logger = logging.getLogger()
     while root_logger.hasHandlers():
