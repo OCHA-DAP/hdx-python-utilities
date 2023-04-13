@@ -87,9 +87,9 @@ exclude_lines = [
     "if 0:",  # Don't complain if non-runnable code
     "if __name__ == .__main__.:"  # isn't run
 ]
-# Configuration above shouldn't nned to change from project to project
+# Configuration above shouldn't need to change from project to project
 
-# From here down, configuration may change from project to project
+# Configuration below changes from project to project
 [tool.coverage.paths]
 source = ["src/hdx", "*/site-packages/hdx"]
 
