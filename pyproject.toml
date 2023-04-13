@@ -2,11 +2,6 @@
 requires = [ "setuptools>=65", "setuptools_scm[toml]>=7.1", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools_scm]
-write_to = "src/hdx/utilities/_version.py"
-local_scheme = "no-local-version"
-version_scheme = "python-simplified-semver"
-
 [tool.autohooks]
 mode = "pythonpath"
 pre-commit = ["autohooks.plugins.black", "autohooks.plugins.flake8", "autohooks.plugins.isort"]
@@ -31,8 +26,47 @@ pythonpath = "src"
 addopts = "--color=yes"
 log_cli = 1
 
-[tool.coverage.paths]
-source = ["src/hdx", "*/site-packages/hdx"]
+[tool.tox]
+legacy_tox_ini = """
+[tox]
+envlist = py311, lint
+
+[gh-actions]
+python =
+    3: py311, lint
+
+[testenv]
+package = wheel
+wheel_build_env = .pkg
+deps =
+    -r test-requirements.txt
+commands =
+    pytest --cov=hdx --no-cov-on-fail --junitxml=.tox/test-results.xml --cov-report=xml --cov-report=term-missing
+
+[testenv:lint]
+deps =
+    flake8
+    flake8-isort
+    flake8-black
+    flake8-pyproject
+commands =
+    flake8 --color=always src tests
+
+[testenv:docs]
+deps =
+    pydoc-markdown
+commands =
+    pydoc-markdown
+
+[testenv:publish]
+package = sdist
+pass_env = SSH_AUTH_SOCK, TWINE_USERNAME, TWINE_PASSWORD
+deps =
+    twine
+
+commands =
+    twine upload {work_dir}/{package_env}/dist/*
+"""
 
 [tool.coverage.report]
 omit = [
@@ -53,6 +87,16 @@ exclude_lines = [
     "if 0:",  # Don't complain if non-runnable code
     "if __name__ == .__main__.:"  # isn't run
 ]
+# Configuration above shouldn't nned to change from project to project
+
+# From here down, configuration may change from project to project
+[tool.coverage.paths]
+source = ["src/hdx", "*/site-packages/hdx"]
+
+[tool.setuptools_scm]
+write_to = "src/hdx/utilities/_version.py"
+local_scheme = "no-local-version"
+version_scheme = "python-simplified-semver"
 
 [[tool.pydoc-markdown.loaders]]
 type = "python"
@@ -144,44 +188,3 @@ output_directory = "docs"
         title = "User Agent"
         contents = ["hdx.utilities.useragent.*"]
 
-[tool.tox]
-legacy_tox_ini = """
-[tox]
-envlist = py311, lint
-
-[gh-actions]
-python =
-    3: py311, lint
-
-[testenv]
-package = wheel
-wheel_build_env = .pkg
-deps =
-    -r test-requirements.txt
-commands =
-    pytest --cov=hdx --no-cov-on-fail --junitxml=.tox/test-results.xml --cov-report=xml --cov-report=term-missing
-
-[testenv:lint]
-deps =
-    flake8
-    flake8-isort
-    flake8-black
-    flake8-pyproject
-commands =
-    flake8 --color=always src tests
-
-[testenv:docs]
-deps =
-    pydoc-markdown
-commands =
-    pydoc-markdown
-
-[testenv:publish]
-package = sdist
-pass_env = SSH_AUTH_SOCK, TWINE_USERNAME, TWINE_PASSWORD
-deps =
-    twine
-
-commands =
-    twine upload {work_dir}/{package_env}/dist/*
-"""
