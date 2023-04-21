@@ -90,11 +90,74 @@ exclude_lines = [
 # Configuration above shouldn't need to change from project to project
 
 # Configuration below changes from project to project
+
+[project]
+name = "hdx-python-utilities"
+description = "HDX Python Utilities for streaming tabular data, date and time handling and other helpful functions"
+authors = [{name = "Michael Rans", email = "rans@email.com"}]
+license = {text = "MIT"}
+keywords = ["HDX", "utilities", "library", "streaming", "tabular data", "datetime", "date", "time", "timezone", "dict",
+    "list", "json", "yaml"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Unix",
+    "Operating System :: MacOS",
+    "Operating System :: Microsoft :: Windows",
+]
+requires-python = ">=3.8"
+# Extras for frictionless[excel,json] added explicitly
+# for conda-forge compatibility
+dependencies = [
+    "frictionless>=5.10.1",
+    # frictionless[excel]
+    "openpyxl>=3.0",
+    "tableschema-to-template>=0.0.13",
+    "xlrd>=1.2",
+    "xlwt>=1.2",
+    # frictionless[json]
+    "ijson>=3.0",
+    "jsonlines>=1.2",
+    # /end frictionless extras
+    "loguru",
+    "python-dateutil==2.8.2",
+    "ratelimit",
+    "requests-file",
+    "ruamel.yaml",
+]
+dynamic = ["version"]
+
+[project.readme]
+file = "README.md"
+content-type = "text/markdown"
+
+[project.urls]
+Homepage = "https://github.com/OCHA-DAP/hdx-python-utilities"
+
+[project.optional-dependencies]
+html = ["beautifulsoup4", "html5lib"]
+email = ["email_validator"]
+
 [tool.hatch.version]
-version.source = "vcs"
+source = "vcs"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/hdx"]
 
 [tool.hatch.build.hooks.vcs]
-version-file = "src/utilities/__version__"
+version-file = "src/hdx/utilities/_version.py"
 
 [tool.hatch.version.raw-options]
 local_scheme = "no-local-version"
@@ -192,4 +255,3 @@ output_directory = "docs"
         [[tool.pydoc-markdown.renderer.pages.children]]
         title = "User Agent"
         contents = ["hdx.utilities.useragent.*"]
-
