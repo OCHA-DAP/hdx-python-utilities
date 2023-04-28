@@ -26,47 +26,36 @@ pythonpath = "src"
 addopts = "--color=yes"
 log_cli = 1
 
-[tool.tox]
-legacy_tox_ini = """
-[tox]
-envlist = py311, lint
+#########
+# Tests #
+#########
 
-[gh-actions]
-python =
-    3: py311, lint
+[tool.hatch.envs.default]
+dependencies = ["-r test-requirements.txt"]
 
-[testenv]
-package = wheel
-wheel_build_env = .pkg
-deps =
-    -r test-requirements.txt
-commands =
-    pytest --cov=hdx --no-cov-on-fail --junitxml=.tox/test-results.xml --cov-report=xml --cov-report=term-missing
+[tool.hatch.envs.default.scripts]
+test = 'pytest --cov=hdx --no-cov-on-fail --junitxml=.tox/test-results.xml --cov-report=xml --cov-report=term-missing'
 
-[testenv:lint]
-deps =
-    flake8
-    flake8-isort
-    flake8-black
-    flake8-pyproject
-commands =
-    flake8 --color=always src tests
+[[tool.hatch.envs.default.matrix]]
+python = ["3.11"]
+type = ["default", "lint"]
 
-[testenv:docs]
-deps =
-    pydoc-markdown
-commands =
-    pydoc-markdown
+[tool.hatch.envs.lint]
+dependencies = [
+    "flake8",
+    "flke8-isort",
+    "flake8-black",
+    "flake8-pyproject"
+]
 
-[testenv:publish]
-package = sdist
-pass_env = SSH_AUTH_SOCK, TWINE_USERNAME, TWINE_PASSWORD
-deps =
-    twine
+[tool.hatch.envs.lint.scripts]
+test = "flake8 --color=always src tests"
 
-commands =
-    twine upload {work_dir}/{package_env}/dist/*
-"""
+[tool.hatch.envs.docs]
+dependencies = ["pydoc-markdown"]
+
+[tool.hatch.envs.docs.scripts]
+test = "pydoc-markdown"
 
 [tool.coverage.report]
 omit = [
@@ -162,6 +151,10 @@ version-file = "src/hdx/utilities/_version.py"
 [tool.hatch.version.raw-options]
 local_scheme = "no-local-version"
 version_scheme = "python-simplified-semver"
+
+# Publishing - disable confirmation req
+[publish.index]
+disable = true
 
 [tool.coverage.paths]
 source = ["src/hdx", "*/site-packages/hdx"]
