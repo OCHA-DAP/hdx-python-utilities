@@ -30,20 +30,30 @@ log_cli = 1
 # Tests #
 #########
 
-[tool.hatch.envs.default]
-dependencies = ["-r test-requirements.txt"]
+[tool.hatch.envs.test]
+# TODO: add to extras?
+dependencies = [
+    "autohooks==23.1.0",
+    "autohooks-plugin-black==22.11.0",
+    "autohooks-plugin-isort==22.8.0",
+    "autohooks-plugin-flake8==23.1.0",
+    "autohooks-plugin-pylint==22.8.1",
+    "pytest==7.2.2",
+    "pytest-cov==4.0.0",
+    "pytest-loguru==0.2.0"
+    ]
 
-[tool.hatch.envs.default.scripts]
+[tool.hatch.envs.test.scripts]
 test = 'pytest --cov=hdx --no-cov-on-fail --junitxml=.tox/test-results.xml --cov-report=xml --cov-report=term-missing'
 
-[[tool.hatch.envs.default.matrix]]
+[[tool.hatch.envs.test.matrix]]
 python = ["3.11"]
-type = ["default", "lint"]
 
 [tool.hatch.envs.lint]
+detached = true
 dependencies = [
     "flake8",
-    "flke8-isort",
+    "flake8-isort",
     "flake8-black",
     "flake8-pyproject"
 ]

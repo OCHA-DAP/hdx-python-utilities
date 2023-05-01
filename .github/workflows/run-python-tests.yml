@@ -27,7 +27,8 @@ jobs:
         pip install --upgrade hatch
     - name: Test with hatch/pytest
       run: |
-        hatch run +py=${{ matrix.py }} +type= test:with-coverage
+        hatch run test:test
+        hatch run lint:test
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
