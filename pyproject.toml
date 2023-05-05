@@ -31,7 +31,7 @@ log_cli = 1
 #########
 
 [tool.hatch.envs.test]
-# TODO: add to extras?
+# TODO: make these an extra?
 dependencies = [
     "autohooks==23.1.0",
     "autohooks-plugin-black==22.11.0",
@@ -42,6 +42,7 @@ dependencies = [
     "pytest-cov==4.0.0",
     "pytest-loguru==0.2.0"
     ]
+features = ["html", "email"]
 
 [tool.hatch.envs.test.scripts]
 test = 'pytest --cov=hdx --no-cov-on-fail --junitxml=.tox/test-results.xml --cov-report=xml --cov-report=term-missing'
