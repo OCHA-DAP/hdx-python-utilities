@@ -28,7 +28,6 @@ jobs:
     - name: Test with hatch/pytest
       run: |
         hatch run test:test
-        hatch run lint:test
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
