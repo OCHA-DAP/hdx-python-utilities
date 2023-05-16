@@ -21,6 +21,9 @@ select = [
   "I"    # isort
 ]
 
+[tool.ruff.isort]
+known-local-folder = ["hdx"]
+
 #########
 # Tests #
 #########
