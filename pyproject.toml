@@ -11,6 +11,9 @@ line-length = 79
 [tool.ruff]
 line-length = 79
 exclude = ["_version.py"]
+ignore = [
+    "E501" # Line too long
+]
 # List of rules: https://beta.ruff.rs/docs/rules/
 select = [
   "E",   # pycodestyle - default
