@@ -2,47 +2,32 @@
 requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
-[tool.autohooks]
-mode = "pythonpath"
-pre-commit = ["autohooks.plugins.black", "autohooks.plugins.flake8", "autohooks.plugins.isort"]
-
+#################
+# Linting tools #
+#################
 [tool.black]
 line-length = 79
 
-[tool.isort]
-profile = "black"
-line_length = 79
-multi_line_output = 3
-
-[tool.flake8]
+[tool.ruff]
+line-length = 79
 exclude = ["_version.py"]
-ignore = ["E203", "E501", "W503"]
-max-line-length = 79
-count = true
-show_source = true
+# List of rules: https://beta.ruff.rs/docs/rules/
+select = [
+  "E",   # pycodestyle - default
+  "F",   # pyflakes - default
+  "I"    # isort
+]
 
+#########
+# Tests #
+#########
 [tool.pytest.ini_options]
 pythonpath = "src"
 addopts = "--color=yes"
 log_cli = 1
 
-#########
-# Tests #
-#########
-
 [tool.hatch.envs.test]
-# TODO: make these an extra?
-dependencies = [
-    "autohooks==23.1.0",
-    "autohooks-plugin-black==22.11.0",
-    "autohooks-plugin-isort==22.8.0",
-    "autohooks-plugin-flake8==23.1.0",
-    "autohooks-plugin-pylint==22.8.1",
-    "pytest==7.2.2",
-    "pytest-cov==4.0.0",
-    "pytest-loguru==0.2.0"
-    ]
-features = ["html", "email"]
+features = ["html", "email", "test"]
 
 [tool.hatch.envs.test.scripts]
 test = 'pytest --cov=hdx --no-cov-on-fail --junitxml=.tox/test-results.xml --cov-report=xml --cov-report=term-missing'
@@ -53,14 +38,19 @@ python = ["3.11"]
 [tool.hatch.envs.lint]
 detached = true
 dependencies = [
-    "flake8",
-    "flake8-isort",
-    "flake8-black",
-    "flake8-pyproject"
+  "black",
+  "ruff",
 ]
 
 [tool.hatch.envs.lint.scripts]
-test = "flake8 --color=always src tests"
+style = [
+  "ruff {args:.}",
+  "black --check --diff {args:.}",
+]
+fmt = [
+  "black {args:.}",
+  "ruff --fix {args:.}",
+]
 
 [tool.hatch.envs.docs]
 dependencies = ["pydoc-markdown"]
@@ -149,6 +139,7 @@ Homepage = "https://github.com/OCHA-DAP/hdx-python-utilities"
 [project.optional-dependencies]
 html = ["beautifulsoup4", "html5lib"]
 email = ["email_validator"]
+test = ["pytest", "pytest-cov", "pytest-loguru"]
 
 [tool.hatch.version]
 source = "vcs"
@@ -163,13 +154,13 @@ version-file = "src/hdx/utilities/_version.py"
 local_scheme = "no-local-version"
 version_scheme = "python-simplified-semver"
 
-# Publishing - disable confirmation req
-[publish.index]
+[tool.hatch.publish.index]
 disable = true
 
 [tool.coverage.paths]
 source = ["src/hdx", "*/site-packages/hdx"]
 
+# Pydoc Markdown - will be moved
 [[tool.pydoc-markdown.loaders]]
 type = "python"
 search_path = ["src"]
