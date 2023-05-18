@@ -33,7 +33,7 @@ With pre-commit, all code is formatted according to
 
 To check if your changes pass pre-commit without committing, run:
 
-    pre-commit run --all-files
+    pre-commit run --all-files --config=.config/pre-commit-config.yaml
 
 ## Testing
 
@@ -58,4 +58,4 @@ Any changes to the dependencies will be automatically reflected in
 `requirements.txt` with `pre-commit`, but you can re-generate
 the file without committing by executing:
 
-    pre-commit run pip-compile --all-files
+    pre-commit run pip-compile --all-files --config=.config/pre-commit-config.yaml
