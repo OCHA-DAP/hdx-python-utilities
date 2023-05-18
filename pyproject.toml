@@ -1,10 +1,29 @@
+#########################
+# General Configuration #
+#########################
+
+# Build
+
 [build-system]
 requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
-#################
-# Linting tools #
-#################
+# Versioning
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.version.raw-options]
+local_scheme = "no-local-version"
+version_scheme = "python-simplified-semver"
+
+# Publishing
+
+[tool.hatch.publish.index]
+disable = true
+
+# Linting tools
+
 [tool.black]
 line-length = 79
 
@@ -24,9 +43,8 @@ select = [
 [tool.ruff.isort]
 known-local-folder = ["hdx"]
 
-#########
-# Tests #
-#########
+# Tests
+
 [tool.pytest.ini_options]
 pythonpath = "src"
 addopts = "--color=yes"
@@ -53,16 +71,11 @@ style = [
   "ruff {args:.}",
   "black --check --diff {args:.}",
 ]
+# Not used for anything at the moment
 fmt = [
   "black {args:.}",
   "ruff --fix {args:.}",
 ]
-
-[tool.hatch.envs.docs]
-dependencies = ["pydoc-markdown"]
-
-[tool.hatch.envs.docs.scripts]
-test = "pydoc-markdown"
 
 [tool.coverage.report]
 omit = [
@@ -73,7 +86,6 @@ omit = [
     "*/tests/*",
     "*__init__*"
 ]
-
 exclude_lines = [
     "pragma: no cover",  # Have to re-enable the standard pragma
     "def __repr__",  # Don't complain about missing
@@ -83,9 +95,12 @@ exclude_lines = [
     "if 0:",  # Don't complain if non-runnable code
     "if __name__ == .__main__.:"  # isn't run
 ]
-# Configuration above shouldn't need to change from project to project
 
-# Configuration below changes from project to project
+#########################
+# Project Configuration #
+#########################
+
+# Project
 
 [project]
 name = "hdx-python-utilities"
@@ -149,8 +164,7 @@ all = ["hdx-python-utilities[html,email]"]
 test = ["hdx-python-utilities[all]", "pytest", "pytest-cov", "pytest-loguru"]
 dev = ["hdx-python-utilities[test]", "pre-commit"]
 
-[tool.hatch.version]
-source = "vcs"
+# Build
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/hdx"]
@@ -158,17 +172,13 @@ packages = ["src/hdx"]
 [tool.hatch.build.hooks.vcs]
 version-file = "src/hdx/utilities/_version.py"
 
-[tool.hatch.version.raw-options]
-local_scheme = "no-local-version"
-version_scheme = "python-simplified-semver"
-
-[tool.hatch.publish.index]
-disable = true
+# Tests
 
 [tool.coverage.paths]
 source = ["src/hdx", "*/site-packages/hdx"]
 
 # Pydoc Markdown - will be moved
+
 [[tool.pydoc-markdown.loaders]]
 type = "python"
 search_path = ["src"]
