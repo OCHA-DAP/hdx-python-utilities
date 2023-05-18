@@ -29,8 +29,8 @@ jobs:
       run: |
         hatch run test:test
     - name: Check styling
-       run: |
-          hatch run lint:style
+      run: |
+        hatch run lint:style
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
