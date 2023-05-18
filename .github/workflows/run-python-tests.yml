@@ -29,6 +29,7 @@ jobs:
       run: |
         hatch run test:test
     - name: Check styling
+      if: always()
       run: |
         hatch run lint:style
     - name: Publish Unit Test Results
