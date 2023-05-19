@@ -160,9 +160,8 @@ Homepage = "https://github.com/OCHA-DAP/hdx-python-utilities"
 [project.optional-dependencies]
 html = ["beautifulsoup4", "html5lib"]
 email = ["email_validator"]
-all = ["hdx-python-utilities[html,email]"]
-test = ["hdx-python-utilities[all]", "pytest", "pytest-cov", "pytest-loguru"]
-dev = ["hdx-python-utilities[test]", "pre-commit"]
+test = ["pytest", "pytest-cov", "pytest-loguru"]
+dev = ["pre-commit"]
 
 # Build
 
