@@ -127,7 +127,7 @@ rfc3986==2.0.0
     # via frictionless
 rich==13.3.5
     # via typer
-ruamel-yaml==0.17.27
+ruamel-yaml==0.17.28
     # via hdx-python-utilities (pyproject.toml)
 ruamel-yaml-clib==0.2.7
     # via ruamel-yaml

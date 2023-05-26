@@ -22,27 +22,6 @@ version_scheme = "python-simplified-semver"
 [tool.hatch.publish.index]
 disable = true
 
-# Linting tools
-
-[tool.black]
-line-length = 79
-
-[tool.ruff]
-line-length = 79
-exclude = ["_version.py"]
-ignore = [
-    "E501" # Line too long
-]
-# List of rules: https://beta.ruff.rs/docs/rules/
-select = [
-  "E",   # pycodestyle - default
-  "F",   # pyflakes - default
-  "I"    # isort
-]
-
-[tool.ruff.isort]
-known-local-folder = ["hdx"]
-
 # Tests
 
 [tool.pytest.ini_options]
@@ -68,13 +47,13 @@ dependencies = [
 
 [tool.hatch.envs.lint.scripts]
 style = [
-  "ruff {args:.}",
-  "black --check --diff {args:.}",
+  "ruff --config .config/ruff.toml {args:.}",
+  "black --config .config/black.toml --check --diff {args:.}",
 ]
 # Not used for anything at the moment
 fmt = [
-  "black {args:.}",
-  "ruff --fix {args:.}",
+  "black --config .config/black.toml {args:.}",
+  "ruff --config .config/ruff.toml --fix {args:.}",
 ]
 
 [tool.coverage.report]
