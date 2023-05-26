@@ -24,16 +24,11 @@ disable = true
 
 # Tests
 
-[tool.pytest.ini_options]
-pythonpath = "src"
-addopts = "--color=yes"
-log_cli = 1
-
 [tool.hatch.envs.test]
 features = ["html", "email", "test"]
 
 [tool.hatch.envs.test.scripts]
-test = 'pytest --cov=hdx --cov-config=.config/coveragerc --no-cov-on-fail --junitxml=.tox/test-results.xml --cov-report=xml --cov-report=term-missing'
+test = 'pytest -c .config/pytest.ini --cov=hdx --cov-config=.config/coveragerc --no-cov-on-fail --junitxml=.tox/test-results.xml --cov-report=xml --cov-report=term-missing'
 
 [[tool.hatch.envs.test.matrix]]
 python = ["3.11"]
