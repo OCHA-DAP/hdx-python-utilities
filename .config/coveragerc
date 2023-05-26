@@ -1,0 +1,22 @@
+[report]
+omit =
+    "*/setup.py"
+    "*/python?.?/*"
+    "*/venv/*"
+    "*/site-packages/*"
+    "*/tests/*"
+    "*__init__*"
+
+exclude_lines =
+    "pragma: no cover"  # Have to re-enable the standard pragma
+    "def __repr__"  # Don't complain about missing
+    "if self.debug"  # debug-only code
+    "raise AssertionError"  # Don't complain if tests don't hit
+    "raise NotImplementedError"  # defensive assertion code
+    "if 0:"  # Don't complain if non-runnable code
+    "if __name__ == .__main__.:"  # isn't run
+
+[paths]
+source =
+    "src/hdx"
+    "*/site-packages/hdx"
