@@ -39,7 +39,7 @@ To check if your changes pass pre-commit without committing, run:
 
 To run the tests and view coverage, execute:
 
-    python -m pytest --cov hdx
+    pytest -c .config/pytest.ini --cov hdx --cov-config .config/coveragerc
 
 Follow the example set out already in ``api.rst`` as you write the documentation.
 

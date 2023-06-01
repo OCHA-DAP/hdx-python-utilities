@@ -1,106 +1,10 @@
 #########################
-# General Configuration #
+# Project Configuration #
 #########################
-
-# Build
 
 [build-system]
 requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
-
-# Versioning
-
-[tool.hatch.version]
-source = "vcs"
-
-[tool.hatch.version.raw-options]
-local_scheme = "no-local-version"
-version_scheme = "python-simplified-semver"
-
-# Publishing
-
-[tool.hatch.publish.index]
-disable = true
-
-# Linting tools
-
-[tool.black]
-line-length = 79
-
-[tool.ruff]
-line-length = 79
-exclude = ["_version.py"]
-ignore = [
-    "E501" # Line too long
-]
-# List of rules: https://beta.ruff.rs/docs/rules/
-select = [
-  "E",   # pycodestyle - default
-  "F",   # pyflakes - default
-  "I"    # isort
-]
-
-[tool.ruff.isort]
-known-local-folder = ["hdx"]
-
-# Tests
-
-[tool.pytest.ini_options]
-pythonpath = "src"
-addopts = "--color=yes"
-log_cli = 1
-
-[tool.hatch.envs.test]
-features = ["html", "email", "test"]
-
-[tool.hatch.envs.test.scripts]
-test = 'pytest --cov=hdx --no-cov-on-fail --junitxml=.tox/test-results.xml --cov-report=xml --cov-report=term-missing'
-
-[[tool.hatch.envs.test.matrix]]
-python = ["3.11"]
-
-[tool.hatch.envs.lint]
-detached = true
-dependencies = [
-  "black",
-  "ruff",
-]
-
-[tool.hatch.envs.lint.scripts]
-style = [
-  "ruff {args:.}",
-  "black --check --diff {args:.}",
-]
-# Not used for anything at the moment
-fmt = [
-  "black {args:.}",
-  "ruff --fix {args:.}",
-]
-
-[tool.coverage.report]
-omit = [
-    "*/setup.py",
-    "*/python?.?/*",
-    "*/venv/*",
-    "*/site-packages/*",
-    "*/tests/*",
-    "*__init__*"
-]
-exclude_lines = [
-    "pragma: no cover",  # Have to re-enable the standard pragma
-    "def __repr__",  # Don't complain about missing
-    "if self.debug",  # debug-only code
-    "raise AssertionError",  # Don't complain if tests don't hit
-    "raise NotImplementedError",  # defensive assertion code
-    "if 0:",  # Don't complain if non-runnable code
-    "if __name__ == .__main__.:"  # isn't run
-]
-
-#########################
-# Project Configuration #
-#########################
-
-# Project
 
 [project]
 name = "hdx-python-utilities"
@@ -163,6 +67,11 @@ email = ["email_validator"]
 test = ["pytest", "pytest-cov", "pytest-loguru"]
 dev = ["pre-commit"]
 
+
+#########
+# Hatch #
+#########
+
 # Build
 
 [tool.hatch.build.targets.wheel]
@@ -171,12 +80,57 @@ packages = ["src/hdx"]
 [tool.hatch.build.hooks.vcs]
 version-file = "src/hdx/utilities/_version.py"
 
+# Versioning
+
+[tool.hatch.version]
+source = "vcs"
+
+[tool.hatch.version.raw-options]
+local_scheme = "no-local-version"
+version_scheme = "python-simplified-semver"
+
+# Publishing
+
+[tool.hatch.publish.index]
+disable = true
+
 # Tests
 
-[tool.coverage.paths]
-source = ["src/hdx", "*/site-packages/hdx"]
+[tool.hatch.envs.test]
+features = ["html", "email", "test"]
 
-# Pydoc Markdown - will be moved
+[tool.hatch.envs.test.scripts]
+test = """
+       pytest -c .config/pytest.ini --cov=hdx
+       --cov-config=.config/coveragerc --no-cov-on-fail
+       --junitxml=.tox/test-results.xml --cov-report=xml
+       --cov-report=term-missing"
+       """
+
+[[tool.hatch.envs.test.matrix]]
+python = ["3.11"]
+
+[tool.hatch.envs.lint]
+detached = true
+dependencies = [
+  "black",
+  "ruff",
+]
+
+[tool.hatch.envs.lint.scripts]
+style = [
+  "ruff --config .config/ruff.toml {args:.}",
+  "black --config .config/black.toml --check --diff {args:.}",
+]
+# Not used for anything at the moment
+fmt = [
+  "black --config .config/black.toml {args:.}",
+  "ruff --config .config/ruff.toml --fix {args:.}",
+]
+
+##################
+# PyDoc Markdown #
+##################
 
 [[tool.pydoc-markdown.loaders]]
 type = "python"
