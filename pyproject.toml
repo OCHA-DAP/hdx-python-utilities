@@ -103,7 +103,7 @@ features = ["html", "email", "test"]
 test = """
        pytest -c .config/pytest.ini --cov=hdx \
        --cov-config=.config/coveragerc --no-cov-on-fail \
-       --junitxml=test-results.xml --cov-report=xml \
+       --junitxml=test-results.xml --cov-report= \
        --cov-report=term-missing
        """
 
