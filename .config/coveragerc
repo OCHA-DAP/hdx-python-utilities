@@ -21,5 +21,5 @@ exclude_lines =
 
 [paths]
 source =
-    "src/hdx"
+    "../src/hdx"
     "*/site-packages/hdx"
