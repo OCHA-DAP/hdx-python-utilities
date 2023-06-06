@@ -32,12 +32,14 @@ jobs:
       if: always()
       run: |
         hatch run lint:style
+    - name: Publish in Coveralls
+      uses: AndreMiras/coveralls-python-action@develop
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        flag-name: tests
     - name: Publish Unit Test Results
       uses: EnricoMi/publish-unit-test-result-action@v2
       if: always()
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         junit_files: test-results.xml
-    - name: Upload Coverage Results
-      uses: codecov/codecov-action@v3
-      if: success()
