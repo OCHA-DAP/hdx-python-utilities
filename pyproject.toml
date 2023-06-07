@@ -102,7 +102,7 @@ features = ["html", "email", "test"]
 [tool.hatch.envs.test.scripts]
 test = """
        pytest -c .config/pytest.ini --rootdir=. --junitxml=test-results.xml \
-       --cov-config=.config/coveragerc --no-cov-on-fail \
+       --cov --cov-config=.config/coveragerc --no-cov-on-fail \
        --cov-report=lcov --cov-report=term-missing
        """
 

@@ -1,10 +1,11 @@
 [run]
 source = src
 
-omit = "_version.py"
+omit = */_version.py
 
 [report]
 exclude_also =
+    from ._version
     def __repr__
     if self.debug:
     if settings.DEBUG
