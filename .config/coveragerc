@@ -1,17 +1,16 @@
-[report]
-omit =
-    "*/setup.py"
-    "*/python?.?/*"
-    "*/venv/*"
-    "*/site-packages/*"
-    "*/tests/*"
-    "*__init__*"
+[run]
+source = src
 
-exclude_lines =
-    "pragma: no cover"  # Have to re-enable the standard pragma
-    "def __repr__"  # Don't complain about missing
-    "if self.debug"  # debug-only code
-    "raise AssertionError"  # Don't complain if tests don't hit
-    "raise NotImplementedError"  # defensive assertion code
-    "if 0:"  # Don't complain if non-runnable code
-    "if __name__ == .__main__.:"  # isn't run
+omit = "_version.py"
+
+[report]
+exclude_also =
+    def __repr__
+    if self.debug:
+    if settings.DEBUG
+    raise AssertionError
+    raise NotImplementedError
+    if 0:
+    if __name__ == .__main__.:
+    if TYPE_CHECKING:
+    @(abc\.)?abstractmethod
