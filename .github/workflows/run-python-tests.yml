@@ -33,7 +33,7 @@ jobs:
       run: |
         hatch run lint:style
     - name: Publish in Coveralls
-      uses: AndreMiras/coveralls-python-action@develop
+      uses: coverallsapp/github-action@v2
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         flag-name: tests
