@@ -18,8 +18,3 @@ exclude_lines =
     "raise NotImplementedError"  # defensive assertion code
     "if 0:"  # Don't complain if non-runnable code
     "if __name__ == .__main__.:"  # isn't run
-
-[paths]
-source =
-    "src/hdx"
-    "*/site-packages/hdx"
