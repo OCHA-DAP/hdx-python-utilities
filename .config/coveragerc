@@ -1,6 +1,3 @@
-[run]
-relative_files = True
-
 [report]
 omit =
     "*/setup.py"
@@ -21,5 +18,5 @@ exclude_lines =
 
 [paths]
 source =
-    "../src/hdx"
+    "src/hdx"
     "*/site-packages/hdx"
