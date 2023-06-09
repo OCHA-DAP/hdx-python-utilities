@@ -274,7 +274,7 @@ class Download(BaseDownload):
                 if isfile(url):
                     url = Path(url).resolve().as_uri()
                 else:
-                    spliturl = spliturl._replace(scheme="http")
+                    spliturl = spliturl._replace(scheme="https")
                     url = urlunsplit(spliturl)
             if post:
                 full_url, parameters = self.get_url_params_for_post(

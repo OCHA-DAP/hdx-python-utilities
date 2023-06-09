@@ -1,0 +1,72 @@
+loaders:
+  - type: python
+    search_path:
+      - ../src
+    packages:
+      - hdx.utilities
+renderer:
+  type: mkdocs
+  output_directory: docs
+  mkdocs_config:
+    site_name: HDX Python Utilities
+    theme: readthedocs
+    repo_url: "https://github.com/OCHA-DAP/hdx-python-utilities"
+  markdown:
+    source_linker:
+      type: github
+      repo: OCHA-DAP/hdx-python-utilities
+  pages:
+    - title: Home
+      name: index
+      source: main.md
+    - title: API Documentation
+      children:
+        - title: Downloading files
+          contents:
+            - hdx.utilities.downloader.*
+        - title: Retrieving files
+          contents:
+            - hdx.utilities.retriever.*
+        - title: Loading and saving JSON and YAML
+          contents:
+            - hdx.utilities.loader.*
+            - hdx.utilities.saver.*
+        - title: Dictionary and list utilities
+          contents:
+            - hdx.utilities.dictandlist.*
+        - title: HTML utilities
+          contents:
+            - hdx.utilities.html.*
+        - title: Comparing files
+          contents:
+            - hdx.utilities.compare.*
+        - title: Emailing
+          contents:
+            - hdx.utilities.email.*
+        - title: Configuring logging
+          contents:
+            - hdx.utilities.easy_logging.*
+        - title: Path utilities
+          contents:
+            - hdx.utilities.path.*
+        - title: Date parsing utilities
+          contents:
+            - hdx.utilities.dateparse.*
+        - title: Text processing
+          contents:
+            - hdx.utilities.text.*
+        - title: Encoding utilities
+          contents:
+            - hdx.utilities.encoding.*
+        - title: Valid UUID
+          contents:
+            - hdx.utilities.uuid.*
+        - title: Wheel utilities
+          contents:
+            - hdx.utilities.session.*
+        - title: Retrying Requests session
+          contents:
+            - hdx.utilities.session.*
+        - title: User Agent
+          contents:
+            - hdx.utilities.useragent.*

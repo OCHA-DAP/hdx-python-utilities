@@ -89,7 +89,7 @@ pluggy==1.0.0
     # via pytest
 pre-commit==3.3.2
     # via hdx-python-utilities (pyproject.toml)
-pydantic==1.10.8
+pydantic==1.10.9
     # via frictionless
 pygments==2.15.1
     # via rich
@@ -158,7 +158,7 @@ typing-extensions==4.6.3
     #   frictionless
     #   pydantic
     #   typer
-urllib3==2.0.2
+urllib3==2.0.3
     # via requests
 validators==0.20.0
     # via frictionless
