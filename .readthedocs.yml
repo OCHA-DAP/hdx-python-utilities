@@ -11,7 +11,7 @@ build:
   jobs:
     pre_build:
       - pip install --upgrade mkdocs
-      - pip install --upgrade pydoc-markdown
+      - pip install pydoc-markdown==4.7.0
       - pydoc-markdown documentation/pydoc-markdown.yml
       - mv docs/content/* docs
       - rmdir docs/content
