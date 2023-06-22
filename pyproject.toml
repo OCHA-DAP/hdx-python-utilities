@@ -89,11 +89,6 @@ source = "vcs"
 local_scheme = "no-local-version"
 version_scheme = "python-simplified-semver"
 
-# Publishing
-
-[tool.hatch.publish.index]
-disable = true
-
 # Tests
 
 [tool.hatch.envs.test]

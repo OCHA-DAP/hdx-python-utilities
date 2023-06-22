@@ -35,7 +35,7 @@ email-validator==2.0.0.post2
     # via hdx-python-utilities (pyproject.toml)
 et-xmlfile==1.1.0
     # via openpyxl
-filelock==3.12.0
+filelock==3.12.2
     # via virtualenv
 frictionless==5.13.1
     # via hdx-python-utilities (pyproject.toml)
@@ -49,7 +49,7 @@ idna==3.4
     # via
     #   email-validator
     #   requests
-ijson==3.2.0.post0
+ijson==3.2.2
     # via hdx-python-utilities (pyproject.toml)
 iniconfig==2.0.0
     # via pytest
@@ -67,9 +67,9 @@ loguru==0.7.0
     # via
     #   hdx-python-utilities (pyproject.toml)
     #   pytest-loguru
-markdown-it-py==2.2.0
+markdown-it-py==3.0.0
     # via rich
-marko==1.3.0
+marko==2.0.0
     # via frictionless
 markupsafe==2.1.3
     # via jinja2
@@ -83,11 +83,11 @@ packaging==23.1
     # via pytest
 petl==1.7.12
     # via frictionless
-platformdirs==3.5.1
+platformdirs==3.7.0
     # via virtualenv
-pluggy==1.0.0
+pluggy==1.2.0
     # via pytest
-pre-commit==3.3.2
+pre-commit==3.3.3
     # via hdx-python-utilities (pyproject.toml)
 pydantic==1.10.9
     # via frictionless
@@ -95,7 +95,7 @@ pygments==2.15.1
     # via rich
 pyrsistent==0.19.3
     # via jsonschema
-pytest==7.3.1
+pytest==7.3.2
     # via
     #   hdx-python-utilities (pyproject.toml)
     #   pytest-cov
@@ -125,9 +125,9 @@ requests-file==1.5.1
     # via hdx-python-utilities (pyproject.toml)
 rfc3986==2.0.0
     # via frictionless
-rich==13.4.1
+rich==13.4.2
     # via typer
-ruamel-yaml==0.17.31
+ruamel-yaml==0.17.32
     # via hdx-python-utilities (pyproject.toml)
 ruamel-yaml-clib==0.2.7
     # via ruamel-yaml
@@ -162,7 +162,7 @@ urllib3==2.0.3
     # via requests
 validators==0.20.0
     # via frictionless
-virtualenv==20.23.0
+virtualenv==20.23.1
     # via pre-commit
 webencodings==0.5.1
     # via html5lib
