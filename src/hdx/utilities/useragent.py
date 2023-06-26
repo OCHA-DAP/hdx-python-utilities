@@ -15,7 +15,7 @@ class UserAgentError(Exception):
 
 
 class UserAgent:
-    default_user_agent_config_yaml = join(expanduser("~"), ".useragent.yml")
+    default_user_agent_config_yaml = join(expanduser("~"), ".useragent.yaml")
     user_agent = None
 
     @staticmethod
@@ -82,13 +82,18 @@ class UserAgent:
         """
         if not user_agent_config_yaml:
             user_agent_config_yaml = cls.default_user_agent_config_yaml
-            logger.info(
-                f"No user agent or user agent config file given. Using default user agent config file: {user_agent_config_yaml}."
-            )
-        if not isfile(user_agent_config_yaml):
-            raise UserAgentError(
-                "User_agent should be supplied in a YAML config file. It can be your project's name for example."
-            )
+            if not isfile(user_agent_config_yaml):
+                user_agent_config_yaml = user_agent_config_yaml.replace(
+                    ".yaml", ".yml"
+                )
+            if isfile(user_agent_config_yaml):
+                logger.info(
+                    f"No user agent or user agent config file given. Using default user agent config file: {user_agent_config_yaml}."
+                )
+            else:
+                raise UserAgentError(
+                    f"User_agent should be supplied in a YAML config file and no configuration file at default path: {cls.default_user_agent_config_yaml}. User agent can be your project's name for example."
+                )
         logger.info(
             f"Loading user agent config from: {user_agent_config_yaml}"
         )
@@ -116,7 +121,7 @@ class UserAgent:
 
         Args:
             user_agent (Optional[str]): User agent string. HDXPythonLibrary/X.X.X- is prefixed.
-            user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.
+            user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
             user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
 
         Returns:
@@ -154,7 +159,7 @@ class UserAgent:
 
         Args:
             user_agent (Optional[str]): User agent string. HDXPythonLibrary/X.X.X- is prefixed.
-            user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.
+            user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
             user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
 
         Returns:
@@ -177,7 +182,7 @@ class UserAgent:
 
         Args:
             user_agent (Optional[str]): User agent string. HDXPythonLibrary/X.X.X- is prefixed.
-            user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.
+            user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
             user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
 
         Returns:

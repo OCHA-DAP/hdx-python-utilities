@@ -38,11 +38,11 @@ class Email:
         **kwargs: See below
         email_config_dict (dict): HDX configuration dictionary OR
         email_config_json (str): Path to JSON HDX configuration OR
-        email_config_yaml (str): Path to YAML HDX configuration. Defaults to ~/hdx_email_configuration.yml.
+        email_config_yaml (str): Path to YAML HDX configuration. Defaults to ~/hdx_email_configuration.yaml.
     """
 
     default_email_config_yaml = join(
-        expanduser("~"), "hdx_email_configuration.yml"
+        expanduser("~"), "hdx_email_configuration.yaml"
     )
 
     def __init__(self, **kwargs: Any) -> None:

@@ -13,7 +13,7 @@ class TestEmail:
 
     @pytest.fixture(scope="class")
     def email_yaml(self, configfolder):
-        return join(configfolder, "hdx_email_configuration.yml")
+        return join(configfolder, "hdx_email_configuration.yaml")
 
     def test_mail(self, mocksmtp):
         smtp_initargs = {

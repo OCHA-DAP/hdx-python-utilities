@@ -43,7 +43,7 @@ class TestDownloader:
 
     @pytest.fixture(scope="class")
     def fixturefile(self, downloaderfolder):
-        return join(downloaderfolder, "extra_params_tree.yml")
+        return join(downloaderfolder, "extra_params_tree.yaml")
 
     @pytest.fixture(scope="class")
     def fixtureurl(self):
@@ -121,7 +121,7 @@ class TestDownloader:
             assert downloader.session.auth == ("user", "pass")
         with Download(basic_auth_file=basicauthfile) as downloader:
             assert downloader.session.auth == ("testuser", "testpass")
-        extraparamsyamltree = join(downloaderfolder, "extra_params_tree.yml")
+        extraparamsyamltree = join(downloaderfolder, "extra_params_tree.yaml")
         with Download(
             extra_params_yaml=extraparamsyamltree, extra_params_lookup="mykey"
         ) as downloader:
@@ -172,7 +172,7 @@ class TestDownloader:
             )
         with pytest.raises(IOError):
             Download(basic_auth_file="NOTEXIST")
-        extraparamsyaml = join(downloaderfolder, "extra_params.yml")
+        extraparamsyaml = join(downloaderfolder, "extra_params.yaml")
         test_url = "http://www.lalala.com/lala"
         with Download(
             basic_auth_file=basicauthfile, extra_params_dict={"key1": "val1"}
@@ -367,7 +367,7 @@ class TestDownloader:
             f = downloader.download_file(fixturefile, folder=tmpdir)
             fpath = abspath(f)
             remove(f)
-            assert fpath == abspath(join(tmpdir, "extra_params_tree.yml"))
+            assert fpath == abspath(join(tmpdir, "extra_params_tree.yaml"))
             f = downloader.download_file(fixtureurl, folder=tmpdir)
             fpath = abspath(f)
             remove(f)

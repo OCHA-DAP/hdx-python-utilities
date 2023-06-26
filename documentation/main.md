@@ -82,7 +82,7 @@ methods that all downloaders should have: `download_file`, `download_text`,
 Note that a single `Download` object cannot be used in parallel: each download operation 
 must be completed before starting the next. 
 
-For example, given YAML file extraparams.yml:
+For example, given YAML file extraparams.yaml:
 
     mykey:
         basic_auth: "XXXXXXXX"
@@ -92,7 +92,7 @@ We can create a downloader as shown below that will use the authentication defin
 `basic\_auth` and add the parameter `locale=en` to each request (eg. for get request 
 <http://myurl/lala?param1=p1&locale=en>):
 
-    with Download(user_agent="test", extra_params_yaml="extraparams.yml", extra_params_lookup="mykey") as downloader:
+    with Download(user_agent="test", extra_params_yaml="extraparams.yaml", extra_params_lookup="mykey") as downloader:
         response = downloader.download(url)  # get requests library response
         json = response.json()
 
@@ -340,16 +340,16 @@ Examples:
 Examples:
 
     # Load YAML
-    mydict = load_yaml("my_yaml.yml")
+    mydict = load_yaml("my_yaml.yaml")
 
     # Load 2 YAMLs and merge into dictionary
-    mydict = load_and_merge_yaml("my_yaml1.yml", "my_yaml2.yml")
+    mydict = load_and_merge_yaml("my_yaml1.yaml", "my_yaml2.yaml")
 
     # Load YAML into existing dictionary
-    mydict = load_yaml_into_existing_dict(existing_dict, "my_yaml.yml")
+    mydict = load_yaml_into_existing_dict(existing_dict, "my_yaml.yaml")
 
     # Load JSON
-    mydict = load_json("my_json.yml")
+    mydict = load_json("my_json.yaml")
 
     # Load 2 JSONs and merge into dictionary
     mydict = load_and_merge_json("my_json1.json", "my_json2.json")
@@ -359,7 +359,7 @@ Examples:
 
     # Save dictionary to YAML file in pretty format
     # preserving order if it is an OrderedDict
-    save_yaml(mydict, "mypath.yml", pretty=True, sortkeys=False)
+    save_yaml(mydict, "mypath.yaml", pretty=True, sortkeys=False)
 
     # Save dictionary to JSON file in compact form
     # sorting the keys
@@ -819,5 +819,5 @@ Examples:
 
 ## Easy building and packaging
 
-The pyproject.toml, setup.cfg, .readthedocs.yml and GitHub Actions workflows 
+The pyproject.toml, setup.cfg, .readthedocs.yaml and GitHub Actions workflows 
 provide a template that can be used by other projects or libraries.

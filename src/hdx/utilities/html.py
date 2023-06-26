@@ -31,7 +31,7 @@ if BeautifulSoup is not None:
             url (str): url to read
             downloader (Download): Download object. Defaults to creating a Download object with given user agent values.
             user_agent (Optional[str]): User agent string. HDXPythonUtilities/X.X.X- is prefixed.
-            user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.
+            user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
             user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
 
         Returns:

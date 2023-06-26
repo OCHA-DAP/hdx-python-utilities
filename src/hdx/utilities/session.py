@@ -35,7 +35,7 @@ def get_session(
 
     Args:
         user_agent (Optional[str]): User agent string. HDXPythonUtilities/X.X.X- is prefixed.
-        user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yml.
+        user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
         user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
         use_env (bool): Whether to read environment variables. Defaults to True.
         fail_on_missing_file (bool): Raise an exception if any specified configuration files are missing. Defaults to True.
