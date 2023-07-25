@@ -11,7 +11,7 @@ attrs==23.1.0
     #   jsonschema
 beautifulsoup4==4.12.2
     # via hdx-python-utilities (pyproject.toml)
-certifi==2023.5.7
+certifi==2023.7.22
     # via requests
 cfgv==3.3.1
     # via pre-commit
