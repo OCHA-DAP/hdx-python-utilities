@@ -171,7 +171,7 @@ class Email:
                 recipient, check_deliverability=True
             )  # validate and get info
             normalised_recipients.append(
-                v["email"]
+                v.normalized
             )  # replace with normalized form
         return normalised_recipients
 
@@ -209,7 +209,7 @@ class Email:
         v = validate_email(
             sender, check_deliverability=False
         )  # validate and get info
-        sender = v["email"]  # replace with normalized form
+        sender = v.normalized
 
         if html_body is not None:
             msg = MIMEMultipart("alternative")

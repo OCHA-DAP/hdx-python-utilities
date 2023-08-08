@@ -55,11 +55,11 @@ class TestDownloader:
 
     @pytest.fixture(scope="class")
     def getfixtureurl(self):
-        return "http://httpbin.org/get"
+        return "https://httpbin.org/get"
 
     @pytest.fixture(scope="class")
     def postfixtureurl(self):
-        return "http://httpbin.org/post"
+        return "https://httpbin.org/post"
 
     @pytest.fixture(scope="class")
     def fixturenotexistsurl(self):
