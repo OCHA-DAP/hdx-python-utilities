@@ -679,6 +679,27 @@ transformation outputs a string. It is used as follows:
             ) as state:
                 assert state.get() == date2.replace(hour=0, minute=0)
 
+            with State(
+                statepath,
+                State.dates_str_to_country_date_dict,
+                State.country_date_dict_to_dates_str,
+            ) as state:
+                state_dict = state.get()
+                assert state_dict == {"DEFAULT": date1}
+                state_dict["AFG"] = date2
+                state.set(state_dict)
+            with State(
+                statepath,
+                State.dates_str_to_country_date_dict,
+                State.country_date_dict_to_dates_str,
+            ) as state:
+                state_dict = state.get()
+                assert state_dict == {
+                    "DEFAULT": date1,
+                    "AFG": date2.replace(hour=0, minute=0),
+                }
+
+
 If run inside a GitHub Action, the saved state file could be committed to 
 GitHub so that on the next run the state is available in the repository.
 
