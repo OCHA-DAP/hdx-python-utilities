@@ -338,7 +338,7 @@ class TestDownloader:
         with Download() as downloader:
             downloader.setup(fixtureurl)
             md5hash = downloader.hash_stream(fixtureurl)
-            assert md5hash == "da9db35a396cca10c618f6795bdb9ff2"
+            assert md5hash == "da52e60d7a7c541e6fa67076bfac49f8"
 
     def test_download_file(
         self,
@@ -457,7 +457,6 @@ class TestDownloader:
 615,2229RTA,,19/04/2001,2001,1,Riots/Protests,Rioters (Algeria),Berber Ethnic Group (Algeria),5,Police Forces of Algeria (1999-),,1,15,Algeria,Tizi Ouzou,Tizi Ouzou,,Tizi Ouzou,36.71183,4.04591,3,Kabylie report,"Riots were reported in numerous villages in Kabylie, resulting in dozens wounded in clashes between protesters and police and significant material damage.",0
 615,2230RTA,,20/04/2001,2001,1,Riots/Protests,Protesters (Algeria),Students (Algeria),6,,,0,60,Algeria,Bejaia,Amizour,,Amizour,36.64022,4.90131,1,Crisis Group,Students protested in the Amizour area. At least 3 were later arrested for allegedly insulting gendarmes.,0
 615,2231RTA,,21/04/2001,2001,1,Riots/Protests,Rioters (Algeria),Berber Ethnic Group (Algeria),5,Police Forces of Algeria (1999-),,1,15,Algeria,Bejaia,Amizour,,Amizour,36.64022,4.90131,1,Kabylie report,"Rioters threw molotov cocktails, rocks and burning tires at gendarmerie stations in Beni Douala, El-Kseur and Amizour.",0
-
 """
             )
             downloader.download(

@@ -6,6 +6,7 @@ repos:
     hooks:
       - id: trailing-whitespace
       - id: end-of-file-fixer
+        exclude: test_csv_processing_blanks.csv
       - id: check-ast
   - repo: https://github.com/psf/black
     rev: 23.3.0
