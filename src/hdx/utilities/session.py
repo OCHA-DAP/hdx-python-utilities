@@ -26,6 +26,8 @@ def get_session(
     use_env: bool = True,
     fail_on_missing_file: bool = True,
     verify: bool = True,
+    retry_attempts: int = 5,
+    backoff_factor: int = 1,
     **kwargs: Any,
 ) -> requests.Session:
     """Set up and return Session object that is set up with retrying. Requires
@@ -40,6 +42,8 @@ def get_session(
         use_env (bool): Whether to read environment variables. Defaults to True.
         fail_on_missing_file (bool): Raise an exception if any specified configuration files are missing. Defaults to True.
         verify (bool): Whether to verify SSL certificates. Defaults to True.
+        retry_attempts (int): Number of retry attempts. Defaults to 5.
+        backoff_factor (int): Backoff factor for retry. Defaults to 1 (0s, 2s, 4s, 8s, 16s, 32s).
         **kwargs: See below
         auth (Tuple[str, str]): Authorisation information in tuple form (user, pass) OR
         basic_auth (str): Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
@@ -171,24 +175,23 @@ def get_session(
     )
 
     retries = Retry(
-        total=5,
-        backoff_factor=0.4,
+        total=retry_attempts,
+        backoff_factor=backoff_factor,
         status_forcelist=status_forcelist,
         allowed_methods=allowed_methods,
         raise_on_redirect=True,
         raise_on_status=True,
     )
     s.mount("file://", FileAdapter())
+    httpadapter = HTTPAdapter(
+        max_retries=retries, pool_connections=100, pool_maxsize=100
+    )
     s.mount(
         "http://",
-        HTTPAdapter(
-            max_retries=retries, pool_connections=100, pool_maxsize=100
-        ),
+        httpadapter,
     )
     s.mount(
         "https://",
-        HTTPAdapter(
-            max_retries=retries, pool_connections=100, pool_maxsize=100
-        ),
+        httpadapter,
     )
     return s

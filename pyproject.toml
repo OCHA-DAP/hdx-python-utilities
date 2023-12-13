@@ -36,15 +36,15 @@ requires-python = ">=3.8"
 # Extras for frictionless[excel,json] added explicitly
 # for conda-forge compatibility
 dependencies = [
-    "frictionless>=5.10.1",
+    "frictionless>=5.16.0",
     # frictionless[excel]
-    "openpyxl>=3.0",
+    "openpyxl>=3.1.2",
     "tableschema-to-template>=0.0.13",
-    "xlrd>=1.2",
-    "xlwt>=1.2",
+    "xlrd>=2.0.1",
+    "xlwt>=1.3.0",
     # frictionless[json]
-    "ijson>=3.0",
-    "jsonlines>=1.2",
+    "ijson>=3.2.3",
+    "jsonlines>=4.0.0",
     # /end frictionless extras
     "loguru",
     "python-dateutil==2.8.2",

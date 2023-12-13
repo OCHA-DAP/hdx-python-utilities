@@ -1,6 +1,6 @@
 # Summary
 
-The HDX Python Utilities Library provides a range of helpful utilities for 
+The HDX Python Utilities Library provides a range of helpful utilities for
 Python developers. Note that these are not specific to HDX.
 
 # Contents
@@ -24,22 +24,22 @@ Python developers. Note that these are not specific to HDX.
 
 # Information
 
-This library is part of the [Humanitarian Data Exchange](https://data.humdata.org/) (HDX) project. If you have 
+This library is part of the [Humanitarian Data Exchange](https://data.humdata.org/) (HDX) project. If you have
 humanitarian related data, please upload your datasets to HDX.
 
 The code for the library is [here](https://github.com/OCHA-DAP/hdx-python-utilities).
-The library has detailed API documentation which can be found in the menu at the top. 
+The library has detailed API documentation which can be found in the menu at the top.
 
 ## Breaking Changes
 From 3.5.5, Python 3.7 no longer supported
 
-From 3.3.7, improved parse_date and parse_date_range by default will attempt to parse 
-time zone if date format not given. The default time zone is UTC (not no timezone). 
+From 3.3.7, improved parse_date and parse_date_range by default will attempt to parse
+time zone if date format not given. The default time zone is UTC (not no timezone).
 
-From 3.1.5, changed setup_logging parameters to console_log_level, log_file and 
+From 3.1.5, changed setup_logging parameters to console_log_level, log_file and
 file_log_level.
 
-From 3.1.1, setup_logging now sets up logaru instead of colorlog and has only one 
+From 3.1.1, setup_logging now sets up logaru instead of colorlog and has only one
 parameter error_file which is False by default. There is no longer SMTP (email) handling
 which can be done directly with logaru instead.
 
@@ -55,10 +55,10 @@ From 3.0.0, only supports Python >= 3.6
 
 From 2.6.9, the Download class and get_session have optional allowed_methods instead of optional method_whitelist
 
-From 2.5.5, the Database class and all the libraries on which it depended have been moved to the new 
+From 2.5.5, the Database class and all the libraries on which it depended have been moved to the new
 [HDX Python Database library](https://github.com/OCHA-DAP/hdx-python-database).
 
-From 2.1.2, get_tabular_rows in the Download class returns headers, iterator and a new method get_tabular_rows_as_list 
+From 2.1.2, get_tabular_rows in the Download class returns headers, iterator and a new method get_tabular_rows_as_list
 returns only the iterator.
 
 From 2.1.4, read_list_from_csv and write_list_to_csv change the order of their parameters to be more logical.
@@ -70,8 +70,8 @@ Arguments about choosing between dict and list are all made consistent - dict_fo
 
 Various utilities to help with downloading files. Includes retrying by default.
 The `Download` class inherits from `BaseDownload` which specifies a number of standard
-methods that all downloaders should have: `download_file`, `download_text`, 
-`download_yaml`, `download_json` and `get_tabular_rows`. 
+methods that all downloaders should have: `download_file`, `download_text`,
+`download_yaml`, `download_json` and `get_tabular_rows`.
 
 - `download_file` returns a path to a file
 - `download_text` returns the text in a file
@@ -79,8 +79,8 @@ methods that all downloaders should have: `download_file`, `download_text`,
 - `download_yaml` returns the YAML in a Python dictionary
 - `get_tabular_rows` returns headers and an iterator (through rows)
 
-Note that a single `Download` object cannot be used in parallel: each download operation 
-must be completed before starting the next. 
+Note that a single `Download` object cannot be used in parallel: each download operation
+must be completed before starting the next.
 
 For example, given YAML file extraparams.yaml:
 
@@ -88,8 +88,8 @@ For example, given YAML file extraparams.yaml:
         basic_auth: "XXXXXXXX"
         locale: "en"
 
-We can create a downloader as shown below that will use the authentication defined in 
-`basic\_auth` and add the parameter `locale=en` to each request (eg. for get request 
+We can create a downloader as shown below that will use the authentication defined in
+`basic\_auth` and add the parameter `locale=en` to each request (eg. for get request
 <http://myurl/lala?param1=p1&locale=en>):
 
     with Download(user_agent="test", extra_params_yaml="extraparams.yaml", extra_params_lookup="mykey") as downloader:
@@ -103,29 +103,29 @@ We can create a downloader as shown below that will use the authentication defin
         filepath = abspath(f)
 
         # Read row by row from tabular file
-        headers, iterator = downloader.get_tabular_rows("http://myurl/my.csv", dict_rows=True, headers=1) 
+        headers, iterator = downloader.get_tabular_rows("http://myurl/my.csv", dict_rows=True, headers=1)
         for row in iterator:
             a = row["col"]
 
-You will get an error if you try to call `get_tabular_rows` twice with different urls to 
+You will get an error if you try to call `get_tabular_rows` twice with different urls to
 get two iterators, then afterwards iterate through those iterators. The first iteration
 must be completed before obtaining another iterator.
 
-If we want to limit the rate of get and post requests to say 1 per 0.1 seconds, then the 
+If we want to limit the rate of get and post requests to say 1 per 0.1 seconds, then the
 `rate_limit` parameter can be passed:
 
     with Download(rate_limit={"calls": 1, "period": 0.1}) as downloader:
         response = downloader.download(url)  # get requests library response
 
-If we want a user agent that will be used in all relevant HDX Python Utilities methods 
-(and all HDX Python API ones too if that library is included), then it can be configured 
+If we want a user agent that will be used in all relevant HDX Python Utilities methods
+(and all HDX Python API ones too if that library is included), then it can be configured
 once and used automatically:
 
     UserAgent.set_global("test")
     with Download() as downloader:
         response = downloader.download(url)  # get requests library response
 
-The response is of the form produced by the requests library. It may not be needed as 
+The response is of the form produced by the requests library. It may not be needed as
 there are functions directly on the Download object eg.
 
     assert downloader.get_status() == 200
@@ -135,21 +135,21 @@ there are functions directly on the Download object eg.
     assert downloader.get_json() == {...}
     assert downloader.get_yaml() == {...}
 
-The `get_tabular_rows` method enables iteration through tabular data. It returns the 
-header of tabular file pointed to by the url and an iterator where each row is returned 
+The `get_tabular_rows` method enables iteration through tabular data. It returns the
+header of tabular file pointed to by the url and an iterator where each row is returned
 as a list or dictionary depending on the dict_rows argument.
 
-The headers argument is either a row number or list of row numbers (in case of 
-multi-line headers) to be considered as headers (rows start counting at 1), or the 
-actual headers defined a list of strings. It defaults to 1 and cannot be None. 
-The `dict_form` arguments specifies if each row should be returned as a dictionary or a 
-list, defaulting to a list.  
+The headers argument is either a row number or list of row numbers (in case of
+multi-line headers) to be considered as headers (rows start counting at 1), or the
+actual headers defined a list of strings. It defaults to 1 and cannot be None.
+The `dict_form` arguments specifies if each row should be returned as a dictionary or a
+list, defaulting to a list.
 
-Optionally, headers can be inserted at specific positions. This is achieved using the 
-header_insertions argument. If supplied, it is a list of tuples of the form 
-`(position, header)` to be inserted. Optionally a function can be called on each row. 
-If supplied, it takes as arguments: headers (prior to any insertions) and row (which 
-will be in dict or list form depending upon the dict_rows argument) and outputs a 
+Optionally, headers can be inserted at specific positions. This is achieved using the
+header_insertions argument. If supplied, it is a list of tuples of the form
+`(position, header)` to be inserted. Optionally a function can be called on each row.
+If supplied, it takes as arguments: headers (prior to any insertions) and row (which
+will be in dict or list form depending upon the dict_rows argument) and outputs a
 modified row. Example:
 
     def testfn(headers, row):
@@ -157,18 +157,18 @@ modified row. Example:
         return row
 
     insertions = {"headers": [(2, "la")], "function": testfn}
-    headers, generator = downloader.get_tabular_rows(url, headers=3, 
+    headers, generator = downloader.get_tabular_rows(url, headers=3,
                                                      header_insertions=[(2, "la")], row_function=testfn)
 
 Other useful functions:
 
     # Iterate through tabular file returning lists for each row
-    headers, iterator = downloader.get_tabular_rows_as_list(url) 
+    headers, iterator = downloader.get_tabular_rows_as_list(url)
     for row in iterator:
         ...
     # Get hxl row
     assert Download.hxl_row(["a", "b", "c"], {"b": "#b", "c": "#c"}, dict_form=True)
-    # == {"a": "", "b": "#b", "c": "#c"}        
+    # == {"a": "", "b": "#b", "c": "#c"}
     # Build get url from url and dictionary of parameters
     Download.get_url_for_get("http://www.lala.com/hdfa?a=3&b=4",
                              OrderedDict([("c", "e"), ("d", "f")]))
@@ -179,60 +179,60 @@ Other useful functions:
                                      OrderedDict([("c", "e"), ("d", "f")]))
     # == ("http://www.lala.com/hdfa",
               OrderedDict([("a", "3"), ("b", "4"), ("c", "e"), ("d", "f")]))
-    # Get mapping of columns positions of headers          
+    # Get mapping of columns positions of headers
     Download.get_column_positions(["a", "b", "c"])
     # == {"a": 0, "b": 1, "c": 2}
 
-    # Get unique filename from url and join to provided folder or temporary folder 
+    # Get unique filename from url and join to provided folder or temporary folder
     # if no folder supplied
     # path = Download.get_path_for_url(url, folder)
 
-For more detail and additional functions, check the API docs mentioned earlier in the 
+For more detail and additional functions, check the API docs mentioned earlier in the
 [usage section](#usage).
 
 ## Retrieving files
 
 The `Retrieve` class inherits from `BaseDownload` which specifies a number of standard
-methods that all downloaders should have: `download_file`, `download_text`, 
-`download_yaml`, `download_json` and `get_tabular_rows`. 
+methods that all downloaders should have: `download_file`, `download_text`,
+`download_yaml`, `download_json` and `get_tabular_rows`.
 
-Note that a single `Retrieve` object cannot be used in parallel: each download operation 
-must be completed before starting the next. For example, you will get an error if you 
-try to call `get_tabular_rows` twice with different urls to get two iterators, then 
-afterwards iterate through those iterators. The first iteration must be completed before 
+Note that a single `Retrieve` object cannot be used in parallel: each download operation
+must be completed before starting the next. For example, you will get an error if you
+try to call `get_tabular_rows` twice with different urls to get two iterators, then
+afterwards iterate through those iterators. The first iteration must be completed before
 obtaining another iterator.
 
 
-When you download a file, you can opt to download from the web as usual or download from 
-the web and and save for future reuse or use the previously downloaded file. The 
-advantage is this is all handled in the class so you don't need to do lots of if-else 
-conditions for the different cases for each download in your code. This is helpful for 
-example when trying to generate test data. 
+When you download a file, you can opt to download from the web as usual or download from
+the web and and save for future reuse or use the previously downloaded file. The
+advantage is this is all handled in the class so you don't need to do lots of if-else
+conditions for the different cases for each download in your code. This is helpful for
+example when trying to generate test data.
 
-All the downloads in your code can be switched between the different modes by setting 
-the save and use_saved flags when 
+All the downloads in your code can be switched between the different modes by setting
+the save and use_saved flags when
 constructing the Retrieve object.
 
     retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save, use_saved)
 
-- `save=False, use_saved=False`  - download from web as normal (files will go in 
+- `save=False, use_saved=False`  - download from web as normal (files will go in
 temp_folder and be discarded)
-- `save=True, use_saved=False` - download from web as normal (files will go in saved_dir 
+- `save=True, use_saved=False` - download from web as normal (files will go in saved_dir
 and will be kept)
 - `save=False, use_saved=True` - use files from saved_dir (don't download at all)
 
-fallback_dir is a folder containing static fallback files which can optionally be used 
+fallback_dir is a folder containing static fallback files which can optionally be used
 if the download fails.
 
 Examples:
 
     with Download() as downloader:
-        # Downloads file returning the path to the downloaded file and using a fallback file if the download 
+        # Downloads file returning the path to the downloaded file and using a fallback file if the download
         # fails. Since saved is False, the file will be saved with name filename in temp_dir
-        retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save=False, use_saved=False, log_level=logging.DEBUG) 
+        retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save=False, use_saved=False, log_level=logging.DEBUG)
         path = retriever.download_file(url, filename, logstr="my file", fallback=True)
 
-        # Downloads text file saving it for future usage and returning the text data (with no fallback) 
+        # Downloads text file saving it for future usage and returning the text data (with no fallback)
         # Since saved is True, the file will be saved with name filename in saved_dir
         retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save=True, use_saved=False)
         text = retriever.download_text(url, filename, logstr="test text", fallback=False)
@@ -240,24 +240,24 @@ Examples:
         # from fallback_dir if needed.
         data = retriever.download_yaml(url, filename, logstr="test yaml", fallback=True)
 
-        # Uses previously downloaded JSON file in saved_dir returning the JSON data (with no fallback) 
+        # Uses previously downloaded JSON file in saved_dir returning the JSON data (with no fallback)
         retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save=False, use_saved=True)
         data = retriever.download_json(url, filename, logstr="test json", fallback=False, log_level=logging.DEBUG)
 
 ## Date utilities
 
-There are utilities to parse dates. By default, *no timezone information will be parsed 
-and the returned datetime will have timezone set to UTC*. To change this behaviour, the 
-functions have a parameter `timezone_handling` which should be changed from its default 
-of 0. If it is 1, then no timezone information will be parsed and a naive datetime will 
-be returned. If it is 2 or more, then timezone information will be parsed. For 2, 
-failure to parse timezone will result in a naive datetime. For 3, failure to parse 
-timezone will result in the timezone being set to UTC. For 4 and 5, the time will be 
-converted from whatever timezone is identified to UTC. For 4, failure to parse timezone 
-will result in a naive (local) datetime converted to UTC. For 5, failure to parse 
+There are utilities to parse dates. By default, *no timezone information will be parsed
+and the returned datetime will have timezone set to UTC*. To change this behaviour, the
+functions have a parameter `timezone_handling` which should be changed from its default
+of 0. If it is 1, then no timezone information will be parsed and a naive datetime will
+be returned. If it is 2 or more, then timezone information will be parsed. For 2,
+failure to parse timezone will result in a naive datetime. For 3, failure to parse
+timezone will result in the timezone being set to UTC. For 4 and 5, the time will be
+converted from whatever timezone is identified to UTC. For 4, failure to parse timezone
+will result in a naive (local) datetime converted to UTC. For 5, failure to parse
 timezone will result in the timezone being set to UTC.
 
-Ambiguous dates are parsed as day first D/M/Y where there are values in front of the 
+Ambiguous dates are parsed as day first D/M/Y where there are values in front of the
 year and day last Y/M/D where there are values after the year.
 
 Examples:
@@ -268,29 +268,29 @@ Examples:
     date = default_date_notz  # as above with no timezone info
     date = default_end_date  # a very late date for avoiding date comparison with None
     date = default_end_date_notz  # as above with no timezone info
-    
+
     # Parse dates
     assert parse_date("20/02/2013") == datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc)
     assert parse_date("20/02/2013", "%d/%m/%Y") == datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc)
-    parse_date("20/02/2013 01:30:20 IST")  # == 
+    parse_date("20/02/2013 01:30:20 IST")  # ==
     # datetime(2013, 2, 20, 1, 30, 20, tzinfo=timezone.utc)
-    parse_date("20/02/2013 01:30:20 IST", timezone_handling=1)  # == 
+    parse_date("20/02/2013 01:30:20 IST", timezone_handling=1)  # ==
     # datetime(2013, 2, 20, 1, 30, 20)
     parse_date("20/02/2013 01:30:20 IST", timezone_handling=2)  # ==
     # datetime(2013, 2, 20, 1, 30, 20, tzinfo=timezone(timedelta(hours=5, minutes=30)))
     parse_date("20/02/2013 01:30:20 IST", timezone_handling=3)  # ==
     # datetime(2013, 2, 20, 1, 30, 20, tzinfo=timezone(timedelta(hours=5, minutes=30)))
-    parse_date("20/02/2013 01:30:20 IST", timezone_handling=4)  # == 
+    parse_date("20/02/2013 01:30:20 IST", timezone_handling=4)  # ==
     # datetime(2013, 2, 19, 20, 0, 20, tzinfo=timezone.utc)
-    parse_date("20/02/2013 01:30:20", zero_time=True)  # == 
+    parse_date("20/02/2013 01:30:20", zero_time=True)  # ==
     # datetime(2013, 2, 20, 0, 0, 0, tzinfo=timezone.utc)
-    parse_date("20/02/2013 01:30:20 IST", max_time=True)  # == 
+    parse_date("20/02/2013 01:30:20 IST", max_time=True)  # ==
     # datetime(2013, 2, 20, 23, 59, 59, tzinfo=timezone.utc)
-    parse_date("20/02/2013 01:30:20 IST", include_microseconds=True, max_time=True) 
+    parse_date("20/02/2013 01:30:20 IST", include_microseconds=True, max_time=True)
     # datetime(2013, 2, 20, 23, 59, 59, 999999, tzinfo=timezone.utc)
-    parse_date("20/02/2013 01:30:20 NUT", timezone_handling=2, default_timezones="-11 X NUT SST")  # == 
+    parse_date("20/02/2013 01:30:20 NUT", timezone_handling=2, default_timezones="-11 X NUT SST")  # ==
     # datetime(2013, 2, 20, 1, 30, 20, tzinfo=timezone(timedelta(hours=-11)))
-    
+
     # Parse date ranges
     parse_date_range("20/02/2013")
     # == datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc), datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc)
@@ -306,19 +306,19 @@ Examples:
     # == datetime(2013, 2, 1, 0, 0, tzinfo=timezone.utc), datetime(2013, 2, 28, 0, 0, tzinfo=timezone.utc)
     parse_date_range("2013")
     # == datetime(2013, 1, 1, 0, 0, tzinfo=timezone.utc), datetime(2013, 12, 31, 0, 0, tzinfo=timezone.utc)
-    
+
     # Pass dict in fuzzy activates fuzzy matching that allows for looking for dates within a sentence
     fuzzy = dict()
     parse_date_range("date is 20/02/2013 for this test", fuzzy=fuzzy)
-    # == datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc), datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc)    
-    assert fuzzy == {"startdate": datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc), 
-                     "enddate": datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc), 
+    # == datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc), datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc)
+    assert fuzzy == {"startdate": datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc),
+                     "enddate": datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc),
                      "nondate": ("date is ", " for this test"), "date": ("20/02/2013",)}
     fuzzy = dict()
     parse_date_range("date is 02/2013 for this test", fuzzy=fuzzy)
     # == datetime(2013, 2, 1, 0, 0, tzinfo=timezone.utc), datetime(2013, 2, 28, 0, 0, tzinfo=timezone.utc)
-    assert fuzzy == {"startdate": datetime(2013, 2, 1, 0, 0, tzinfo=timezone.utc), 
-                     "enddate": datetime(2013, 2, 28, 0, 0, tzinfo=timezone.utc), 
+    assert fuzzy == {"startdate": datetime(2013, 2, 1, 0, 0, tzinfo=timezone.utc),
+                     "enddate": datetime(2013, 2, 28, 0, 0, tzinfo=timezone.utc),
                      "nondate": ("date is ", " for this test"), "date": ("02/2013",)}
 
     # Convert between datetime and timestamp
@@ -401,7 +401,7 @@ supported) based on a given configuration. Here is an example YAML configuration
 
 The `input` section is needed if the rows of data that are passed in are missing either
 headers or HXL hashtags. The `output` section defines what files will be created. If
-`hxltags` are specified, then only those columns are output. CSV output would look like 
+`hxltags` are specified, then only those columns are output. CSV output would look like
 this:
 
     Col2,Col3,tag4
@@ -410,7 +410,7 @@ this:
     5,6,40
 
 
-For JSON output, if no `metadata` or `data` is specified, the output will look like 
+For JSON output, if no `metadata` or `data` is specified, the output will look like
 this:
 
     [
@@ -444,9 +444,9 @@ The utility is called as follows:
     )
 
 The first parameter is the configuration which can come from a YAML file for example.
-The second parameter, `rows` is the data. That data can be a list of lists, tuples or 
+The second parameter, `rows` is the data. That data can be a list of lists, tuples or
 dictionaries. If `includes_header` is `True`, headers are taken from `rows`, otherwise
-they must be given by the configuration. If `includes_hxltags` is `True`, HXL hashtags 
+they must be given by the configuration. If `includes_hxltags` is `True`, HXL hashtags
 are taken from `rows`, otherwise they must be given by the configuration. `output_dir`
 specifies where the output should go and defaults to "". Any other parameters (such as
 `today` in the example above) are used to populate template variables given in the
@@ -617,16 +617,16 @@ Example of setup and sending email:
 
 ## Logging
 
-The library provides elegant logs to the console with a simple default setup which 
-should be adequate for most cases. By default, the log shows `INFO` level and higher. 
-This can be changed with `console_log_level`. If `log_file`, a path to a log file, is 
+The library provides elegant logs to the console with a simple default setup which
+should be adequate for most cases. By default, the log shows `INFO` level and higher.
+This can be changed with `console_log_level`. If `log_file`, a path to a log file, is
 specified then logging will also go to a file. The log level for the file can be
 set using `file_log_level` which by default is `ERROR`.
 
     from hdx.utilities.easy_logging import setup_logging
     ...
     logger = logging.getLogger(__name__)
-    setup_logging(console_log_level="DEBUG", log_file="output.log", 
+    setup_logging(console_log_level="DEBUG", log_file="output.log",
     file_log_level="INFO")
 
 To use logging in your files, simply add the line below to the top of
@@ -651,18 +651,18 @@ It is called ErrorsOnExit and can be used as follows:
         ...
         errors.add("ANOTHER ERROR MESSAGE")
 
-The above code will collect the errors, in this case "MY ERROR MESSAGE" and "ANOTHER 
+The above code will collect the errors, in this case "MY ERROR MESSAGE" and "ANOTHER
 ERROR MESSAGE". On leaving the `with` block, the errors will be logged and the code will
-exit with the error code 1 (ie. `sys.exit(1)` will be called). If there are no errors, 
+exit with the error code 1 (ie. `sys.exit(1)` will be called). If there are no errors,
 the code will not exit and execution will continue after the `with` block (ie.
 `sys.exit(1)` will not be called).
 
 ## State utility
 
-The State class allows the reading and writing of state to a given path. Input 
-and output state transformations can be supplied in read_fn and write_fn 
-respectively. The input state transformation takes in a string while the output 
-transformation outputs a string. It is used as follows: 
+The State class allows the reading and writing of state to a given path. Input
+and output state transformations can be supplied in read_fn and write_fn
+respectively. The input state transformation takes in a string while the output
+transformation outputs a string. It is used as follows:
 
         with temp_dir(folder="test_state") as tmpdir:
             statepath = join(tmpdir, statefile)
@@ -700,7 +700,7 @@ transformation outputs a string. It is used as follows:
                 }
 
 
-If run inside a GitHub Action, the saved state file could be committed to 
+If run inside a GitHub Action, the saved state file could be committed to
 GitHub so that on the next run the state is available in the repository.
 
 ## Path utilities
@@ -724,37 +724,37 @@ Get filename or (filename, extension) from url
     assert filename == "test_data"
     assert extension == ".csv"
 
-Gets temporary directory from environment variable `TEMP_DIR` and falls back to 
+Gets temporary directory from environment variable `TEMP_DIR` and falls back to
 the temporary folder created by the os function `gettempdir`.
-    
+
     temp_folder = get_temp_dir()
 
-Gets temporary directory from environment variable `TEMP_DIR` and falls back to 
-the temporary folder created by the os function `gettempdir`.  It (optionally) 
-appends the given folder name, creates the folder and deletes the folder if 
+Gets temporary directory from environment variable `TEMP_DIR` and falls back to
+the temporary folder created by the os function `gettempdir`.  It (optionally)
+appends the given folder name, creates the folder and deletes the folder if
 exiting successfully else keeps the folder if there was an exception.
 
     with temp_dir("papa", delete_on_success=True, delete_on_failure=False) as tempdir:
         ...
 
-Sometimes it is necessary to be able to resume runs if they fail. The following 
-example creates a temporary folder and iterates through a list of items. On 
-each iteration, the current state of progress is stored in the temporary 
-folder. If the iteration were to fail, the temporary folder is not deleted and 
+Sometimes it is necessary to be able to resume runs if they fail. The following
+example creates a temporary folder and iterates through a list of items. On
+each iteration, the current state of progress is stored in the temporary
+folder. If the iteration were to fail, the temporary folder is not deleted and
 on the next run, it will resume where it failed assuming that the new run does
-not recreate the environment (eg. this would work with a dedicated server but 
-not GitHub Actions). Once the whole list is iterated through, the temporary 
+not recreate the environment (eg. this would work with a dedicated server but
+not GitHub Actions). Once the whole list is iterated through, the temporary
 folder is deleted.
 
-What is returned each iteration is a tuple with 2 dictionaries. The first 
-(`info`) contains key `folder` which is the temporary directory optionally with 
-folder appended (and created if it doesn't exist). In key `progress` is held 
-the current position in the iterator. It also contains the key `batch` 
-containing a batch code to be passed as the `batch` parameter in 
-`create_in_hdx` or `update_in_hdx` calls. The second dictionary is the next 
-dictionary in the iterator. The environment variable `WHERETOSTART` can be set 
-to the starting value for example `iso3=SDN` in the example below. If it is set 
-to `RESET`, then the temporary folder is deleted before the run starts to 
+What is returned each iteration is a tuple with 2 dictionaries. The first
+(`info`) contains key `folder` which is the temporary directory optionally with
+folder appended (and created if it doesn't exist). In key `progress` is held
+the current position in the iterator. It also contains the key `batch`
+containing a batch code to be passed as the `batch` parameter in
+`create_in_hdx` or `update_in_hdx` calls. The second dictionary is the next
+dictionary in the iterator. The environment variable `WHERETOSTART` can be set
+to the starting value for example `iso3=SDN` in the example below. If it is set
+to `RESET`, then the temporary folder is deleted before the run starts to
 ensure it starts from the beginning.
 
     iterator = [{"iso3": "AFG", "name": "Afghanistan"}, {"iso3": "SDN", "name": "Sudan"},
@@ -763,7 +763,7 @@ ensure it starts from the beginning.
     for info, nextdict in progress_storing_tempdir(tempfolder, iterator, "iso3"):
         ...
 
-Sometimes, it may be necessary to create the folder and batch code for use by 
+Sometimes, it may be necessary to create the folder and batch code for use by
 parts of the code outside of the iterator. This can be achieved as follows:
 
     with wheretostart_tempdir_batch(tempfolder) as info:
@@ -772,25 +772,25 @@ parts of the code outside of the iterator. This can be achieved as follows:
         for info, country in progress_storing_folder(info, iterator, "iso3"):
             ...
 
-The batch code can be passed into `wheretostart_tempdir_batch` in the `batch` 
-parameter. If not given, the batch code is generated. The folder to use will be 
-a generated temporary folder unless `tempdir` is given. 
+The batch code can be passed into `wheretostart_tempdir_batch` in the `batch`
+parameter. If not given, the batch code is generated. The folder to use will be
+a generated temporary folder unless `tempdir` is given.
 
 ## Text processing
 
 Examples:
 
     a = "The quick brown fox jumped over the lazy dog. It was so fast!"
-    
+
     # Remove whitespace and punctuation from end of string
     assert remove_end_characters('lalala,.,"') == "lalala"
     assert remove_end_characters('lalala, .\t/,"', f"{punctuation}{whitespace}" == "lalala"
-    
+
     # Remove list of items from end of string, stripping any whitespace
     result = remove_from_end(a, ["fast!", "so"], "Transforming %s -> %s")
     assert result == "The quick brown fox jumped over the lazy dog. It was"
 
-    # Remove string from another string and delete any preceding end characters - by default 
+    # Remove string from another string and delete any preceding end characters - by default
     # punctuation (eg. comma) and any whitespace following the punctuation
     assert remove_string("lala, 01/02/2020 ", "01/02/2020") == "lala "
     assert remove_string("lala,(01/02/2020) ", "01/02/2020") == "lala) "
@@ -840,5 +840,5 @@ Examples:
 
 ## Easy building and packaging
 
-The pyproject.toml, setup.cfg, .readthedocs.yaml and GitHub Actions workflows 
+The pyproject.toml, setup.cfg, .readthedocs.yaml and GitHub Actions workflows
 provide a template that can be used by other projects or libraries.

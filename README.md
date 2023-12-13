@@ -22,7 +22,7 @@ Note that these are not specific to HDX.
 1. Check valid UUID
 1. Easy building and packaging
 
-For more information, please read the [documentation](https://hdx-python-utilities.readthedocs.io/en/latest/). 
+For more information, please read the [documentation](https://hdx-python-utilities.readthedocs.io/en/latest/).
 
-This library is part of the [Humanitarian Data Exchange](https://data.humdata.org/) (HDX) project. If you have 
+This library is part of the [Humanitarian Data Exchange](https://data.humdata.org/) (HDX) project. If you have
 humanitarian related data, please upload your datasets to HDX.
