@@ -104,7 +104,7 @@ class TestLoader:
 this
 is
 a
-test
+test  
 
 """  # noqa: W291
     expected_text_strip = """hello
