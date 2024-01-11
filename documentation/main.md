@@ -348,8 +348,11 @@ Examples:
     # Load YAML into existing dictionary
     mydict = load_yaml_into_existing_dict(existing_dict, "my_yaml.yaml")
 
-    # Load JSON
-    mydict = load_json("my_json.yaml")
+    # Load JSON raising a LoadError if the file is empty
+    mydict = load_json("my_json.json")
+
+    # Load JSON returning None if the file is empty
+    mydict = load_json("my_json.json", loaderror_if_empty=False)
 
     # Load 2 JSONs and merge into dictionary
     mydict = load_and_merge_json("my_json1.json", "my_json2.json")
