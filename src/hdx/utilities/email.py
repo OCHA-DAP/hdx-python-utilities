@@ -151,7 +151,7 @@ class Email:
 
     @staticmethod
     def get_normalised_emails(
-        recipients: Union[str, ListTuple[str]]
+        recipients: Union[str, ListTuple[str]],
     ) -> List[str]:
         """Get list of normalised emails.
 
