@@ -33,10 +33,11 @@ def load_text(
     Returns:
         str: String contents of file
     """
+    linesep_ = "\n"
     with open(path, encoding=encoding) as f:
         string = f.read()
         if replace_newlines is not None:
-            string = string.replace(linesep, replace_newlines)
+            string = string.replace(linesep_, replace_newlines)
         if strip:
             string = string.strip()
     if not string:
@@ -108,9 +109,7 @@ def load_and_merge_yaml(
         Dict: Dictionary of merged YAML files
     """
     configs = [
-        load_yaml(
-            path, encoding=encoding, loaderror_if_empty=loaderror_if_empty
-        )
+        load_yaml(path, encoding=encoding, loaderror_if_empty=loaderror_if_empty)
         for path in paths
     ]
     return merge_dictionaries(configs)
@@ -133,9 +132,7 @@ def load_and_merge_json(
         Dict: Dictionary of merged JSON files
     """
     configs = [
-        load_json(
-            path, encoding=encoding, loaderror_if_empty=loaderror_if_empty
-        )
+        load_json(path, encoding=encoding, loaderror_if_empty=loaderror_if_empty)
         for path in paths
     ]
     return merge_dictionaries(configs)
@@ -158,9 +155,7 @@ def load_yaml_into_existing_dict(
     Returns:
         Dict: YAML file merged into dictionary
     """
-    yamldict = load_yaml(
-        path, encoding=encoding, loaderror_if_empty=loaderror_if_empty
-    )
+    yamldict = load_yaml(path, encoding=encoding, loaderror_if_empty=loaderror_if_empty)
     return merge_two_dictionaries(data, yamldict)
 
 
@@ -181,7 +176,5 @@ def load_json_into_existing_dict(
     Returns:
         dict: JSON file merged into dictionary
     """
-    jsondict = load_json(
-        path, encoding=encoding, loaderror_if_empty=loaderror_if_empty
-    )
+    jsondict = load_json(path, encoding=encoding, loaderror_if_empty=loaderror_if_empty)
     return merge_two_dictionaries(data, jsondict)

@@ -24,7 +24,11 @@ charset-normalizer==3.3.2
 click==8.1.7
     # via typer
 colorama==0.4.6
-    # via typer
+    # via
+    #   click
+    #   loguru
+    #   pytest
+    #   typer
 coverage[toml]==7.4.1
     # via
     #   coverage
@@ -172,6 +176,8 @@ virtualenv==20.25.0
     # via pre-commit
 webencodings==0.5.1
     # via html5lib
+win32-setctime==1.1.0
+    # via loguru
 xlrd==2.0.1
     # via hdx-python-utilities (pyproject.toml)
 xlsxwriter==3.1.9
