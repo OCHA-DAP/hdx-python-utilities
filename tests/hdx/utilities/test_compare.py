@@ -1,6 +1,5 @@
 """Compare Utility Tests"""
 from os.path import join
-
 import pytest
 
 from hdx.utilities.compare import assert_files_same, compare_files

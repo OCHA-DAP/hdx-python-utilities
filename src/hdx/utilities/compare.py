@@ -4,7 +4,9 @@ from os import linesep
 from typing import List
 
 
-def compare_files(path1: str, path2: str, encoding: str = "utf-8") -> List[str]:
+def compare_files(
+    path1: str, path2: str, encoding: str = "utf-8"
+) -> List[str]:
     """Returns the delta between two files using -, ?, + format excluding lines
     that are the same.
 

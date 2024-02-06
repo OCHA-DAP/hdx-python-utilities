@@ -1,6 +1,5 @@
 """Date Parse Utility Tests"""
 from datetime import datetime, timedelta, timezone
-
 import pytest
 from dateutil.parser import ParserError
 
