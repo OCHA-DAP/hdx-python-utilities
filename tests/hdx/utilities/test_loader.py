@@ -172,7 +172,7 @@ test"""
             assert result == TestLoader.text
             result = load_text(text_file, strip=True)
             assert result == TestLoader.expected_text_strip
-            result = load_text(text_file, replace_newlines=" ")
+            result = load_text(text_file, replace_line_separators=" ")
             assert result == TestLoader.expected_text_newlines_to_spaces
             with pytest.raises(IOError):
                 load_text(join(tmpdir, "NOTEXIST.txt"))
