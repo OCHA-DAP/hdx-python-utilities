@@ -1,14 +1,17 @@
 line-length = 79
 exclude = ["_version.py"]
-lint.ignore = [
-    "E501" # Line too long
-]
+
+[lint]
 # List of rules: https://docs.astral.sh/ruff/rules/
-lint.select = [
+select = [
   "E",   # pycodestyle - default
   "F",   # pyflakes - default
   "I"    # isort
 ]
+ignore = [
+    "E501" # Line too long
+]
+
 
 [lint.isort]
 known-local-folder = ["hdx"]
