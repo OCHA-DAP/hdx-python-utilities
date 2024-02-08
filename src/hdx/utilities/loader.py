@@ -32,14 +32,14 @@ def load_text(
         replace_newlines (Optional[str]): String with which to replace newlines. Defaults to None (don't replace). (deprecated 2024-02-07)
         replace_line_separators (Optional[str]): String with which to replace newlines. Defaults to None (don't replace).
         loaderror_if_empty (bool): Whether to raise LoadError if file is empty. Default to True.
-        default_line_separator (str): line separator to be replaced if replace_newlines is True
+        default_line_separator (str): line separator to be replaced if replace_line_separators is not None
 
     Returns:
         str: String contents of file
     """
     if replace_newlines is not None:
         warn(
-            "Keyword argument 'replace_newlines' to 'load_text' is deprecated "
+            "Keyword argument 'replace_newlines' to 'load_text' is deprecated on 2024-02-08 "
             "in favour of 'replace_line_separators'",
             DeprecationWarning,
             stacklevel=2,
