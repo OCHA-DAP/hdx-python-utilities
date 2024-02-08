@@ -96,3 +96,5 @@ ENV/
 
 # hatch-vcs
 _version.py
+
+.vscode/settings.json

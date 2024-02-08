@@ -16,7 +16,7 @@ class TestCompare:
         return join(fixturesfolder, "compare", "test_csv_processing2.csv")
 
     def test_compare_files(self, testfile1, testfile2):
-        result = compare_files(testfile1, testfile2)
+        result = compare_files(testfile1, testfile2, encoding="utf-8")
         assert result == [
             "- coal   ,3      ,7.4    ,'needed'",
             "?         ^\n",

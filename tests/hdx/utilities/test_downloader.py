@@ -403,7 +403,7 @@ class TestDownloader:
                 filename=filename,
             )
             fpath = abspath(f)
-            with open(fpath) as fi:
+            with open(fpath, encoding="utf-8") as fi:
                 text = fi.read()
                 assert '"id": "10"' in text
                 assert '"lala": "a"' in text
@@ -419,7 +419,7 @@ class TestDownloader:
                 filename=filename,
             )
             fpath = abspath(f)
-            with open(fpath) as fi:
+            with open(fpath, encoding="utf-8") as fi:
                 text = fi.read()
                 assert '"id": "3"' in text
                 assert '"lala": "b"' in text

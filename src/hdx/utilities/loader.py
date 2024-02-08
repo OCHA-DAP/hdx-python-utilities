@@ -1,8 +1,8 @@
 """Loading utilities for YAML, JSON etc."""
 
 import json
-from os import linesep
 from typing import Any, Dict, Optional
+from warnings import warn
 
 from ruamel.yaml import YAML
 
@@ -19,7 +19,9 @@ def load_text(
     encoding: str = "utf-8",
     strip: bool = False,
     replace_newlines: Optional[str] = None,
+    replace_line_separators: Optional[str] = None,
     loaderror_if_empty: bool = True,
+    default_line_separator: str = "\n",
 ) -> str:
     """Load file into a string removing newlines.
 
@@ -27,16 +29,28 @@ def load_text(
         path (str): Path to file
         encoding (str): Encoding of file. Defaults to utf-8.
         strip (bool): Whether to strip whitespace from start and end. Defaults to False.
-        replace_newlines (Optional[str]): String with which tp replace newlines. Defaults to None (don't replace).
+        replace_newlines (Optional[str]): String with which to replace newlines. Defaults to None (don't replace). (deprecated 2024-02-07)
+        replace_line_separators (Optional[str]): String with which to replace newlines. Defaults to None (don't replace).
         loaderror_if_empty (bool): Whether to raise LoadError if file is empty. Default to True.
+        default_line_separator (str): line separator to be replaced if replace_line_separators is not None
 
     Returns:
         str: String contents of file
     """
+    if replace_newlines is not None:
+        warn(
+            "Keyword argument 'replace_newlines' to 'load_text' is deprecated on 2024-02-08 "
+            "in favour of 'replace_line_separators'",
+            DeprecationWarning,
+            stacklevel=2,
+        )
+        replace_line_separators = replace_newlines
     with open(path, encoding=encoding) as f:
         string = f.read()
-        if replace_newlines is not None:
-            string = string.replace(linesep, replace_newlines)
+        if replace_line_separators is not None:
+            string = string.replace(
+                default_line_separator, replace_line_separators
+            )
         if strip:
             string = string.strip()
     if not string:

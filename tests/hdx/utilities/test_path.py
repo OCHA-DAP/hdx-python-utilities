@@ -272,7 +272,7 @@ class TestPath:
             (
                 0,
                 {
-                    "folder": "/tmp/gaga/0",
+                    "folder": join(expected_dir, "0"),
                     "batch": "1234",
                     "progress": "emergency_id=911",
                 },
@@ -281,7 +281,7 @@ class TestPath:
             (
                 1,
                 {
-                    "folder": "/tmp/gaga/1",
+                    "folder": join(expected_dir, "1"),
                     "batch": "1234",
                     "progress": "iso3=AFG",
                 },
@@ -290,7 +290,7 @@ class TestPath:
             (
                 1,
                 {
-                    "folder": "/tmp/gaga/1",
+                    "folder": join(expected_dir, "1"),
                     "batch": "1234",
                     "progress": "iso3=SDN",
                 },
@@ -299,7 +299,7 @@ class TestPath:
             (
                 1,
                 {
-                    "folder": "/tmp/gaga/1",
+                    "folder": join(expected_dir, "1"),
                     "batch": "1234",
                     "progress": "iso3=YEM",
                 },
@@ -308,7 +308,7 @@ class TestPath:
             (
                 1,
                 {
-                    "folder": "/tmp/gaga/1",
+                    "folder": join(expected_dir, "1"),
                     "batch": "1234",
                     "progress": "iso3=ZAM",
                 },
