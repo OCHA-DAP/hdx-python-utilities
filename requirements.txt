@@ -24,11 +24,7 @@ charset-normalizer==3.3.2
 click==8.1.7
     # via typer
 colorama==0.4.6
-    # via
-    #   click
-    #   loguru
-    #   pytest
-    #   typer
+    # via typer
 coverage[toml]==7.4.1
     # via
     #   coverage
@@ -49,7 +45,7 @@ html5lib==1.1
     # via hdx-python-utilities (pyproject.toml)
 humanize==4.9.0
     # via frictionless
-identify==2.5.33
+identify==2.5.34
     # via pre-commit
 idna==3.6
     # via
@@ -93,7 +89,7 @@ platformdirs==4.2.0
     # via virtualenv
 pluggy==1.4.0
     # via pytest
-pre-commit==3.6.0
+pre-commit==3.6.1
     # via hdx-python-utilities (pyproject.toml)
 pydantic==2.6.1
     # via frictionless
@@ -116,7 +112,7 @@ python-dateutil==2.8.2
     # via
     #   frictionless
     #   hdx-python-utilities (pyproject.toml)
-python-slugify==8.0.3
+python-slugify==8.0.4
     # via frictionless
 pyyaml==6.0.1
     # via
@@ -135,7 +131,7 @@ rfc3986==2.0.0
     # via frictionless
 rich==13.7.0
     # via typer
-ruamel-yaml==0.18.5
+ruamel-yaml==0.18.6
     # via hdx-python-utilities (pyproject.toml)
 ruamel-yaml-clib==0.2.8
     # via ruamel-yaml
@@ -176,8 +172,6 @@ virtualenv==20.25.0
     # via pre-commit
 webencodings==0.5.1
     # via html5lib
-win32-setctime==1.1.0
-    # via loguru
 xlrd==2.0.1
     # via hdx-python-utilities (pyproject.toml)
 xlsxwriter==3.1.9
