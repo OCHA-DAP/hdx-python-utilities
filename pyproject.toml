@@ -102,7 +102,7 @@ test = """
        """
 
 [[tool.hatch.envs.test.matrix]]
-python = ["3.12"]
+python = ["3.11"]
 
 [tool.hatch.envs.lint]
 detached = true
