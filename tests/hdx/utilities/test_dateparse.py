@@ -18,7 +18,7 @@ class TestDateParse:
     def test_now_utc(self):
         assert now_utc().replace(
             second=0, microsecond=0
-        ) == datetime.utcnow().replace(
+        ) == datetime.now(timezone.utc).replace(
             second=0, microsecond=0, tzinfo=timezone.utc
         )
 
