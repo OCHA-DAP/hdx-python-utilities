@@ -1,4 +1,5 @@
 """Loader Tests"""
+
 from collections import OrderedDict
 from os.path import join
 

@@ -1,4 +1,5 @@
 """User agent utilities."""
+
 import logging
 import os
 from os.path import expanduser, isfile, join

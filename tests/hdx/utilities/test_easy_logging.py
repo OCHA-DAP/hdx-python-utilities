@@ -1,4 +1,5 @@
 """Logging Tests"""
+
 import logging
 
 from loguru import logger

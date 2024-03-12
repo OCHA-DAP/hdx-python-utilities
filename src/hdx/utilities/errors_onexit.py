@@ -1,4 +1,5 @@
 """Collect and log errors on exit."""
+
 import logging
 import sys
 from typing import Any

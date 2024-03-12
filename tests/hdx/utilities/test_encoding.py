@@ -1,4 +1,5 @@
 """Encoding Utility Tests"""
+
 from hdx.utilities.encoding import (
     base64_to_str,
     basicauth_decode,

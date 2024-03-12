@@ -1,4 +1,5 @@
 """Errors on exit Tests"""
+
 import logging
 
 import pytest

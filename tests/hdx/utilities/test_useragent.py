@@ -1,4 +1,5 @@
 """User Agent Tests"""
+
 from os.path import join
 
 import pytest

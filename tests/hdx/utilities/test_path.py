@@ -1,4 +1,5 @@
 """Path Utility Tests"""
+
 import copy
 from os.path import exists, join
 from shutil import rmtree

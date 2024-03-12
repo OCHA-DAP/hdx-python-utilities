@@ -1,4 +1,5 @@
 """Email Tests"""
+
 from os.path import join
 
 import pytest

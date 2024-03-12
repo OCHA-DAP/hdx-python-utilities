@@ -1,4 +1,5 @@
 """Global fixtures"""
+
 import smtplib
 from os.path import join
 

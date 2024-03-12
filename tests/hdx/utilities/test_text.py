@@ -1,4 +1,5 @@
 """Text Processing Tests"""
+
 from string import punctuation, whitespace
 
 from pytest import approx

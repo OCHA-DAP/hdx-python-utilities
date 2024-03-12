@@ -1,4 +1,5 @@
 """State Utility Tests"""
+
 from datetime import datetime, timezone
 from os.path import join
 from shutil import copyfile

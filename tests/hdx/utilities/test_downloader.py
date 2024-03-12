@@ -1,4 +1,5 @@
 """Downloader Tests"""
+
 import copy
 import re
 from collections import OrderedDict

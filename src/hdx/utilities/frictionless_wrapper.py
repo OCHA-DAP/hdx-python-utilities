@@ -1,4 +1,5 @@
 """Frictionless wrapper"""
+
 from typing import Any, Optional, Tuple
 
 import requests

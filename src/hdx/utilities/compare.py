@@ -1,4 +1,5 @@
 """File compare utilities."""
+
 import difflib
 from os import linesep
 from typing import List

@@ -1,4 +1,5 @@
 """Utility to save state to a file and read it back."""
+
 import logging
 from typing import Any, Callable, Dict
 
