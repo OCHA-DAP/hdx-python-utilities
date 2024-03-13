@@ -315,7 +315,12 @@ class Download(BaseDownload):
         Returns:
             None
         """
-        self.session.headers["Authorization"] = f"Bearer {bearer_token}"
+        self.session.headers.update(
+            {
+                "Accept": "application/json",
+                "Authorization": f"Bearer {bearer_token}",
+            }
+        )
 
     def hash_stream(self, url: str) -> str:
         """Stream file from url and hash it using MD5. Must call setup method
