@@ -265,6 +265,13 @@ class TestDownloader:
                 downloader.session.headers["Authorization"]
                 == f"Bearer {bearertoken}"
             )
+            bearertoken = "FGHIJ"
+            downloader.update_bearer_token(bearertoken)
+            assert (
+                downloader.session.headers["Authorization"]
+                == f"Bearer {bearertoken}"
+            )
+
         with pytest.raises(SessionError):
             Download(
                 extra_params_dict={"key1": "val1"},

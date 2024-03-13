@@ -306,6 +306,17 @@ class Download(BaseDownload):
             ) from e
         return self.response
 
+    def update_bearer_token(self, bearer_token: str) -> None:
+        """Update bearer token
+
+        Args:
+            bearer_token (str): Bearer token
+
+        Returns:
+            None
+        """
+        self.session.headers["Authorization"] = f"Bearer {bearer_token}"
+
     def hash_stream(self, url: str) -> str:
         """Stream file from url and hash it using MD5. Must call setup method
         first.

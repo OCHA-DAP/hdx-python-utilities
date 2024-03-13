@@ -166,6 +166,17 @@ class Retrieve(BaseDownload):
         filename = slugify(f"{filename}{extension}")
         return f"{prefix}{filename}{first_ext}", kwargs
 
+    def update_bearer_token(self, bearer_token: str) -> None:
+        """Update bearer token in downloader
+
+        Args:
+            bearer_token (str): Bearer token
+
+        Returns:
+            None
+        """
+        self.downloader.update_bearer_token(bearer_token)
+
     def download_file(
         self,
         url: str,
