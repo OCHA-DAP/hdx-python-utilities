@@ -266,7 +266,7 @@ class TestDownloader:
                 == f"Bearer {bearertoken}"
             )
             bearertoken = "FGHIJ"
-            downloader.update_bearer_token(bearertoken)
+            downloader.set_bearer_token(bearertoken)
             assert (
                 downloader.session.headers["Authorization"]
                 == f"Bearer {bearertoken}"

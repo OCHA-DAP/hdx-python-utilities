@@ -156,7 +156,7 @@ class TestRetriever:
                     use_saved=True,
                 )
 
-    def test_update_bearer_token(self, dirs, retrieverfolder, fallback_dir):
+    def test_set_bearer_token(self, dirs, retrieverfolder, fallback_dir):
         saved_dir, temp_dir = dirs
         bearertoken = "12345"
         with Download(bearer_token=bearertoken) as downloader:
@@ -173,7 +173,7 @@ class TestRetriever:
                 use_saved=False,
             ) as retriever:
                 bearertoken = "67890"
-                retriever.update_bearer_token(bearertoken)
+                retriever.set_bearer_token(bearertoken)
                 assert (
                     downloader.session.headers["Authorization"]
                     == f"Bearer {bearertoken}"

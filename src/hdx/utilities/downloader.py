@@ -306,8 +306,8 @@ class Download(BaseDownload):
             ) from e
         return self.response
 
-    def update_bearer_token(self, bearer_token: str) -> None:
-        """Update bearer token
+    def set_bearer_token(self, bearer_token: str) -> None:
+        """Set bearer token
 
         Args:
             bearer_token (str): Bearer token
