@@ -81,7 +81,7 @@ openpyxl==3.1.2
     # via hdx-python-utilities (pyproject.toml)
 packaging==24.0
     # via pytest
-petl==1.7.14
+petl==1.7.15
     # via frictionless
 platformdirs==4.2.0
     # via virtualenv
@@ -89,7 +89,7 @@ pluggy==1.4.0
     # via pytest
 pre-commit==3.6.2
     # via hdx-python-utilities (pyproject.toml)
-pydantic==2.6.3
+pydantic==2.6.4
     # via frictionless
 pydantic-core==2.16.3
     # via pydantic

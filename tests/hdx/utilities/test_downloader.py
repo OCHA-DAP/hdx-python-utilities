@@ -114,14 +114,29 @@ class TestDownloader:
         assert abspath(path) == abspath(join(downloaderfolder, filename))
 
     def test_init(self, monkeypatch, downloaderfolder):
-        basicauthfile = join(downloaderfolder, "basicauth.txt")
         with Download(auth=("u", "p")) as downloader:
             assert downloader.session.auth == ("u", "p")
         basicauth = "Basic dXNlcjpwYXNz"
         with Download(basic_auth=basicauth) as downloader:
             assert downloader.session.auth == ("user", "pass")
+        basicauthfile = join(downloaderfolder, "basicauth.txt")
         with Download(basic_auth_file=basicauthfile) as downloader:
             assert downloader.session.auth == ("testuser", "testpass")
+        bearertoken = "ABCDE"
+        with Download(bearer_token=bearertoken) as downloader:
+            assert downloader.session.headers["Accept"] == "application/json"
+            assert (
+                downloader.session.headers["Authorization"]
+                == f"Bearer {bearertoken}"
+            )
+        bearertokenfile = join(downloaderfolder, "bearertoken.txt")
+        bearertoken = "12345"
+        with Download(bearer_token_file=bearertokenfile) as downloader:
+            assert downloader.session.headers["Accept"] == "application/json"
+            assert (
+                downloader.session.headers["Authorization"]
+                == f"Bearer {bearertoken}"
+            )
         extraparamsyamltree = join(downloaderfolder, "extra_params_tree.yaml")
         with Download(
             extra_params_yaml=extraparamsyamltree, extra_params_lookup="mykey"
@@ -130,6 +145,19 @@ class TestDownloader:
         monkeypatch.setenv("BASIC_AUTH", basicauth)
         with Download() as downloader:
             assert downloader.session.auth == ("user", "pass")
+        bearertoken = "98765"
+        monkeypatch.setenv("BEARER_TOKEN", bearertoken)
+        with pytest.raises(SessionError):
+            Download()
+        monkeypatch.delenv("BASIC_AUTH")
+        with Download() as downloader:
+            assert downloader.session.headers["Accept"] == "application/json"
+            assert (
+                downloader.session.headers["Authorization"]
+                == f"Bearer {bearertoken}"
+            )
+        monkeypatch.delenv("BEARER_TOKEN")
+        monkeypatch.setenv("BASIC_AUTH", basicauth)
         with pytest.raises(SessionError):
             Download(basic_auth="12345")
         with pytest.raises(SessionError):
@@ -173,6 +201,8 @@ class TestDownloader:
             )
         with pytest.raises(IOError):
             Download(basic_auth_file="NOTEXIST")
+        with pytest.raises(IOError):
+            Download(bearer_token_file="NOTEXIST")
         extraparamsyaml = join(downloaderfolder, "extra_params.yaml")
         test_url = "http://www.lalala.com/lala"
         with Download(
@@ -226,6 +256,22 @@ class TestDownloader:
             assert "param3=11" in full_url
             assert "basic_auth" not in full_url
         monkeypatch.delenv("EXTRA_PARAMS")
+        bearertoken = "ZYXWV"
+        with Download(
+            extra_params_dict={"bearer_token": bearertoken}
+        ) as downloader:
+            assert downloader.session.headers["Accept"] == "application/json"
+            assert (
+                downloader.session.headers["Authorization"]
+                == f"Bearer {bearertoken}"
+            )
+            bearertoken = "FGHIJ"
+            downloader.set_bearer_token(bearertoken)
+            assert (
+                downloader.session.headers["Authorization"]
+                == f"Bearer {bearertoken}"
+            )
+
         with pytest.raises(SessionError):
             Download(
                 extra_params_dict={"key1": "val1"},

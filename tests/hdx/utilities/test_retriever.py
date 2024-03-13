@@ -156,6 +156,29 @@ class TestRetriever:
                     use_saved=True,
                 )
 
+    def test_set_bearer_token(self, dirs, retrieverfolder, fallback_dir):
+        saved_dir, temp_dir = dirs
+        bearertoken = "12345"
+        with Download(bearer_token=bearertoken) as downloader:
+            assert (
+                downloader.session.headers["Authorization"]
+                == f"Bearer {bearertoken}"
+            )
+            with Retrieve(
+                downloader,
+                fallback_dir,
+                saved_dir,
+                temp_dir,
+                save=False,
+                use_saved=False,
+            ) as retriever:
+                bearertoken = "67890"
+                retriever.set_bearer_token(bearertoken)
+                assert (
+                    downloader.session.headers["Authorization"]
+                    == f"Bearer {bearertoken}"
+                )
+
     def test_download_nosave(self, dirs, retrieverfolder, fallback_dir):
         saved_dir, temp_dir = dirs
         with Download() as downloader:

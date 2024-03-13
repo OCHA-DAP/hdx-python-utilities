@@ -42,6 +42,8 @@ class Download(BaseDownload):
         auth (Tuple[str, str]): Authorisation information in tuple form (user, pass) OR
         basic_auth (str): Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
         basic_auth_file (str): Path to file containing authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx)
+        bearer_token (str): Bearer token string OR
+        bearer_token_file (str): Path to file containing bearer token string OR
         extra_params_dict (Dict[str, str]): Extra parameters to put on end of url as a dictionary OR
         extra_params_json (str): Path to JSON file containing extra parameters to put on end of url OR
         extra_params_yaml (str): Path to YAML file containing extra parameters to put on end of url
@@ -303,6 +305,22 @@ class Download(BaseDownload):
                 f"Setup of Streaming Download of {url} failed!"
             ) from e
         return self.response
+
+    def set_bearer_token(self, bearer_token: str) -> None:
+        """Set bearer token
+
+        Args:
+            bearer_token (str): Bearer token
+
+        Returns:
+            None
+        """
+        self.session.headers.update(
+            {
+                "Accept": "application/json",
+                "Authorization": f"Bearer {bearer_token}",
+            }
+        )
 
     def hash_stream(self, url: str) -> str:
         """Stream file from url and hash it using MD5. Must call setup method
@@ -1265,6 +1283,8 @@ class Download(BaseDownload):
             auth (Tuple[str, str]): Authorisation information in tuple form (user, pass) OR
             basic_auth (str): Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
             basic_auth_file (str): Path to file containing authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx)
+            bearer_token (str): Bearer token string OR
+            bearer_token_file (str): Path to file containing bearer token string OR
             extra_params_dict (Dict[str, str]): Extra parameters to put on end of url as a dictionary OR
             extra_params_json (str): Path to JSON file containing extra parameters to put on end of url OR
             extra_params_yaml (str): Path to YAML file containing extra parameters to put on end of url

@@ -33,8 +33,9 @@ def get_session(
 ) -> requests.Session:
     """Set up and return Session object that is set up with retrying. Requires
     either global user agent to be set or appropriate user agent parameter(s)
-    to be completed. If the EXTRA_PARAMS or BASIC_AUTH environment variable is
-    supplied, the extra_params* parameters will be ignored.
+    to be completed. If the EXTRA_PARAMS, BASIC_AUTH or BEARER_TOKEN
+    environment variable is supplied, the extra_params* parameters will be
+    ignored.
 
     Args:
         user_agent (Optional[str]): User agent string. HDXPythonUtilities/X.X.X- is prefixed.
@@ -48,7 +49,9 @@ def get_session(
         **kwargs: See below
         auth (Tuple[str, str]): Authorisation information in tuple form (user, pass) OR
         basic_auth (str): Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
-        basic_auth_file (str): Path to file containing authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx)
+        basic_auth_file (str): Path to file containing authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
+        bearer_token (str): Bearer token string OR
+        bearer_token_file (str): Path to file containing bearer token string OR
         extra_params_dict (Dict): Extra parameters to put on end of url as a dictionary OR
         extra_params_json (str): Path to JSON file containing extra parameters to put on end of url OR
         extra_params_yaml (str): Path to YAML file containing extra parameters to put on end of url
@@ -76,11 +79,16 @@ def get_session(
     extra_params_found = False
     extra_params_dict = None
     basic_auth = None
+    bearer_token = None
     if use_env:
         basic_auth_env = os.getenv("BASIC_AUTH")
         if basic_auth_env:
             basic_auth = basic_auth_env
-            auths_found.append("basic_auth environment variable")
+            auths_found.append("BASIC_AUTH environment variable")
+        bearer_token_env = os.getenv("BEARER_TOKEN")
+        if bearer_token_env:
+            bearer_token = bearer_token_env
+            auths_found.append("BEARER_TOKEN environment variable")
         extra_params = os.getenv("EXTRA_PARAMS")
         if extra_params:
             if "=" in extra_params:
@@ -133,10 +141,15 @@ def get_session(
                 )
     if extra_params_dict:
         basic_auth_param = extra_params_dict.get("basic_auth")
+        bearer_token_param = extra_params_dict.get("bearer_token")
         if basic_auth_param:
             basic_auth = basic_auth_param
             auths_found.append("basic_auth parameter")
             del extra_params_dict["basic_auth"]
+        if bearer_token_param:
+            bearer_token = bearer_token_param
+            auths_found.append("bearer_token parameter")
+            del extra_params_dict["bearer_token"]
 
     s.params = extra_params_dict
 
@@ -144,6 +157,10 @@ def get_session(
     if basic_auth_arg:
         basic_auth = basic_auth_arg
         auths_found.append("basic_auth argument")
+    bearer_token_arg = kwargs.get("bearer_token")
+    if bearer_token_arg:
+        bearer_token = bearer_token_arg
+        auths_found.append("bearer_token argument")
 
     auth = kwargs.get("auth")
     if auth:
@@ -157,6 +174,15 @@ def get_session(
         except OSError:
             if fail_on_missing_file:
                 raise
+    bearer_token_file = kwargs.get("bearer_token_file")
+    if bearer_token_file:
+        logger.info(f"Loading bearer token from: {bearer_token_file}")
+        try:
+            bearer_token = load_text(bearer_token_file, strip=True)
+            auths_found.append(f"file {bearer_token_file}")
+        except OSError:
+            if fail_on_missing_file:
+                raise
     if len(auths_found) > 1:
         auths_found_str = ", ".join(auths_found)
         raise SessionError(
@@ -165,7 +191,16 @@ def get_session(
     if "headers" not in auths_found:
         if basic_auth:
             auth = basicauth_decode(basic_auth)
-        s.auth = auth
+            s.auth = auth
+        elif bearer_token:
+            s.headers.update(
+                {
+                    "Accept": "application/json",
+                    "Authorization": f"Bearer {bearer_token}",
+                }
+            )
+        else:
+            s.auth = auth
 
     status_forcelist = kwargs.get(
         "status_forcelist", (429, 500, 502, 503, 504)
