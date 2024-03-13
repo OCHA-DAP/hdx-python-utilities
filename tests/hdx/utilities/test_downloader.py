@@ -201,6 +201,8 @@ class TestDownloader:
             )
         with pytest.raises(IOError):
             Download(basic_auth_file="NOTEXIST")
+        with pytest.raises(IOError):
+            Download(bearer_token_file="NOTEXIST")
         extraparamsyaml = join(downloaderfolder, "extra_params.yaml")
         test_url = "http://www.lalala.com/lala"
         with Download(
@@ -254,6 +256,15 @@ class TestDownloader:
             assert "param3=11" in full_url
             assert "basic_auth" not in full_url
         monkeypatch.delenv("EXTRA_PARAMS")
+        bearertoken = "ZYXWV"
+        with Download(
+            extra_params_dict={"bearer_token": bearertoken}
+        ) as downloader:
+            assert downloader.session.headers["Accept"] == "application/json"
+            assert (
+                downloader.session.headers["Authorization"]
+                == f"Bearer {bearertoken}"
+            )
         with pytest.raises(SessionError):
             Download(
                 extra_params_dict={"key1": "val1"},
