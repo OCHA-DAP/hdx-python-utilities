@@ -149,6 +149,14 @@ class TestDownloader:
         monkeypatch.setenv("BEARER_TOKEN", bearertoken)
         with pytest.raises(SessionError):
             Download()
+        with Download(use_auth="bearer_token") as downloader:
+            assert downloader.session.headers["Accept"] == "application/json"
+            assert (
+                downloader.session.headers["Authorization"]
+                == f"Bearer {bearertoken}"
+            )
+        with Download(use_auth="basic_auth") as downloader:
+            assert downloader.session.auth == ("user", "pass")
         monkeypatch.delenv("BASIC_AUTH")
         with Download() as downloader:
             assert downloader.session.headers["Accept"] == "application/json"
@@ -188,6 +196,20 @@ class TestDownloader:
                 extra_params_yaml=extraparamsyamltree,
                 extra_params_lookup="mykey",
             )
+        with Download(
+            auth=("u", "p"),
+            extra_params_yaml=extraparamsyamltree,
+            extra_params_lookup="mykey",
+            use_auth="basic_auth",
+        ) as downloader:
+            assert downloader.session.auth == ("testuser", "testpass")
+        with Download(
+            auth=("u", "p"),
+            extra_params_yaml=extraparamsyamltree,
+            extra_params_lookup="mykey",
+            use_auth="auth",
+        ) as downloader:
+            assert downloader.session.auth == ("u", "p")
         with pytest.raises(SessionError):
             Download(
                 basic_auth_file=basicauthfile,
