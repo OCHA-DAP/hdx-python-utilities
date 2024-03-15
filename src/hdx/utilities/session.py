@@ -57,6 +57,7 @@ def get_session(
         extra_params_yaml (str): Path to YAML file containing extra parameters to put on end of url
         extra_params_lookup (str): Lookup key for parameters. If not given assumes parameters are at root of the dict.
         headers (Dict): Additional headers to add to request.
+        use_auth (str): If more than one auth found, specify which one to use, rather than failing.
         status_forcelist (ListTuple[int]): HTTP statuses for which to force retry. Defaults to (429, 500, 502, 503, 504).
         allowed_methods (ListTuple[str]): HTTP methods for which to force retry. Defaults to ("HEAD", "TRACE", "GET", "PUT", "OPTIONS", "DELETE").
     """
@@ -184,11 +185,26 @@ def get_session(
             if fail_on_missing_file:
                 raise
     if len(auths_found) > 1:
-        auths_found_str = ", ".join(auths_found)
-        raise SessionError(
-            f"More than one authorisation given! ({auths_found_str})"
-        )
-    if "headers" not in auths_found:
+        use_auth = kwargs.get("use_auth")
+        if use_auth is None:
+            auths_found_str = ", ".join(auths_found)
+            raise SessionError(
+                f"More than one authorisation given! ({auths_found_str})"
+            )
+        else:
+            if use_auth == "basic_auth":
+                auth = basicauth_decode(basic_auth)
+                s.auth = auth
+            elif use_auth == "bearer_token":
+                s.headers.update(
+                    {
+                        "Accept": "application/json",
+                        "Authorization": f"Bearer {bearer_token}",
+                    }
+                )
+            elif use_auth == "auth":
+                s.auth = auth
+    elif "headers" not in auths_found:
         if basic_auth:
             auth = basicauth_decode(basic_auth)
             s.auth = auth
