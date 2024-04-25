@@ -10,8 +10,9 @@ from hdx.utilities.dateparse import (
     get_timestamp_from_datetime,
     iso_string_from_datetime,
     now_utc,
+    now_utc_notz,
     parse_date,
-    parse_date_range, now_utc_notz,
+    parse_date_range,
 )
 
 
