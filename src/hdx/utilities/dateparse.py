@@ -650,6 +650,15 @@ def now_utc() -> datetime:
     return datetime.now(timezone.utc)
 
 
+def now_utc_notz() -> datetime:
+    """Return now in UTC but with timezone removed.
+
+    Returns:
+        datetime: Now in UTC but with timezone removed
+    """
+    return datetime.now(timezone.utc).replace(tzinfo=None)
+
+
 def parse_date_range(
     string: str,
     date_format: Optional[str] = None,

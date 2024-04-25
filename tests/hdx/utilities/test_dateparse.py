@@ -10,6 +10,7 @@ from hdx.utilities.dateparse import (
     get_timestamp_from_datetime,
     iso_string_from_datetime,
     now_utc,
+    now_utc_notz,
     parse_date,
     parse_date_range,
 )
@@ -20,6 +21,9 @@ class TestDateParse:
         assert now_utc().replace(second=0, microsecond=0) == datetime.now(
             timezone.utc
         ).replace(second=0, microsecond=0, tzinfo=timezone.utc)
+        assert now_utc_notz().replace(second=0, microsecond=0) == datetime.now(
+            timezone.utc
+        ).replace(second=0, microsecond=0, tzinfo=None)
 
     def test_parse_date_range(self):
         result = (
