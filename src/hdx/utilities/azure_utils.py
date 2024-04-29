@@ -179,8 +179,8 @@ class AzureBlobUpload:
         )
 
         blob_client = blob_service.get_blob_client(
-            container=container,
-            blob=filename)
+            container=container, blob=filename
+        )
 
         try:
             stream = io.StringIO()
