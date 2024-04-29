@@ -9,8 +9,8 @@ from os.path import exists
 from typing import Any
 
 try:
-    from azure.storage.blob import BlobServiceClient, ContentSettings
     import pandas as pd
+    from azure.storage.blob import BlobServiceClient, ContentSettings
 except ImportError:
     BlobServiceClient = None
     ContentSettings = None
