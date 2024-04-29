@@ -1,3 +1,4 @@
+""" All the logic around Azure blob uploads and downloads of files"""
 import base64
 import hashlib
 import hmac
@@ -6,7 +7,7 @@ import logging
 from datetime import datetime
 from os.path import exists
 from typing import Any
-from .downloader import Download
+
 try:
     from azure.storage.blob import BlobServiceClient, ContentSettings
     import pandas as pd
@@ -15,6 +16,7 @@ except ImportError:
     ContentSettings = None
     pd = None
 
+from .downloader import Download
 
 logger = logging.getLogger(__name__)
 
