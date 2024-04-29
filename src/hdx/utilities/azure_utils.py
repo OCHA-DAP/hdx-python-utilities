@@ -122,16 +122,16 @@ class AzureBlobDownload(Download):
         headers = {
             "x-ms-date": request_time,
             "x-ms-version": api_version,
-            "Authorization": ("SharedKey " + account + ":" + signed_string,)
+            "Authorization": ("SharedKey " + account + ":" + signed_string,),
         }
 
         url = (
-                "https://"
-                + account
-                + ".blob.core.windows.net/"
-                + container
-                + "/"
-                + blob
+            "https://"
+            + account
+            + ".blob.core.windows.net/"
+            + container
+            + "/"
+            + blob
         )
 
         if keep and exists(url):
@@ -161,7 +161,7 @@ class AzureBlobUpload:
         account: str,
         container: str,
         key: str,
-        data: None
+        data: None,
     ) -> str:
         """Upload a file to a blob storage within a container for an azure storage account
         Args:
@@ -190,7 +190,7 @@ class AzureBlobUpload:
             blob_client.upload_blob(
                 file_to_blob,
                 overwrite=True,
-                content_settings=ContentSettings(content_type="text/csv")
+                content_settings=ContentSettings(content_type="text/csv"),
             )
             logger.info("Successfully uploaded: %s" % dataset_name)
         except Exception:
