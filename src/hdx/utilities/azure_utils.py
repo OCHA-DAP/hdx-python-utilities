@@ -1,4 +1,4 @@
-""" All the logic around Azure blob uploads and downloads of files"""
+"""All the logic around Azure blob uploads and downloads of files"""
 import base64
 import hashlib
 import hmac
@@ -22,6 +22,7 @@ logger = logging.getLogger(__name__)
 
 
 class AzureBlobDownload(Download):
+    """Wrapper for Azure Blob download logic"""
 
     def download_file(
             self,
@@ -39,7 +40,8 @@ class AzureBlobDownload(Download):
             account (str): Storage account to access the blob
             container (str): Container to download from
             key (str): Key to access the blob
-            blob (str): Name of the blob to be downloaded. If empty, then it is assumed to download the whole container.
+            blob (str): Name of the blob to be downloaded. If empty, then it is assumed to download
+            the whole container.
             **kwargs: See below
             path (str): Full path to use for downloaded file instead of folder and filename.
             keep (bool): Whether to keep already downloaded file. Defaults to False.
@@ -52,50 +54,52 @@ class AzureBlobDownload(Download):
         path = kwargs.get("path")
         keep = kwargs.get("keep", False)
 
-        request_time = datetime.utcnow().strftime('%a, %d %b %Y %H:%M:%S GMT')
-        api_version = '2018-03-28'
+        request_time = datetime.utcnow().strftime("%a, %d %b %Y %H:%M:%S GMT")
+        api_version = "2018-03-28"
         parameters = {
-            'verb': 'GET',
-            'Content-Encoding': '',
-            'Content-Language': '',
-            'Content-Length': '',
-            'Content-MD5': '',
-            'Content-Type': '',
-            'Date': '',
-            'If-Modified-Since': '',
-            'If-Match': '',
-            'If-None-Match': '',
-            'If-Unmodified-Since': '',
-            'Range': '',
-            'CanonicalizedHeaders': 'x-ms-date:' + request_time + '\nx-ms-version:' + api_version + '\n',
-            'CanonicalizedResource': '/' + account + '/' + container + '/' + blob
+            "verb": "GET",
+            "Content-Encoding": "",
+            "Content-Language": "",
+            "Content-Length": "",
+            "Content-MD5": "",
+            "Content-Type": "",
+            "Date": "",
+            "If-Modified-Since": "",
+            "If-Match": "",
+            "If-None-Match": "",
+            "If-Unmodified-Since": "",
+            "Range": "",
+            "CanonicalizedHeaders": "x-ms-date:" + request_time + "\nx-ms-version:"
+                                    + api_version + "\n",
+            "CanonicalizedResource": "/" + account + "/" + container + "/" + blob
         }
 
-        signature = (parameters['verb'] + '\n'
-                          + parameters['Content-Encoding'] + '\n'
-                          + parameters['Content-Language'] + '\n'
-                          + parameters['Content-Length'] + '\n'
-                          + parameters['Content-MD5'] + '\n'
-                          + parameters['Content-Type'] + '\n'
-                          + parameters['Date'] + '\n'
-                          + parameters['If-Modified-Since'] + '\n'
-                          + parameters['If-Match'] + '\n'
-                          + parameters['If-None-Match'] + '\n'
-                          + parameters['If-Unmodified-Since'] + '\n'
-                          + parameters['Range'] + '\n'
-                          + parameters['CanonicalizedHeaders']
-                          + parameters['CanonicalizedResource'])
+        signature = (parameters["verb"] + "\n"
+                          + parameters["Content-Encoding"] + "\n"
+                          + parameters["Content-Language"] + "\n"
+                          + parameters["Content-Length"] + "\n"
+                          + parameters["Content-MD5"] + "\n"
+                          + parameters["Content-Type"] + "\n"
+                          + parameters["Date"] + "\n"
+                          + parameters["If-Modified-Since"] + "\n"
+                          + parameters["If-Match"] + "\n"
+                          + parameters["If-None-Match"] + "\n"
+                          + parameters["If-Unmodified-Since"] + "\n"
+                          + parameters["Range"] + "\n"
+                          + parameters["CanonicalizedHeaders"]
+                          + parameters["CanonicalizedResource"])
 
-        signed_string = base64.b64encode(hmac.new(base64.b64decode(key), msg=signature.encode('utf-8'),
+        signed_string = base64.b64encode(hmac.new(base64.b64decode(key),
+                                                  msg=signature.encode("utf-8"),
                                                   digestmod=hashlib.sha256).digest()).decode()
 
         headers = {
-            'x-ms-date': request_time,
-            'x-ms-version': api_version,
-            'Authorization': ('SharedKey ' + account + ':' + signed_string)
+            "x-ms-date": request_time,
+            "x-ms-version": api_version,
+            "Authorization": ("SharedKey " + account + ":" + signed_string)
         }
 
-        url = ('https://' + account + '.blob.core.windows.net/' + container + '/' + blob)
+        url = "https://" + account + ".blob.core.windows.net/" + container + "/" + blob
 
         if keep and exists(url):
             print(f"The blob URL exists: {url}")
@@ -110,11 +114,12 @@ class AzureBlobDownload(Download):
             encoding=kwargs.get("encoding"),
         )
         return self.stream_path(
-            path, f"Download of {url} failed in retrieval of stream!"
+            path, "Download of %s failed in retrieval of stream!" % url
         )
 
 
 class AzureBlobUpload:
+    """Wrapper for Azure Blob upload logic"""
 
     def upload_file(
             self,
@@ -150,6 +155,6 @@ class AzureBlobUpload:
             blob_client.upload_blob(file_to_blob,
                                     overwrite=True,
                                     content_settings=ContentSettings(content_type="text/csv"))
-            logger.info(f"Successfully uploaded: {dataset_name}")
+            logger.info("Successfully uploaded: %s" % dataset_name)
         except Exception:
-            logger.error(f"Failed to upload dataset: {dataset_name}")
+            logger.error("Failed to upload dataset: %s" % dataset_name)
