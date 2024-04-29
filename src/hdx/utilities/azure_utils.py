@@ -1,4 +1,5 @@
 """All the logic around Azure blob uploads and downloads of files"""
+
 import base64
 import hashlib
 import hmac
@@ -25,13 +26,13 @@ class AzureBlobDownload(Download):
     """Wrapper for Azure Blob download logic"""
 
     def download_file(
-            self,
-            url: str,
-            account: str,
-            container: str,
-            key: str,
-            blob: None,
-            **kwargs: Any,
+        self,
+        url: str,
+        account: str,
+        container: str,
+        key: str,
+        blob: None,
+        **kwargs: Any,
     ) -> str:
         """Download a blob file from an Azure Storage
 
@@ -69,37 +70,69 @@ class AzureBlobDownload(Download):
             "If-None-Match": "",
             "If-Unmodified-Since": "",
             "Range": "",
-            "CanonicalizedHeaders": "x-ms-date:" + request_time + "\nx-ms-version:"
-                                    + api_version + "\n",
-            "CanonicalizedResource": "/" + account + "/" + container + "/" + blob
+            "CanonicalizedHeaders": "x-ms-date:"
+            + request_time
+            + "\nx-ms-version:"
+            + api_version
+            + "\n",
+            "CanonicalizedResource": "/"
+            + account
+            + "/"
+            + container
+            + "/"
+            + blob,
         }
 
-        signature = (parameters["verb"] + "\n"
-                          + parameters["Content-Encoding"] + "\n"
-                          + parameters["Content-Language"] + "\n"
-                          + parameters["Content-Length"] + "\n"
-                          + parameters["Content-MD5"] + "\n"
-                          + parameters["Content-Type"] + "\n"
-                          + parameters["Date"] + "\n"
-                          + parameters["If-Modified-Since"] + "\n"
-                          + parameters["If-Match"] + "\n"
-                          + parameters["If-None-Match"] + "\n"
-                          + parameters["If-Unmodified-Since"] + "\n"
-                          + parameters["Range"] + "\n"
-                          + parameters["CanonicalizedHeaders"]
-                          + parameters["CanonicalizedResource"])
-
-        signed_string = base64.b64encode(hmac.new(base64.b64decode(key),
-                                                  msg=signature.encode("utf-8"),
-                                                  digestmod=hashlib.sha256).digest()).decode()
+        signature = (
+            parameters["verb"]
+            + "\n"
+            + parameters["Content-Encoding"]
+            + "\n"
+            + parameters["Content-Language"]
+            + "\n"
+            + parameters["Content-Length"]
+            + "\n"
+            + parameters["Content-MD5"]
+            + "\n"
+            + parameters["Content-Type"]
+            + "\n"
+            + parameters["Date"]
+            + "\n"
+            + parameters["If-Modified-Since"]
+            + "\n"
+            + parameters["If-Match"]
+            + "\n"
+            + parameters["If-None-Match"]
+            + "\n"
+            + parameters["If-Unmodified-Since"]
+            + "\n"
+            + parameters["Range"]
+            + "\n"
+            + parameters["CanonicalizedHeaders"]
+            + parameters["CanonicalizedResource"]
+        )
+        signed_string = base64.b64encode(
+            hmac.new(
+                base64.b64decode(key),
+                msg=signature.encode("utf-8"),
+                digestmod=hashlib.sha256,
+            ).digest()
+        ).decode()
 
         headers = {
             "x-ms-date": request_time,
             "x-ms-version": api_version,
-            "Authorization": ("SharedKey " + account + ":" + signed_string)
+            "Authorization": ("SharedKey " + account + ":" + signed_string,)
         }
 
-        url = "https://" + account + ".blob.core.windows.net/" + container + "/" + blob
+        url = (
+                "https://"
+                + account
+                + ".blob.core.windows.net/"
+                + container
+                + "/"
+                + blob
+        )
 
         if keep and exists(url):
             print(f"The blob URL exists: {url}")
@@ -122,13 +155,13 @@ class AzureBlobUpload:
     """Wrapper for Azure Blob upload logic"""
 
     def upload_file(
-            self,
-            dataset_name: str,
-            filename: str,
-            account: str,
-            container: str,
-            key: str,
-            data: None
+        self,
+        dataset_name: str,
+        filename: str,
+        account: str,
+        container: str,
+        key: str,
+        data: None
     ) -> str:
         """Upload a file to a blob storage within a container for an azure storage account
         Args:
@@ -142,19 +175,23 @@ class AzureBlobUpload:
 
         blob_service = BlobServiceClient.from_connection_string(
             f"DefaultEndpointsProtocol=https;AccountName={account};AccountKey= "
-            f"{key};EndpointSuffix=core.windows.net")
+            f"{key};EndpointSuffix=core.windows.net"
+        )
 
-        blob_client = blob_service.get_blob_client(container=container,
-                                                   blob=filename)
+        blob_client = blob_service.get_blob_client(
+            container=container,
+            blob=filename)
 
         try:
             stream = io.StringIO()
             df = pd.DataFrame(data[dataset_name])
             df.to_csv(stream, sep=";")
             file_to_blob = stream.getvalue()
-            blob_client.upload_blob(file_to_blob,
-                                    overwrite=True,
-                                    content_settings=ContentSettings(content_type="text/csv"))
+            blob_client.upload_blob(
+                file_to_blob,
+                overwrite=True,
+                content_settings=ContentSettings(content_type="text/csv")
+            )
             logger.info("Successfully uploaded: %s" % dataset_name)
         except Exception:
             logger.error("Failed to upload dataset: %s" % dataset_name)
