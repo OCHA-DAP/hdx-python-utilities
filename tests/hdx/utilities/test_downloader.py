@@ -256,13 +256,13 @@ class TestDownloader:
             assert "param2=value2" in full_url
             assert "param3=11" in full_url
             assert "basic_auth" not in full_url
-        monkeypatch.setenv("EXTRA_PARAMS", "param1=value2+3,param2=value3+7")
+        monkeypatch.setenv("EXTRA_PARAMS", "param1=value2+3==,param2=value3+7")
         with Download(
             extra_params_yaml=extraparamsyamltree, extra_params_lookup="mykey"
         ) as downloader:
             assert downloader.session.auth is None
             full_url = downloader.get_full_url(test_url)
-            assert "param1=value2%2B3" in full_url
+            assert "param1=value2%2B3%3D%3D" in full_url
             assert "param2=value3%2B7" in full_url
             assert "param3=11" not in full_url
             assert "basic_auth" not in full_url
