@@ -98,7 +98,7 @@ def get_session(
                     "Loading extra parameters from environment variable"
                 )
                 for extra_param in extra_params.split(","):
-                    key, value = extra_param.split("=")
+                    key, value = extra_param.split("=", maxsplit=1)
                     extra_params_dict[key] = value
             extra_params_found = True
     if not extra_params_found:
