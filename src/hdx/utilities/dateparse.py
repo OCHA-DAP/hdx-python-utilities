@@ -177,8 +177,10 @@ class _ymd(list):  # pragma: no cover
             self.ystridx = len(self) - 1
 
     def _resolve_from_stridxs(self, strids):
-        """Try to resolve the identities of year/month/day elements using
-        ystridx, mstridx, and dstridx, if enough of these are specified."""
+        """
+        Try to resolve the identities of year/month/day elements using
+        ystridx, mstridx, and dstridx, if enough of these are specified.
+        """
         if len(self) == 3 and len(strids) == 2:
             # we can back out the remaining stridx value
             missing = [x for x in range(3) if x not in strids.values()]
@@ -301,8 +303,9 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
         fuzzy=False,
         fuzzy_with_tokens=False,
     ):
-        """Private method which performs the heavy lifting of parsing, called
-        from ``parse()``, which passes on its ``kwargs`` to this function.
+        """
+        Private method which performs the heavy lifting of parsing, called from
+        ``parse()``, which passes on its ``kwargs`` to this function.
 
         :param timestr:
             The string to parse.
@@ -553,7 +556,8 @@ DEFAULTPARSER = DateParser(parserinfo(dayfirst=True))
 def parse(
     timestr, default=None, ignoretz=False, tzinfos=None, **kwargs
 ):  # pragma: no cover
-    """Parse the date/time string into a :class:`datetime.datetime` object.
+    """
+    Parse the date/time string into a :class:`datetime.datetime` object.
 
     :param timestr:
         Any date/time string using the supported formats.

@@ -47,7 +47,7 @@ dependencies = [
     "jsonlines>=4.0.0",
     # /end frictionless extras
     "loguru",
-    "python-dateutil==2.8.2",
+    "python-dateutil==2.9.0.post0",
     "ratelimit",
     "requests-file",
     "ruamel.yaml",
