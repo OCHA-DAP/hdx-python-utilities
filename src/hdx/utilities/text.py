@@ -4,6 +4,7 @@ import difflib
 import logging
 import re
 import string
+import unicodedata
 from string import punctuation
 from typing import Any, Dict, List, Optional, Set, Tuple
 
@@ -14,6 +15,44 @@ logger = logging.getLogger(__name__)
 
 PUNCTUATION_MINUS_BRACKETS = r"""!"#$%&'*+,-./:;<=>?@\^_`|~"""
 TEMPLATE_VARIABLES = re.compile("{{.*?}}")
+
+
+KEEP_CHARS_SAME = set(string.ascii_lowercase).union(set(string.digits))
+CHANGE_TO_LOWERCASE = set(string.ascii_uppercase)
+MAP_TO_SPACE = set(string.punctuation).union(set(string.whitespace))
+MAP_TO_SPACE.remove("'")
+
+
+def normalise(text: str) -> str:
+    """
+    Mormalise text for example to support name matching. Accented characters
+    are replaced with non-accented if possible. Any punctuation and whitespace
+    is replaced with a space except for ' which is replaced with blank.
+    Multiple spaces are replaced with a single space. Uppercase is replaced
+    with lowercase. Spaces at start and end are removed. All non-ASCII
+    characters are removed.
+
+    Args:
+        text (str): Text to normalise
+
+    Returns:
+        str: Normalised text
+    """
+    chars = []
+    space = False
+    for chr in unicodedata.normalize("NFD", text):
+        if chr in KEEP_CHARS_SAME:
+            chars.append(chr)
+            space = False
+        elif chr in CHANGE_TO_LOWERCASE:
+            chars.append(chr.lower())
+            space = False
+        elif chr in MAP_TO_SPACE:
+            if space:
+                continue
+            chars.append(" ")
+            space = True
+    return "".join(chars).strip()
 
 
 def remove_end_characters(
