@@ -785,6 +785,9 @@ Examples:
 
     a = "The quick brown fox jumped over the lazy dog. It was so fast!"
 
+    # Normalise text eg. to support name matching
+    assert normalise("£^*& ()+-[]<>?|\ Al DhaleZ'eÉ / الضالع,,..1234''#~~### ") == "al dhalezee 1234"
+
     # Remove whitespace and punctuation from end of string
     assert remove_end_characters('lalala,.,"') == "lalala"
     assert remove_end_characters('lalala, .\t/,"', f"{punctuation}{whitespace}" == "lalala"

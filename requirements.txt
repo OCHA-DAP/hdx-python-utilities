@@ -10,7 +10,7 @@ attrs==23.2.0
     #   referencing
 beautifulsoup4==4.12.3
     # via hdx-python-utilities (pyproject.toml)
-certifi==2024.6.2
+certifi==2024.7.4
     # via requests
 cfgv==3.4.0
     # via pre-commit
@@ -86,9 +86,9 @@ pluggy==1.5.0
     # via pytest
 pre-commit==3.7.1
     # via hdx-python-utilities (pyproject.toml)
-pydantic==2.8.0
+pydantic==2.8.2
     # via frictionless
-pydantic-core==2.20.0
+pydantic-core==2.20.1
     # via pydantic
 pygments==2.18.0
     # via rich
@@ -164,7 +164,7 @@ typing-extensions==4.12.2
     #   typer
 urllib3==2.2.2
     # via requests
-validators==0.29.0
+validators==0.30.0
     # via frictionless
 virtualenv==20.26.3
     # via pre-commit

@@ -15,6 +15,7 @@ from hdx.utilities.text import (
     get_words_in_sentence,
     match_template_variables,
     multiple_replace,
+    normalise,
     number_format,
     only_allowed_in_str,
     remove_end_characters,
@@ -27,6 +28,14 @@ class TestText:
     a = "The quick brown fox jumped over the lazy dog. It was so fast!"
     b = "The quicker brown fox leapt over the slower fox. It was so fast!"
     c = "The quick brown fox climbed over the lazy dog. It was so fast!"
+
+    def test_normalise(self):
+        assert (
+            normalise(
+                "£^*& ()+-[]<>?|\ Al DhaleZ'eÉ / الضالع,,..1234''#~~### "
+            )
+            == "al dhalezee 1234"
+        )
 
     def test_remove_end_characters(self):
         assert remove_end_characters('lalala,.,"') == "lalala"
