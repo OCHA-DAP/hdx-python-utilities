@@ -14,7 +14,8 @@ on:
       - gh-pages
 
 concurrency:
-  group: ${{ github.head_ref ||  github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
