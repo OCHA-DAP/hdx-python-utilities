@@ -20,7 +20,7 @@ charset-normalizer==3.3.2
     # via requests
 click==8.1.7
     # via typer
-coverage==7.5.4
+coverage==7.6.0
     # via pytest-cov
 distlib==0.3.8
     # via virtualenv
@@ -36,9 +36,9 @@ frictionless==5.17.0
     # via hdx-python-utilities (pyproject.toml)
 html5lib==1.1
     # via hdx-python-utilities (pyproject.toml)
-humanize==4.9.0
+humanize==4.10.0
     # via frictionless
-identify==2.5.36
+identify==2.6.0
     # via pre-commit
 idna==3.7
     # via
@@ -54,7 +54,7 @@ jinja2==3.1.4
     # via frictionless
 jsonlines==4.0.0
     # via hdx-python-utilities (pyproject.toml)
-jsonschema==4.22.0
+jsonschema==4.23.0
     # via
     #   frictionless
     #   tableschema-to-template
@@ -92,7 +92,7 @@ pydantic-core==2.20.1
     # via pydantic
 pygments==2.18.0
     # via rich
-pytest==8.2.2
+pytest==8.3.2
     # via
     #   hdx-python-utilities (pyproject.toml)
     #   pytest-cov
@@ -127,7 +127,7 @@ rfc3986==2.0.0
     # via frictionless
 rich==13.7.1
     # via typer
-rpds-py==0.18.1
+rpds-py==0.19.1
     # via
     #   jsonschema
     #   referencing
@@ -164,7 +164,7 @@ typing-extensions==4.12.2
     #   typer
 urllib3==2.2.2
     # via requests
-validators==0.30.0
+validators==0.33.0
     # via frictionless
 virtualenv==20.26.3
     # via pre-commit
