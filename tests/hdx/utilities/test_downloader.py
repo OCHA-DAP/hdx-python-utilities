@@ -1221,40 +1221,35 @@ class TestDownloader:
             ]
 
     def test_get_tabular_rows_xlsx2csv(self, fixtureurlexcel):
-        with Download() as downloader:
-            headers, iterator = downloader.get_tabular_rows(
-                fixtureurlexcel,
-                format="xlsx",
-                xlsx2csv=True,
-            )
-            assert headers == [
-                "GWNO",
-                "EVENT_ID_CNTY",
-                "EVENT_ID_NO_CNTY",
-                "EVENT_DATE",
-                "YEAR",
-                "TIME_PRECISION",
-                "EVENT_TYPE",
-                "ACTOR1",
-                "ALLY_ACTOR_1",
-                "INTER1",
-                "ACTOR2",
-                "ALLY_ACTOR_2",
-                "INTER2",
-                "INTERACTION",
-                "COUNTRY",
-                "ADMIN1",
-                "ADMIN2",
-                "ADMIN3",
-                "LOCATION",
-                "LATITUDE",
-                "LONGITUDE",
-                "GEO_PRECISION",
-                "SOURCE",
-                "NOTES",
-                "FATALITIES",
-            ]
-        assert list(iterator)[0] == [
+        expected_headers = [
+            "GWNO",
+            "EVENT_ID_CNTY",
+            "EVENT_ID_NO_CNTY",
+            "EVENT_DATE",
+            "YEAR",
+            "TIME_PRECISION",
+            "EVENT_TYPE",
+            "ACTOR1",
+            "ALLY_ACTOR_1",
+            "INTER1",
+            "ACTOR2",
+            "ALLY_ACTOR_2",
+            "INTER2",
+            "INTERACTION",
+            "COUNTRY",
+            "ADMIN1",
+            "ADMIN2",
+            "ADMIN3",
+            "LOCATION",
+            "LATITUDE",
+            "LONGITUDE",
+            "GEO_PRECISION",
+            "SOURCE",
+            "NOTES",
+            "FATALITIES",
+        ]
+
+        expected_row = [
             "615",
             "1416RTA",
             None,
@@ -1282,6 +1277,25 @@ class TestDownloader:
             "Beni Douala. He later died on Apr.21.",
             "1",
         ]
+
+        with Download() as downloader:
+            headers, iterator = downloader.get_tabular_rows(
+                fixtureurlexcel,
+                format="xlsx",
+                xlsx2csv=True,
+            )
+            assert headers == expected_headers
+            assert list(iterator)[0] == expected_row
+
+            headers, iterator = downloader.get_tabular_rows(
+                fixtureurlexcel,
+                format="xlsx",
+                xlsx2csv=True,
+                sheet="test_data",
+            )
+            assert headers == expected_headers
+            assert list(iterator)[0] == expected_row
+
 
     def test_get_tabular_rows_json(self, fixturejsonurl):
         with Download() as downloader:
