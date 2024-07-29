@@ -696,7 +696,7 @@ class Download(BaseDownload):
         if xlsx2csv:
             path = self.download_file(url)
             outpath = path.replace(".xlsx", ".csv")
-            sheet = kwargs.get("sheet", 1)
+            sheet = kwargs.pop("sheet", 1)
             if isinstance(sheet, int):
                 sheet_args = {"sheetid": sheet}
             else:
@@ -704,6 +704,7 @@ class Download(BaseDownload):
             Xlsx2csv(path).convert(outpath, **sheet_args)
             url = outpath
             kwargs["format"] = "csv"  # format takes precedence over file_type
+            kwargs.pop("fill_merged_cells", None)
 
         resource = self.get_frictionless_tableresource(
             url,
