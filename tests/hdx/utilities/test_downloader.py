@@ -1220,6 +1220,69 @@ class TestDownloader:
                 "Tulkarm",
             ]
 
+    def test_get_tabular_rows_xlsx2csv(self, fixtureurlexcel):
+        with Download() as downloader:
+            headers, iterator = downloader.get_tabular_rows(
+                fixtureurlexcel,
+                format="xlsx",
+                xlsx2csv=True,
+            )
+            assert headers == [
+                "GWNO",
+                "EVENT_ID_CNTY",
+                "EVENT_ID_NO_CNTY",
+                "EVENT_DATE",
+                "YEAR",
+                "TIME_PRECISION",
+                "EVENT_TYPE",
+                "ACTOR1",
+                "ALLY_ACTOR_1",
+                "INTER1",
+                "ACTOR2",
+                "ALLY_ACTOR_2",
+                "INTER2",
+                "INTERACTION",
+                "COUNTRY",
+                "ADMIN1",
+                "ADMIN2",
+                "ADMIN3",
+                "LOCATION",
+                "LATITUDE",
+                "LONGITUDE",
+                "GEO_PRECISION",
+                "SOURCE",
+                "NOTES",
+                "FATALITIES",
+            ]
+        assert list(iterator)[0] == [
+            "615",
+            "1416RTA",
+            None,
+            "18/04/2001",
+            "2001",
+            "1",
+            "Violence against civilians",
+            "Police Forces of Algeria (1999-)",
+            None,
+            "1",
+            "Civilians (Algeria)",
+            "Berber Ethnic Group (Algeria)",
+            "7",
+            "17",
+            "Algeria",
+            "Tizi Ouzou",
+            "Beni-Douala",
+            None,
+            "Beni Douala",
+            "36.61954",
+            "4.08282",
+            "1",
+            "Associated Press Online",
+            "A Berber student was shot while in police custody at a police station in "
+            "Beni Douala. He later died on Apr.21.",
+            "1",
+        ]
+
     def test_get_tabular_rows_json(self, fixturejsonurl):
         with Download() as downloader:
             headers, iterator = downloader.get_tabular_rows(

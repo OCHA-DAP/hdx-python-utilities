@@ -51,6 +51,7 @@ dependencies = [
     "ratelimit",
     "requests-file",
     "ruamel.yaml",
+    "xlsx2csv",
 ]
 dynamic = ["version"]
 
