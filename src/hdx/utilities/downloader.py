@@ -15,6 +15,7 @@ from frictionless.resources import TableResource
 from ratelimit import RateLimitDecorator, sleep_and_retry
 from requests import Request
 from ruamel.yaml import YAML
+from xlsx2csv import Xlsx2csv
 
 from .base_downloader import BaseDownload, DownloadError
 from .frictionless_wrapper import get_frictionless_tableresource
@@ -669,6 +670,7 @@ class Download(BaseDownload):
             **kwargs:
             format (Optional[str]): Type of file. Defaults to inferring.
             file_type (Optional[str]): Type of file. Defaults to inferring.
+            xlsx2csv (bool): Whether to convert xlsx files. Defaults to False.
             encoding (Optional[str]): Type of encoding. Defaults to inferring.
             compression (Optional[str]): Type of compression. Defaults to inferring.
             delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
@@ -690,6 +692,20 @@ class Download(BaseDownload):
         """
         if headers is None:
             raise DownloadError("Argument headers cannot be None!")
+        xlsx2csv = kwargs.pop("xlsx2csv", False)
+        if xlsx2csv:
+            path = self.download_file(url)
+            outpath = path.replace(".xlsx", ".csv")
+            sheet = kwargs.pop("sheet", 1)
+            if isinstance(sheet, int):
+                sheet_args = {"sheetid": sheet}
+            else:
+                sheet_args = {"sheetname": sheet}
+            Xlsx2csv(path).convert(outpath, **sheet_args)
+            url = outpath
+            kwargs["format"] = "csv"  # format takes precedence over file_type
+            kwargs.pop("fill_merged_cells", None)
+
         resource = self.get_frictionless_tableresource(
             url,
             ignore_blank_rows=ignore_blank_rows,
@@ -771,6 +787,7 @@ class Download(BaseDownload):
             **kwargs:
             format (Optional[str]): Type of file. Defaults to inferring.
             file_type (Optional[str]): Type of file. Defaults to inferring.
+            xlsx2csv (bool): Whether to convert xlsx files. Defaults to False.
             encoding (Optional[str]): Type of encoding. Defaults to inferring.
             compression (Optional[str]): Type of compression. Defaults to inferring.
             delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
@@ -875,6 +892,7 @@ class Download(BaseDownload):
             **kwargs:
             format (Optional[str]): Type of file. Defaults to inferring.
             file_type (Optional[str]): Type of file. Defaults to inferring.
+            xlsx2csv (bool): Whether to convert xlsx files. Defaults to False.
             encoding (Optional[str]): Type of encoding. Defaults to inferring.
             compression (Optional[str]): Type of compression. Defaults to inferring.
             delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
@@ -950,6 +968,7 @@ class Download(BaseDownload):
             **kwargs:
             format (Optional[str]): Type of file. Defaults to inferring.
             file_type (Optional[str]): Type of file. Defaults to inferring.
+            xlsx2csv (bool): Whether to convert xlsx files. Defaults to False.
             encoding (Optional[str]): Type of encoding. Defaults to inferring.
             compression (Optional[str]): Type of compression. Defaults to inferring.
             delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.

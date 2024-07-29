@@ -418,7 +418,7 @@ class Retrieve(BaseDownload):
             filename (Optional[str]): Filename of saved file. Defaults to getting from url.
             logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
             fallback (bool): Whether to use static fallback if download fails. Defaults to False.
-            **kwargs: Parameters to pass to download_file call
+            **kwargs: Parameters to pass to download_file and get_tabular_rows calls
 
         Returns:
             Tuple[List[str],Iterator[ListDict]]: Tuple (headers, iterator where each row is a list or dictionary)
