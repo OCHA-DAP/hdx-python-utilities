@@ -1296,7 +1296,6 @@ class TestDownloader:
             assert headers == expected_headers
             assert list(iterator)[0] == expected_row
 
-
     def test_get_tabular_rows_json(self, fixturejsonurl):
         with Download() as downloader:
             headers, iterator = downloader.get_tabular_rows(
