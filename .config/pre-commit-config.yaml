@@ -10,7 +10,7 @@ repos:
         exclude: (test_csv_processing_blanks.csv|test.txt)
       - id: check-ast
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.4.8
+    rev: v0.6.4
     hooks:
       # Run the linter.
       - id: ruff
@@ -19,7 +19,7 @@ repos:
       - id: ruff-format
         args: [--config, .config/ruff.toml]
   - repo: https://github.com/astral-sh/uv-pre-commit
-    rev: 0.2.10
+    rev: 0.4.5
     hooks:
       # Run the pip compile
       - id: pip-compile
