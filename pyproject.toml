@@ -36,7 +36,7 @@ requires-python = ">=3.8"
 # Extras for frictionless[excel,json] added explicitly
 # for conda-forge compatibility
 dependencies = [
-    "frictionless>=5.17.1",
+    "frictionless>=5.18.0",
     # frictionless[excel]
     "openpyxl>=3.1.2",
     "tableschema-to-template>=0.0.13",
@@ -96,7 +96,7 @@ version_scheme = "python-simplified-semver"
 features = ["html", "email", "test"]
 
 [[tool.hatch.envs.hatch-test.matrix]]
-python = ["3.11"]
+python = ["3.12"]
 
 [tool.hatch.envs.hatch-test.scripts]
 run = """
