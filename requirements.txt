@@ -30,17 +30,17 @@ email-validator==2.2.0
     # via hdx-python-utilities (pyproject.toml)
 et-xmlfile==1.1.0
     # via openpyxl
-filelock==3.15.4
+filelock==3.16.1
     # via virtualenv
-frictionless==5.17.1
+frictionless==5.18.0
     # via hdx-python-utilities (pyproject.toml)
 html5lib==1.1
     # via hdx-python-utilities (pyproject.toml)
 humanize==4.10.0
     # via frictionless
-identify==2.6.0
+identify==2.6.1
     # via pre-commit
-idna==3.8
+idna==3.10
     # via
     #   email-validator
     #   requests
@@ -80,19 +80,19 @@ packaging==24.1
     # via pytest
 petl==1.7.15
     # via frictionless
-platformdirs==4.2.2
+platformdirs==4.3.6
     # via virtualenv
 pluggy==1.5.0
     # via pytest
 pre-commit==3.8.0
     # via hdx-python-utilities (pyproject.toml)
-pydantic==2.9.0
+pydantic==2.9.2
     # via frictionless
-pydantic-core==2.23.2
+pydantic-core==2.23.4
     # via pydantic
 pygments==2.18.0
     # via rich
-pytest==8.3.2
+pytest==8.3.3
     # via
     #   hdx-python-utilities (pyproject.toml)
     #   pytest-cov
@@ -125,7 +125,7 @@ requests-file==2.1.0
     # via hdx-python-utilities (pyproject.toml)
 rfc3986==2.0.0
     # via frictionless
-rich==13.8.0
+rich==13.8.1
     # via typer
 rpds-py==0.20.0
     # via
@@ -162,13 +162,11 @@ typing-extensions==4.12.2
     #   pydantic
     #   pydantic-core
     #   typer
-tzdata==2024.1
-    # via pydantic
-urllib3==2.2.2
+urllib3==2.2.3
     # via requests
 validators==0.34.0
     # via frictionless
-virtualenv==20.26.3
+virtualenv==20.26.6
     # via pre-commit
 webencodings==0.5.1
     # via html5lib
