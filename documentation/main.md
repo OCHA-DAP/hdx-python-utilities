@@ -18,6 +18,7 @@ Python developers. Note that these are not specific to HDX.
 1. [State utility](#state-utility)
 1. [Path utilities](#path-utilities)
 1. [Text processing](#text-processing)
+1. [Matching utilities](#matching-utilities)
 1. [Encoding utilities](#encoding-utilities)
 1. [Check valid UUID](#valid-uuid)
 1. [Easy building and packaging](#easy-building-and-packaging)
@@ -31,6 +32,11 @@ The code for the library is [here](https://github.com/OCHA-DAP/hdx-python-utilit
 The library has detailed API documentation which can be found in the menu at the top.
 
 ## Breaking Changes
+From 3.8.0, multiple_replace, match_template_variables, earliest_index,
+get_matching_text_in_strs, get_matching_text,
+get_matching_then_nonmatching_text moved from hdx.utilities.text to
+hdx.utilities.matching.
+
 From 3.5.5, Python 3.7 no longer supported
 
 From 3.3.7, improved parse_date and parse_date_range by default will attempt to parse
@@ -803,13 +809,35 @@ Examples:
     assert remove_string("lala, 01/02/2020 ", "01/02/2020", PUNCTUATION_MINUS_BRACKETS) == "lala "
     assert remove_string("lala,(01/02/2020) ", "01/02/2020", PUNCTUATION_MINUS_BRACKETS) == "lala,() "
 
+    # Extract words from a string sentence into a list
+    result = get_words_in_sentence("Korea (Democratic People's Republic of)")
+    assert result == ["Korea", "Democratic", "People's", "Republic", "of"]
+
+## Matching utilities
+
+Examples:
+
+    possible_names = ["Al Maharah", "Ad Dali", "Dhamar"]
+    phonetics = Phonetics()
+    assert phonetics.match(possible_names, "al dali") == 1
+
+    org_type_lookup = {"Donor": "433", "National NGO": "441", "Other": "443"}
+    lookup = {
+        normalise(k): v for k, v in org_type_lookup.items()
+    }
+    assert get_code_from_name("NATIONAL_NGO", lookup, [], fuzzy_match=False) == "441"
+
+    a = "The quick brown fox jumped over the lazy dog. It was so fast!"
+
     # Replace multiple strings in a string simultaneously
     result = multiple_replace(a, {"quick": "slow", "fast": "slow", "lazy": "busy"})
     assert result == "The slow brown fox jumped over the busy dog. It was so slow!"
 
-    # Extract words from a string sentence into a list
-    result = get_words_in_sentence("Korea (Democratic People's Republic of)")
-    assert result == ["Korea", "Democratic", "People's", "Republic", "of"]
+    # Look for template variables in a string (ie. {{XXX}})
+    assert match_template_variables("dasdda{{abc}}gff") == ("{{abc}}", "abc")
+
+    # Search a string for each of a list of strings and return the earliest index
+    assert earliest_index(a, ["dog", "lala", "fox", "haha", "quick"]) == 4
 
     # Find matching text in strings
     a = "The quick brown fox jumped over the lazy dog. It was so fast!"
@@ -818,11 +846,6 @@ Examples:
     result = get_matching_text([a, b, c], match_min_size=10)
     assert result == " brown fox  over the  It was so fast!"
 
-    # Search a string for each of a list of strings and return the earliest index
-    assert earliest_index(a, ["dog", "lala", "fox", "haha", "quick"]) == 4
-
-    # Look for template variables in a string (ie. {{XXX}})
-    assert match_template_variables("dasdda{{abc}}gff") == ("{{abc}}", "abc")
 
 ## Encoding utilities
 

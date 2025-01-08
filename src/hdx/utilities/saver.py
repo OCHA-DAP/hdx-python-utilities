@@ -13,7 +13,7 @@ from ruamel.yaml import (
     add_representer,
 )
 
-from .text import match_template_variables
+from .matching import match_template_variables
 from .typehint import ListTuple, ListTupleDict
 
 
