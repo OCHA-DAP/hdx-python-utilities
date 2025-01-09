@@ -18,6 +18,7 @@ class TestErrorsHandler:
         with pytest.raises(SystemExit):
             with caplog.at_level(logging.ERROR):
                 with ErrorHandler() as errors:
+                    errors.add_message("this is a error!")
                     errors.add_message(
                         "this is a warning!", "warning 1", "warning"
                     )
@@ -29,12 +30,29 @@ class TestErrorsHandler:
                     )
                     errors.add_multi_valued_message(
                         "this is a multi valued warning!",
-                        (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14),
-                        "warning 2",
+                        (1, 2, 3, 4),
+                        "warning 1",
                         "warning",
                     )
-                    assert len(errors.shared_errors["warning"]) == 2
-                    assert len(errors.shared_errors["error"]) == 1
+                    errors.add_multi_valued_message(
+                        "this is a multi valued error!",
+                        (1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14),
+                        "error 1",
+                        "error",
+                    )
+                    errors.add_multi_valued_message(
+                        "this is another multi valued warning!",
+                        (),
+                        "warning 1",
+                        "warning",
+                    )
+                    assert len(errors.shared_errors["warning"]) == 1
+                    assert (
+                        len(errors.shared_errors["warning"]["warning 1"]) == 2
+                    )
+                    assert len(errors.shared_errors["error"]) == 2
+                    assert len(errors.shared_errors["error"][""]) == 1
+                    assert len(errors.shared_errors["error"]["error 1"]) == 2
                 assert "missing value" in caplog.text
                 assert "warning" not in caplog.text
                 assert "multi" not in caplog.text
