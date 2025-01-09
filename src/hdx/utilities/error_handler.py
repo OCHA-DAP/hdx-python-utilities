@@ -11,61 +11,75 @@ logger = logging.getLogger(__name__)
 
 
 class ErrorHandler:
-    """Class that enables recording of errors and warnings. They can be logged
-    by calling output_errors or automatically logged on exit and are output
-    grouped by category and sorted."""
+    """Class that enables recording of errors and warnings.
+
+    Errors and warnings can be logged by calling the `output` method or
+    automatically logged on exit. Messages are output grouped by category and
+    sorted.
+
+    Args:
+        should_exit_on_error (bool): Whether to exit with a 1 code if there are errors. Default is True.
+
+    """
 
     def __init__(
         self,
+        should_exit_on_error: bool = True,
     ):
+        self.should_exit_on_error = should_exit_on_error
         self.shared_errors = {
             "error": {},
             "warning": {},
         }
 
     def add_message(
-        self, category: str, message: str, message_type: str = "error"
+        self, message: str, category: str = "", message_type: str = "error"
     ) -> None:
-        """Add error to be logged.
+        """Add error to be logged. Prepend category if supplied. Output format:
+        error category - {text}
 
         Args:
-            category (str): Error category
             message (str): Error message
+            category (str): Error category. Defaults to "".
             message_type (str): The type of message (error or warning). Default is "error"
 
         Returns:
             None
         """
-        dict_of_sets_add(self.shared_errors[message_type], category, message)
+        if category:
+            output = f"{category} - {message}"
+        else:
+            output = message
+        dict_of_sets_add(self.shared_errors[message_type], category, output)
 
     def add_missing_value_message(
         self,
-        category: str,
         value_type: str,
         value: str,
+        category: str = "",
         message_type: str = "error",
     ) -> None:
         """
         Add a new message (typically a warning or error) concerning a missing value
         to a dictionary of messages in a fixed format:
-            error category - {text}
+            error category - type n not found
         identifier is usually a dataset name.
         Args:
-            category (str): Error category
             value_type (str): Type of value e.g. "sector"
             value (str): Missing value
+            category (str): Error category. Defaults to "".
             message_type (str): The type of message (error or warning). Default is "error"
         Returns:
             None
         """
         text = f"{value_type} {value} not found"
-        self.add_message(category, text, message_type)
+        self.add_message(text, category, message_type)
 
     def add_multi_valued_message(
         self,
-        category: str,
         text: str,
         values: ListTuple,
+        category: str = "",
         message_type: str = "error",
     ) -> bool:
         """
@@ -76,9 +90,9 @@ class ErrorHandler:
         a dataset name. Values are cast to string.
 
         Args:
-            category (str): Error category
             text (str): Text to use e.g. "negative values removed"
             values (ListTuple): List of values of concern
+            category (str): Error category. Defaults to "".
             message_type (str): The type of message (error or warning). Default is "error"
         Returns:
             bool: True if a message was added, False if not
@@ -92,12 +106,12 @@ class ErrorHandler:
         else:
             msg = ""
         text = f"{no_values} {text}{msg}: {', '.join(map(str, values))}"
-        self.add_message(category, text, message_type)
+        self.add_message(text, category, message_type)
         return True
 
-    def output_errors(self) -> None:
+    def output(self) -> None:
         """
-        Log errors by category
+        Log errors and warning by category and sorted
 
         Returns:
             None
@@ -113,18 +127,19 @@ class ErrorHandler:
                 logger.warning(warning)
 
     def exit_on_error(self) -> None:
-        """Exit with a 1 code if there are errors.
+        """Exit with a 1 code if there are errors and should_exit_on_error
+        is True
 
         Returns:
             None
         """
-        if self.shared_errors["error"]:
+        if self.should_exit_on_error and self.shared_errors["error"]:
             sys.exit(1)
 
     def __enter__(self) -> "ErrorHandler":
         return self
 
     def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
-        self.output_errors()
+        self.output()
         if exc_type is None:
             self.exit_on_error()

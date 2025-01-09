@@ -657,16 +657,21 @@ It is called ErrorsOnExit and can be used as follows:
 
     with ErrorsHandler() as errors:
         ...
-        errors.add_message("category 1", MY ERROR MESSAGE")
+        errors.add_message("MY ERROR MESSAGE")
+        errors.add_message("MY WARNING MESSAGE", "category 1", "warning")
         ...
-        errors.add("category 1", ANOTHER ERROR MESSAGE")
+        errors.add("ERROR MESSAGE", "category 1", "warning")
+        errors.add("ANOTHER ERROR MESSAGE", "category 1", "warning")
 
-The above code will collect the errors, in this case "MY ERROR MESSAGE" and 
-"ANOTHER ERROR MESSAGE". On leaving the `with` block, the errors will be logged 
-by category and sorted and the code will exit with the error code 1 (ie. 
-`sys.exit(1)` will be called). If there are no errors, the code will not exit 
-and execution will continue after the `with` block (ie.`sys.exit(1)` will not 
-be called).
+The above code will collect the errors and warnings, in this case
+"MY ERROR MESSAGE", "category 1 - ERROR MESSAGE",
+"category 1 - ANOTHER ERROR MESSAGE" and "category 1 - MY WARNING MESSAGE".
+On leaving the `with` block, the errors and warnings will be logged by category
+and sorted. The code will exit with the error code 1 (ie.`sys.exit(1)` will be
+called) if there are errors and `should_exit_on_error` is True (the default
+for this parameter in the constructor). If there are no errors, the code will
+not exit and execution will continue after the `with` block (ie.`sys.exit(1)`
+will not be called).
 
 ## State utility
 
