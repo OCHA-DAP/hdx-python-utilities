@@ -35,7 +35,8 @@ The library has detailed API documentation which can be found in the menu at the
 From 3.8.0, multiple_replace, match_template_variables, earliest_index,
 get_matching_text_in_strs, get_matching_text,
 get_matching_then_nonmatching_text moved from hdx.utilities.text to
-hdx.utilities.matching.
+hdx.utilities.matching. ErrorOnExit renamed ErrorHandler with changed
+functionality.
 
 From 3.5.5, Python 3.7 no longer supported
 
@@ -654,17 +655,18 @@ Then use the logger like this:
 There is a class that allows collecting of errors to be logged later, typically on exit.
 It is called ErrorsOnExit and can be used as follows:
 
-    with ErrorsOnExit() as errors:
+    with ErrorsHandler() as errors:
         ...
-        errors.add("MY ERROR MESSAGE")
+        errors.add_message("category 1", MY ERROR MESSAGE")
         ...
-        errors.add("ANOTHER ERROR MESSAGE")
+        errors.add("category 1", ANOTHER ERROR MESSAGE")
 
-The above code will collect the errors, in this case "MY ERROR MESSAGE" and "ANOTHER
-ERROR MESSAGE". On leaving the `with` block, the errors will be logged and the code will
-exit with the error code 1 (ie. `sys.exit(1)` will be called). If there are no errors,
-the code will not exit and execution will continue after the `with` block (ie.
-`sys.exit(1)` will not be called).
+The above code will collect the errors, in this case "MY ERROR MESSAGE" and 
+"ANOTHER ERROR MESSAGE". On leaving the `with` block, the errors will be logged 
+by category and sorted and the code will exit with the error code 1 (ie. 
+`sys.exit(1)` will be called). If there are no errors, the code will not exit 
+and execution will continue after the `with` block (ie.`sys.exit(1)` will not 
+be called).
 
 ## State utility
 
