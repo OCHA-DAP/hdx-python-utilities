@@ -47,6 +47,7 @@ dependencies = [
     "jsonlines>=4.0.0",
     # /end frictionless extras
     "loguru",
+    "pyphonetics",
     "python-dateutil>=2.9.0, <2.9.1",
     "ratelimit",
     "requests-file",
@@ -104,6 +105,9 @@ run = """
        --cov --cov-config=.config/coveragerc --no-cov-on-fail \
        --cov-report=lcov --cov-report=term-missing
        """
+
+[tool.hatch.envs.hatch-static-analysis]
+dependencies = ["ruff==0.8.6"]
 
 [tool.hatch.envs.hatch-static-analysis.scripts]
 format-check = ["ruff format --config .config/ruff.toml --check --diff {args:.}",]
