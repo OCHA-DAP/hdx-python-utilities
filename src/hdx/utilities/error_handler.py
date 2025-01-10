@@ -53,6 +53,22 @@ class ErrorHandler:
             output = message
         dict_of_sets_add(self.shared_errors[message_type], category, output)
 
+    @staticmethod
+    def missing_value_message(value_type: str, value: str) -> str:
+        """
+        Generate a formatted message for a missing value of a specific type in
+        a fixed format:
+            error category - type n not found
+
+        Args:
+            value_type (str): The type of value that is missing
+            value (str): The specific missing value
+
+        Returns:
+            str: A formatted message stating the missing value and its type.
+        """
+        return f"{value_type} {value} not found"
+
     def add_missing_value(
         self,
         value_type: str,
@@ -73,8 +89,35 @@ class ErrorHandler:
         Returns:
             None
         """
-        text = f"{value_type} {value} not found"
-        self.add(text, category, message_type)
+        self.add(
+            self.missing_value_message(value_type, value),
+            category,
+            message_type,
+        )
+
+    def multi_valued_message(self, text: str, values: ListTuple) -> str:
+        """
+        Generate a formatted message for a list of values in a fixed format:
+            error category - n {text}. First 10 values: n1,n2,n3...
+        If less than 10 values, ". First 10 values" is omitted. identifier is usually
+        a dataset name. Values are cast to string.
+
+        Args:
+            text (str): Descriptive text for the issue (e.g., "invalid values").
+            values (ListTuple): The list of related values of concern.
+
+        Returns:
+            str: A formatted string in the specified format:
+                 n {text}. First 10 values: n1,n2,n3...
+                 If less than 10 values, ". First 10 values" is omitted.
+        """
+        no_values = len(values)
+        if no_values > 10:
+            values = values[:10]
+            message_suffix = ". First 10 values"
+        else:
+            message_suffix = ""
+        return f"{no_values} {text}{message_suffix}: {', '.join(map(str, values))}"
 
     def add_multi_valued(
         self,
@@ -100,14 +143,9 @@ class ErrorHandler:
         """
         if not values:
             return False
-        no_values = len(values)
-        if no_values > 10:
-            values = values[:10]
-            msg = ". First 10 values"
-        else:
-            msg = ""
-        text = f"{no_values} {text}{msg}: {', '.join(map(str, values))}"
-        self.add(text, category, message_type)
+        self.add(
+            self.multi_valued_message(text, values), category, message_type
+        )
         return True
 
     def log(self) -> None:
