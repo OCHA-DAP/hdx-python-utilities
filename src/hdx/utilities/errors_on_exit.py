@@ -1,11 +1,8 @@
 """Collect and log errors on exit."""
 
-import logging
 import warnings
 
 from hdx.utilities.error_handler import ErrorHandler
-
-logger = logging.getLogger(__name__)
 
 
 class ErrorsOnExit(ErrorHandler):  # pragma: no cover
