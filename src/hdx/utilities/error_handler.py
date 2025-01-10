@@ -32,7 +32,7 @@ class ErrorHandler:
             "warning": {},
         }
 
-    def add_message(
+    def add(
         self, message: str, category: str = "", message_type: str = "error"
     ) -> None:
         """Add error to be logged. Prepend category if supplied. Output format:
@@ -46,13 +46,14 @@ class ErrorHandler:
         Returns:
             None
         """
+        message = message.strip()
         if category:
             output = f"{category} - {message}"
         else:
             output = message
         dict_of_sets_add(self.shared_errors[message_type], category, output)
 
-    def add_missing_value_message(
+    def add_missing_value(
         self,
         value_type: str,
         value: str,
@@ -73,9 +74,9 @@ class ErrorHandler:
             None
         """
         text = f"{value_type} {value} not found"
-        self.add_message(text, category, message_type)
+        self.add(text, category, message_type)
 
-    def add_multi_valued_message(
+    def add_multi_valued(
         self,
         text: str,
         values: ListTuple,
@@ -106,10 +107,10 @@ class ErrorHandler:
         else:
             msg = ""
         text = f"{no_values} {text}{msg}: {', '.join(map(str, values))}"
-        self.add_message(text, category, message_type)
+        self.add(text, category, message_type)
         return True
 
-    def output(self) -> None:
+    def log(self) -> None:
         """
         Log errors and warning by category and sorted
 
@@ -140,6 +141,6 @@ class ErrorHandler:
         return self
 
     def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
-        self.output()
+        self.log()
         if exc_type is None:
             self.exit_on_error()
