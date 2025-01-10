@@ -2,7 +2,7 @@
 
 import logging
 import sys
-from typing import Any
+from typing import Any, Optional
 
 from hdx.utilities.dictandlist import dict_of_sets_add
 from hdx.utilities.typehint import ListTuple
@@ -65,7 +65,7 @@ class ErrorHandler:
             value (str): The specific missing value
 
         Returns:
-            str: A formatted message stating the missing value and its type.
+            str: A formatted message stating the missing value and its type
         """
         return f"{value_type} {value} not found"
 
@@ -95,7 +95,9 @@ class ErrorHandler:
             message_type,
         )
 
-    def multi_valued_message(self, text: str, values: ListTuple) -> str:
+    def multi_valued_message(
+        self, text: str, values: ListTuple
+    ) -> Optional[str]:
         """
         Generate a formatted message for a list of values in a fixed format:
             error category - n {text}. First 10 values: n1,n2,n3...
@@ -103,14 +105,14 @@ class ErrorHandler:
         a dataset name. Values are cast to string.
 
         Args:
-            text (str): Descriptive text for the issue (e.g., "invalid values").
-            values (ListTuple): The list of related values of concern.
+            text (str): Descriptive text for the issue (e.g., "invalid values")
+            values (ListTuple): The list of related values of concern
 
         Returns:
-            str: A formatted string in the specified format:
-                 n {text}. First 10 values: n1,n2,n3...
-                 If less than 10 values, ". First 10 values" is omitted.
+            Optional[str]: A formatted string in the format defined above
         """
+        if not values:
+            return None
         no_values = len(values)
         if no_values > 10:
             values = values[:10]
@@ -141,11 +143,10 @@ class ErrorHandler:
         Returns:
             bool: True if a message was added, False if not
         """
-        if not values:
+        message = self.multi_valued_message(text, values)
+        if text is None:
             return False
-        self.add(
-            self.multi_valued_message(text, values), category, message_type
-        )
+        self.add(message, category, message_type)
         return True
 
     def log(self) -> None:
