@@ -54,7 +54,7 @@ class ErrorHandler:
         dict_of_sets_add(self.shared_errors[message_type], category, output)
 
     @staticmethod
-    def missing_value_message(value_type: str, value: str) -> str:
+    def missing_value_message(value_type: str, value: Any) -> str:
         """
         Generate a formatted message for a missing value of a specific type in
         a fixed format:
@@ -62,17 +62,17 @@ class ErrorHandler:
 
         Args:
             value_type (str): The type of value that is missing
-            value (str): The specific missing value
+            value (Any): The specific missing value
 
         Returns:
             str: A formatted message stating the missing value and its type
         """
-        return f"{value_type} {value} not found"
+        return f"{value_type} {str(value)} not found"
 
     def add_missing_value(
         self,
         value_type: str,
-        value: str,
+        value: Any,
         category: str = "",
         message_type: str = "error",
     ) -> None:
@@ -83,7 +83,7 @@ class ErrorHandler:
         identifier is usually a dataset name.
         Args:
             value_type (str): Type of value e.g. "sector"
-            value (str): Missing value
+            value (Any): Missing value
             category (str): Error category. Defaults to "".
             message_type (str): The type of message (error or warning). Default is "error"
         Returns:
