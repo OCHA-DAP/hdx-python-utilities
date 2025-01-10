@@ -144,7 +144,7 @@ class ErrorHandler:
             bool: True if a message was added, False if not
         """
         message = self.multi_valued_message(text, values)
-        if text is None:
+        if message is None:
             return False
         self.add(message, category, message_type)
         return True
