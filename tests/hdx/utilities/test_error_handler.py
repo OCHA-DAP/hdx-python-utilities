@@ -10,7 +10,7 @@ from hdx.utilities.error_handler import ErrorHandler
 setup_logging()
 
 
-class TestErrorsHandler:
+class TestErrorHandler:
     def test_error_handler(self, caplog):
         with ErrorHandler() as errors:
             assert len(errors.shared_errors["warning"]) == 0
