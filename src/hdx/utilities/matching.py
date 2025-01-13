@@ -67,7 +67,7 @@ def get_code_from_name(
     unmatched: List[str],
     fuzzy_match: bool = True,
     match_threshold: int = 5,
-) -> str | None:
+) -> Optional[str]:
     """
     Given a name (org type, sector, etc), return the corresponding code.
 
@@ -79,7 +79,7 @@ def get_code_from_name(
         match_threshold (int): Match threshold
 
     Returns:
-        str or None: Matching code
+        Optional[str]: Matching code
     """
     code = code_lookup.get(name)
     if code:
