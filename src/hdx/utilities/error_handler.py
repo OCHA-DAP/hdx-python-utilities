@@ -151,7 +151,7 @@ class ErrorHandler:
 
     def log(self) -> None:
         """
-        Log errors and warning by category and sorted
+        Log errors and warnings by category and sorted
 
         Returns:
             None
