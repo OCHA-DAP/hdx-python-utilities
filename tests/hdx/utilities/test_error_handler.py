@@ -17,7 +17,7 @@ class TestErrorHandler:
             assert len(errors.shared_errors["error"]) == 0
         with pytest.raises(SystemExit):
             with caplog.at_level(logging.ERROR):
-                with ErrorHandler() as errors:
+                with ErrorHandler(should_exit_on_error=True) as errors:
                     errors.add("this is a error!")
                     errors.add("this is a warning!", "warning 1", "warning")
                     errors.add_missing_value(

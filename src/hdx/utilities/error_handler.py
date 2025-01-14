@@ -18,13 +18,13 @@ class ErrorHandler:
     sorted.
 
     Args:
-        should_exit_on_error (bool): Whether to exit with a 1 code if there are errors. Default is True.
+        should_exit_on_error (bool): Whether to exit with a 1 code if there are errors. Default is False.
 
     """
 
     def __init__(
         self,
-        should_exit_on_error: bool = True,
+        should_exit_on_error: bool = False,
     ):
         self.should_exit_on_error = should_exit_on_error
         self.shared_errors = {
