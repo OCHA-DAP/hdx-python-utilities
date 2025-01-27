@@ -8,6 +8,19 @@ from .frictionless_wrapper import get_frictionless_tableresource
 from .typehint import ListDict, ListTuple, ListTupleDict
 
 
+def invert_dictionary(d: Dict) -> Dict:
+    """Invert a dictionary from key - value to value - key. Assumes
+    one to one mapping between keys and values.
+
+    Args:
+        d (Dict): Dictionary
+
+    Returns:
+        Dict: Return inverse of dictionary
+    """
+    return dict(zip(d.values(), d.keys()))
+
+
 def merge_two_dictionaries(
     a: Dict, b: Dict, merge_lists: bool = False
 ) -> Dict:

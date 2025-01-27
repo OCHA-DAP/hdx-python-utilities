@@ -466,6 +466,10 @@ configuration for the metadata.
 
 Examples:
 
+    # Invert dictionary
+    a = {"a": "#a", "b": "#b", "c": "#c"}
+    assert invert_dictionary(a) == {"#a": "a", "#b": "b", "#c": "c"}
+
     # Merge dictionaries
     d1 = {1: 1, 2: 2, 3: 3, 4: ["a", "b", "c"]}
     d2 = {2: 6, 5: 8, 6: 9, 4: ["d", "e"]}

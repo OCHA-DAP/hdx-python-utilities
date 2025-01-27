@@ -16,6 +16,7 @@ from hdx.utilities.dictandlist import (
     float_value_convert,
     integer_key_convert,
     integer_value_convert,
+    invert_dictionary,
     key_value_convert,
     list_distribute_contents,
     list_distribute_contents_simple,
@@ -27,6 +28,10 @@ from hdx.utilities.path import temp_dir
 
 
 class TestDictAndList:
+    def test_invert_dictionary(self):
+        a = {"a": "#a", "b": "#b", "c": "#c"}
+        assert invert_dictionary(a) == {"#a": "a", "#b": "b", "#c": "c"}
+
     def test_merge_dictionaries(self):
         d1 = {1: 1, 2: 2, 3: 3, 4: {"a": 1, "b": "c"}}
         d2 = {2: 6, 4: 8, 6: 9, 9: {"c": 12, "e": "h"}}
