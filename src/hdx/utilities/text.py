@@ -122,7 +122,7 @@ def remove_string(
     newstring = remove_end_characters(
         newstring, characters_to_remove=end_characters_to_remove
     )
-    return f"{newstring}{string[index + len(toremove):]}"
+    return f"{newstring}{string[index + len(toremove) :]}"
 
 
 def get_words_in_sentence(sentence: str) -> List[str]:
