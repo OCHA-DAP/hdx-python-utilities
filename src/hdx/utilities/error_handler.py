@@ -151,20 +151,20 @@ class ErrorHandler:
 
     def log(self) -> None:
         """
-        Log errors and warnings by category and sorted
+        Log warnings and errors by category and sorted
 
         Returns:
             None
         """
 
-        for _, errors in self.shared_errors["error"].items():
-            errors = sorted(errors)
-            for error in errors:
-                logger.error(error)
         for _, warnings in self.shared_errors["warning"].items():
             warnings = sorted(warnings)
             for warning in warnings:
                 logger.warning(warning)
+        for _, errors in self.shared_errors["error"].items():
+            errors = sorted(errors)
+            for error in errors:
+                logger.error(error)
 
     def exit_on_error(self) -> None:
         """Exit with a 1 code if there are errors and should_exit_on_error
