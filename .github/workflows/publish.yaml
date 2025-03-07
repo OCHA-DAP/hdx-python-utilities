@@ -8,6 +8,13 @@ jobs:
   publish:
     runs-on: ubuntu-latest
 
+    environment:
+      name: pypi
+      url: https://pypi.org/p/hdx-python-utilities
+
+    permissions:
+      id-token: write  # IMPORTANT: mandatory for trusted publishing
+
     steps:
     - uses: actions/checkout@v4
     - name: Get history and tags for versioning to work
@@ -26,5 +33,5 @@ jobs:
     - name: Build with hatch
       run: |
         hatch build
-    - name: Publish package distributions to PyPI
+    - name: Publish distribution 📦 to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
