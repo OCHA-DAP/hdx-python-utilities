@@ -3,12 +3,16 @@ name: Publish to TestPyPI
 on:
   workflow_dispatch: # add run button in github
 
-permissions:
-  id-token: write
-
 jobs:
   publish:
     runs-on: ubuntu-latest
+
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/hdx-python-utilities
+
+    permissions:
+      id-token: write  # IMPORTANT: mandatory for trusted publishing
 
     steps:
     - uses: actions/checkout@v4
@@ -28,7 +32,7 @@ jobs:
     - name: Build with hatch
       run: |
         hatch build
-    - name: Publish package distributions to PyPI
+    - name: Publish distribution 📦 to TestPyPI
       uses: pypa/gh-action-pypi-publish@release/v1
       with:
         repository-url: https://test.pypi.org/legacy/
