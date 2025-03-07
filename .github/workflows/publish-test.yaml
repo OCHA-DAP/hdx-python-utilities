@@ -1,8 +1,7 @@
 name: Publish to PyPI
 
 on:
-  release:
-    types: [published]
+  workflow_dispatch: # add run button in github
 
 jobs:
   publish:
@@ -28,3 +27,5 @@ jobs:
         hatch build
     - name: Publish package distributions to PyPI
       uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        repository-url: https://test.pypi.org/legacy/
