@@ -1,0 +1,28 @@
+site_name: HDX Python Utilities
+repo_url: "https://github.com/OCHA-DAP/hdx-python-utilities"
+theme:
+  name: material
+  highlightjs: true
+plugins:
+  - search
+  - mkapi
+nav:
+  - Home: main.md
+  - API Documentation:
+    - Downloading files: $hdx.utilities.downloader.*
+    - Retrieving files: $hdx.utilities.retriever.*
+    - Loading JSON and YAML: $hdx.utilities.loader.*
+    - Saving JSON and YAML: $hdx.utilities.saver.*
+    - Dictionary and list utilities: $hdx.utilities.dictandlist.*
+    - HTML utilities: $hdx.utilities.html.*
+    - Comparing files: $hdx.utilities.compare.*
+    - Emailing: $hdx.utilities.email.*
+    - Configuring logging: $hdx.utilities.easy_logging.*
+    - Path utilities: $hdx.utilities.path.*
+    - Date parsing utilities: $hdx.utilities.dateparse.*
+    - Text processing: $hdx.utilities.text.*
+    - Encoding utilities: $hdx.utilities.encoding.*
+    - Valid UUID: $hdx.utilities.uuid.*
+    - Wheel utilities: $hdx.utilities.session.*
+    - Retrying Requests session: $hdx.utilities.session.*
+    - User Agent: $hdx.utilities.useragent.*
