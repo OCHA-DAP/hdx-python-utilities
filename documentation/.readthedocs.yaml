@@ -9,7 +9,6 @@ build:
   jobs:
     pre_build:
       - pip install mkapi
-      - pip install mkdocs-same-dir
 
 mkdocs:
   configuration: documentation/mkdocs.yaml

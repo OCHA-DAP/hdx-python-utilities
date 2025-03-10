@@ -7,7 +7,6 @@ theme:
   highlightjs: true
 plugins:
   - search
-  - same-dir
   - mkapi
 nav:
   - Home: index.md
