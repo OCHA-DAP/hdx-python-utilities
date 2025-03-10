@@ -10,7 +10,7 @@ plugins:
   - same-dir
   - mkapi
 nav:
-  - Home: main.md
+  - Home: index.md
   - API Documentation:
     - Downloading files: $hdx.utilities.downloader.*
     - Retrieving files: $hdx.utilities.retriever.*
