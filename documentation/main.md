@@ -194,8 +194,7 @@ Other useful functions:
     # if no folder supplied
     # path = Download.get_path_for_url(url, folder)
 
-For more detail and additional functions, check the API docs mentioned earlier in the
-[usage section](#usage).
+For more detail and additional functions, check the API documentation.
 
 ## Retrieving files
 
