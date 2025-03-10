@@ -1,5 +1,7 @@
 site_name: HDX Python Utilities
 repo_url: "https://github.com/OCHA-DAP/hdx-python-utilities"
+docs_dir: .
+site_dir: ../site
 theme:
   name: material
   highlightjs: true
