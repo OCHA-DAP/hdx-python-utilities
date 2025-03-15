@@ -1,0 +1,32 @@
+site_name: HDX Python Utilities
+repo_url: https://github.com/OCHA-DAP/hdx-python-utilities/
+repo_name: OCHA-DAP/hdx-python-utilities
+docs_dir: .
+site_dir: ../site
+theme:
+  name: material
+  highlightjs: true
+plugins:
+  - search
+  - mkapi
+nav:
+  - Home: index.md
+  - API Documentation:
+    - Downloading files: $src/hdx.utilities.downloader.*
+    - Retrieving files: $src/hdx.utilities.retriever.*
+    - Loading and saving JSON and YAML:
+      - Loading: $src/hdx.utilities.loader.*
+      - Saving: $src/hdx.utilities.saver.*
+    - Dictionary and list utilities: $src/hdx.utilities.dictandlist.*
+    - HTML utilities: $src/hdx.utilities.html.*
+    - Comparing files: $src/hdx.utilities.compare.*
+    - Emailing: $src/hdx.utilities.email.*
+    - Configuring logging: $src/hdx.utilities.easy_logging.*
+    - Path utilities: $src/hdx.utilities.path.*
+    - Date parsing utilities: $src/hdx.utilities.dateparse.*
+    - Text processing: $src/hdx.utilities.text.*
+    - Encoding utilities: $src/hdx.utilities.encoding.*
+    - Valid UUID: $src/hdx.utilities.uuid.*
+    - Wheel utilities: $src/hdx.utilities.session.*
+    - Retrying Requests session: $src/hdx.utilities.session.*
+    - User Agent: $src/hdx.utilities.useragent.*
