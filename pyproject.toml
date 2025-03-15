@@ -68,7 +68,7 @@ html = ["beautifulsoup4", "html5lib"]
 email = ["email_validator"]
 test = ["pytest", "pytest-cov", "pytest-loguru"]
 dev = ["pre-commit"]
-docs = ["mkdocs-material", "mkapi"]
+docs = ["mkapi"]
 
 #########
 # Hatch #
