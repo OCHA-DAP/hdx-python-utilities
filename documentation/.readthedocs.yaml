@@ -8,7 +8,7 @@ build:
     python: "3.12"
   jobs:
     pre_build:
-      - pip install .[mkdocs]
+      - pip install .[docs]
 
 mkdocs:
   configuration: documentation/mkdocs.yaml
