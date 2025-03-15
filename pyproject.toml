@@ -68,7 +68,7 @@ html = ["beautifulsoup4", "html5lib"]
 email = ["email_validator"]
 test = ["pytest", "pytest-cov", "pytest-loguru"]
 dev = ["pre-commit"]
-
+docs = ["mkapi"]
 
 #########
 # Hatch #
@@ -107,7 +107,7 @@ run = """
        """
 
 [tool.hatch.envs.hatch-static-analysis]
-dependencies = ["ruff==0.9.6"]
+dependencies = ["ruff==0.9.10"]
 
 [tool.hatch.envs.hatch-static-analysis.scripts]
 format-check = ["ruff format --config .config/ruff.toml --check --diff {args:.}",]
