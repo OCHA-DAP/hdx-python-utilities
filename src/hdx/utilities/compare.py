@@ -1,8 +1,9 @@
 """File compare utilities."""
 
-import cydifflib
 from os import linesep
 from typing import List
+
+import cydifflib
 
 
 def compare_files(path1: str, path2: str, encoding: str = "utf-8") -> List[str]:
