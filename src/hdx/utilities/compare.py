@@ -1,13 +1,12 @@
 """File compare utilities."""
 
-import difflib
 from os import linesep
 from typing import List
 
+import cydifflib
 
-def compare_files(
-    path1: str, path2: str, encoding: str = "utf-8"
-) -> List[str]:
+
+def compare_files(path1: str, path2: str, encoding: str = "utf-8") -> List[str]:
     """Returns the delta between two files using -, ?, + format excluding lines
     that are the same.
 
@@ -18,7 +17,7 @@ def compare_files(
     Returns:
         List[str]: Delta between the two files
     """
-    diff = difflib.ndiff(
+    diff = cydifflib.ndiff(
         open(path1, encoding=encoding).read().splitlines(),
         open(path2, encoding=encoding).read().splitlines(),
     )

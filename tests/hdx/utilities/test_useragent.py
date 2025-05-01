@@ -62,10 +62,7 @@ class TestUserAgent:
             user_agent_config_yaml=user_agent_config3_yaml,
             user_agent_lookup="lookup2",
         )
-        assert (
-            UserAgent.get()
-            == f"HDXPythonUtilities/{__version__}-mylookupagent2"
-        )
+        assert UserAgent.get() == f"HDXPythonUtilities/{__version__}-mylookupagent2"
         UserAgent.clear_global()
         with pytest.raises(UserAgentError):
             UserAgent.get(
@@ -84,10 +81,7 @@ class TestUserAgent:
             UserAgent._load(prefix="", user_agent_config_yaml="")
         my_user_agent = "lala"
         monkeypatch.setenv("USER_AGENT", my_user_agent)
-        assert (
-            UserAgent.get()
-            == f"HDXPythonUtilities/{__version__}-{my_user_agent}"
-        )
+        assert UserAgent.get() == f"HDXPythonUtilities/{__version__}-{my_user_agent}"
         my_preprefix = "haha"
         monkeypatch.setenv("PREPREFIX", my_preprefix)
         assert (

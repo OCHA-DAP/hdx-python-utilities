@@ -76,7 +76,5 @@ def basicauth_decode(encoded_string: str) -> Tuple[str, str]:
             f'"xxxxxxxxxxxx" or "Basic xxxxxxxxxxxx"'
         )
 
-    username, password = base64_to_str(split_encoded_string[info_index]).split(
-        ":", 1
-    )
+    username, password = base64_to_str(split_encoded_string[info_index]).split(":", 1)
     return unquote(username), unquote(password)

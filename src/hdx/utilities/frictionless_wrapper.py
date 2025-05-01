@@ -68,9 +68,7 @@ def get_frictionless_control(**kwargs: Any) -> Tuple[Control, Any]:
     return control, kwargs
 
 
-def get_frictionless_detector(
-    infer_types: bool, **kwargs: Any
-) -> Tuple[Detector, Any]:
+def get_frictionless_detector(infer_types: bool, **kwargs: Any) -> Tuple[Detector, Any]:
     """Get Frictionless Detector.
 
     Args:

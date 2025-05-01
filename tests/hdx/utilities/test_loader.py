@@ -44,9 +44,7 @@ class TestLoader:
             ),
             (
                 "dataset",
-                OrderedDict(
-                    [("required_fields", ["name", "title", "dataset_date"])]
-                ),
+                OrderedDict([("required_fields", ["name", "title", "dataset_date"])]),
             ),
             (
                 "resource",
@@ -119,19 +117,13 @@ test"""
         loaderfolder = join(fixturesfolder, "loader")
         with pytest.raises(LoadError):
             load_text(join(loaderfolder, "empty.yaml"))
-        load_text(
-            join(loaderfolder, "empty.yaml"), loaderror_if_empty=False
-        ) == ""
+        load_text(join(loaderfolder, "empty.yaml"), loaderror_if_empty=False) == ""
         with pytest.raises(LoadError):
             load_yaml(join(loaderfolder, "empty.yaml"))
-        load_yaml(
-            join(loaderfolder, "empty.yaml"), loaderror_if_empty=False
-        ) is None
+        load_yaml(join(loaderfolder, "empty.yaml"), loaderror_if_empty=False) is None
         with pytest.raises(LoadError):
             load_json(join(loaderfolder, "empty.json"))
-        load_json(
-            join(loaderfolder, "empty.json"), loaderror_if_empty=False
-        ) is None
+        load_json(join(loaderfolder, "empty.json"), loaderror_if_empty=False) is None
 
     def test_load_and_merge_yaml(self, configfolder):
         result = load_and_merge_yaml(

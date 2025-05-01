@@ -36,23 +36,15 @@ class TestState:
         with temp_dir(folder="test_state") as tmpdir:
             statepath = join(tmpdir, statefile)
             copyfile(join(statefolder, statefile), statepath)
-            with State(
-                statepath, parse_date, iso_string_from_datetime
-            ) as state:
+            with State(statepath, parse_date, iso_string_from_datetime) as state:
                 assert state.get() == date1
-            with State(
-                statepath, parse_date, iso_string_from_datetime
-            ) as state:
+            with State(statepath, parse_date, iso_string_from_datetime) as state:
                 assert state.get() == date1
                 state.set(date2)
-            with State(
-                statepath, parse_date, iso_string_from_datetime
-            ) as state:
+            with State(statepath, parse_date, iso_string_from_datetime) as state:
                 assert state.get() == date2.replace(hour=0, minute=0)
 
-    def test_multi_date_state(
-        self, statefolder, multidatestatefile, date1, date2
-    ):
+    def test_multi_date_state(self, statefolder, multidatestatefile, date1, date2):
         with temp_dir(folder="test_multidatestate") as tmpdir:
             statepath = join(tmpdir, multidatestatefile)
             copyfile(join(statefolder, multidatestatefile), statepath)

@@ -21,18 +21,14 @@ from hdx.utilities.text import (
 class TestText:
     def test_normalise(self):
         assert (
-            normalise(
-                "£^*& ()+-[]<>?|\ Al DhaleZ'eÉ / الضالع,,..1234''#~~### "
-            )
+            normalise("£^*& ()+-[]<>?|\ Al DhaleZ'eÉ / الضالع,,..1234''#~~### ")
             == "al dhalezee 1234"
         )
 
     def test_remove_end_characters(self):
         assert remove_end_characters('lalala,.,"') == "lalala"
         assert (
-            remove_end_characters(
-                'lalala, .\t/,"', f"{punctuation}{whitespace}"
-            )
+            remove_end_characters('lalala, .\t/,"', f"{punctuation}{whitespace}")
             == "lalala"
         )
 
@@ -54,9 +50,7 @@ class TestText:
         assert remove_string("lala, 01/02/2020 ", "01/02/2020") == "lala "
         assert remove_string("lala,(01/02/2020) ", "01/02/2020") == "lala) "
         assert (
-            remove_string(
-                "lala, 01/02/2020 ", "01/02/2020", PUNCTUATION_MINUS_BRACKETS
-            )
+            remove_string("lala, 01/02/2020 ", "01/02/2020", PUNCTUATION_MINUS_BRACKETS)
             == "lala "
         )
         assert (
@@ -67,9 +61,7 @@ class TestText:
         )
 
     def test_get_words_in_sentence(self):
-        result = get_words_in_sentence(
-            "Korea (Democratic People's Republic of)"
-        )
+        result = get_words_in_sentence("Korea (Democratic People's Republic of)")
         assert result == ["Korea", "Democratic", "People's", "Republic", "of"]
         result = get_words_in_sentence("Serbia and Kosovo: S/RES/1244 (1999)")
         assert result == [

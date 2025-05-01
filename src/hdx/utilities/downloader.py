@@ -282,9 +282,7 @@ class Download(BaseDownload):
                     spliturl = spliturl._replace(scheme="https")
                     url = urlunsplit(spliturl)
             if post:
-                full_url, parameters = self.get_url_params_for_post(
-                    url, parameters
-                )
+                full_url, parameters = self.get_url_params_for_post(url, parameters)
                 self.response = self.session.post(
                     full_url,
                     data=parameters,
@@ -303,9 +301,7 @@ class Download(BaseDownload):
             if encoding:
                 self.response.encoding = encoding
         except Exception as e:
-            raise DownloadError(
-                f"Setup of Streaming Download of {url} failed!"
-            ) from e
+            raise DownloadError(f"Setup of Streaming Download of {url} failed!") from e
         return self.response
 
     def set_bearer_token(self, bearer_token: str) -> None:
@@ -393,9 +389,7 @@ class Download(BaseDownload):
         Returns:
             str: Path of downloaded file
         """
-        path = self.get_path_for_url(
-            url, folder, filename, path, overwrite, keep
-        )
+        path = self.get_path_for_url(url, folder, filename, path, overwrite, keep)
         if keep and exists(path):
             return path
         return self.stream_path(
@@ -432,9 +426,7 @@ class Download(BaseDownload):
         path = kwargs.get("path")
         overwrite = kwargs.get("overwrite", False)
         keep = kwargs.get("keep", False)
-        path = self.get_path_for_url(
-            url, folder, filename, path, overwrite, keep
-        )
+        path = self.get_path_for_url(url, folder, filename, path, overwrite, keep)
         if keep and exists(path):
             return path
         self.setup(
@@ -637,9 +629,7 @@ class Download(BaseDownload):
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
         header_insertions: Optional[ListTuple[Tuple[int, str]]] = None,
-        row_function: Optional[
-            Callable[[List[str], ListDict], ListDict]
-        ] = None,
+        row_function: Optional[Callable[[List[str], ListDict], ListDict]] = None,
         **kwargs: Any,
     ) -> Tuple[List[str], Iterator[ListDict]]:
         """Returns header of tabular file pointed to by url and an iterator
@@ -750,9 +740,7 @@ class Download(BaseDownload):
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
         header_insertions: Optional[ListTuple[Tuple[int, str]]] = None,
-        row_function: Optional[
-            Callable[[List[str], ListDict], ListDict]
-        ] = None,
+        row_function: Optional[Callable[[List[str], ListDict], ListDict]] = None,
         **kwargs: Any,
     ) -> Tuple[List[str], Iterator[ListDict]]:
         """Returns header of tabular file(s) pointed to by url and an iterator
@@ -858,9 +846,7 @@ class Download(BaseDownload):
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
         header_insertions: Optional[ListTuple[Tuple[int, str]]] = None,
-        row_function: Optional[
-            Callable[[List[str], ListDict], ListDict]
-        ] = None,
+        row_function: Optional[Callable[[List[str], ListDict], ListDict]] = None,
         **kwargs: Any,
     ) -> Tuple[List[str], Iterator[List]]:
         """Returns headers and an iterator where each row is returned as a
@@ -935,9 +921,7 @@ class Download(BaseDownload):
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
         header_insertions: Optional[ListTuple[Tuple[int, str]]] = None,
-        row_function: Optional[
-            Callable[[List[str], ListDict], ListDict]
-        ] = None,
+        row_function: Optional[Callable[[List[str], ListDict], ListDict]] = None,
         **kwargs: Any,
     ) -> Tuple[List[str], Iterator[Dict]]:
         """Returns headers and an iterator where each row is returned as a
@@ -1012,9 +996,7 @@ class Download(BaseDownload):
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
         header_insertions: Optional[ListTuple[Tuple[int, str]]] = None,
-        row_function: Optional[
-            Callable[[List[str], ListDict], ListDict]
-        ] = None,
+        row_function: Optional[Callable[[List[str], ListDict], ListDict]] = None,
         **kwargs: Any,
     ) -> Dict:
         """Download 2 column csv from url and return a dictionary of keys
@@ -1093,9 +1075,7 @@ class Download(BaseDownload):
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
         header_insertions: Optional[ListTuple[Tuple[int, str]]] = None,
-        row_function: Optional[
-            Callable[[List[str], ListDict], ListDict]
-        ] = None,
+        row_function: Optional[Callable[[List[str], ListDict], ListDict]] = None,
         **kwargs: Any,
     ) -> Dict[str, Dict]:
         """Download multicolumn csv from url and return dictionary where keys
@@ -1178,9 +1158,7 @@ class Download(BaseDownload):
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
         header_insertions: Optional[ListTuple[Tuple[int, str]]] = None,
-        row_function: Optional[
-            Callable[[List[str], ListDict], ListDict]
-        ] = None,
+        row_function: Optional[Callable[[List[str], ListDict], ListDict]] = None,
         **kwargs: Any,
     ) -> Dict[str, Dict]:
         """Download multicolumn csv from url and return dictionary where keys

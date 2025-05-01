@@ -120,9 +120,7 @@ def temp_dir(
     Returns:
         str: A temporary directory
     """
-    tempdir = get_temp_dir(
-        folder, delete_if_exists=delete_if_exists, tempdir=tempdir
-    )
+    tempdir = get_temp_dir(folder, delete_if_exists=delete_if_exists, tempdir=tempdir)
     try:
         yield tempdir
         if folder and delete_on_success:
@@ -245,9 +243,7 @@ def progress_storing_folder(
     if not wheretostart:
         contents = getenv("WHERETOSTART")
         if contents:
-            wheretostart = get_wheretostart(
-                contents, "Environment variable", key
-            )
+            wheretostart = get_wheretostart(contents, "Environment variable", key)
         else:
             if exists(progress_file):
                 contents = load_text(progress_file, strip=True)
@@ -263,9 +259,7 @@ def progress_storing_folder(
             if not found:
                 if current == wheretostart:
                     found = True
-                    logger.info(
-                        f"Starting run from WHERETOSTART {wheretostart}"
-                    )
+                    logger.info(f"Starting run from WHERETOSTART {wheretostart}")
                 else:
                     logger.info(
                         "Run not started. Ignoring {}. WHERETOSTART ({}) not matched.".format(
@@ -306,9 +300,7 @@ def wheretostart_tempdir_batch(
     if wheretostart:
         if wheretostart.upper() == "RESET":
             delete_if_exists = True
-            logger.info(
-                "Removing progress file and will start from beginning!"
-            )
+            logger.info("Removing progress file and will start from beginning!")
     with temp_dir_batch(
         folder,
         delete_if_exists,
@@ -349,9 +341,7 @@ def progress_storing_tempdir(
     Returns:
         Tuple[Dict,Dict]: A tuple of the form (info dictionary, next object in iterator)
     """
-    with wheretostart_tempdir_batch(
-        folder, batch=batch, tempdir=tempdir
-    ) as info:
+    with wheretostart_tempdir_batch(folder, batch=batch, tempdir=tempdir) as info:
         yield from progress_storing_folder(info, iterator, key)
 
 
@@ -388,9 +378,7 @@ def multiple_progress_storing_tempdir(
     if wheretostartenv:
         if wheretostartenv.upper() == "RESET":
             delete_if_exists = True
-            logger.info(
-                "Removing progress file and will start from beginning!"
-            )
+            logger.info("Removing progress file and will start from beginning!")
     with temp_dir_batch(
         folder,
         delete_if_exists,
@@ -474,7 +462,5 @@ def get_filename_from_url(
     Returns:
         str: filename
     """
-    filename, extension = get_filename_extension_from_url(
-        url, second_last, use_query
-    )
+    filename, extension = get_filename_extension_from_url(url, second_last, use_query)
     return f"{filename}{extension}"

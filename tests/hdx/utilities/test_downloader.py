@@ -86,31 +86,23 @@ class TestDownloader:
     def fixturejsonurl(self):
         return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/main/tests/fixtures/downloader/test_json_processing.json?a=1"
 
-    def test_get_path_for_url(
-        self, tmpdir, fixtureurl, configfolder, downloaderfolder
-    ):
+    def test_get_path_for_url(self, tmpdir, fixtureurl, configfolder, downloaderfolder):
         tmpdir = str(tmpdir)
         filename = "test_data.csv"
         path = Download.get_path_for_url(fixtureurl, configfolder)
         assert abspath(path) == abspath(join(configfolder, filename))
         path = Download.get_path_for_url(fixtureurl, downloaderfolder)
-        assert abspath(path) == abspath(
-            join(downloaderfolder, "test_data3.csv")
-        )
+        assert abspath(path) == abspath(join(downloaderfolder, "test_data3.csv"))
         testfolder = join(tmpdir, self.downloaderfoldername)
         rmtree(testfolder, ignore_errors=True)
         copytree(downloaderfolder, testfolder)
-        path = Download.get_path_for_url(
-            fixtureurl, testfolder, overwrite=True
-        )
+        path = Download.get_path_for_url(fixtureurl, testfolder, overwrite=True)
         assert abspath(path) == abspath(join(testfolder, filename))
         rmtree(testfolder)
         filename = "myfilename.txt"
         path = Download.get_path_for_url(fixtureurl, filename=filename)
         assert abspath(path) == abspath(join(gettempdir(), filename))
-        path = Download.get_path_for_url(
-            fixtureurl, downloaderfolder, filename
-        )
+        path = Download.get_path_for_url(fixtureurl, downloaderfolder, filename)
         assert abspath(path) == abspath(join(downloaderfolder, filename))
 
     def test_init(self, monkeypatch, downloaderfolder):
@@ -126,16 +118,14 @@ class TestDownloader:
         with Download(bearer_token=bearertoken) as downloader:
             assert downloader.session.headers["Accept"] == "application/json"
             assert (
-                downloader.session.headers["Authorization"]
-                == f"Bearer {bearertoken}"
+                downloader.session.headers["Authorization"] == f"Bearer {bearertoken}"
             )
         bearertokenfile = join(downloaderfolder, "bearertoken.txt")
         bearertoken = "12345"
         with Download(bearer_token_file=bearertokenfile) as downloader:
             assert downloader.session.headers["Accept"] == "application/json"
             assert (
-                downloader.session.headers["Authorization"]
-                == f"Bearer {bearertoken}"
+                downloader.session.headers["Authorization"] == f"Bearer {bearertoken}"
             )
         extraparamsyamltree = join(downloaderfolder, "extra_params_tree.yaml")
         with Download(
@@ -152,8 +142,7 @@ class TestDownloader:
         with Download(use_auth="bearer_token") as downloader:
             assert downloader.session.headers["Accept"] == "application/json"
             assert (
-                downloader.session.headers["Authorization"]
-                == f"Bearer {bearertoken}"
+                downloader.session.headers["Authorization"] == f"Bearer {bearertoken}"
             )
         with Download(use_auth="basic_auth") as downloader:
             assert downloader.session.auth == ("user", "pass")
@@ -161,8 +150,7 @@ class TestDownloader:
         with Download() as downloader:
             assert downloader.session.headers["Accept"] == "application/json"
             assert (
-                downloader.session.headers["Authorization"]
-                == f"Bearer {bearertoken}"
+                downloader.session.headers["Authorization"] == f"Bearer {bearertoken}"
             )
         monkeypatch.delenv("BEARER_TOKEN")
         monkeypatch.setenv("BASIC_AUTH", basicauth)
@@ -279,19 +267,15 @@ class TestDownloader:
             assert "basic_auth" not in full_url
         monkeypatch.delenv("EXTRA_PARAMS")
         bearertoken = "ZYXWV"
-        with Download(
-            extra_params_dict={"bearer_token": bearertoken}
-        ) as downloader:
+        with Download(extra_params_dict={"bearer_token": bearertoken}) as downloader:
             assert downloader.session.headers["Accept"] == "application/json"
             assert (
-                downloader.session.headers["Authorization"]
-                == f"Bearer {bearertoken}"
+                downloader.session.headers["Authorization"] == f"Bearer {bearertoken}"
             )
             bearertoken = "FGHIJ"
             downloader.set_bearer_token(bearertoken)
             assert (
-                downloader.session.headers["Authorization"]
-                == f"Bearer {bearertoken}"
+                downloader.session.headers["Authorization"] == f"Bearer {bearertoken}"
             )
 
         with pytest.raises(SessionError):
@@ -341,18 +325,14 @@ class TestDownloader:
         )
         assert result[0] == "http://www.lala.com/hdfa"
         assert list(result[1].items()) == list(
-            OrderedDict(
-                [("a", "3"), ("b", "4"), ("c", "e"), ("d", "f")]
-            ).items()
+            OrderedDict([("a", "3"), ("b", "4"), ("c", "e"), ("d", "f")]).items()
         )
         result = Download.get_url_params_for_post(
             "http://www.lala.com/hdfa?a=3&b=4", {"c": "e", "d": "f"}
         )
         assert result[0] == "http://www.lala.com/hdfa"
         assert list(result[1].items()) == list(
-            OrderedDict(
-                [("a", "3"), ("b", "4"), ("c", "e"), ("d", "f")]
-            ).items()
+            OrderedDict([("a", "3"), ("b", "4"), ("c", "e"), ("d", "f")]).items()
         )
 
     def test_hxl_row(self):
@@ -441,9 +421,7 @@ class TestDownloader:
             fpath = abspath(f)
             remove(f)
             assert fpath == abspath(join(tmpdir, "test_data.csv"))
-            f = downloader.download_file(
-                fixtureurl, folder=tmpdir, filename=filename
-            )
+            f = downloader.download_file(fixtureurl, folder=tmpdir, filename=filename)
             fpath = abspath(f)
             assert fpath == abspath(join(tmpdir, filename))
             f = downloader.download_file(
@@ -455,9 +433,7 @@ class TestDownloader:
                 fixtureurl, path=join(tmpdir, filename), overwrite=False
             )
             fpath = abspath(f)
-            assert fpath == abspath(
-                join(tmpdir, filename.replace(".txt", "1.txt"))
-            )
+            assert fpath == abspath(join(tmpdir, filename.replace(".txt", "1.txt")))
             f = downloader.download_file(
                 fixtureurl, path=join(tmpdir, filename), keep=True
             )
@@ -514,9 +490,7 @@ class TestDownloader:
             assert downloader.get_status() == 200
             assert len(downloader.get_headers()) in (24, 25)
             assert (
-                bool(
-                    re.match(r"7\d\d", downloader.get_header("Content-Length"))
-                )
+                bool(re.match(r"7\d\d", downloader.get_header("Content-Length")))
                 is True
             )
             assert (
@@ -590,20 +564,14 @@ class TestDownloader:
                 infer_types=True,
             )
             assert result == {615: "2231RTA", "GWNO": "EVENT_ID_CNTY"}
-            result = downloader.download_tabular_key_value(
-                fixtureprocessurl, headers=3
-            )
+            result = downloader.download_tabular_key_value(fixtureprocessurl, headers=3)
             assert result == {"coal": "3", "gas": "2"}
             with pytest.raises(DownloadError):
-                downloader.download_tabular_key_value(
-                    "NOTEXIST://NOTEXIST.csv"
-                )
+                downloader.download_tabular_key_value("NOTEXIST://NOTEXIST.csv")
 
     def test_get_tabular_rows_as_list(self, fixtureprocessurl):
         with Download() as downloader:
-            headers, rows = downloader.get_tabular_rows_as_list(
-                fixtureprocessurl
-            )
+            headers, rows = downloader.get_tabular_rows_as_list(fixtureprocessurl)
             rows = list(rows)
             assert rows == [
                 ["la1", "ha1", "ba1", "ma1"],
@@ -614,9 +582,7 @@ class TestDownloader:
 
     def test_get_tabular_rows_as_dict(self, fixtureprocessurl):
         with Download() as downloader:
-            headers, rows = downloader.get_tabular_rows_as_dict(
-                fixtureprocessurl
-            )
+            headers, rows = downloader.get_tabular_rows_as_dict(fixtureprocessurl)
             rows = list(rows)
             assert rows == [
                 {
@@ -641,9 +607,7 @@ class TestDownloader:
             headers, iterator = downloader.get_tabular_rows(fixtureprocessurl)
             assert headers == expected_headers
             assert list(iterator) == expected[1:]
-            headers, iterator = downloader.get_tabular_rows(
-                fixtureprocessurlblank
-            )
+            headers, iterator = downloader.get_tabular_rows(fixtureprocessurlblank)
             assert headers == expected_headers
             blank_expected = copy.deepcopy(expected[1:])
             blank_expected[2][0] = None

@@ -59,9 +59,7 @@ class Retrieve(BaseDownload):
         self.log_level = log_level
 
     @staticmethod
-    def check_flags(
-        saved_dir: str, save: bool, use_saved: bool, delete: bool
-    ) -> None:
+    def check_flags(saved_dir: str, save: bool, use_saved: bool, delete: bool) -> None:
         """Check flags. Also delete saved_dir if save and delete are True.
 
         Args:
@@ -218,9 +216,7 @@ class Retrieve(BaseDownload):
                 log_level,
                 f"Downloading {logstr} from {self.get_url_logstr(url)} into {output_path}",
             )
-            return self.downloader.download_file(
-                url, path=output_path, **kwargs
-            )
+            return self.downloader.download_file(url, path=output_path, **kwargs)
         except DownloadError:
             if not fallback:
                 raise
@@ -305,9 +301,7 @@ class Retrieve(BaseDownload):
         """
         if log_level is None:
             log_level = self.log_level
-        filename, kwargs = self.get_filename(
-            url, filename, ("yaml", "yml"), **kwargs
-        )
+        filename, kwargs = self.get_filename(url, filename, ("yaml", "yml"), **kwargs)
         if not logstr:
             logstr = filename
         saved_path = join(self.saved_dir, filename)
@@ -358,9 +352,7 @@ class Retrieve(BaseDownload):
         """
         if log_level is None:
             log_level = self.log_level
-        filename, kwargs = self.get_filename(
-            url, filename, ("json",), **kwargs
-        )
+        filename, kwargs = self.get_filename(url, filename, ("json",), **kwargs)
         if not logstr:
             logstr = filename
         saved_path = join(self.saved_dir, filename)
@@ -435,9 +427,7 @@ class Retrieve(BaseDownload):
             path = [path]
             for url in urls[1:]:
                 temp_kwargs = deepcopy(orig_kwargs)
-                pth = self.download_file(
-                    url, None, logstr, fallback, **temp_kwargs
-                )
+                pth = self.download_file(url, None, logstr, fallback, **temp_kwargs)
                 path.append(pth)
 
         kwargs.pop("file_prefix", None)

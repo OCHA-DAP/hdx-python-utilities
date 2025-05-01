@@ -41,9 +41,7 @@ class Email:
         email_config_yaml (str): Path to YAML HDX configuration. Defaults to ~/hdx_email_configuration.yaml.
     """
 
-    default_email_config_yaml = join(
-        expanduser("~"), "hdx_email_configuration.yaml"
-    )
+    default_email_config_yaml = join(expanduser("~"), "hdx_email_configuration.yaml")
 
     def __init__(self, **kwargs: Any) -> None:
         email_config_found = False
@@ -59,9 +57,7 @@ class Email:
                     "More than one email configuration file given!"
                 )
             email_config_found = True
-            logger.info(
-                f"Loading email configuration from: {email_config_json}"
-            )
+            logger.info(f"Loading email configuration from: {email_config_json}")
             email_config_dict = load_json(email_config_json)
 
         email_config_yaml = kwargs.get("email_config_yaml", None)
@@ -76,9 +72,7 @@ class Email:
                     "No email configuration parameter. Using default email configuration path."
                 )
                 email_config_yaml = Email.default_email_config_yaml
-            logger.info(
-                f"Loading email configuration from: {email_config_yaml}"
-            )
+            logger.info(f"Loading email configuration from: {email_config_yaml}")
             email_config_dict = load_yaml(email_config_yaml)
 
         self.connection_type = email_config_dict.get("connection_type", "smtp")
@@ -170,9 +164,7 @@ class Email:
             v = validate_email(
                 recipient, check_deliverability=True
             )  # validate and get info
-            normalised_recipients.append(
-                v.normalized
-            )  # replace with normalized form
+            normalised_recipients.append(v.normalized)  # replace with normalized form
         return normalised_recipients
 
     def send(
@@ -206,9 +198,7 @@ class Email:
         """
         if sender is None:
             sender = self.sender
-        v = validate_email(
-            sender, check_deliverability=False
-        )  # validate and get info
+        v = validate_email(sender, check_deliverability=False)  # validate and get info
         sender = v.normalized
 
         if html_body is not None:

@@ -84,9 +84,7 @@ class UserAgent:
         if not user_agent_config_yaml:
             user_agent_config_yaml = cls.default_user_agent_config_yaml
             if not isfile(user_agent_config_yaml):
-                user_agent_config_yaml = user_agent_config_yaml.replace(
-                    ".yaml", ".yml"
-                )
+                user_agent_config_yaml = user_agent_config_yaml.replace(".yaml", ".yml")
             if isfile(user_agent_config_yaml):
                 logger.info(
                     f"No user agent or user agent config file given. Using default user agent config file: {user_agent_config_yaml}."
@@ -95,14 +93,10 @@ class UserAgent:
                 raise UserAgentError(
                     f"User_agent should be supplied in a YAML config file and no configuration file at default path: {cls.default_user_agent_config_yaml}. User agent can be your project's name for example."
                 )
-        logger.info(
-            f"Loading user agent config from: {user_agent_config_yaml}"
-        )
+        logger.info(f"Loading user agent config from: {user_agent_config_yaml}")
         user_agent_config_dict = load_yaml(user_agent_config_yaml)
         if user_agent_lookup:
-            user_agent_config_dict = user_agent_config_dict.get(
-                user_agent_lookup
-            )
+            user_agent_config_dict = user_agent_config_dict.get(user_agent_lookup)
         if not user_agent_config_dict:
             raise UserAgentError(
                 f"No user agent information read from: {user_agent_config_yaml}"

@@ -21,9 +21,7 @@ def invert_dictionary(d: Dict) -> Dict:
     return dict(zip(d.values(), d.keys()))
 
 
-def merge_two_dictionaries(
-    a: Dict, b: Dict, merge_lists: bool = False
-) -> Dict:
+def merge_two_dictionaries(a: Dict, b: Dict, merge_lists: bool = False) -> Dict:
     """Merges b into a and returns merged result.
 
     NOTE: tuples and arbitrary objects are not handled as it is totally ambiguous what should happen
@@ -66,9 +64,7 @@ def merge_two_dictionaries(
                     else:
                         a[key] = b[key]
             else:
-                raise ValueError(
-                    f'Cannot merge non-dict "{b}" into dict "{a}"'
-                )
+                raise ValueError(f'Cannot merge non-dict "{b}" into dict "{a}"')
         else:
             raise ValueError(f'NOT IMPLEMENTED "{b}" into "{a}"')
     except TypeError as e:
@@ -78,9 +74,7 @@ def merge_two_dictionaries(
     return a
 
 
-def merge_dictionaries(
-    dicts: ListTuple[Dict], merge_lists: bool = False
-) -> Dict:
+def merge_dictionaries(dicts: ListTuple[Dict], merge_lists: bool = False) -> Dict:
     """Merges all dictionaries in dicts into a single dictionary and returns
     result.
 
@@ -149,9 +143,7 @@ def dict_of_sets_add(dictionary: Dict, key: Any, value: Any) -> None:
     dictionary[key] = set_objs
 
 
-def dict_of_dicts_add(
-    dictionary: Dict, parent_key: Any, key: Any, value: Any
-) -> None:
+def dict_of_dicts_add(dictionary: Dict, parent_key: Any, key: Any, value: Any) -> None:
     """Add key value pair to a dictionary within a dictionary by key.
 
     Args:
@@ -227,12 +219,9 @@ def list_distribute_contents(
         width = len(piles_list[0])
         pile_iters_list = [iter(pile) for pile in piles_list]
         pile_sizes_list = [
-            [pile_position] * len(pile)
-            for pile_position, pile in enumerate(piles_list)
+            [pile_position] * len(pile) for pile_position, pile in enumerate(piles_list)
         ]
-        grouped_rows = grouper(
-            width, itertools.chain.from_iterable(pile_sizes_list)
-        )
+        grouped_rows = grouper(width, itertools.chain.from_iterable(pile_sizes_list))
         grouped_columns = itertools.zip_longest(*grouped_rows)
         shuffled_pile = [
             next(pile_iters_list[position])
@@ -250,9 +239,7 @@ def list_distribute_contents(
     return riffle_shuffle(intermediate_list)
 
 
-def extract_list_from_list_of_dict(
-    list_of_dict: ListTuple[Dict], key: Any
-) -> List:
+def extract_list_from_list_of_dict(list_of_dict: ListTuple[Dict], key: Any) -> List:
     """Extract a list by looking up key in each member of a list of
     dictionaries.
 
@@ -323,9 +310,7 @@ def integer_key_convert(dictin: Dict, dropfailedkeys: bool = False) -> Dict:
     return key_value_convert(dictin, keyfn=int, dropfailedkeys=dropfailedkeys)
 
 
-def integer_value_convert(
-    dictin: Dict, dropfailedvalues: bool = False
-) -> Dict:
+def integer_value_convert(dictin: Dict, dropfailedvalues: bool = False) -> Dict:
     """Convert values of dictionary to integers.
 
     Args:
@@ -335,9 +320,7 @@ def integer_value_convert(
     Returns:
         Dict: Dictionary with values converted to integers
     """
-    return key_value_convert(
-        dictin, valuefn=int, dropfailedvalues=dropfailedvalues
-    )
+    return key_value_convert(dictin, valuefn=int, dropfailedvalues=dropfailedvalues)
 
 
 def float_value_convert(dictin: Dict, dropfailedvalues: bool = False) -> Dict:
@@ -350,9 +333,7 @@ def float_value_convert(dictin: Dict, dropfailedvalues: bool = False) -> Dict:
     Returns:
         Dict: Dictionary with values converted to floats
     """
-    return key_value_convert(
-        dictin, valuefn=float, dropfailedvalues=dropfailedvalues
-    )
+    return key_value_convert(dictin, valuefn=float, dropfailedvalues=dropfailedvalues)
 
 
 def avg_dicts(dictin1: Dict, dictin2: Dict, dropmissing: bool = True) -> Dict:
