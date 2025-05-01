@@ -36,9 +36,7 @@ class TestLoader:
             ),
             (
                 "dataset",
-                OrderedDict(
-                    [("required_fields", ["name", "title", "dataset_date"])]
-                ),
+                OrderedDict([("required_fields", ["name", "title", "dataset_date"])]),
             ),
             (
                 "resource",
@@ -148,9 +146,7 @@ class TestLoader:
         save_json(dct, test_path, pretty=pretty, sortkeys=sortkeys)
         assert_files_same(ref_path, test_path)
 
-    def test_save_hxlated_output(
-        self, tmpdir, saverfolder, json_csv_configuration
-    ):
+    def test_save_hxlated_output(self, tmpdir, saverfolder, json_csv_configuration):
         rows = (
             ("Col1", "Col2", "Col3"),
             ("#tag1", "#tag2", "#tag3"),
@@ -167,13 +163,9 @@ class TestLoader:
             output_dir=output_dir,
         )
         filename = "out.csv"
-        assert_files_same(
-            join(saverfolder, filename), join(output_dir, filename)
-        )
+        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
         filename = "out.json"
-        assert_files_same(
-            join(saverfolder, filename), join(output_dir, filename)
-        )
+        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
 
         row0 = rows[0]
         rowsdict = []
@@ -190,13 +182,9 @@ class TestLoader:
             output_dir=output_dir,
         )
         filename = "out.csv"
-        assert_files_same(
-            join(saverfolder, filename), join(output_dir, filename)
-        )
+        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
         filename = "out.json"
-        assert_files_same(
-            join(saverfolder, filename), join(output_dir, filename)
-        )
+        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
 
         save_hxlated_output(
             json_csv_configuration["test2"],
@@ -206,13 +194,9 @@ class TestLoader:
             output_dir=output_dir,
         )
         filename = "out2.csv"
-        assert_files_same(
-            join(saverfolder, filename), join(output_dir, filename)
-        )
+        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
         filename = "out2.json"
-        assert_files_same(
-            join(saverfolder, filename), join(output_dir, filename)
-        )
+        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
 
         rowsdict = []
         for row in rows[1:]:
@@ -228,13 +212,9 @@ class TestLoader:
             output_dir=output_dir,
         )
         filename = "out2.csv"
-        assert_files_same(
-            join(saverfolder, filename), join(output_dir, filename)
-        )
+        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
         filename = "out2.json"
-        assert_files_same(
-            join(saverfolder, filename), join(output_dir, filename)
-        )
+        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
 
         save_hxlated_output(
             json_csv_configuration["test3"],
@@ -244,9 +224,7 @@ class TestLoader:
             output_dir=output_dir,
         )
         filename = "out3.csv"
-        assert_files_same(
-            join(saverfolder, "out.csv"), join(output_dir, filename)
-        )
+        assert_files_same(join(saverfolder, "out.csv"), join(output_dir, filename))
         filename = "out3.json"
         assert exists(join(output_dir, filename)) is False
 
@@ -260,9 +238,7 @@ class TestLoader:
         filename = "out4.csv"
         assert exists(join(output_dir, filename)) is False
         filename = "out4.json"
-        assert_files_same(
-            join(saverfolder, "out2.json"), join(output_dir, filename)
-        )
+        assert_files_same(join(saverfolder, "out2.json"), join(output_dir, filename))
 
         save_hxlated_output(
             json_csv_configuration["test5"],
@@ -272,13 +248,9 @@ class TestLoader:
             output_dir=output_dir,
         )
         filename = "out5.csv"
-        assert_files_same(
-            join(saverfolder, "out2.csv"), join(output_dir, filename)
-        )
+        assert_files_same(join(saverfolder, "out2.csv"), join(output_dir, filename))
         filename = "out5.json"
-        assert_files_same(
-            join(saverfolder, filename), join(output_dir, filename)
-        )
+        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
 
         save_hxlated_output(
             json_csv_configuration["test6"],
@@ -289,13 +261,9 @@ class TestLoader:
             today="today!",
         )
         filename = "out6.csv"
-        assert_files_same(
-            join(saverfolder, "out2.csv"), join(output_dir, filename)
-        )
+        assert_files_same(join(saverfolder, "out2.csv"), join(output_dir, filename))
         filename = "out6.json"
-        assert_files_same(
-            join(saverfolder, filename), join(output_dir, filename)
-        )
+        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
 
         save_hxlated_output(
             json_csv_configuration["test7"],
@@ -306,13 +274,9 @@ class TestLoader:
             today="today!",
         )
         filename = "out7.csv"
-        assert_files_same(
-            join(saverfolder, "out2.csv"), join(output_dir, filename)
-        )
+        assert_files_same(join(saverfolder, "out2.csv"), join(output_dir, filename))
         filename = "out7.json"
-        assert_files_same(
-            join(saverfolder, filename), join(output_dir, filename)
-        )
+        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
 
         save_hxlated_output(
             json_csv_configuration["test8"],
@@ -323,10 +287,6 @@ class TestLoader:
             today="today!",
         )
         filename = "out8.csv"
-        assert_files_same(
-            join(saverfolder, filename), join(output_dir, filename)
-        )
+        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
         filename = "out8.json"
-        assert_files_same(
-            join(saverfolder, filename), join(output_dir, filename)
-        )
+        assert_files_same(join(saverfolder, filename), join(output_dir, filename))

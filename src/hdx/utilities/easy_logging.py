@@ -58,13 +58,13 @@ def setup_logging(
 
             msg = record.getMessage()
             try:
-                logger.opt(
-                    colors=True, depth=depth, exception=record.exc_info
-                ).log(level, msg)
+                logger.opt(colors=True, depth=depth, exception=record.exc_info).log(
+                    level, msg
+                )
             except ValueError:
-                logger.opt(
-                    colors=False, depth=depth, exception=record.exc_info
-                ).log(level, msg)
+                logger.opt(colors=False, depth=depth, exception=record.exc_info).log(
+                    level, msg
+                )
 
     root_logger = logging.getLogger()
     while root_logger.hasHandlers():

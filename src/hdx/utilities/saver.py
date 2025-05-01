@@ -38,15 +38,9 @@ class PrettySafeRepresenter(SafeRepresenter):
         return self.represent_scalar("tag:yaml.org,2002:null", "")
 
 
-UnPrettyRTRepresenter.add_representer(
-    None, UnPrettyRTRepresenter.represent_none
-)
-UnPrettySafeRepresenter.add_representer(
-    None, UnPrettySafeRepresenter.represent_none
-)
-PrettySafeRepresenter.add_representer(
-    None, PrettySafeRepresenter.represent_none
-)
+UnPrettyRTRepresenter.add_representer(None, UnPrettyRTRepresenter.represent_none)
+UnPrettySafeRepresenter.add_representer(None, UnPrettySafeRepresenter.represent_none)
+PrettySafeRepresenter.add_representer(None, PrettySafeRepresenter.represent_none)
 
 
 representers = {
@@ -100,9 +94,7 @@ def save_yaml(
             yaml.indent(offset=2)
         else:
             yaml.default_flow_style = None
-        yaml.representer.add_representer(
-            type(None), representer.represent_none
-        )
+        yaml.representer.add_representer(type(None), representer.represent_none)
         yaml.dump(object, f)
 
 
@@ -218,31 +210,23 @@ def save_hxlated_output(
             metadata = {}
             for metadata_name, value in metadata_configuration.items():
                 if isinstance(value, str):
-                    template_string, match_string = match_template_variables(
-                        value
-                    )
+                    template_string, match_string = match_template_variables(value)
                     if template_string:
                         value = kwargs.get(match_string)
                 if value is None:
                     continue
                 metadata[metadata_name] = value
-            metadata_json = json.dumps(
-                metadata, indent=None, separators=(",", ":")
-            )
+            metadata_json = json.dumps(metadata, indent=None, separators=(",", ":"))
         else:
             metadata_json = None
 
-        output_json = open(
-            join(output_dir, json_configuration["filename"]), "w"
-        )
+        output_json = open(join(output_dir, json_configuration["filename"]), "w")
 
         if metadata_json:
             metadata_key = metadata_configuration.get("key", "metadata")
             if data_key is None:
                 data_key = "data"
-            output_string = (
-                f'{{"{metadata_key}":{metadata_json},"{data_key}":[\n'
-            )
+            output_string = f'{{"{metadata_key}":{metadata_json},"{data_key}":[\n'
         elif data_key is None:
             output_string = "[\n"
         else:

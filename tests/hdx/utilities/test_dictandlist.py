@@ -151,9 +151,7 @@ class TestDictAndList:
             {"key": "a", "data": 3},
             {"key": "b", "data": 5},
         ]
-        result = list_distribute_contents_simple(
-            input_list, lambda x: x["key"]
-        )
+        result = list_distribute_contents_simple(input_list, lambda x: x["key"])
         assert result == [
             {"key": "a", "data": 2},
             {"key": "b", "data": 5},
@@ -280,9 +278,7 @@ class TestDictAndList:
         ) as tempdir:
             filename = "test_read_write_list_to_csv.csv"
             filepath = join(tempdir, filename)
-            write_list_to_csv(
-                filepath, list_of_lists, headers=["h1", "h2", "h3", "h4"]
-            )
+            write_list_to_csv(filepath, list_of_lists, headers=["h1", "h2", "h3", "h4"])
             newll = read_list_from_csv(filepath)
             newld = read_list_from_csv(filepath, headers=1, dict_form=True)
             remove(filepath)
@@ -314,9 +310,7 @@ class TestDictAndList:
                 {"h1": "4", "h2": "5", "h4": "b", "h3": "6"},
                 {"h1": "7", "h2": "8", "h4": "c", "h3": "9"},
             ]
-            write_list_to_csv(
-                filepath, list_of_lists, headers=["h1", "h2", "h3"]
-            )
+            write_list_to_csv(filepath, list_of_lists, headers=["h1", "h2", "h3"])
             newll = read_list_from_csv(filepath)
             remove(filepath)
             assert newll == [
@@ -366,9 +360,7 @@ class TestDictAndList:
                 {"h1": 4, "h2": 5, "h3": 6, "h4": "b"},
                 {"h1": 7, "h2": 8, "h3": 9, "h4": "c"},
             ]
-            write_list_to_csv(
-                filepath, list_of_dicts, headers=["h1", "h2", "h3", "h4"]
-            )
+            write_list_to_csv(filepath, list_of_dicts, headers=["h1", "h2", "h3", "h4"])
             newll = read_list_from_csv(filepath)
             remove(filepath)
             assert newll == [

@@ -161,8 +161,7 @@ class TestRetriever:
         bearertoken = "12345"
         with Download(bearer_token=bearertoken) as downloader:
             assert (
-                downloader.session.headers["Authorization"]
-                == f"Bearer {bearertoken}"
+                downloader.session.headers["Authorization"] == f"Bearer {bearertoken}"
             )
             with Retrieve(
                 downloader,
@@ -201,9 +200,7 @@ class TestRetriever:
                 )
                 assert path == join(fallback_dir, filename)
                 with pytest.raises(DownloadError):
-                    retriever.download_file(
-                        "NOTEXIST", filename, fallback=False
-                    )
+                    retriever.download_file("NOTEXIST", filename, fallback=False)
                 with pytest.raises(DownloadError):
                     long_url = "".join(
                         random.SystemRandom().choice(
@@ -221,9 +218,7 @@ class TestRetriever:
                 )
                 assert text == "goodbye"
                 with pytest.raises(DownloadError):
-                    retriever.download_text(
-                        "NOTEXIST", filename, fallback=False
-                    )
+                    retriever.download_text("NOTEXIST", filename, fallback=False)
                 filename = "test.yaml"
                 url = join(retrieverfolder, filename)
                 data = retriever.download_yaml(
@@ -235,9 +230,7 @@ class TestRetriever:
                 )
                 assert data["param_1"] == "XYZ"
                 with pytest.raises(DownloadError):
-                    retriever.download_yaml(
-                        "NOTEXIST", filename, fallback=False
-                    )
+                    retriever.download_yaml("NOTEXIST", filename, fallback=False)
                 filename = "test.json"
                 url = join(retrieverfolder, filename)
                 data = retriever.download_json(
@@ -249,9 +242,7 @@ class TestRetriever:
                 )
                 assert data["my_param"] == "xyz"
                 with pytest.raises(DownloadError):
-                    retriever.download_json(
-                        "NOTEXIST", filename, fallback=False
-                    )
+                    retriever.download_json("NOTEXIST", filename, fallback=False)
                 filename = "test.csv"
                 url = join(retrieverfolder, filename)
                 headers, iterator = retriever.get_tabular_rows(
@@ -278,9 +269,7 @@ class TestRetriever:
                         fallback=False,
                     )
 
-    def test_get_tabular_rows_multi_url(
-        self, dirs, retrieverfolder, fallback_dir
-    ):
+    def test_get_tabular_rows_multi_url(self, dirs, retrieverfolder, fallback_dir):
         saved_dir, temp_dir = dirs
         with Download() as downloader:
             with Retrieve(
@@ -342,9 +331,7 @@ class TestRetriever:
                 )
                 assert path == join(fallback_dir, filename)
                 with pytest.raises(DownloadError):
-                    retriever.download_file(
-                        "NOTEXIST", filename, fallback=False
-                    )
+                    retriever.download_file("NOTEXIST", filename, fallback=False)
                 text = retriever.download_text(
                     url, filename, logstr="test file", fallback=False
                 )
@@ -354,9 +341,7 @@ class TestRetriever:
                 )
                 assert text == "goodbye"
                 with pytest.raises(DownloadError):
-                    retriever.download_text(
-                        "NOTEXIST", filename, fallback=False
-                    )
+                    retriever.download_text("NOTEXIST", filename, fallback=False)
                 filename = "test.yaml"
                 url = join(retrieverfolder, filename)
                 data = retriever.download_yaml(
@@ -368,9 +353,7 @@ class TestRetriever:
                 )
                 assert data["param_1"] == "XYZ"
                 with pytest.raises(DownloadError):
-                    retriever.download_yaml(
-                        "NOTEXIST", filename, fallback=False
-                    )
+                    retriever.download_yaml("NOTEXIST", filename, fallback=False)
                 filename = "test.json"
                 url = join(retrieverfolder, filename)
                 data = retriever.download_json(
@@ -382,9 +365,7 @@ class TestRetriever:
                 )
                 assert data["my_param"] == "xyz"
                 with pytest.raises(DownloadError):
-                    retriever.download_json(
-                        "NOTEXIST", filename, fallback=False
-                    )
+                    retriever.download_json("NOTEXIST", filename, fallback=False)
                 filename = "test.csv"
                 url = join(retrieverfolder, filename)
                 headers, iterator = retriever.get_tabular_rows(
@@ -433,9 +414,7 @@ class TestRetriever:
                     "NOTEXIST", filename, logstr="test file", fallback=True
                 )
                 assert path == join(saved_dir, filename)
-                path = retriever.download_file(
-                    "NOTEXIST", filename, fallback=False
-                )
+                path = retriever.download_file("NOTEXIST", filename, fallback=False)
                 assert path == join(saved_dir, filename)
                 text = retriever.download_text(
                     url, filename, logstr="test file", fallback=False
@@ -445,9 +424,7 @@ class TestRetriever:
                     "NOTEXIST", filename, logstr="test file", fallback=True
                 )
                 assert text == "hello"
-                text = retriever.download_text(
-                    "NOTEXIST", filename, fallback=False
-                )
+                text = retriever.download_text("NOTEXIST", filename, fallback=False)
                 assert text == "hello"
                 filename = "test.yaml"
                 url = join(retrieverfolder, filename)
@@ -459,9 +436,7 @@ class TestRetriever:
                     "NOTEXIST", filename, logstr="test file", fallback=True
                 )
                 assert data["param_1"] == "ABC"
-                data = retriever.download_yaml(
-                    "NOTEXIST", filename, fallback=False
-                )
+                data = retriever.download_yaml("NOTEXIST", filename, fallback=False)
                 assert data["param_1"] == "ABC"
                 filename = "test.json"
                 url = join(retrieverfolder, filename)
@@ -473,9 +448,7 @@ class TestRetriever:
                     "NOTEXIST", filename, logstr="test file", fallback=True
                 )
                 assert data["my_param"] == "abc"
-                data = retriever.download_json(
-                    "NOTEXIST", filename, fallback=False
-                )
+                data = retriever.download_json("NOTEXIST", filename, fallback=False)
                 assert data["my_param"] == "abc"
                 filename = "test.csv"
                 url = join(retrieverfolder, filename)

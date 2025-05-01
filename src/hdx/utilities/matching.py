@@ -48,9 +48,7 @@ class Phonetics(RefinedSoundex):
 
         for i, possible_name in enumerate(possible_names):
             for transform_possible_name in transform_possible_names:
-                transformed_possible_name = transform_possible_name(
-                    possible_name
-                )
+                transformed_possible_name = transform_possible_name(possible_name)
                 if not transformed_possible_name:
                     continue
                 check_name(name, transformed_possible_name)
@@ -126,9 +124,7 @@ def multiple_replace(string: str, replacements: Dict[str, str]) -> str:
     if not replacements:
         return string
     pattern = re.compile(
-        "|".join(
-            [re.escape(k) for k in sorted(replacements, key=len, reverse=True)]
-        ),
+        "|".join([re.escape(k) for k in sorted(replacements, key=len, reverse=True)]),
         flags=re.DOTALL,
     )
     return pattern.sub(lambda x: replacements[x.group(0)], string)

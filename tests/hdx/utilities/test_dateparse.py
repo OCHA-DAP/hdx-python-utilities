@@ -37,18 +37,13 @@ class TestDateParse:
             datetime(2013, 2, 20, 10, 0, tzinfo=timezone.utc),
         )
         assert parse_date_range("20/02/2013 10:00:00") == result
-        assert (
-            parse_date_range("20/02/2013 10:00:00", "%d/%m/%Y %H:%M:%S")
-            == result
-        )
+        assert parse_date_range("20/02/2013 10:00:00", "%d/%m/%Y %H:%M:%S") == result
         result = (
             datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc),
             datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc),
         )
         assert parse_date_range("20/02/2013") == result
-        assert (
-            parse_date_range("20/02/2013 10:00:00", zero_time=True) == result
-        )
+        assert parse_date_range("20/02/2013 10:00:00", zero_time=True) == result
         result2 = (
             datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc),
             datetime(2013, 2, 20, 23, 59, 59, tzinfo=timezone.utc),
@@ -76,15 +71,12 @@ class TestDateParse:
         )
         assert parse_date_range("20/02/2013", "%d/%m/%Y") == result
         assert (
-            parse_date_range(
-                "20/02/2013 10:00:00", "%d/%m/%Y %H:%M:%S", zero_time=True
-            )
+            parse_date_range("20/02/2013 10:00:00", "%d/%m/%Y %H:%M:%S", zero_time=True)
             == result
         )
         fuzzy = {}
         assert (
-            parse_date_range("date is 20/02/2013 for this test", fuzzy=fuzzy)
-            == result
+            parse_date_range("date is 20/02/2013 for this test", fuzzy=fuzzy) == result
         )
         fuzzyresult = {
             "startdate": datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc),
@@ -117,10 +109,7 @@ class TestDateParse:
         assert parse_date_range("02/2013") == result
         assert parse_date_range("02/2013", "%m/%Y") == result
         fuzzy = {}
-        assert (
-            parse_date_range("date is 02/2013 for this test", fuzzy=fuzzy)
-            == result
-        )
+        assert parse_date_range("date is 02/2013 for this test", fuzzy=fuzzy) == result
         assert fuzzy == {
             "startdate": datetime(2013, 2, 1, 0, 0, tzinfo=timezone.utc),
             "enddate": datetime(2013, 2, 28, 0, 0, tzinfo=timezone.utc),
@@ -181,9 +170,7 @@ class TestDateParse:
             20,
             tzinfo=timezone.utc,
         )
-        assert parse_date(
-            "20/02/2013 01:30:20 IST", timezone_handling=1
-        ) == datetime(
+        assert parse_date("20/02/2013 01:30:20 IST", timezone_handling=1) == datetime(
             2013,
             2,
             20,
@@ -215,9 +202,7 @@ class TestDateParse:
             20,
             tzinfo=timezone(timedelta(hours=5, minutes=30)),
         )
-        assert parse_date(
-            "20/02/2013 01:30:20 IST", timezone_handling=4
-        ) == datetime(
+        assert parse_date("20/02/2013 01:30:20 IST", timezone_handling=4) == datetime(
             2013,
             2,
             19,
@@ -226,9 +211,7 @@ class TestDateParse:
             20,
             tzinfo=timezone.utc,
         )
-        assert parse_date(
-            "20/02/2013 01:30:20 IST", zero_time=True
-        ) == datetime(
+        assert parse_date("20/02/2013 01:30:20 IST", zero_time=True) == datetime(
             2013,
             2,
             20,
@@ -237,9 +220,7 @@ class TestDateParse:
             0,
             tzinfo=timezone.utc,
         )
-        assert parse_date(
-            "20/02/2013 01:30:20 IST", max_time=True
-        ) == datetime(
+        assert parse_date("20/02/2013 01:30:20 IST", max_time=True) == datetime(
             2013,
             2,
             20,
@@ -309,9 +290,7 @@ class TestDateParse:
         expected_date = datetime(2020, 7, 31, 7, 33, 54, tzinfo=timezone.utc)
         timestamp = get_timestamp_from_datetime(expected_date)
         assert timestamp == expected_timestamp
-        date = get_datetime_from_timestamp(
-            expected_timestamp, timezone=timezone.utc
-        )
+        date = get_datetime_from_timestamp(expected_timestamp, timezone=timezone.utc)
         assert date == expected_date
         date = get_datetime_from_timestamp(
             expected_timestamp * 1000, timezone=timezone.utc

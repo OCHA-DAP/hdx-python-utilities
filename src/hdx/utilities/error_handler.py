@@ -95,9 +95,7 @@ class ErrorHandler:
             message_type,
         )
 
-    def multi_valued_message(
-        self, text: str, values: ListTuple
-    ) -> Optional[str]:
+    def multi_valued_message(self, text: str, values: ListTuple) -> Optional[str]:
         """
         Generate a formatted message for a list of values in a fixed format:
             error category - n {text}. First 10 values: n1,n2,n3...

@@ -129,8 +129,9 @@ class _timelex(object):
             instream = StringIO(instream)
         elif getattr(instream, "read", None) is None:
             raise TypeError(
-                "Parser must be a string or character stream, not "
-                "{itype}".format(itype=instream.__class__.__name__)
+                "Parser must be a string or character stream, not {itype}".format(
+                    itype=instream.__class__.__name__
+                )
             )
 
         self.instream = instream
@@ -374,9 +375,7 @@ class _ymd(list):  # pragma: no cover
         )
 
         strids = {key: val for key, val in strids if val is not None}
-        if len(self) == len(strids) > 0 or (
-            len(self) == 3 and len(strids) == 2
-        ):
+        if len(self) == len(strids) > 0 or (len(self) == 3 and len(strids) == 2):
             return self._resolve_from_stridxs(strids)
 
         mstridx = self.mstridx
@@ -598,9 +597,7 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
                         skipped_idxs.append(i)
 
                 # Check for a timezone name
-                elif self._could_be_tzname(
-                    res.hour, res.tzname, res.tzoffset, l[i]
-                ):
+                elif self._could_be_tzname(res.hour, res.tzname, res.tzoffset, l[i]):
                     res.tzname = l[i]
                     res.tzoffset = info.tzoffset(res.tzname)
 
@@ -641,9 +638,7 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
                     else:
                         raise ValueError(timestr)
 
-                    res.tzoffset = signal * (
-                        hour_offset * 3600 + min_offset * 60
-                    )
+                    res.tzoffset = signal * (hour_offset * 3600 + min_offset * 60)
 
                     # Look for a timezone name between parenthesis
                     if (
@@ -652,9 +647,7 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
                         and l[i + 3] == "("
                         and l[i + 5] == ")"
                         and 3 <= len(l[i + 4])
-                        and self._could_be_tzname(
-                            res.hour, res.tzname, None, l[i + 4]
-                        )
+                        and self._could_be_tzname(res.hour, res.tzname, None, l[i + 4])
                     ):
                         # -0300 (BRST)
                         res.tzname = l[i + 4]
@@ -685,9 +678,7 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
             return None, None, None
 
         if fuzzy_with_tokens:
-            skipped_tokens, date_tokens = self._recombine_skipped_date(
-                l, skipped_idxs
-            )
+            skipped_tokens, date_tokens = self._recombine_skipped_date(l, skipped_idxs)
             return res, tuple(skipped_tokens), tuple(date_tokens)
         else:
             return res, None, None
@@ -788,9 +779,7 @@ def parse(
     """
 
     if default is None:
-        default = datetime.now().replace(
-            hour=0, minute=0, second=0, microsecond=0
-        )
+        default = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
 
     res, skipped_tokens, date_tokens = DEFAULTPARSER._parse(timestr, **kwargs)
 
@@ -935,10 +924,7 @@ def parse_date_range(
                 ignoretz=ignoretz,
                 tzinfos=tzinfos,
             )
-        if (
-            startdate.year == default_sd_year
-            and enddate.year == default_ed_year
-        ):
+        if startdate.year == default_sd_year and enddate.year == default_ed_year:
             raise ParserError("No year in date!")
     else:
         try:
@@ -969,21 +955,13 @@ def parse_date_range(
             enddate = enddate.replace(month=default_enddate.month)
     if zero_time:
         if not max_starttime:
-            startdate = startdate.replace(
-                hour=0, minute=0, second=0, microsecond=0
-            )
+            startdate = startdate.replace(hour=0, minute=0, second=0, microsecond=0)
         if not max_endtime:
-            enddate = enddate.replace(
-                hour=0, minute=0, second=0, microsecond=0
-            )
+            enddate = enddate.replace(hour=0, minute=0, second=0, microsecond=0)
     if max_starttime:
-        startdate = startdate.replace(
-            hour=23, minute=59, second=59, microsecond=999999
-        )
+        startdate = startdate.replace(hour=23, minute=59, second=59, microsecond=999999)
     if max_endtime:
-        enddate = enddate.replace(
-            hour=23, minute=59, second=59, microsecond=999999
-        )
+        enddate = enddate.replace(hour=23, minute=59, second=59, microsecond=999999)
     if timezone_handling == 0:
         startdate = startdate.replace(tzinfo=timezone.utc)
         enddate = enddate.replace(tzinfo=timezone.utc)
@@ -1118,9 +1096,7 @@ def get_timestamp_from_datetime(date: datetime) -> float:
             + date.microsecond / 1e6
         )
     else:
-        return (
-            date - datetime(1970, 1, 1, tzinfo=timezone.utc)
-        ).total_seconds()
+        return (date - datetime(1970, 1, 1, tzinfo=timezone.utc)).total_seconds()
 
 
 def get_datetime_from_timestamp(

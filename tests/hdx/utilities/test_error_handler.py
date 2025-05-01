@@ -45,9 +45,7 @@ class TestErrorHandler:
                         "warning",
                     )
                     assert len(errors.shared_errors["warning"]) == 1
-                    assert (
-                        len(errors.shared_errors["warning"]["warning 1"]) == 2
-                    )
+                    assert len(errors.shared_errors["warning"]["warning 1"]) == 2
                     assert len(errors.shared_errors["error"]) == 2
                     assert len(errors.shared_errors["error"][""]) == 1
                     assert len(errors.shared_errors["error"]["error 1"]) == 2

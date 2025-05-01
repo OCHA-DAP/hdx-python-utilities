@@ -25,9 +25,7 @@ class TestMatching:
         assert phonetics.match(possible_names, "xxx", "Damar") == 2
         transform_possible_names = [lambda x: None]
         assert (
-            phonetics.match(
-                possible_names, "xxx", "yyy", transform_possible_names
-            )
+            phonetics.match(possible_names, "xxx", "yyy", transform_possible_names)
             is None
         )
 
@@ -58,9 +56,7 @@ class TestMatching:
             "ong nat": "441",
             "un agency": "447",
         }
-        actual_org_type_lookup = {
-            normalise(k): v for k, v in org_type_lookup.items()
-        }
+        actual_org_type_lookup = {normalise(k): v for k, v in org_type_lookup.items()}
         actual_org_type_lookup.update(org_type_map)
         assert (
             get_code_from_name(
@@ -100,9 +96,7 @@ class TestMatching:
             is None
         )
         assert (
-            get_code_from_name(
-                "NGO", actual_org_type_lookup, [], fuzzy_match=False
-            )
+            get_code_from_name("NGO", actual_org_type_lookup, [], fuzzy_match=False)
             is None
         )
         assert (
@@ -154,39 +148,27 @@ class TestMatching:
             "wash": "WSH",
         }
 
-        actual_sector_lookup = {
-            normalise(k): v for k, v in sector_lookup.items()
-        }
+        actual_sector_lookup = {normalise(k): v for k, v in sector_lookup.items()}
         actual_sector_lookup.update(sector_map)
         assert (
-            get_code_from_name(
-                "education", actual_sector_lookup, [], fuzzy_match=True
-            )
+            get_code_from_name("education", actual_sector_lookup, [], fuzzy_match=True)
             == "EDU"
         )
         assert (
-            get_code_from_name(
-                "LOGISTIQUE", actual_sector_lookup, [], fuzzy_match=True
-            )
+            get_code_from_name("LOGISTIQUE", actual_sector_lookup, [], fuzzy_match=True)
             == "LOG"
         )
         assert (
-            get_code_from_name(
-                "CCCM", actual_sector_lookup, [], fuzzy_match=False
-            )
+            get_code_from_name("CCCM", actual_sector_lookup, [], fuzzy_match=False)
             == "CCM"
         )
         assert (
-            get_code_from_name(
-                "Santé", actual_sector_lookup, [], fuzzy_match=False
-            )
+            get_code_from_name("Santé", actual_sector_lookup, [], fuzzy_match=False)
             == "HEA"
         )
         actual_sector_lookup["cccm"] = "CCM"
         assert (
-            get_code_from_name(
-                "CCS", actual_sector_lookup, [], fuzzy_match=False
-            )
+            get_code_from_name("CCS", actual_sector_lookup, [], fuzzy_match=False)
             is None
         )
 
@@ -194,10 +176,7 @@ class TestMatching:
         result = multiple_replace(
             self.a, {"quick": "slow", "fast": "slow", "lazy": "busy"}
         )
-        assert (
-            result
-            == "The slow brown fox jumped over the busy dog. It was so slow!"
-        )
+        assert result == "The slow brown fox jumped over the busy dog. It was so slow!"
 
     def test_match_template_variables(self):
         assert match_template_variables("dasdda") == (None, None)
@@ -211,10 +190,7 @@ class TestMatching:
         assert earliest_index(self.a, ["lala"]) is None
         assert earliest_index(self.a, ["lala", "fox", "haha", "dog"]) == 16
         assert earliest_index(self.a, ["dog", "lala", "fox", "haha"]) == 16
-        assert (
-            earliest_index(self.a, ["dog", "lala", "fox", "haha", "quick"])
-            == 4
-        )
+        assert earliest_index(self.a, ["dog", "lala", "fox", "haha", "quick"]) == 4
 
     def test_get_matching_text_in_strs(self):
         result = get_matching_text_in_strs(self.a, self.b)
@@ -256,9 +232,7 @@ class TestMatching:
             'Internally displaced persons are defined according to the 1998 Guiding Principles (http://www.internal-displacement.org/publications/1998/ocha-guiding-principles-on-internal-displacement) as people or groups of people who have been forced or obliged to flee or to leave their homes or places of habitual residence, in particular as a result of armed conflict, or to avoid the effects of armed conflict, situations of generalized violence, violations of human rights, or natural or human-made disasters and who have not crossed an international border.\n\n"New Displacement" refers to the number of new cases or incidents of displacement recorded, rather than the number of people displaced. This is done because people may have been displaced more than once.\n\nContains data from IDMC\'s [data portal](https://github.com/idmc-labs/IDMC-Platform-API/wiki).',
             'Internally displaced persons are defined according to the 1998 Guiding Principles (http://www.internal-displacement.org/publications/1998/ocha-guiding-principles-on-internal-displacement) as people or groups of people who have been forced or obliged to flee or to leave their homes or places of habitual residence, in particular as a result of armed conflict, or to avoid the effects of armed conflict, situations of generalized violence, violations of human rights, or natural or human-made disasters and who have not crossed an international border.\n\n"New Displacement" refers to the number of new cases or incidents of displacement recorded, rather than the number of people displaced. This is done because people may have been displaced more than once.\n\nContains data from IDMC\'s [data portal](https://github.com/idmc-labs/IDMC-Platform-API/wiki).',
         ]
-        result = get_matching_text(
-            description, ignore="\n", end_characters=".!"
-        )
+        result = get_matching_text(description, ignore="\n", end_characters=".!")
         assert (
             result
             == """Internally displaced persons are defined according to the 1998 Guiding Principles (http://www.internal-displacement.org/publications/1998/ocha-guiding-principles-on-internal-displacement) as people or groups of people who have been forced or obliged to flee or to leave their homes or places of habitual residence, in particular as a result of armed conflict, or to avoid the effects of armed conflict, situations of generalized violence, violations of human rights, or natural or human-made disasters and who have not crossed an international border.
@@ -268,9 +242,7 @@ Contains data from IDMC's [data portal](https://github.com/idmc-labs/IDMC-Platfo
 
     def test_get_matching_then_nonmatching_text(self):
         list_of_str = [self.a, self.b, self.c]
-        result = get_matching_then_nonmatching_text(
-            list_of_str, match_min_size=10
-        )
+        result = get_matching_then_nonmatching_text(list_of_str, match_min_size=10)
         assert (
             result
             == " brown fox  over the  It was so fast!The quickjumpedlazy dog.The quickerleaptslower fox.The quickclimbedlazy dog."

@@ -94,9 +94,7 @@ def get_session(
         if extra_params:
             if "=" in extra_params:
                 extra_params_dict = {}
-                logger.info(
-                    "Loading extra parameters from environment variable"
-                )
+                logger.info("Loading extra parameters from environment variable")
                 for extra_param in extra_params.split(","):
                     key, value = extra_param.split("=", maxsplit=1)
                     extra_params_dict[key] = value
@@ -111,9 +109,7 @@ def get_session(
         extra_params_json = kwargs.get("extra_params_json", "")
         if extra_params_json:
             if extra_params_found:
-                raise SessionError(
-                    "More than one set of extra parameters given!"
-                )
+                raise SessionError("More than one set of extra parameters given!")
             extra_params_found = True
             logger.info(f"Loading extra parameters from: {extra_params_json}")
             try:
@@ -124,9 +120,7 @@ def get_session(
         extra_params_yaml = kwargs.get("extra_params_yaml", "")
         if extra_params_yaml:
             if extra_params_found:
-                raise SessionError(
-                    "More than one set of extra parameters given!"
-                )
+                raise SessionError("More than one set of extra parameters given!")
             logger.info(f"Loading extra parameters from: {extra_params_yaml}")
             try:
                 extra_params_dict = load_yaml(extra_params_yaml)
@@ -218,9 +212,7 @@ def get_session(
         else:
             s.auth = auth
 
-    status_forcelist = kwargs.get(
-        "status_forcelist", (429, 500, 502, 503, 504)
-    )
+    status_forcelist = kwargs.get("status_forcelist", (429, 500, 502, 503, 504))
     allowed_methods = kwargs.get(
         "allowed_methods",
         ("HEAD", "TRACE", "GET", "PUT", "OPTIONS", "DELETE"),

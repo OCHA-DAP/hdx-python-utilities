@@ -50,9 +50,7 @@ def normalise(text: str) -> str:
     return "".join(chars).strip()
 
 
-def remove_end_characters(
-    string: str, characters_to_remove: str = punctuation
-) -> str:
+def remove_end_characters(string: str, characters_to_remove: str = punctuation) -> str:
     """Remove any characters at end of string that are in characters_to_remove.
 
     Args:
@@ -134,14 +132,10 @@ def get_words_in_sentence(sentence: str) -> List[str]:
     Returns:
         List[str]: List of words in sentence
     """
-    return re.sub(
-        "[" + punctuation.replace("'", "") + "]", " ", sentence
-    ).split()
+    return re.sub("[" + punctuation.replace("'", "") + "]", " ", sentence).split()
 
 
-def number_format(
-    val: Any, format: str = "%.4f", trailing_zeros: bool = True
-) -> str:
+def number_format(val: Any, format: str = "%.4f", trailing_zeros: bool = True) -> str:
     """Format float-castable input as string.
 
     Args:

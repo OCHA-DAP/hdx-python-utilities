@@ -129,9 +129,7 @@ class TestPath:
         ]
         expected_batch_file = join(expected_dir, "batch.txt")
         result = list()
-        for info, nextdict in progress_storing_tempdir(
-            tempfolder, iterator, "iso3"
-        ):
+        for info, nextdict in progress_storing_tempdir(tempfolder, iterator, "iso3"):
             assert info["folder"] == expected_dir
             expected_batch = load_text(expected_batch_file, strip=True)
             result.append(nextdict)
@@ -141,9 +139,7 @@ class TestPath:
 
         monkeypatch.setenv("WHERETOSTART", "iso3=SDN")
         result = list()
-        for info, nextdict in progress_storing_tempdir(
-            tempfolder, iterator, "iso3"
-        ):
+        for info, nextdict in progress_storing_tempdir(tempfolder, iterator, "iso3"):
             assert exists(info["folder"]) is True
             assert info["folder"] == expected_dir
             expected_batch = load_text(expected_batch_file, strip=True)
@@ -164,9 +160,7 @@ class TestPath:
             pass
         assert exists(expected_dir) is True
         result = list()
-        for info, nextdict in progress_storing_tempdir(
-            tempfolder, iterator, "iso3"
-        ):
+        for info, nextdict in progress_storing_tempdir(tempfolder, iterator, "iso3"):
             assert exists(info["folder"]) is True
             assert info["folder"] == expected_dir
             assert info["batch"] == start_batch
@@ -186,9 +180,7 @@ class TestPath:
         assert exists(expected_dir) is True
         monkeypatch.setenv("WHERETOSTART", "RESET")
         result = list()
-        for info, nextdict in progress_storing_tempdir(
-            tempfolder, iterator, "iso3"
-        ):
+        for info, nextdict in progress_storing_tempdir(tempfolder, iterator, "iso3"):
             assert exists(info["folder"]) is True
             assert info["folder"] == expected_dir
             assert info["batch"] != start_batch
@@ -209,9 +201,7 @@ class TestPath:
         assert exists(expected_dir) is True
         monkeypatch.setenv("WHERETOSTART", "iso3=SDN")
         result = list()
-        for info, nextdict in progress_storing_tempdir(
-            tempfolder, iterator, "iso3"
-        ):
+        for info, nextdict in progress_storing_tempdir(tempfolder, iterator, "iso3"):
             assert exists(info["folder"]) is True
             assert info["folder"] == expected_dir
             assert info["batch"] == start_batch
@@ -396,9 +386,7 @@ class TestPath:
         rmtree(expected_dir, ignore_errors=True)
 
     def test_get_filename_extension_from_url(self, fixtureurl):
-        filename = get_filename_from_url(
-            "http://test.com/test.csv", second_last=True
-        )
+        filename = get_filename_from_url("http://test.com/test.csv", second_last=True)
         assert filename == "test.csv"
         filename = get_filename_from_url("http://test.com/test/test.csv", True)
         assert filename == "test_test.csv"
