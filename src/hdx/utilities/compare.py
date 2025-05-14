@@ -3,7 +3,10 @@
 from os import linesep
 from typing import List
 
-import cydifflib
+try:
+    from cydifflib import ndiff
+except ImportError:
+    from difflib import ndiff
 
 
 def compare_files(path1: str, path2: str, encoding: str = "utf-8") -> List[str]:
@@ -17,7 +20,7 @@ def compare_files(path1: str, path2: str, encoding: str = "utf-8") -> List[str]:
     Returns:
         List[str]: Delta between the two files
     """
-    diff = cydifflib.ndiff(
+    diff = ndiff(
         open(path1, encoding=encoding).read().splitlines(),
         open(path2, encoding=encoding).read().splitlines(),
     )
