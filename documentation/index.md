@@ -593,7 +593,7 @@ Compare two files:
     #  "?         ^                +++\n"]
 
 To use faster cydifflib instead of difflib, install this library with optional
-dependency as follows:
+dependency as follows (or install cydifflib directly):
 
     pip install hdx-python-utilities[diff]
 
