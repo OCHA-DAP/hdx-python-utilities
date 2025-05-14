@@ -561,7 +561,10 @@ Examples:
 
 ## HTML utilities
 
-These are built on top of BeautifulSoup and simplify its setup.
+These are built on top of BeautifulSoup and simplify its setup. Install this
+library with optional dependency as follows:
+
+    pip install hdx-python-utilities[email]
 
 Examples:
 
@@ -589,7 +592,17 @@ Compare two files:
     #  "+ coal   ,1      ,7.4    ,'notneeded'\n",
     #  "?         ^                +++\n"]
 
+To use faster cydifflib instead of difflib, install this library with optional
+dependency as follows:
+
+    pip install hdx-python-utilities[diff]
+
 ## Emailing
+
+Install this library with optional dependency as follows:
+
+    pip install hdx-python-utilities[email]
+
 
 Example of setup and sending email:
 

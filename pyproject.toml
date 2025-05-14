@@ -46,7 +46,6 @@ dependencies = [
     "ijson>=3.2.3",
     "jsonlines>=4.0.0",
     # /end frictionless extras
-    "cydifflib",
     "loguru",
     "pyphonetics",
     "python-dateutil>=2.9.0, <2.9.1",
@@ -66,6 +65,7 @@ Homepage = "https://github.com/OCHA-DAP/hdx-python-utilities"
 
 [project.optional-dependencies]
 html = ["beautifulsoup4", "html5lib"]
+diff = ["cydifflib"]
 email = ["email_validator"]
 test = ["pytest", "pytest-cov", "pytest-loguru"]
 dev = ["pre-commit"]
