@@ -35,7 +35,9 @@ def get_session(
     either global user agent to be set or appropriate user agent parameter(s)
     to be completed. If the EXTRA_PARAMS, BASIC_AUTH or BEARER_TOKEN
     environment variable is supplied, the extra_params* parameters will be
-    ignored.
+    ignored. extra_params_dict takes precedence over extra_params_json and
+    extra_params_yaml. extra_params_lookup, if supplied, only applies to
+    extra_params_json and extra_params_yaml.
 
     Args:
         user_agent (Optional[str]): User agent string. HDXPythonUtilities/X.X.X- is prefixed.
@@ -105,11 +107,9 @@ def get_session(
         if extra_params_dict:
             extra_params_found = True
             logger.info("Loading extra parameters from dictionary")
-
+    if not extra_params_found:
         extra_params_json = kwargs.get("extra_params_json", "")
         if extra_params_json:
-            if extra_params_found:
-                raise SessionError("More than one set of extra parameters given!")
             extra_params_found = True
             logger.info(f"Loading extra parameters from: {extra_params_json}")
             try:
@@ -120,7 +120,7 @@ def get_session(
         extra_params_yaml = kwargs.get("extra_params_yaml", "")
         if extra_params_yaml:
             if extra_params_found:
-                raise SessionError("More than one set of extra parameters given!")
+                raise SessionError("More than one extra parameters file given!")
             logger.info(f"Loading extra parameters from: {extra_params_yaml}")
             try:
                 extra_params_dict = load_yaml(extra_params_yaml)

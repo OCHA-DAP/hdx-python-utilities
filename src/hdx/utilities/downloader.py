@@ -29,7 +29,11 @@ logger = logging.getLogger(__name__)
 class Download(BaseDownload):
     """Download class with various download operations. Requires either global
     user agent to be set or appropriate user agent parameter(s) to be
-    completed.
+    completed. If the EXTRA_PARAMS, BASIC_AUTH or BEARER_TOKEN
+    environment variable is supplied, the extra_params* parameters will be
+    ignored. extra_params_dict takes precedence over extra_params_json and
+    extra_params_yaml. extra_params_lookup, if supplied, only applies to
+    extra_params_json and extra_params_yaml.
 
     Args:
         user_agent (Optional[str]): User agent string. HDXPythonUtilities/X.X.X- is prefixed.
