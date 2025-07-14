@@ -1,7 +1,7 @@
 dataset:
   required_fields: [name, title, dataset_date]
 hdx_prod_site: {password: null, url: https://data.humdata.org/, username: null}
-hdx_test_site: {password: lalala, url: https://test-data.humdata.org/, username:
+hdx_test_site: {password: lalala, url: https://test-data.humdata.org/, username: 
     lala}
 param_1: ABC
 resource:
