@@ -278,21 +278,29 @@ class TestDownloader:
                 downloader.session.headers["Authorization"] == f"Bearer {bearertoken}"
             )
 
+        with Download(
+            extra_params_dict={"key1": "val1"},
+            extra_params_json=extraparamsjson,
+        ) as downloader:
+            full_url = downloader.get_full_url(test_url)
+            assert "key1=val1" in full_url
+        with Download(
+            extra_params_dict={"key1": "val1"},
+            extra_params_yaml=extraparamsyaml,
+        ) as downloader:
+            full_url = downloader.get_full_url(test_url)
+            assert "key1=val1" in full_url
+        with Download(
+            extra_params_dict={"key1": "val1"},
+            extra_params_yaml=extraparamsyamltree,
+            extra_params_lookup="mykey",
+        ) as downloader:
+            full_url = downloader.get_full_url(test_url)
+            assert "key1=val1" in full_url
         with pytest.raises(SessionError):
             Download(
-                extra_params_dict={"key1": "val1"},
                 extra_params_json=extraparamsjson,
-            )
-        with pytest.raises(SessionError):
-            Download(
-                extra_params_dict={"key1": "val1"},
                 extra_params_yaml=extraparamsyaml,
-            )
-        with pytest.raises(SessionError):
-            Download(
-                extra_params_dict={"key1": "val1"},
-                extra_params_yaml=extraparamsyamltree,
-                extra_params_lookup="mykey",
             )
         with pytest.raises(IOError):
             Download(extra_params_json="NOTEXIST")

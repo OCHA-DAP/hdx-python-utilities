@@ -1,5 +1,6 @@
 hdx_prod_site: {url: https://data.humdata.org/, username: null, password: null}
-hdx_test_site: {url: https://test-data.humdata.org/, username: lala, password: lalala}
+hdx_test_site: {url: https://test-data.humdata.org/, username: lala, password: 
+    lalala}
 dataset:
   required_fields: [name, title, dataset_date]
 resource:
