@@ -385,7 +385,8 @@ class TestDownloader:
                 post=True,
                 parameters=OrderedDict([("a", "3"), ("c", "2")]),
             )
-            assert list(downloader.get_json()["form"].items()) == list(
+            json = downloader.get_json()
+            assert list(json["json"].items()) == list(
                 OrderedDict(
                     [("a", "3"), ("c", "2"), ("id", "3"), ("lala", "b")]
                 ).items()
@@ -525,7 +526,7 @@ class TestDownloader:
                 post=True,
                 parameters=OrderedDict([("a", "3"), ("c", "2")]),
             )
-            assert list(json["form"].items()) == list(
+            assert list(json["json"].items()) == list(
                 OrderedDict(
                     [("a", "3"), ("c", "2"), ("id", "3"), ("lala", "b")]
                 ).items()
