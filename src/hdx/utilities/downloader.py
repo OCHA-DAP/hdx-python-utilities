@@ -1,6 +1,7 @@
 """Downloading utilities for urls."""
 
 import hashlib
+import json
 import logging
 from copy import deepcopy
 from os import remove
@@ -287,9 +288,10 @@ class Download(BaseDownload):
                     url = urlunsplit(spliturl)
             if post:
                 full_url, parameters = self.get_url_params_for_post(url, parameters)
+                json_parameters = json.dumps(parameters)
                 self.response = self.session.post(
                     full_url,
-                    data=parameters,
+                    data=json_parameters,
                     stream=stream,
                     timeout=timeout,
                     headers=headers,
