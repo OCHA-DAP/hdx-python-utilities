@@ -11,7 +11,7 @@ from .loader import load_json, load_yaml
 from .typehint import ListTuple
 
 try:
-    from email_validator import validate_email
+    from email_validator import EmailNotValidError, validate_email
 except ImportError:
     validate_email = None
 
@@ -19,6 +19,10 @@ logger = logging.getLogger(__name__)
 
 
 class EmailConfigurationError(Exception):
+    pass
+
+
+class EmailSendError(Exception):
     pass
 
 
@@ -144,27 +148,44 @@ class Email:
         self.server.quit()
 
     @staticmethod
+    def get_normalised_email(email: str, check_deliverability: bool = False) -> str:
+        """Get normalised email.
+
+        Args:
+            email (str): Email address to normalise
+
+        Returns:
+            str: Normalised email
+        """
+        try:
+            v = validate_email(
+                email, check_deliverability=check_deliverability
+            )  # validate and get info
+        except EmailNotValidError as ex:
+            raise EmailSendError(f'Email address "{email}" is invalid!') from ex
+        return v.normalized
+
+    @classmethod
     def get_normalised_emails(
-        recipients: Union[str, ListTuple[str]],
+        cls,
+        emails: Union[str, ListTuple[str]],
     ) -> List[str]:
         """Get list of normalised emails.
 
         Args:
-            recipients (Union[str, ListTuple[str]]): Email recipient(s)
+            emails (Union[str, ListTuple[str]]): Email address or addresses
 
         Returns:
             List[str]: Normalised emails
         """
-        if isinstance(recipients, str):
-            recipients = (recipients,)
+        if isinstance(emails, str):
+            emails = (emails,)
         if validate_email is None:
-            return recipients
+            return emails
         normalised_recipients = []
-        for recipient in recipients:
-            v = validate_email(
-                recipient, check_deliverability=True
-            )  # validate and get info
-            normalised_recipients.append(v.normalized)  # replace with normalized form
+        for email in emails:
+            email = cls.get_normalised_email(email, check_deliverability=True)
+            normalised_recipients.append(email)  # replace with normalized form
         return normalised_recipients
 
     def send(
@@ -198,8 +219,7 @@ class Email:
         """
         if sender is None:
             sender = self.sender
-        v = validate_email(sender, check_deliverability=False)  # validate and get info
-        sender = v.normalized
+        sender = self.get_normalised_email(sender, check_deliverability=False)
 
         if html_body is not None:
             msg = MIMEMultipart("alternative")
