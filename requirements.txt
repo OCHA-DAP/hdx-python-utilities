@@ -16,7 +16,7 @@ backrefs==5.9
     # via mkdocs-material
 beautifulsoup4==4.13.4
     # via hdx-python-utilities (pyproject.toml)
-certifi==2025.7.14
+certifi==2025.8.3
     # via requests
 cfgv==3.4.0
     # via pre-commit
@@ -30,7 +30,7 @@ click==8.2.1
     #   typer
 colorama==0.4.6
     # via mkdocs-material
-coverage==7.10.1
+coverage==7.10.2
     # via pytest-cov
 cydifflib==1.2.0
     # via hdx-python-utilities (pyproject.toml)
@@ -235,7 +235,7 @@ urllib3==2.5.0
     # via requests
 validators==0.35.0
     # via frictionless
-virtualenv==20.32.0
+virtualenv==20.33.0
     # via pre-commit
 watchdog==6.0.0
     # via mkdocs
