@@ -113,17 +113,33 @@ a
 test"""
     expected_text_newlines_to_spaces = """  hello this is a test    """
 
-    def test_load_empty(self, fixturesfolder):
-        loaderfolder = join(fixturesfolder, "loader")
+    @pytest.fixture(scope="class")
+    def loaderfolder(self, fixturesfolder):
+        return join(fixturesfolder, "loader")
+
+    @pytest.fixture(scope="class")
+    def empty_yaml(self, loaderfolder):
+        return join(loaderfolder, "empty.yaml")
+
+    @pytest.fixture(scope="class")
+    def empty_json(self, loaderfolder):
+        return join(loaderfolder, "empty.json")
+
+    @pytest.fixture(scope="class")
+    def empty_list(self, loaderfolder):
+        return join(loaderfolder, "empty_list.json")
+
+    def test_load_empty(self, empty_yaml, empty_json, empty_list):
         with pytest.raises(LoadError):
-            load_text(join(loaderfolder, "empty.yaml"))
-        load_text(join(loaderfolder, "empty.yaml"), loaderror_if_empty=False) == ""
+            load_text(empty_yaml)
+        load_text(empty_yaml, loaderror_if_empty=False) == ""
         with pytest.raises(LoadError):
-            load_yaml(join(loaderfolder, "empty.yaml"))
-        load_yaml(join(loaderfolder, "empty.yaml"), loaderror_if_empty=False) is None
+            load_yaml(empty_yaml)
+        load_yaml(empty_yaml, loaderror_if_empty=False) is None
         with pytest.raises(LoadError):
-            load_json(join(loaderfolder, "empty.json"))
-        load_json(join(loaderfolder, "empty.json"), loaderror_if_empty=False) is None
+            load_json(empty_json)
+        load_json(empty_json, loaderror_if_empty=False) is None
+        load_json(empty_list)
 
     def test_load_and_merge_yaml(self, configfolder):
         result = load_and_merge_yaml(

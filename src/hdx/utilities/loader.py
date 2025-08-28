@@ -72,13 +72,14 @@ def load_yaml(
         Any: The data from the YAML file
     """
     with open(path, encoding=encoding) as f:
+        data = f.read()
+        if not data:
+            if loaderror_if_empty:
+                raise LoadError(f"YAML file: {path} is empty!")
+            return None
         yaml = YAML()
-        yamlobj = yaml.load(f.read())
-    if not yamlobj:
-        if loaderror_if_empty:
-            raise LoadError(f"YAML file: {path} is empty!")
-        return None
-    return yamlobj
+        yamlobj = yaml.load(data)
+        return yamlobj
 
 
 def load_json(
@@ -95,12 +96,13 @@ def load_json(
         Any: The data from the JSON file
     """
     with open(path, encoding=encoding) as f:
-        jsonobj = json.loads(f.read())
-    if not jsonobj:
-        if loaderror_if_empty:
-            raise LoadError(f"JSON file: {path} is empty!")
-        return None
-    return jsonobj
+        data = f.read()
+        if not data:
+            if loaderror_if_empty:
+                raise LoadError(f"JSON file: {path} is empty!")
+            return None
+        jsonobj = json.loads(data)
+        return jsonobj
 
 
 def load_and_merge_yaml(
