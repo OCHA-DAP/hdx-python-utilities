@@ -261,6 +261,7 @@ class Download(BaseDownload):
         timeout: Optional[float] = None,
         headers: Optional[Dict] = None,
         encoding: Optional[str] = None,
+        json_string: bool = False,
     ) -> requests.Response:
         """Setup download from provided url returning the response.
 
@@ -272,6 +273,7 @@ class Download(BaseDownload):
             timeout (Optional[float]): Timeout for connecting to URL. Defaults to None (no timeout).
             headers (Optional[Dict]): Headers to pass. Defaults to None.
             encoding (Optional[str]): Encoding to use for text response. Defaults to None (best guess).
+            json_string (bool): Whether to post parameters as JSON string. Defaults to False.
 
         Returns:
             requests.Response: requests.Response object
@@ -288,10 +290,11 @@ class Download(BaseDownload):
                     url = urlunsplit(spliturl)
             if post:
                 full_url, parameters = self.get_url_params_for_post(url, parameters)
-                json_parameters = json.dumps(parameters)
+                if json_string:
+                    parameters = json.dumps(parameters)
                 self.response = self.session.post(
                     full_url,
-                    data=json_parameters,
+                    data=parameters,
                     stream=stream,
                     timeout=timeout,
                     headers=headers,
@@ -423,6 +426,7 @@ class Download(BaseDownload):
             timeout (float): Timeout for connecting to URL. Defaults to None (no timeout).
             headers (Dict): Headers to pass. Defaults to None.
             encoding (str): Encoding to use for text response. Defaults to None (best guess).
+            json_string (bool): Whether to post parameters as JSON string. Defaults to False.
 
         Returns:
             str: Path of downloaded file
@@ -443,6 +447,7 @@ class Download(BaseDownload):
             timeout=kwargs.get("timeout"),
             headers=kwargs.get("headers"),
             encoding=kwargs.get("encoding"),
+            json_string=kwargs.get("json_string", False),
         )
         return self.stream_path(
             path, f"Download of {url} failed in retrieval of stream!"
@@ -459,6 +464,7 @@ class Download(BaseDownload):
             timeout (float): Timeout for connecting to URL. Defaults to None (no timeout).
             headers (Dict): Headers to pass. Defaults to None.
             encoding (str): Encoding to use for text response. Defaults to None (best guess).
+            json_string (bool): Whether to post parameters as JSON string. Defaults to False.
 
         Returns:
             requests.Response: Response
@@ -471,6 +477,7 @@ class Download(BaseDownload):
             timeout=kwargs.get("timeout"),
             headers=kwargs.get("headers"),
             encoding=kwargs.get("encoding"),
+            json_string=kwargs.get("json_string", False),
         )
 
     def get_header(self, header: str) -> Any:

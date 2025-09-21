@@ -386,6 +386,18 @@ class TestDownloader:
                 parameters=OrderedDict([("a", "3"), ("c", "2")]),
             )
             json = downloader.get_json()
+            assert list(json["form"].items()) == list(
+                OrderedDict(
+                    [("a", "3"), ("c", "2"), ("id", "3"), ("lala", "b")]
+                ).items()
+            )
+            downloader.setup(
+                f"{postfixtureurl}?id=3&lala=b",
+                post=True,
+                parameters=OrderedDict([("a", "3"), ("c", "2")]),
+                json_string=True,
+            )
+            json = downloader.get_json()
             assert list(json["json"].items()) == list(
                 OrderedDict(
                     [("a", "3"), ("c", "2"), ("id", "3"), ("lala", "b")]
@@ -525,6 +537,17 @@ class TestDownloader:
                 f"{postfixtureurl}?id=3&lala=b",
                 post=True,
                 parameters=OrderedDict([("a", "3"), ("c", "2")]),
+            )
+            assert list(json["form"].items()) == list(
+                OrderedDict(
+                    [("a", "3"), ("c", "2"), ("id", "3"), ("lala", "b")]
+                ).items()
+            )
+            json = downloader.download_json(
+                f"{postfixtureurl}?id=3&lala=b",
+                post=True,
+                parameters=OrderedDict([("a", "3"), ("c", "2")]),
+                json_string=True,
             )
             assert list(json["json"].items()) == list(
                 OrderedDict(
