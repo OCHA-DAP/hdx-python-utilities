@@ -341,6 +341,18 @@ Examples:
     )
     assert date == expected_date
 
+    # Handle quarter
+    date = datetime(2020, 7, 31, 7, 33, 54, tzinfo=timezone.utc)
+    assert get_quarter(date) == 3
+    year = 2022
+    quarter = 3
+    assert get_quarter_start(year, quarter) == datetime(
+        2022, 7, 1, tzinfo=timezone.utc
+    )
+    assert get_quarter_end(year, quarter) == datetime(
+        2022, 9, 30, 23, 59, 59, tzinfo=timezone.utc
+    )
+
 ## Loading and saving JSON and YAML
 
 Examples:

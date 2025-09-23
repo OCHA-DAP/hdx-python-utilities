@@ -7,6 +7,9 @@ from dateutil.parser import ParserError
 
 from hdx.utilities.dateparse import (
     get_datetime_from_timestamp,
+    get_quarter,
+    get_quarter_end,
+    get_quarter_start,
     get_timestamp_from_datetime,
     iso_string_from_datetime,
     now_utc,
@@ -301,3 +304,147 @@ class TestDateParse:
         date = datetime(2020, 7, 31, 7, 33, 54, tzinfo=timezone.utc)
         string = iso_string_from_datetime(date)
         assert string == "2020-07-31"
+
+    def test_get_quarter(self):
+        date = datetime(2020, 7, 31, 7, 33, 54, tzinfo=timezone.utc)
+        assert get_quarter(date) == 3
+        assert (
+            get_quarter(datetime(year=2021, month=10, day=5, tzinfo=timezone.utc)) == 4
+        )
+        assert (
+            get_quarter(datetime(year=2020, month=9, day=25, tzinfo=timezone.utc)) == 3
+        )
+        assert (
+            get_quarter(datetime(year=2020, month=12, day=11, tzinfo=timezone.utc)) == 4
+        )
+        assert (
+            get_quarter(datetime(year=2020, month=1, day=2, tzinfo=timezone.utc)) == 1
+        )
+
+    def test_get_quarter_start_end(self):
+        year = 2022
+        quarter = 3
+        assert get_quarter_start(year, quarter) == datetime(
+            2022, 7, 1, tzinfo=timezone.utc
+        )
+        assert get_quarter_end(year, quarter) == datetime(
+            2022, 9, 30, 23, 59, 59, tzinfo=timezone.utc
+        )
+        assert get_quarter_end(year, quarter, max_time=False) == datetime(
+            2022, 9, 30, tzinfo=timezone.utc
+        )
+        assert get_quarter_end(year, quarter, include_microseconds=True) == datetime(
+            2022, 9, 30, 23, 59, 59, 999999, tzinfo=timezone.utc
+        )
+
+        date = datetime(2020, 10, 5, tzinfo=timezone.utc)
+        assert get_quarter_start(date.year, get_quarter(date)) == datetime(
+            2020, 10, 1, tzinfo=timezone.utc
+        )
+        assert get_quarter_end(
+            date.year, get_quarter(date), max_time=False
+        ) == datetime(2020, 12, 31, tzinfo=timezone.utc)
+
+        date = datetime(2020, 9, 25, tzinfo=timezone.utc)
+        assert get_quarter_start(date.year, get_quarter(date)) == datetime(
+            2020, 7, 1, tzinfo=timezone.utc
+        )
+        assert get_quarter_end(
+            date.year, get_quarter(date), max_time=False
+        ) == datetime(2020, 9, 30, tzinfo=timezone.utc)
+
+        date = datetime(2020, 7, 1, tzinfo=timezone.utc)
+        assert get_quarter_start(date.year, get_quarter(date)) == datetime(
+            2020, 7, 1, tzinfo=timezone.utc
+        )
+        assert get_quarter_end(
+            date.year, get_quarter(date), max_time=False
+        ) == datetime(2020, 9, 30, tzinfo=timezone.utc)
+
+        date = datetime(2020, 9, 30, tzinfo=timezone.utc)
+        assert get_quarter_start(date.year, get_quarter(date)) == datetime(
+            2020, 7, 1, tzinfo=timezone.utc
+        )
+        assert get_quarter_end(
+            date.year, get_quarter(date), max_time=False
+        ) == datetime(2020, 9, 30, tzinfo=timezone.utc)
+
+        date = datetime(2020, 12, 11, tzinfo=timezone.utc)
+        assert get_quarter_start(date.year, get_quarter(date)) == datetime(
+            2020, 10, 1, tzinfo=timezone.utc
+        )
+        assert get_quarter_end(
+            date.year, get_quarter(date), max_time=False
+        ) == datetime(2020, 12, 31, tzinfo=timezone.utc)
+
+        date = datetime(2020, 10, 1, tzinfo=timezone.utc)
+        assert get_quarter_start(date.year, get_quarter(date)) == datetime(
+            2020, 10, 1, tzinfo=timezone.utc
+        )
+        assert get_quarter_end(
+            date.year, get_quarter(date), max_time=False
+        ) == datetime(2020, 12, 31, tzinfo=timezone.utc)
+
+        date = datetime(2020, 12, 31, tzinfo=timezone.utc)
+        assert get_quarter_start(date.year, get_quarter(date)) == datetime(
+            2020, 10, 1, tzinfo=timezone.utc
+        )
+        assert get_quarter_end(
+            date.year, get_quarter(date), max_time=False
+        ) == datetime(2020, 12, 31, tzinfo=timezone.utc)
+
+        date = datetime(2020, 1, 2, tzinfo=timezone.utc)
+        assert get_quarter_start(date.year, get_quarter(date)) == datetime(
+            2020, 1, 1, tzinfo=timezone.utc
+        )
+        assert get_quarter_end(
+            date.year, get_quarter(date), max_time=False
+        ) == datetime(2020, 3, 31, tzinfo=timezone.utc)
+
+        date = datetime(2020, 1, 1, tzinfo=timezone.utc)
+        assert get_quarter_start(date.year, get_quarter(date)) == datetime(
+            2020, 1, 1, tzinfo=timezone.utc
+        )
+        assert get_quarter_end(
+            date.year, get_quarter(date), max_time=False
+        ) == datetime(2020, 3, 31, tzinfo=timezone.utc)
+
+        date = datetime(2020, 3, 31, tzinfo=timezone.utc)
+        assert get_quarter_start(date.year, get_quarter(date)) == datetime(
+            2020, 1, 1, tzinfo=timezone.utc
+        )
+        assert get_quarter_end(
+            date.year, get_quarter(date), max_time=False
+        ) == datetime(2020, 3, 31, tzinfo=timezone.utc)
+
+        date = datetime(2020, 2, 29, tzinfo=timezone.utc)
+        assert get_quarter_start(date.year, get_quarter(date)) == datetime(
+            2020, 1, 1, tzinfo=timezone.utc
+        )
+        assert get_quarter_end(
+            date.year, get_quarter(date), max_time=False
+        ) == datetime(2020, 3, 31, tzinfo=timezone.utc)
+
+        date = datetime(2020, 5, 6, tzinfo=timezone.utc)
+        assert get_quarter_start(date.year, get_quarter(date)) == datetime(
+            2020, 4, 1, tzinfo=timezone.utc
+        )
+        assert get_quarter_end(
+            date.year, get_quarter(date), max_time=False
+        ) == datetime(2020, 6, 30, tzinfo=timezone.utc)
+
+        date = datetime(2020, 4, 1, tzinfo=timezone.utc)
+        assert get_quarter_start(date.year, get_quarter(date)) == datetime(
+            2020, 4, 1, tzinfo=timezone.utc
+        )
+        assert get_quarter_end(
+            date.year, get_quarter(date), max_time=False
+        ) == datetime(2020, 6, 30, tzinfo=timezone.utc)
+
+        date = datetime(2020, 6, 30, tzinfo=timezone.utc)
+        assert get_quarter_start(date.year, get_quarter(date)) == datetime(
+            2020, 4, 1, tzinfo=timezone.utc
+        )
+        assert get_quarter_end(
+            date.year, get_quarter(date), max_time=False
+        ) == datetime(2020, 6, 30, tzinfo=timezone.utc)
