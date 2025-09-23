@@ -3,7 +3,7 @@
 import re
 import time
 from calendar import monthrange
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from io import StringIO
 from typing import Dict, Optional, Tuple
 
@@ -1129,3 +1129,63 @@ def iso_string_from_datetime(date: datetime) -> str:
         str: ISO formatted date without any time elements
     """
     return date.date().isoformat()
+
+
+def get_quarter(date: datetime) -> int:
+    """Get the quarter of the given date
+
+    Args:
+        date (datetime): Date
+
+    Returns:
+        int: Quarter in which the given date is contained
+    """
+    return (date.month - 1) // 3 + 1
+
+
+def get_quarter_start(year: int, quarter: int) -> datetime:
+    """Get the first day of the quarter in which a given date is contained
+
+    Args:
+        year (int): Year
+        quarter (int): Quarter
+
+    Returns:
+        datetime: First day of quarter
+    """
+    month = 3 * (quarter - 1) + 1
+    return datetime(year, month, 1, tzinfo=timezone.utc)
+
+
+def get_quarter_end(
+    year: int, quarter: int, max_time: bool = True, include_microseconds: bool = False
+):
+    """Get the last day of the quarter in which a given date is contained
+
+    Args:
+        year (int): Year
+        quarter (int): Quarter
+        max_time (bool): Make date time component 23:59:59:999999. Defaults to True.
+        include_microseconds (bool): Includes microseconds if True. Defaults to False.
+
+    Returns:
+        datetime: First day of quarter
+    """
+    year = year + 3 * quarter // 12
+    month = 3 * quarter % 12 + 1
+    if max_time:
+        hours = 23
+        minutes = 59
+        seconds = 59
+        if include_microseconds:
+            microseconds = 999999
+        else:
+            microseconds = 0
+    else:
+        hours = 0
+        minutes = 0
+        seconds = 0
+        microseconds = 0
+    return datetime(
+        year, month, 1, hours, minutes, seconds, microseconds, tzinfo=timezone.utc
+    ) + timedelta(days=-1)

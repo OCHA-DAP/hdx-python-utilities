@@ -200,7 +200,7 @@ rpds-py==0.27.1
     #   referencing
 ruamel-yaml==0.18.15
     # via hdx-python-utilities (pyproject.toml)
-ruamel-yaml-clib==0.2.12
+ruamel-yaml-clib==0.2.14
     # via ruamel-yaml
 shellingham==1.5.4
     # via typer
