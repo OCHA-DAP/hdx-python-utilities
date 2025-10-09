@@ -741,7 +741,7 @@ class Download(BaseDownload):
                 else:
                     yield row
 
-        return headers, get_next()
+        return headers.to_list(), get_next()
 
     def get_tabular_rows(
         self,
