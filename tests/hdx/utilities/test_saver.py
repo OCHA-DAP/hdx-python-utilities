@@ -304,10 +304,10 @@ class TestLoader:
         ) as tempdir:
             filename = "test_save_iterable_to_csv.csv"
             filepath = join(tempdir, filename)
-            res = save_iterable(
+            rows = save_iterable(
                 filepath, list_of_lists, headers=["h1", "h2", "h3", "h4"]
             )
-            assert res is True
+            assert rows == list_of_lists
             newll = read_list_from_csv(filepath)
             newld = read_list_from_csv(filepath, headers=1, dict_form=True)
             remove(filepath)
@@ -323,13 +323,13 @@ class TestLoader:
                 {"h1": "7", "h2": "8", "h4": "c", "h3": "9"},
             ]
             xlfilepath = filepath.replace("csv", "xlsx")
-            res = save_iterable(
+            rows = save_iterable(
                 xlfilepath,
                 list_of_lists,
                 headers=["h1", "h2", "h3", "h4"],
                 format="xlsx",
             )
-            assert res is True
+            assert rows == list_of_lists
             assert exists(xlfilepath), "File should exist"
 
             save_iterable(filepath, list_of_tuples, headers=("h1", "h2", "h3", "h4"))
@@ -441,5 +441,5 @@ class TestLoader:
             with pytest.raises(ValueError):
                 read_list_from_csv(filepath, dict_form=True)
 
-            res = save_iterable(filepath, [], headers=["h1", "h3", "h4"])
-            assert res is False
+            rows = save_iterable(filepath, [], headers=["h1", "h3", "h4"])
+            assert rows == []

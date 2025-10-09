@@ -395,7 +395,8 @@ as a csv or Excel.
     l = [[1, 2, 3, "a"],
          [4, 5, 6, "b"],
          [7, 8, 9, "c"]]
-    save_iterable(filepath, l, headers=["h1", "h2", "h3", "h4"])
+    rows = save_iterable(filepath, l, headers=["h1", "h2", "h3", "h4"])
+    assert rows == l
     newll = read_list_from_csv(filepath)
     newld = read_list_from_csv(filepath, headers=1, dict_form=True)
     assert newll == [["h1", "h2", "h3", "h4"], ["1", "2", "3", "a"], ["4", "5", "6", "b"], ["7", "8", "9", "c"]]
