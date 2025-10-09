@@ -4,7 +4,7 @@ import csv
 import json
 from collections import OrderedDict
 from os.path import join
-from typing import Any, Dict, Iterable, Union, Optional
+from typing import Any, Dict, Iterable, Optional, Union
 
 from ruamel.yaml import (
     YAML,
@@ -270,13 +270,14 @@ def save_hxlated_output(
     if csv_file:
         csv_file.close()
 
+
 def save_iterable(
-        filepath: str,
-        rows: Iterable[ListTupleDict],
-        headers: Union[int, ListTuple[str], None] = None,
-        columns: Union[ListTuple[int], ListTuple[str], None] = None,
-        format: str = "csv",
-        encoding: Optional[str] = None,
+    filepath: str,
+    rows: Iterable[ListTupleDict],
+    headers: Union[int, ListTuple[str], None] = None,
+    columns: Union[ListTuple[int], ListTuple[str], None] = None,
+    format: str = "csv",
+    encoding: Optional[str] = None,
 ) -> None:
     """Save an iterable of rows in dict or list form to a csv. (The headers
     argument is either a row number (rows start counting at 1), or the actual
@@ -323,7 +324,7 @@ def save_iterable(
         if isinstance(headers, int):
             headers_rowno = headers
             headers = row
-            for i in range(headers_rowno-1):
+            for i in range(headers_rowno - 1):
                 headers = next(rows)
         else:
             headers_rowno = None

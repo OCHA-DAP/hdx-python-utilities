@@ -388,7 +388,7 @@ Examples:
 
 ## Saving iterable to file
 
-`save_iterable` is a utility to save an iterable of dict, list or tuple to a file such 
+`save_iterable` is a utility to save an iterable of dict, list or tuple to a file such
 as a csv or Excel.
 
     # Save iterable to file
@@ -589,8 +589,8 @@ Examples:
                     {"h1": "4", "h2": "5", "h4": "b", "h3": "6"},
                     {"h1": "7", "h2": "8", "h4": "c", "h3": "9"}]
 
-Note that `get_tabular_rows` is a more powerful and streaming version of 
-`read_list_from_csv` and `save_iterable_to_csv` is a generally more efficient version of 
+Note that `get_tabular_rows` is a more powerful and streaming version of
+`read_list_from_csv` and `save_iterable_to_csv` is a generally more efficient version of
 `write_list_to_csv` as it uses iteration instead of list manipulation.
 
 ## HTML utilities

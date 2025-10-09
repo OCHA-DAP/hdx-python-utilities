@@ -11,8 +11,7 @@ from hdx.utilities.compare import assert_files_same
 from hdx.utilities.dictandlist import read_list_from_csv
 from hdx.utilities.loader import load_yaml
 from hdx.utilities.path import temp_dir
-from hdx.utilities.saver import save_hxlated_output, save_json, save_yaml, \
-    save_iterable
+from hdx.utilities.saver import save_hxlated_output, save_iterable, save_json, save_yaml
 
 
 class TestLoader:
@@ -321,12 +320,15 @@ class TestLoader:
                 {"h1": "7", "h2": "8", "h4": "c", "h3": "9"},
             ]
             xlfilepath = filepath.replace("csv", "xlsx")
-            save_iterable(xlfilepath, list_of_lists, headers=["h1", "h2", "h3", "h4"], format="xlsx")
+            save_iterable(
+                xlfilepath,
+                list_of_lists,
+                headers=["h1", "h2", "h3", "h4"],
+                format="xlsx",
+            )
             assert exists(xlfilepath), "File should exist"
 
-            save_iterable(
-                filepath, list_of_tuples, headers=("h1", "h2", "h3", "h4")
-            )
+            save_iterable(filepath, list_of_tuples, headers=("h1", "h2", "h3", "h4"))
             newll = read_list_from_csv(filepath)
             newld = read_list_from_csv(filepath, headers=1, dict_form=True)
             remove(filepath)
