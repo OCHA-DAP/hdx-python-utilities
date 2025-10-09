@@ -735,8 +735,8 @@ class Download(BaseDownload):
                 if row_function:
                     processed_row = row_function(origheaders, row)
                     if processed_row is not None:
-                        if dict_form:
-                            processed_row = processed_row
+                        if dict_form and origheaders and header_insertions:
+                            processed_row = {key: processed_row[key] for key in headers}
                         yield processed_row
                 else:
                     yield row
