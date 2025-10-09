@@ -4,7 +4,7 @@ import csv
 import json
 from collections import OrderedDict
 from os.path import join
-from typing import Any, Dict
+from typing import Any, Dict, Iterable, Union, Optional
 
 from ruamel.yaml import (
     YAML,
@@ -13,6 +13,7 @@ from ruamel.yaml import (
     add_representer,
 )
 
+from .frictionless_wrapper import get_frictionless_tableresource
 from .matching import match_template_variables
 from .typehint import ListTuple, ListTupleDict
 
@@ -268,3 +269,86 @@ def save_hxlated_output(
         output_json.close()
     if csv_file:
         csv_file.close()
+
+def save_iterable(
+        filepath: str,
+        rows: Iterable[ListTupleDict],
+        headers: Union[int, ListTuple[str], None] = None,
+        columns: Union[ListTuple[int], ListTuple[str], None] = None,
+        format: str = "csv",
+        encoding: Optional[str] = None,
+) -> None:
+    """Save an iterable of rows in dict or list form to a csv. (The headers
+    argument is either a row number (rows start counting at 1), or the actual
+    headers defined as a list of strings. If not set, all rows will be treated
+    as containing values.)
+
+    Args:
+        filepath (str): Path to write to
+        rows (Iterable[ListTupleDict]): List of rows in dict or list form
+        headers (Union[int, ListTuple[str], None]): Headers to write. Defaults to None.
+        columns (Union[ListTuple[int], ListTuple[str], None]): Columns to write. Defaults to all.
+        format (str): Format to write. Defaults to csv.
+        encoding (Optional[str]): Encoding to use. Defaults to None (infer encoding).
+
+    Returns:
+        None
+    """
+    rows = iter(rows)
+    row = next(rows)
+    newrows = []
+    if isinstance(row, dict):
+        has_header = True
+        if columns:
+            newrow = {}
+            for column in columns:
+                if column in row:
+                    newrow[column] = row[column]
+            newrows.append(newrow)
+            for row in rows:
+                newrow = {}
+                for column in columns:
+                    if column in row:
+                        newrow[column] = row[column]
+                newrows.append(newrow)
+            if headers is None:
+                headers = columns
+        else:
+            newrows.append(row)
+            for row in rows:
+                newrows.append(row)
+    else:
+        if headers is None:
+            headers = 1
+        if isinstance(headers, int):
+            headers_rowno = headers
+            headers = row
+            for i in range(headers_rowno-1):
+                headers = next(rows)
+        else:
+            headers_rowno = None
+        has_header = False
+        if columns:
+            if headers_rowno is None:
+                newrow = []
+                for column in columns:
+                    newrow.append(row[column - 1])
+                newrows.append(newrow)
+            for row in rows:
+                newrow = []
+                for column in columns:
+                    newrow.append(row[column - 1])
+                newrows.append(newrow)
+        else:
+            if headers_rowno is None:
+                newrows.append(row)
+            for row in rows:
+                newrows.append(row)
+    resource = get_frictionless_tableresource(
+        data=newrows,
+        has_header=has_header,
+        headers=headers,
+        encoding=encoding,
+    )
+    resource.write(filepath, format=format, encoding=encoding)
+    resource.close()
