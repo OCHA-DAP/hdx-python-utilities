@@ -2,13 +2,16 @@
 
 import json
 from collections import OrderedDict
+from os import remove
 from os.path import exists, join
 
 import pytest
 
 from hdx.utilities.compare import assert_files_same
+from hdx.utilities.dictandlist import read_list_from_csv
 from hdx.utilities.loader import load_yaml
-from hdx.utilities.saver import save_hxlated_output, save_json, save_yaml
+from hdx.utilities.path import temp_dir
+from hdx.utilities.saver import save_hxlated_output, save_iterable, save_json, save_yaml
 
 
 class TestLoader:
@@ -290,3 +293,153 @@ class TestLoader:
         assert_files_same(join(saverfolder, filename), join(output_dir, filename))
         filename = "out8.json"
         assert_files_same(join(saverfolder, filename), join(output_dir, filename))
+
+    def test_save_iterable(self):
+        list_of_tuples = [(1, 2, 3, "a"), (4, 5, 6, "b"), (7, 8, 9, "c")]
+        list_of_lists = [[1, 2, 3, "a"], [4, 5, 6, "b"], [7, 8, 9, "c"]]
+        with temp_dir(
+            "TestSaveIterable",
+            delete_on_success=True,
+            delete_on_failure=False,
+        ) as tempdir:
+            filename = "test_save_iterable_to_csv.csv"
+            filepath = join(tempdir, filename)
+            res = save_iterable(
+                filepath, list_of_lists, headers=["h1", "h2", "h3", "h4"]
+            )
+            assert res is True
+            newll = read_list_from_csv(filepath)
+            newld = read_list_from_csv(filepath, headers=1, dict_form=True)
+            remove(filepath)
+            assert newll == [
+                ["h1", "h2", "h3", "h4"],
+                ["1", "2", "3", "a"],
+                ["4", "5", "6", "b"],
+                ["7", "8", "9", "c"],
+            ]
+            assert newld == [
+                {"h1": "1", "h2": "2", "h4": "a", "h3": "3"},
+                {"h1": "4", "h2": "5", "h4": "b", "h3": "6"},
+                {"h1": "7", "h2": "8", "h4": "c", "h3": "9"},
+            ]
+            xlfilepath = filepath.replace("csv", "xlsx")
+            res = save_iterable(
+                xlfilepath,
+                list_of_lists,
+                headers=["h1", "h2", "h3", "h4"],
+                format="xlsx",
+            )
+            assert res is True
+            assert exists(xlfilepath), "File should exist"
+
+            save_iterable(filepath, list_of_tuples, headers=("h1", "h2", "h3", "h4"))
+            newll = read_list_from_csv(filepath)
+            newld = read_list_from_csv(filepath, headers=1, dict_form=True)
+            remove(filepath)
+            assert newll == [
+                ["h1", "h2", "h3", "h4"],
+                ["1", "2", "3", "a"],
+                ["4", "5", "6", "b"],
+                ["7", "8", "9", "c"],
+            ]
+            assert newld == [
+                {"h1": "1", "h2": "2", "h4": "a", "h3": "3"},
+                {"h1": "4", "h2": "5", "h4": "b", "h3": "6"},
+                {"h1": "7", "h2": "8", "h4": "c", "h3": "9"},
+            ]
+            save_iterable(filepath, list_of_lists, headers=["h1", "h2", "h3"])
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [
+                ["h1", "h2", "h3"],
+                ["1", "2", "3"],
+                ["4", "5", "6"],
+                ["7", "8", "9"],
+            ]
+            save_iterable(
+                filepath,
+                list_of_lists,
+                headers=["h1", "h3", "h4"],
+                columns=[1, 3, 4],
+            )
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [
+                ["h1", "h3", "h4"],
+                ["1", "3", "a"],
+                ["4", "6", "b"],
+                ["7", "9", "c"],
+            ]
+
+            list_of_lists = [
+                ["1", "2", "3", "a"],
+                ["4", "5", "6", "b"],
+                [7, 8, 9, "c"],
+            ]
+            save_iterable(filepath, list_of_lists)
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [
+                ["1", "2", "3", "a"],
+                ["4", "5", "6", "b"],
+                ["7", "8", "9", "c"],
+            ]
+            save_iterable(filepath, list_of_lists, headers=2)
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [
+                ["4", "5", "6", "b"],
+                ["7", "8", "9", "c"],
+            ]
+
+            list_of_dicts = [
+                {"h1": 1, "h2": 2, "h3": 3, "h4": "a"},
+                {"h1": 4, "h2": 5, "h3": 6, "h4": "b"},
+                {"h1": 7, "h2": 8, "h3": 9, "h4": "c"},
+            ]
+            save_iterable(filepath, list_of_dicts, headers=["h1", "h2", "h3", "h4"])
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [
+                ["h1", "h2", "h3", "h4"],
+                ["1", "2", "3", "a"],
+                ["4", "5", "6", "b"],
+                ["7", "8", "9", "c"],
+            ]
+            save_iterable(filepath, list_of_dicts)
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [
+                ["h1", "h2", "h3", "h4"],
+                ["1", "2", "3", "a"],
+                ["4", "5", "6", "b"],
+                ["7", "8", "9", "c"],
+            ]
+            save_iterable(filepath, list_of_dicts, headers=2)
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [
+                ["1", "2", "3", "a"],
+                ["4", "5", "6", "b"],
+                ["7", "8", "9", "c"],
+            ]
+            save_iterable(
+                filepath,
+                list_of_dicts,
+                headers=["h1", "h3", "h4"],
+                columns=["h1", "h3", "h4"],
+            )
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [
+                ["h1", "h3", "h4"],
+                ["1", "3", "a"],
+                ["4", "6", "b"],
+                ["7", "9", "c"],
+            ]
+
+            with pytest.raises(ValueError):
+                read_list_from_csv(filepath, dict_form=True)
+
+            res = save_iterable(filepath, [], headers=["h1", "h3", "h4"])
+            assert res is False

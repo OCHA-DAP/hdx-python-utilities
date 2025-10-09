@@ -386,6 +386,24 @@ Examples:
     # sorting the keys
     save_json(mydict, "mypath.json", pretty=False, sortkeys=False)
 
+## Saving iterable to file
+
+`save_iterable` is a utility to save an iterable of dict, list or tuple to a file such
+as a csv or Excel.
+
+    # Save iterable to file
+    l = [[1, 2, 3, "a"],
+         [4, 5, 6, "b"],
+         [7, 8, 9, "c"]]
+    save_iterable(filepath, l, headers=["h1", "h2", "h3", "h4"])
+    newll = read_list_from_csv(filepath)
+    newld = read_list_from_csv(filepath, headers=1, dict_form=True)
+    assert newll == [["h1", "h2", "h3", "h4"], ["1", "2", "3", "a"], ["4", "5", "6", "b"], ["7", "8", "9", "c"]]
+    assert newld == [{"h1": "1", "h2": "2", "h4": "a", "h3": "3"},
+                    {"h1": "4", "h2": "5", "h4": "b", "h3": "6"},
+                    {"h1": "7", "h2": "8", "h4": "c", "h3": "9"}]
+    save_iterable(xlfilepath, list_of_lists, headers=["h1", "h2", "h3", "h4"], format="xlsx")
+
 ## Loading and saving HXLated csv and/or JSON
 
 `save_hxlated_output` is a utility to save HXLated output (currently JSON and/or csv are
@@ -555,6 +573,10 @@ Examples:
     d2 = {1: 2, 2: 2.0, 3: 5, 4: 4, 7: 3}
     assert avg_dicts(d1, d2) == {1: 1.5, 2: 1.5, 3: 4, 4: 4}
 
+    ## Convert command line arguments to dictionary
+    args = "a=1,big=hello,1=3"
+    assert args_to_dict(args) == {"a": "1", "big": "hello", "1": "3"}
+
     # Read and write lists to csv
     l = [[1, 2, 3, "a"],
          [4, 5, 6, "b"],
@@ -567,9 +589,9 @@ Examples:
                     {"h1": "4", "h2": "5", "h4": "b", "h3": "6"},
                     {"h1": "7", "h2": "8", "h4": "c", "h3": "9"}]
 
-    ## Convert command line arguments to dictionary
-    args = "a=1,big=hello,1=3"
-    assert args_to_dict(args) == {"a": "1", "big": "hello", "1": "3"}
+Note that `get_tabular_rows` in the `Download` class is a more powerful and streaming
+version of `read_list_from_csv` and `save_iterable` is a generally more efficient
+version of`write_list_to_csv` as it uses iteration instead of list manipulation.
 
 ## HTML utilities
 
