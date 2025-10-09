@@ -278,7 +278,7 @@ def save_iterable(
     columns: Union[ListTuple[int], ListTuple[str], None] = None,
     format: str = "csv",
     encoding: Optional[str] = None,
-) -> None:
+) -> bool:
     """Save an iterable of rows in dict or list form to a csv. (The headers
     argument is either a row number (rows start counting at 1), or the actual
     headers defined as a list of strings. If not set, all rows will be treated
@@ -293,10 +293,13 @@ def save_iterable(
         encoding (Optional[str]): Encoding to use. Defaults to None (infer encoding).
 
     Returns:
-        None
+        bool: Whether iterable was saved
     """
     rows = iter(rows)
-    row = next(rows)
+    try:
+        row = next(rows)
+    except StopIteration:
+        return False
     newrows = []
     if isinstance(row, dict):
         has_header = True
@@ -353,3 +356,4 @@ def save_iterable(
     )
     resource.write(filepath, format=format, encoding=encoding)
     resource.close()
+    return True
