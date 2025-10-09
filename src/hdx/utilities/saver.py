@@ -4,7 +4,7 @@ import csv
 import json
 from collections import OrderedDict
 from os.path import join
-from typing import Any, Dict, Iterable, List, Optional, Union
+from typing import Any, Callable, Dict, Iterable, List, Optional, Union
 
 from ruamel.yaml import (
     YAML,
@@ -278,6 +278,7 @@ def save_iterable(
     columns: Union[ListTuple[int], ListTuple[str], None] = None,
     format: str = "csv",
     encoding: Optional[str] = None,
+    row_function: Optional[Callable[[Dict], Optional[Dict]]] = None,
 ) -> List:
     """Save an iterable of rows in dict or list form to a csv. (The headers
     argument is either a row number (rows start counting at 1), or the actual
@@ -291,10 +292,16 @@ def save_iterable(
         columns (Union[ListTuple[int], ListTuple[str], None]): Columns to write. Defaults to all.
         format (str): Format to write. Defaults to csv.
         encoding (Optional[str]): Encoding to use. Defaults to None (infer encoding).
+        row_function (Optional[Callable[[Dict],Optional[Dict]]]): Row function to call for each row. Defaults to None.
 
     Returns:
         List: List of rows written to file
     """
+    if row_function is None:
+
+        def row_function(row):
+            return row
+
     newrows = []
     rows = iter(rows)
     try:
@@ -303,13 +310,18 @@ def save_iterable(
         return newrows
     if isinstance(row, dict):
         has_header = True
+        row = row_function(row)
         if columns:
-            newrow = {}
-            for column in columns:
-                if column in row:
-                    newrow[column] = row[column]
-            newrows.append(newrow)
+            if row is not None:
+                newrow = {}
+                for column in columns:
+                    if column in row:
+                        newrow[column] = row[column]
+                newrows.append(newrow)
             for row in rows:
+                row = row_function(row)
+                if row is None:
+                    continue
                 newrow = {}
                 for column in columns:
                     if column in row:
@@ -318,8 +330,12 @@ def save_iterable(
             if headers is None:
                 headers = columns
         else:
-            newrows.append(row)
+            if row is not None:
+                newrows.append(row)
             for row in rows:
+                row = row_function(row)
+                if row is None:
+                    continue
                 newrows.append(row)
     else:
         if headers is None:
@@ -332,21 +348,28 @@ def save_iterable(
         else:
             headers_rowno = None
         has_header = False
+        row = row_function(row)
         if columns:
-            if headers_rowno is None:
+            if headers_rowno is None and row is not None:
                 newrow = []
                 for column in columns:
                     newrow.append(row[column - 1])
                 newrows.append(newrow)
             for row in rows:
+                row = row_function(row)
+                if row is None:
+                    continue
                 newrow = []
                 for column in columns:
                     newrow.append(row[column - 1])
                 newrows.append(newrow)
         else:
-            if headers_rowno is None:
+            if headers_rowno is None and row is not None:
                 newrows.append(row)
             for row in rows:
+                row = row_function(row)
+                if row is None:
+                    continue
                 newrows.append(row)
     resource = get_frictionless_tableresource(
         data=newrows,

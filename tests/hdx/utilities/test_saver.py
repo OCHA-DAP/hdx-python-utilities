@@ -371,6 +371,32 @@ class TestLoader:
                 ["7", "9", "c"],
             ]
 
+            def row_func(row):
+                row[1] = row[1] + 1
+                return row
+
+            rows = save_iterable(
+                filepath,
+                list_of_lists,
+                headers=["h1", "h2", "h3", "h4"],
+                row_function=row_func,
+            )
+            assert rows == list_of_lists
+            newll = read_list_from_csv(filepath)
+            newld = read_list_from_csv(filepath, headers=1, dict_form=True)
+            remove(filepath)
+            assert newll == [
+                ["h1", "h2", "h3", "h4"],
+                ["1", "3", "3", "a"],
+                ["4", "6", "6", "b"],
+                ["7", "9", "9", "c"],
+            ]
+            assert newld == [
+                {"h1": "1", "h2": "3", "h4": "a", "h3": "3"},
+                {"h1": "4", "h2": "6", "h4": "b", "h3": "6"},
+                {"h1": "7", "h2": "9", "h4": "c", "h3": "9"},
+            ]
+
             list_of_lists = [
                 ["1", "2", "3", "a"],
                 ["4", "5", "6", "b"],
@@ -436,6 +462,25 @@ class TestLoader:
                 ["1", "3", "a"],
                 ["4", "6", "b"],
                 ["7", "9", "c"],
+            ]
+
+            def row_func(row):
+                row["h3"] = row["h3"] + 1
+                return row
+
+            save_iterable(
+                filepath,
+                list_of_dicts,
+                headers=["h1", "h2", "h3", "h4"],
+                row_function=row_func,
+            )
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [
+                ["h1", "h2", "h3", "h4"],
+                ["1", "2", "4", "a"],
+                ["4", "5", "7", "b"],
+                ["7", "8", "10", "c"],
             ]
 
             with pytest.raises(ValueError):
