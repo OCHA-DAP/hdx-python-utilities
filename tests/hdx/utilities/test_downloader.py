@@ -56,11 +56,11 @@ class TestDownloader:
 
     @pytest.fixture(scope="class")
     def getfixtureurl(self):
-        return "https://httpbin.org/get"
+        return "https://free.mockerapi.com/get"
 
     @pytest.fixture(scope="class")
     def postfixtureurl(self):
-        return "https://httpbin.org/post"
+        return "https://free.mockerapi.com/post"
 
     @pytest.fixture(scope="class")
     def fixturenotexistsurl(self):
@@ -369,7 +369,7 @@ class TestDownloader:
         with Download() as downloader:
             downloader.setup(postfixtureurl, post=True)
             headers = downloader.response.headers
-            assert bool(re.match(r"4\d\d", headers["Content-Length"])) is True
+            assert headers["Content-Type"] == "application/json"
             downloader.setup(
                 f"{getfixtureurl}?id=10&lala=a",
                 post=False,
@@ -377,7 +377,7 @@ class TestDownloader:
             )
             assert list(downloader.get_json()["args"].items()) == list(
                 OrderedDict(
-                    [("b", "4"), ("d", "3"), ("id", "10"), ("lala", "a")]
+                    [("id", "10"), ("lala", "a"), ("b", "4"), ("d", "3")]
                 ).items()
             )
             downloader.setup(
@@ -388,7 +388,7 @@ class TestDownloader:
             json = downloader.get_json()
             assert list(json["form"].items()) == list(
                 OrderedDict(
-                    [("a", "3"), ("c", "2"), ("id", "3"), ("lala", "b")]
+                    [("id", "3"), ("lala", "b"), ("a", "3"), ("c", "2")]
                 ).items()
             )
             downloader.setup(
@@ -400,7 +400,7 @@ class TestDownloader:
             json = downloader.get_json()
             assert list(json["json"].items()) == list(
                 OrderedDict(
-                    [("a", "3"), ("c", "2"), ("id", "3"), ("lala", "b")]
+                    [("id", "3"), ("lala", "b"), ("a", "3"), ("c", "2")]
                 ).items()
             )
 
@@ -530,7 +530,7 @@ class TestDownloader:
             )
             assert list(downloader.get_json()["args"].items()) == list(
                 OrderedDict(
-                    [("b", "4"), ("d", "3"), ("id", "10"), ("lala", "a")]
+                    [("id", "10"), ("lala", "a"), ("b", "4"), ("d", "3")]
                 ).items()
             )
             json = downloader.download_json(
@@ -540,7 +540,7 @@ class TestDownloader:
             )
             assert list(json["form"].items()) == list(
                 OrderedDict(
-                    [("a", "3"), ("c", "2"), ("id", "3"), ("lala", "b")]
+                    [("id", "3"), ("lala", "b"), ("a", "3"), ("c", "2")]
                 ).items()
             )
             json = downloader.download_json(
@@ -551,7 +551,7 @@ class TestDownloader:
             )
             assert list(json["json"].items()) == list(
                 OrderedDict(
-                    [("a", "3"), ("c", "2"), ("id", "3"), ("lala", "b")]
+                    [("id", "3"), ("lala", "b"), ("a", "3"), ("c", "2")]
                 ).items()
             )
         with Download(rate_limit={"calls": 1, "period": 0.1}) as downloader:
@@ -562,7 +562,7 @@ class TestDownloader:
             )
             assert list(downloader.get_json()["args"].items()) == list(
                 OrderedDict(
-                    [("b", "4"), ("d", "3"), ("id", "10"), ("lala", "a")]
+                    [("id", "10"), ("lala", "a"), ("b", "4"), ("d", "3")]
                 ).items()
             )
             yaml = downloader.download_yaml(fixturefile)

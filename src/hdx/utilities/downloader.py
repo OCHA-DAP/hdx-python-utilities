@@ -1,7 +1,6 @@
 """Downloading utilities for urls."""
 
 import hashlib
-import json
 import logging
 from copy import deepcopy
 from os import remove
@@ -291,14 +290,21 @@ class Download(BaseDownload):
             if post:
                 full_url, parameters = self.get_url_params_for_post(url, parameters)
                 if json_string:
-                    parameters = json.dumps(parameters)
-                self.response = self.session.post(
-                    full_url,
-                    data=parameters,
-                    stream=stream,
-                    timeout=timeout,
-                    headers=headers,
-                )
+                    self.response = self.session.post(
+                        full_url,
+                        json=parameters,
+                        stream=stream,
+                        timeout=timeout,
+                        headers=headers,
+                    )
+                else:
+                    self.response = self.session.post(
+                        full_url,
+                        data=parameters,
+                        stream=stream,
+                        timeout=timeout,
+                        headers=headers,
+                    )
             else:
                 self.response = self.session.get(
                     self.get_url_for_get(url, parameters),
