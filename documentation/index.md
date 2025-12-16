@@ -395,6 +395,12 @@ as a csv or Excel.
     l = [[1, 2, 3, "a"],
          [4, 5, 6, "b"],
          [7, 8, 9, "c"]]
+    ld = [
+        {"h1": "1", "h2": "2", "h4": "a", "h3": "3"},
+        {"h1": "4", "h2": "5", "h4": "b", "h3": "6"},
+        {"h1": "7", "h2": "8", "h4": "c", "h3": "9"},
+    ]
+
     rows = save_iterable(filepath, l, headers=["h1", "h2", "h3", "h4"])
     assert rows == l
     newll = read_list_from_csv(filepath)
@@ -403,6 +409,44 @@ as a csv or Excel.
     assert newld == [{"h1": "1", "h2": "2", "h4": "a", "h3": "3"},
                     {"h1": "4", "h2": "5", "h4": "b", "h3": "6"},
                     {"h1": "7", "h2": "8", "h4": "c", "h3": "9"}]
+
+    rows = save_iterable(
+        filepath, ld, columns=["h3", "h2", "h1", "h4"]
+    )
+    newll = read_list_from_csv(filepath)
+    assert newll == [
+        ["h3", "h2", "h1", "h4"],
+        ["3", "2", "1", "a"],
+        ["6", "5", "4", "b"],
+        ["9", "8", "7", "c"],
+    ]
+
+    save_iterable(
+        filepath, ld, columns=["h2", "h3", "h1"]
+    )
+    newll = read_list_from_csv(filepath)
+    assert newll == [['h2', 'h3', 'h1'], ['2', '3', '1'], ['5', '6', '4'], ['8', '9', '7']]
+
+    def row_func(row):
+        row[1] = row[1] + 1
+        return row
+
+    rows = save_iterable(
+        filepath,
+        l,
+        headers=["h1", "h2", "h3", "h4"],
+        row_function=row_func,
+    )
+    assert rows == [[1, 3, 3, "a"], [4, 6, 6, "b"], [7, 9, 9, "c"]]
+    newll = read_list_from_csv(filepath)
+    newld = read_list_from_csv(filepath, headers=1, dict_form=True)
+    assert newll == [
+        ["h1", "h2", "h3", "h4"],
+        ["1", "3", "3", "a"],
+        ["4", "6", "6", "b"],
+        ["7", "9", "9", "c"],
+    ]
+
     save_iterable(xlfilepath, list_of_lists, headers=["h1", "h2", "h3", "h4"], format="xlsx")
 
 ## Loading and saving HXLated csv and/or JSON
@@ -578,11 +622,7 @@ Examples:
     args = "a=1,big=hello,1=3"
     assert args_to_dict(args) == {"a": "1", "big": "hello", "1": "3"}
 
-    # Read and write lists to csv
-    l = [[1, 2, 3, "a"],
-         [4, 5, 6, "b"],
-         [7, 8, 9, "c"]]
-    write_list_to_csv(filepath, l, headers=["h1", "h2", "h3", "h4"])
+    # Read lists from csv
     newll = read_list_from_csv(filepath)
     newld = read_list_from_csv(filepath, headers=1, dict_form=True)
     assert newll == [["h1", "h2", "h3", "h4"], ["1", "2", "3", "a"], ["4", "5", "6", "b"], ["7", "8", "9", "c"]]
@@ -591,8 +631,7 @@ Examples:
                     {"h1": "7", "h2": "8", "h4": "c", "h3": "9"}]
 
 Note that `get_tabular_rows` in the `Download` class is a more powerful and streaming
-version of `read_list_from_csv` and `save_iterable` is a generally more efficient
-version of`write_list_to_csv` as it uses iteration instead of list manipulation.
+version of `read_list_from_csv`. `save_iterable` replaces `write_list_to_csv`.
 
 ## HTML utilities
 

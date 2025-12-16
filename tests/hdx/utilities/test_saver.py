@@ -2,6 +2,7 @@
 
 import json
 from collections import OrderedDict
+from copy import deepcopy
 from os import remove
 from os.path import exists, join
 
@@ -297,6 +298,12 @@ class TestLoader:
     def test_save_iterable(self):
         list_of_tuples = [(1, 2, 3, "a"), (4, 5, 6, "b"), (7, 8, 9, "c")]
         list_of_lists = [[1, 2, 3, "a"], [4, 5, 6, "b"], [7, 8, 9, "c"]]
+        list_of_dicts = [
+            {"h1": "1", "h2": "2", "h4": "a", "h3": "3"},
+            {"h1": "4", "h2": "5", "h4": "b", "h3": "6"},
+            {"h1": "7", "h2": "8", "h4": "c", "h3": "9"},
+        ]
+
         with temp_dir(
             "TestSaveIterable",
             delete_on_success=True,
@@ -322,6 +329,30 @@ class TestLoader:
                 {"h1": "4", "h2": "5", "h4": "b", "h3": "6"},
                 {"h1": "7", "h2": "8", "h4": "c", "h3": "9"},
             ]
+
+            rows = save_iterable(
+                filepath, list_of_dicts, columns=["h3", "h2", "h1", "h4"]
+            )
+            assert rows == list_of_dicts
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [
+                ["h3", "h2", "h1", "h4"],
+                ["3", "2", "1", "a"],
+                ["6", "5", "4", "b"],
+                ["9", "8", "7", "c"],
+            ]
+
+            save_iterable(filepath, list_of_dicts, columns=["h2", "h3", "h1"])
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [
+                ["h2", "h3", "h1"],
+                ["2", "3", "1"],
+                ["5", "6", "4"],
+                ["8", "9", "7"],
+            ]
+
             xlfilepath = filepath.replace("csv", "xlsx")
             rows = save_iterable(
                 xlfilepath,
@@ -375,13 +406,14 @@ class TestLoader:
                 row[1] = row[1] + 1
                 return row
 
+            list_of_lists_copy = deepcopy(list_of_lists)
             rows = save_iterable(
                 filepath,
-                list_of_lists,
+                list_of_lists_copy,
                 headers=["h1", "h2", "h3", "h4"],
                 row_function=row_func,
             )
-            assert rows == list_of_lists
+            assert rows == [[1, 3, 3, "a"], [4, 6, 6, "b"], [7, 9, 9, "c"]]
             newll = read_list_from_csv(filepath)
             newld = read_list_from_csv(filepath, headers=1, dict_form=True)
             remove(filepath)
