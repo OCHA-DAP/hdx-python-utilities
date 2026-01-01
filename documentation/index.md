@@ -18,6 +18,7 @@ Python developers. Note that these are not specific to HDX.
 1. [State utility](#state-utility)
 1. [Path utilities](#path-utilities)
 1. [Text processing](#text-processing)
+2. [Stable file hashing](#stable-file-hashing)
 1. [Matching utilities](#matching-utilities)
 1. [Encoding utilities](#encoding-utilities)
 1. [Check valid UUID](#valid-uuid)
@@ -909,6 +910,13 @@ Examples:
     # Extract words from a string sentence into a list
     result = get_words_in_sentence("Korea (Democratic People's Republic of)")
     assert result == ["Korea", "Democratic", "People's", "Republic", "of"]
+
+## Stable file hashing
+
+Efficient Hashing of files that produces a stable hash even for zip and xlsx files eg.
+
+    assert get_size_and_hash(shpfile, "shp") == (1330530, "31662cb7")
+    assert get_size_and_hash(xlsxfile, "xlsx") == (13727, "55434630784372644438afb5ee5fbc60")
 
 ## Matching utilities
 

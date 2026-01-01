@@ -4,8 +4,8 @@ import itertools
 import warnings
 from typing import Any, Callable, Dict, List, MutableMapping, Optional, Union
 
-from .frictionless_wrapper import get_frictionless_tableresource
-from .typehint import ListDict, ListTuple, ListTupleDict
+from hdx.utilities.frictionless_wrapper import get_frictionless_tableresource
+from hdx.utilities.typehint import ListDict, ListTuple, ListTupleDict
 
 
 def invert_dictionary(d: MutableMapping) -> Dict:

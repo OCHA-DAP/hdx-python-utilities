@@ -7,8 +7,8 @@ from email.mime.text import MIMEText
 from os.path import expanduser, join
 from typing import Any, List, Optional, Union
 
-from .loader import load_json, load_yaml
-from .typehint import ListTuple
+from hdx.utilities.loader import load_json, load_yaml
+from hdx.utilities.typehint import ListTuple
 
 try:
     from email_validator import EmailNotValidError, validate_email

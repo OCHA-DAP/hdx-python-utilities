@@ -174,8 +174,8 @@ test"""
         assert list(result.items()) == list(TestLoader.expected_json.items())
 
     def test_load_file_to_str(self):
-        with temp_dir(folder="test_text") as tmpdir:
-            text_file = join(tmpdir, "text_file.txt")
+        with temp_dir(folder="test_text") as tmp_path:
+            text_file = join(tmp_path, "text_file.txt")
             save_text(TestLoader.text, text_file)
             result = load_text(text_file)
             assert result == TestLoader.text
@@ -184,4 +184,4 @@ test"""
             result = load_text(text_file, replace_line_separators=" ")
             assert result == TestLoader.expected_text_newlines_to_spaces
             with pytest.raises(IOError):
-                load_text(join(tmpdir, "NOTEXIST.txt"))
+                load_text(join(tmp_path, "NOTEXIST.txt"))

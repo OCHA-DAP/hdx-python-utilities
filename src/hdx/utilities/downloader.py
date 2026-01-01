@@ -17,11 +17,11 @@ from requests import Request
 from ruamel.yaml import YAML
 from xlsx2csv import Xlsx2csv
 
-from .base_downloader import BaseDownload, DownloadError
-from .frictionless_wrapper import get_frictionless_tableresource
-from .path import get_filename_from_url, get_temp_dir
-from .session import get_session
-from .typehint import ListDict, ListTuple
+from hdx.utilities.base_downloader import BaseDownload, DownloadError
+from hdx.utilities.frictionless_wrapper import get_frictionless_tableresource
+from hdx.utilities.path import get_filename_from_url, get_temp_dir
+from hdx.utilities.session import get_session
+from hdx.utilities.typehint import ListDict, ListTuple
 
 logger = logging.getLogger(__name__)
 

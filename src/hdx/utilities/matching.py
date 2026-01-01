@@ -4,8 +4,8 @@ from typing import Callable, Dict, List, Optional, Tuple
 
 from pyphonetics import RefinedSoundex
 
-from .text import normalise
-from .typehint import ListTuple
+from hdx.utilities.text import normalise
+from hdx.utilities.typehint import ListTuple
 
 TEMPLATE_VARIABLES = re.compile("{{.*?}}")
 

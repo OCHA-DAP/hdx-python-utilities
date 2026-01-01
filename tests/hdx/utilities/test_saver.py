@@ -113,8 +113,8 @@ class TestLoader:
             ("pretty-true_sortkeys-true.yaml", True, True),
         ],
     )
-    def test_save_yaml(self, tmpdir, saverfolder, filename, pretty, sortkeys):
-        test_path = join(str(tmpdir), filename)
+    def test_save_yaml(self, tmp_path, saverfolder, filename, pretty, sortkeys):
+        test_path = join(str(tmp_path), filename)
         ref_path = join(saverfolder, filename)
         save_yaml(
             TestLoader.yaml_to_write,
@@ -136,8 +136,8 @@ class TestLoader:
             ("pretty-true_sortkeys-true.json", True, True),
         ],
     )
-    def test_save_json(self, tmpdir, saverfolder, filename, pretty, sortkeys):
-        test_path = join(str(tmpdir), filename)
+    def test_save_json(self, tmp_path, saverfolder, filename, pretty, sortkeys):
+        test_path = join(str(tmp_path), filename)
         ref_path = join(saverfolder, filename)
         save_json(
             TestLoader.json_to_write,
@@ -150,14 +150,14 @@ class TestLoader:
         save_json(dct, test_path, pretty=pretty, sortkeys=sortkeys)
         assert_files_same(ref_path, test_path)
 
-    def test_save_hxlated_output(self, tmpdir, saverfolder, json_csv_configuration):
+    def test_save_hxlated_output(self, tmp_path, saverfolder, json_csv_configuration):
         rows = (
             ("Col1", "Col2", "Col3"),
             ("#tag1", "#tag2", "#tag3"),
             (1, "2", 3),
             (4, "5", 6),
         )
-        output_dir = str(tmpdir)
+        output_dir = str(tmp_path)
 
         save_hxlated_output(
             json_csv_configuration["test1"],
