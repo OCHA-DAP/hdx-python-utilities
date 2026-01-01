@@ -13,9 +13,9 @@ from ruamel.yaml import (
     add_representer,
 )
 
-from .frictionless_wrapper import get_frictionless_tableresource
-from .matching import match_template_variables
-from .typehint import ListTuple, ListTupleDict
+from hdx.utilities.frictionless_wrapper import get_frictionless_tableresource
+from hdx.utilities.matching import match_template_variables
+from hdx.utilities.typehint import ListTuple, ListTupleDict
 
 
 class UnPrettyRTRepresenter(RoundTripRepresenter):

@@ -86,14 +86,16 @@ class TestDownloader:
     def fixturejsonurl(self):
         return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/main/tests/fixtures/downloader/test_json_processing.json?a=1"
 
-    def test_get_path_for_url(self, tmpdir, fixtureurl, configfolder, downloaderfolder):
-        tmpdir = str(tmpdir)
+    def test_get_path_for_url(
+        self, tmp_path, fixtureurl, configfolder, downloaderfolder
+    ):
+        tmp_path = str(tmp_path)
         filename = "test_data.csv"
         path = Download.get_path_for_url(fixtureurl, configfolder)
         assert abspath(path) == abspath(join(configfolder, filename))
         path = Download.get_path_for_url(fixtureurl, downloaderfolder)
         assert abspath(path) == abspath(join(downloaderfolder, "test_data3.csv"))
-        testfolder = join(tmpdir, self.downloaderfoldername)
+        testfolder = join(tmp_path, self.downloaderfoldername)
         rmtree(testfolder, ignore_errors=True)
         copytree(downloaderfolder, testfolder)
         path = Download.get_path_for_url(fixtureurl, testfolder, overwrite=True)
@@ -412,60 +414,60 @@ class TestDownloader:
 
     def test_download_file(
         self,
-        tmpdir,
+        tmp_path,
         fixturefile,
         fixtureurl,
         fixturenotexistsurl,
         getfixtureurl,
         postfixtureurl,
     ):
-        tmpdir = str(tmpdir)
+        tmp_path = str(tmp_path)
         with pytest.raises(DownloadError), Download() as downloader:
-            downloader.download_file("NOTEXIST://NOTEXIST.csv", folder=tmpdir)
+            downloader.download_file("NOTEXIST://NOTEXIST.csv", folder=tmp_path)
         with pytest.raises(DownloadError), Download() as downloader:
             downloader.download_file(fixturenotexistsurl)
         filename = "myfilename.txt"
         with pytest.raises(DownloadError), Download() as downloader:
             downloader.download_file(
-                fixturefile, folder=tmpdir, path=join(tmpdir, filename)
+                fixturefile, folder=tmp_path, path=join(tmp_path, filename)
             )
         with pytest.raises(DownloadError), Download() as downloader:
             downloader.download_file(
-                fixturefile, filename=filename, path=join(tmpdir, filename)
+                fixturefile, filename=filename, path=join(tmp_path, filename)
             )
         with Download() as downloader:
-            f = downloader.download_file(fixturefile, folder=tmpdir)
+            f = downloader.download_file(fixturefile, folder=tmp_path)
             fpath = abspath(f)
             remove(f)
-            assert fpath == abspath(join(tmpdir, "extra_params_tree.yaml"))
-            f = downloader.download_file(fixtureurl, folder=tmpdir)
+            assert fpath == abspath(join(tmp_path, "extra_params_tree.yaml"))
+            f = downloader.download_file(fixtureurl, folder=tmp_path)
             fpath = abspath(f)
             remove(f)
-            assert fpath == abspath(join(tmpdir, "test_data.csv"))
-            f = downloader.download_file(fixtureurl, folder=tmpdir, filename=filename)
+            assert fpath == abspath(join(tmp_path, "test_data.csv"))
+            f = downloader.download_file(fixtureurl, folder=tmp_path, filename=filename)
             fpath = abspath(f)
-            assert fpath == abspath(join(tmpdir, filename))
+            assert fpath == abspath(join(tmp_path, filename))
             f = downloader.download_file(
-                fixtureurl, path=join(tmpdir, filename), overwrite=True
+                fixtureurl, path=join(tmp_path, filename), overwrite=True
             )
             fpath = abspath(f)
-            assert fpath == abspath(join(tmpdir, filename))
+            assert fpath == abspath(join(tmp_path, filename))
             f = downloader.download_file(
-                fixtureurl, path=join(tmpdir, filename), overwrite=False
+                fixtureurl, path=join(tmp_path, filename), overwrite=False
             )
             fpath = abspath(f)
-            assert fpath == abspath(join(tmpdir, filename.replace(".txt", "1.txt")))
+            assert fpath == abspath(join(tmp_path, filename.replace(".txt", "1.txt")))
             f = downloader.download_file(
-                fixtureurl, path=join(tmpdir, filename), keep=True
+                fixtureurl, path=join(tmp_path, filename), keep=True
             )
             fpath = abspath(f)
             remove(f)
-            assert fpath == abspath(join(tmpdir, filename))
+            assert fpath == abspath(join(tmp_path, filename))
             f = downloader.download_file(
                 f"{getfixtureurl}?id=10&lala=a",
                 post=False,
                 parameters=OrderedDict([("b", "4"), ("d", "3")]),
-                folder=tmpdir,
+                folder=tmp_path,
                 filename=filename,
             )
             fpath = abspath(f)
@@ -476,12 +478,12 @@ class TestDownloader:
                 assert '"b": "4"' in text
                 assert '"d": "3"' in text
             remove(f)
-            assert fpath == abspath(join(tmpdir, filename))
+            assert fpath == abspath(join(tmp_path, filename))
             f = downloader.download_file(
                 f"{postfixtureurl}?id=3&lala=b",
                 post=True,
                 parameters=OrderedDict([("a", "3"), ("c", "2")]),
-                folder=tmpdir,
+                folder=tmp_path,
                 filename=filename,
             )
             fpath = abspath(f)
@@ -492,7 +494,7 @@ class TestDownloader:
                 assert '"a": "3"' in text
                 assert '"c": "2"' in text
             remove(f)
-            assert fpath == abspath(join(tmpdir, filename))
+            assert fpath == abspath(join(tmp_path, filename))
 
     def test_download(
         self,

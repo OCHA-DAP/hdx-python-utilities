@@ -6,8 +6,8 @@ from warnings import warn
 
 from ruamel.yaml import YAML
 
-from .dictandlist import merge_dictionaries, merge_two_dictionaries
-from .typehint import ListTuple
+from hdx.utilities.dictandlist import merge_dictionaries, merge_two_dictionaries
+from hdx.utilities.typehint import ListTuple
 
 
 class LoadError(Exception):

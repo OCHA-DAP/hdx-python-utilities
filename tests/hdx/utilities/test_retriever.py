@@ -32,10 +32,10 @@ class TestRetriever:
         return join(retrieverfolder, "fallbacks")
 
     @pytest.fixture(scope="function")
-    def dirs(self, tmpdir):
-        tmpdir = str(tmpdir)
-        saved_dir = join(tmpdir, "saved")
-        temp_dir = join(tmpdir, "temp")
+    def dirs(self, tmp_path):
+        tmp_path = str(tmp_path)
+        saved_dir = join(tmp_path, "saved")
+        temp_dir = join(tmp_path, "temp")
         rmtree(temp_dir, ignore_errors=True)
         mkdir(temp_dir)
         return saved_dir, temp_dir
