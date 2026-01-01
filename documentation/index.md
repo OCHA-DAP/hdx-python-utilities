@@ -18,7 +18,7 @@ Python developers. Note that these are not specific to HDX.
 1. [State utility](#state-utility)
 1. [Path utilities](#path-utilities)
 1. [Text processing](#text-processing)
-2. [Stable file hashing](#stable-file-hashing)
+1. [Stable file hashing](#stable-file-hashing)
 1. [Matching utilities](#matching-utilities)
 1. [Encoding utilities](#encoding-utilities)
 1. [Check valid UUID](#valid-uuid)
