@@ -104,9 +104,6 @@ def get_size_and_hash(filepath: str, file_format: str) -> Tuple[int, str]:
     with open(filepath, "rb") as fp:
         size = fstat(fp.fileno()).st_size
         signature = fp.read(4)
-        if len(signature) != 4:
-            logger.error(f"File {filepath} does not contain a valid signature")
-            return -1, ""
         if signature == zip_signature:  # zip, xlsx etc.
             if file_format == "xlsx":
                 buffer = bytearray(signature)
