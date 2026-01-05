@@ -84,8 +84,14 @@ class TestZipCRC:
             "aaf00484",
         )  # treat xlsx as zip
 
-        assert get_size_and_hash(emptyfile, "zip") == (-1, "")
-        assert get_size_and_hash(emptyfile, "xlsx") == (-1, "")
+        assert get_size_and_hash(emptyfile, "zip") == (
+            0,
+            "d41d8cd98f00b204e9800998ecf8427e",
+        )
+        assert get_size_and_hash(emptyfile, "xlsx") == (
+            0,
+            "d41d8cd98f00b204e9800998ecf8427e",
+        )
 
         assert get_size_and_hash(badzipheader, "zip") == (
             18,
