@@ -105,7 +105,7 @@ def get_size_and_hash(filepath: str, file_format: str) -> Tuple[int, str]:
         size = fstat(fp.fileno()).st_size
         signature = fp.read(4)
         if signature == zip_signature:  # zip, xlsx etc.
-            if file_format == "xlsx":
+            if file_format.lower() == "xlsx":
                 buffer = bytearray(signature)
                 while chunk := fp.read(4096):
                     buffer.extend(chunk)
