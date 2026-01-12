@@ -1,13 +1,13 @@
 """Loading utilities for YAML, JSON etc."""
 
 import json
-from typing import Any, Dict, Optional
+from collections.abc import Mapping, Sequence
+from typing import Any
 from warnings import warn
 
 from ruamel.yaml import YAML
 
 from hdx.utilities.dictandlist import merge_dictionaries, merge_two_dictionaries
-from hdx.utilities.typehint import ListTuple
 
 
 class LoadError(Exception):
@@ -18,24 +18,24 @@ def load_text(
     path: str,
     encoding: str = "utf-8",
     strip: bool = False,
-    replace_newlines: Optional[str] = None,
-    replace_line_separators: Optional[str] = None,
+    replace_newlines: str | None = None,
+    replace_line_separators: str | None = None,
     loaderror_if_empty: bool = True,
     default_line_separator: str = "\n",
 ) -> str:
     """Load file into a string removing newlines.
 
     Args:
-        path (str): Path to file
-        encoding (str): Encoding of file. Defaults to utf-8.
-        strip (bool): Whether to strip whitespace from start and end. Defaults to False.
-        replace_newlines (Optional[str]): String with which to replace newlines. Defaults to None (don't replace). (deprecated 2024-02-07)
-        replace_line_separators (Optional[str]): String with which to replace newlines. Defaults to None (don't replace).
-        loaderror_if_empty (bool): Whether to raise LoadError if file is empty. Default to True.
-        default_line_separator (str): line separator to be replaced if replace_line_separators is not None
+        path: Path to file
+        encoding: Encoding of file. Defaults to utf-8.
+        strip: Whether to strip whitespace from start and end. Defaults to False.
+        replace_newlines: String with which to replace newlines. Defaults to None (don't replace). (deprecated 2024-02-07)
+        replace_line_separators: String with which to replace newlines. Defaults to None (don't replace).
+        loaderror_if_empty: Whether to raise LoadError if file is empty. Default to True.
+        default_line_separator: line separator to be replaced if replace_line_separators is not None
 
     Returns:
-        str: String contents of file
+        String contents of file
     """
     if replace_newlines is not None:
         warn(
@@ -64,12 +64,12 @@ def load_yaml(
     """Load YAML file into an ordered dictionary.
 
     Args:
-        path (str): Path to YAML file
-        encoding (str): Encoding of file. Defaults to utf-8.
-        loaderror_if_empty (bool): Whether to raise LoadError if file is empty. Default to True.
+        path: Path to YAML file
+        encoding: Encoding of file. Defaults to utf-8.
+        loaderror_if_empty: Whether to raise LoadError if file is empty. Default to True.
 
     Returns:
-        Any: The data from the YAML file
+        The data from the YAML file
     """
     with open(path, encoding=encoding) as f:
         data = f.read()
@@ -88,12 +88,12 @@ def load_json(
     """Load JSON file into an ordered dictionary (dict for Python 3.7+)
 
     Args:
-        path (str): Path to JSON file
-        encoding (str): Encoding of file. Defaults to utf-8.
-        loaderror_if_empty (bool): Whether to raise LoadError if file is empty. Default to True.
+        path: Path to JSON file
+        encoding: Encoding of file. Defaults to utf-8.
+        loaderror_if_empty: Whether to raise LoadError if file is empty. Default to True.
 
     Returns:
-        Any: The data from the JSON file
+        The data from the JSON file
     """
     with open(path, encoding=encoding) as f:
         data = f.read()
@@ -106,20 +106,20 @@ def load_json(
 
 
 def load_and_merge_yaml(
-    paths: ListTuple[str],
+    paths: Sequence[str],
     encoding: str = "utf-8",
     loaderror_if_empty: bool = True,
-) -> Dict:
+) -> Mapping:
     """Load multiple YAML files that are in dictionary form and merge into one
     dictionary.
 
     Args:
-        paths (ListTuple[str]): Paths to YAML files
-        encoding (str): Encoding of file. Defaults to utf-8.
-        loaderror_if_empty (bool): Whether to raise LoadError if any file is empty. Default to True.
+        paths: Paths to YAML files
+        encoding: Encoding of file. Defaults to utf-8.
+        loaderror_if_empty: Whether to raise LoadError if any file is empty. Default to True.
 
     Returns:
-        Dict: Dictionary of merged YAML files
+        Dictionary of merged YAML files
     """
     configs = [
         load_yaml(path, encoding=encoding, loaderror_if_empty=loaderror_if_empty)
@@ -129,20 +129,20 @@ def load_and_merge_yaml(
 
 
 def load_and_merge_json(
-    paths: ListTuple[str],
+    paths: Sequence[str],
     encoding: str = "utf-8",
     loaderror_if_empty: bool = True,
-) -> Dict:
+) -> Mapping:
     """Load multiple JSON files that are in dictionary form and merge into one
     dictionary.
 
     Args:
-        paths (ListTuple[str]): Paths to JSON files
-        encoding (str): Encoding of file. Defaults to utf-8.
-        loaderror_if_empty (bool): Whether to raise LoadError if any file is empty. Default to True.
+        paths: Paths to JSON files
+        encoding: Encoding of file. Defaults to utf-8.
+        loaderror_if_empty: Whether to raise LoadError if any file is empty. Default to True.
 
     Returns:
-        Dict: Dictionary of merged JSON files
+        Dictionary of merged JSON files
     """
     configs = [
         load_json(path, encoding=encoding, loaderror_if_empty=loaderror_if_empty)
@@ -156,17 +156,17 @@ def load_yaml_into_existing_dict(
     path: str,
     encoding: str = "utf-8",
     loaderror_if_empty: bool = True,
-) -> Dict:
+) -> Mapping:
     """Merge YAML file that is in dictionary form into existing dictionary.
 
     Args:
-        data (dict): Dictionary to merge into
-        path (str): YAML file to load and merge
-        encoding (str): Encoding of file. Defaults to utf-8.
-        loaderror_if_empty (bool): Whether to raise LoadError if file is empty. Default to True.
+        data: Dictionary to merge into
+        path: YAML file to load and merge
+        encoding: Encoding of file. Defaults to utf-8.
+        loaderror_if_empty: Whether to raise LoadError if file is empty. Default to True.
 
     Returns:
-        Dict: YAML file merged into dictionary
+        YAML file merged into dictionary
     """
     yamldict = load_yaml(path, encoding=encoding, loaderror_if_empty=loaderror_if_empty)
     return merge_two_dictionaries(data, yamldict)
@@ -177,17 +177,17 @@ def load_json_into_existing_dict(
     path: str,
     encoding: str = "utf-8",
     loaderror_if_empty: bool = True,
-) -> Dict:
+) -> Mapping:
     """Merge JSON file that is in dictionary form into existing dictionary.
 
     Args:
-        data (dict): Dictionary to merge into
-        path (str): JSON file to load and merge
-        encoding (str): Encoding of file. Defaults to utf-8.
-        loaderror_if_empty (bool): Whether to raise LoadError if file is empty. Default to True.
+        data: Dictionary to merge into
+        path: JSON file to load and merge
+        encoding: Encoding of file. Defaults to utf-8.
+        loaderror_if_empty: Whether to raise LoadError if file is empty. Default to True.
 
     Returns:
-        dict: JSON file merged into dictionary
+        JSON file merged into dictionary
     """
     jsondict = load_json(path, encoding=encoding, loaderror_if_empty=loaderror_if_empty)
     return merge_two_dictionaries(data, jsondict)

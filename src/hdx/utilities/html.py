@@ -1,7 +1,7 @@
 """HTML parsing utilities."""
 
 import logging
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 try:
     from bs4 import BeautifulSoup, Tag
@@ -19,23 +19,23 @@ if BeautifulSoup is not None:
     def get_soup(
         url: str,
         downloader: Download = None,
-        user_agent: Optional[str] = None,
-        user_agent_config_yaml: Optional[str] = None,
-        user_agent_lookup: Optional[str] = None,
+        user_agent: str | None = None,
+        user_agent_config_yaml: str | None = None,
+        user_agent_lookup: str | None = None,
         **kwargs: Any,
     ) -> BeautifulSoup:
         """Get BeautifulSoup object for a url. Requires either global user
         agent to be set or appropriate user agent parameter(s) to be completed.
 
         Args:
-            url (str): url to read
-            downloader (Download): Download object. Defaults to creating a Download object with given user agent values.
-            user_agent (Optional[str]): User agent string. HDXPythonUtilities/X.X.X- is prefixed.
-            user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
-            user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
+            url: url to read
+            downloader: Download object. Defaults to creating a Download object with given user agent values.
+            user_agent: User agent string. HDXPythonUtilities/X.X.X- is prefixed.
+            user_agent_config_yaml: Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
+            user_agent_lookup: Lookup key for YAML. Ignored if user_agent supplied.
 
         Returns:
-            BeautifulSoup: The BeautifulSoup object for a url
+            The BeautifulSoup object for a url
         """
         if not downloader:
             downloader = Download(
@@ -49,21 +49,21 @@ if BeautifulSoup is not None:
         newlines and with &nbsp replaced with space.
 
         Args:
-            tag (Tag): BeautifulSoup tag
+            tag: BeautifulSoup tag
 
         Returns:
-            str: Text of tag stripped of leading and trailing whitespace and newlines and with &nbsp replaced with space
+            Text of tag stripped of leading and trailing whitespace and newlines and with &nbsp replaced with space
         """
         return tag.get_text().strip(" \t\n\r").replace("\xa0", " ")
 
-    def extract_table(tabletag: Tag) -> List[Dict]:
+    def extract_table(tabletag: Tag) -> list[dict]:
         """Extract HTML table as list of dictionaries.
 
         Args:
-            tabletag (Tag): BeautifulSoup tag
+            tabletag: BeautifulSoup tag
 
         Returns:
-            str: Text of tag stripped of leading and trailing whitespace and newlines and with &nbsp replaced with space
+            Text of tag stripped of leading and trailing whitespace and newlines and with &nbsp replaced with space
         """
         theadtag = tabletag.find_next("thead")
 

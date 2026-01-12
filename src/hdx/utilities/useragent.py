@@ -3,7 +3,7 @@
 import logging
 import os
 from os.path import expanduser, isfile, join
-from typing import Any, Dict, Optional
+from typing import Any
 
 from hdx.utilities import __version__
 from hdx.utilities.loader import load_yaml
@@ -25,10 +25,10 @@ class UserAgent:
 
         Args:
             **kwargs: See below
-            user_agent (str): User agent string.
+            user_agent: User agent string.
 
         Returns:
-            kwargs: Changed keyword arguments
+            Changed keyword arguments
         """
         user_agent = os.getenv("USER_AGENT")
         if user_agent is not None:
@@ -39,16 +39,16 @@ class UserAgent:
         return kwargs
 
     @staticmethod
-    def _construct(configdict: Dict, prefix: str, ua: str) -> str:
+    def _construct(configdict: dict, prefix: str, ua: str) -> str:
         """Construct user agent.
 
         Args:
-            configdict (str): Additional configuration for user agent
-            prefix (str): Text to put at start of user agent
-            ua (str): Custom user agent text
+            configdict: Additional configuration for user agent
+            prefix: Text to put at start of user agent
+            ua: Custom user agent text
 
         Returns:
-            str: Full user agent string
+            Full user agent string
         """
         if not ua:
             raise UserAgentError(
@@ -69,17 +69,17 @@ class UserAgent:
         cls,
         prefix: str,
         user_agent_config_yaml: str,
-        user_agent_lookup: Optional[str] = None,
+        user_agent_lookup: str | None = None,
     ) -> str:
         """Load user agent YAML file.
 
         Args:
-            prefix (str): Text to put at start of user agent
-            user_agent_config_yaml (str): Path to user agent YAML file
-            user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
+            prefix: Text to put at start of user agent
+            user_agent_config_yaml: Path to user agent YAML file
+            user_agent_lookup: Lookup key for YAML. Ignored if user_agent supplied.
 
         Returns:
-            str: user agent
+            user agent
         """
         if not user_agent_config_yaml:
             user_agent_config_yaml = cls.default_user_agent_config_yaml
@@ -107,20 +107,20 @@ class UserAgent:
     @classmethod
     def _create(
         cls,
-        user_agent: Optional[str] = None,
-        user_agent_config_yaml: Optional[str] = None,
-        user_agent_lookup: Optional[str] = None,
+        user_agent: str | None = None,
+        user_agent_config_yaml: str | None = None,
+        user_agent_lookup: str | None = None,
         **kwargs: Any,
     ) -> str:
         """Get full user agent string.
 
         Args:
-            user_agent (Optional[str]): User agent string. HDXPythonLibrary/X.X.X- is prefixed.
-            user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
-            user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
+            user_agent: User agent string. HDXPythonLibrary/X.X.X- is prefixed.
+            user_agent_config_yaml: Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
+            user_agent_lookup: Lookup key for YAML. Ignored if user_agent supplied.
 
         Returns:
-            str: Full user agent string
+            Full user agent string
         """
         kwargs = UserAgent._environment_variables(**kwargs)
         user_agent = kwargs.pop("user_agent", user_agent)
@@ -145,17 +145,17 @@ class UserAgent:
     @classmethod
     def set_global(
         cls,
-        user_agent: Optional[str] = None,
-        user_agent_config_yaml: Optional[str] = None,
-        user_agent_lookup: Optional[str] = None,
+        user_agent: str | None = None,
+        user_agent_config_yaml: str | None = None,
+        user_agent_lookup: str | None = None,
         **kwargs: Any,
     ) -> None:
         """Set global user agent string.
 
         Args:
-            user_agent (Optional[str]): User agent string. HDXPythonLibrary/X.X.X- is prefixed.
-            user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
-            user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
+            user_agent: User agent string. HDXPythonLibrary/X.X.X- is prefixed.
+            user_agent_config_yaml: Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
+            user_agent_lookup: Lookup key for YAML. Ignored if user_agent supplied.
 
         Returns:
             None
@@ -167,21 +167,21 @@ class UserAgent:
     @classmethod
     def get(
         cls,
-        user_agent: Optional[str] = None,
-        user_agent_config_yaml: Optional[str] = None,
-        user_agent_lookup: Optional[str] = None,
+        user_agent: str | None = None,
+        user_agent_config_yaml: str | None = None,
+        user_agent_lookup: str | None = None,
         **kwargs: Any,
     ) -> str:
         """Get full user agent string from parameters if supplied falling back
         on global user agent if set.
 
         Args:
-            user_agent (Optional[str]): User agent string. HDXPythonLibrary/X.X.X- is prefixed.
-            user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
-            user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
+            user_agent: User agent string. HDXPythonLibrary/X.X.X- is prefixed.
+            user_agent_config_yaml: Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
+            user_agent_lookup: Lookup key for YAML. Ignored if user_agent supplied.
 
         Returns:
-            str: Full user agent string
+            Full user agent string
         """
         if (
             user_agent

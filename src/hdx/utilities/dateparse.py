@@ -5,7 +5,6 @@ import time
 from calendar import monthrange
 from datetime import datetime, timedelta, timezone
 from io import StringIO
-from typing import Dict, Optional, Tuple
 
 import dateutil
 from dateutil.parser import ParserError, parserinfo
@@ -94,15 +93,15 @@ default_timezone_info = """-12 Y
 -9.5 MART MIT"""
 
 
-def get_tzinfos(timezone_info: str) -> Dict[str, int]:
+def get_tzinfos(timezone_info: str) -> dict[str, int]:
     """Get tzinfos dictionary used by dateutil from timezone information
     string.
 
     Args:
-        timezone_info (str): Timezones information string
+        timezone_info: Timezones information string
 
     Returns:
-        Dict[str, int]: tzinfos dictionary
+        tzinfos dictionary
     """
     tzinfos = {}
     for tz_descr in map(str.split, timezone_info.split("\n")):
@@ -117,7 +116,7 @@ default_tzinfos = get_tzinfos(default_timezone_info)
 
 # Ugly copy and paste of the whole _timelex class from dateutil to prevent
 # deprecation warnings
-class _timelex(object):
+class _timelex:
     # Fractional seconds are sometimes split by a comma
     _split_decimal = re.compile("([.,])")
 
@@ -129,9 +128,7 @@ class _timelex(object):
             instream = StringIO(instream)
         elif getattr(instream, "read", None) is None:
             raise TypeError(
-                "Parser must be a string or character stream, not {itype}".format(
-                    itype=instream.__class__.__name__
-                )
+                f"Parser must be a string or character stream, not {instream.__class__.__name__}"
             )
 
         self.instream = instream
@@ -807,7 +804,7 @@ def now_utc() -> datetime:
     """Return now with UTC timezone.
 
     Returns:
-        datetime: Now with UTC timezone
+        Now with UTC timezone
     """
     return datetime.now(timezone.utc)
 
@@ -816,22 +813,22 @@ def now_utc_notz() -> datetime:
     """Return now in UTC but with timezone removed.
 
     Returns:
-        datetime: Now in UTC but with timezone removed
+        Now in UTC but with timezone removed
     """
     return datetime.now(timezone.utc).replace(tzinfo=None)
 
 
 def parse_date_range(
     string: str,
-    date_format: Optional[str] = None,
+    date_format: str | None = None,
     timezone_handling: int = 0,
-    fuzzy: Optional[Dict] = None,
+    fuzzy: dict | None = None,
     include_microseconds: bool = False,
     zero_time: bool = False,
     max_starttime: bool = False,
     max_endtime: bool = False,
-    default_timezones: Optional[str] = None,
-) -> Tuple[datetime, datetime]:
+    default_timezones: str | None = None,
+) -> tuple[datetime, datetime]:
     """Parse date from string using specified date_format if given and return
     datetime date range in dictionary keys startdate and enddate. If no
     date_format is supplied, the function will guess, which for unambiguous
@@ -864,18 +861,18 @@ def parse_date_range(
         -10 W CKT HAST HST TAHT TKT
 
     Args:
-        string (str): Dataset date string
-        date_format (Optional[str]): Date format. If None is given, will attempt to guess. Defaults to None.
-        timezone_handling (int): Timezone handling. See description. Defaults to 0 (ignore timezone, return UTC).
-        fuzzy (Optional[Dict]): If dict supplied, fuzzy matching will be used and results returned in dict
-        include_microseconds (bool): Includes microseconds if True. Defaults to False.
-        zero_time (bool): Zero time elements of datetime if True. Defaults to False.
-        max_starttime (bool): Make start date time component 23:59:59:999999. Defaults to False.
-        max_endtime (bool): Make end date time component 23:59:59:999999. Defaults to False.
-        default_timezones (Optional[str]): Timezone information. Defaults to None. (Internal default).
+        string: Dataset date string
+        date_format: Date format. If None is given, will attempt to guess. Defaults to None.
+        timezone_handling: Timezone handling. See description. Defaults to 0 (ignore timezone, return UTC).
+        fuzzy: If dict supplied, fuzzy matching will be used and results returned in dict
+        include_microseconds: Includes microseconds if True. Defaults to False.
+        zero_time: Zero time elements of datetime if True. Defaults to False.
+        max_starttime: Make start date time component 23:59:59:999999. Defaults to False.
+        max_endtime: Make end date time component 23:59:59:999999. Defaults to False.
+        default_timezones: Timezone information. Defaults to None. (Internal default).
 
     Returns:
-        Tuple[datetime,datetime]: Tuple containing start date and end date
+        Tuple containing start date and end date
     """
     if date_format is None or fuzzy is not None:
         if timezone_handling >= 2:
@@ -993,13 +990,13 @@ def parse_date_range(
 
 def parse_date(
     string: str,
-    date_format: Optional[str] = None,
+    date_format: str | None = None,
     timezone_handling: int = 0,
-    fuzzy: Optional[Dict] = None,
+    fuzzy: dict | None = None,
     include_microseconds: bool = False,
     zero_time: bool = False,
     max_time: bool = False,
-    default_timezones: Optional[str] = None,
+    default_timezones: str | None = None,
 ) -> datetime:
     """Parse date from string using specified date_format and return a datetime
     object. Raises exception for dates that are missing year, month or day. If
@@ -1033,17 +1030,17 @@ def parse_date(
         -10 W CKT HAST HST TAHT TKT
 
     Args:
-        string (str): Dataset date string
-        date_format (Optional[str]): Date format. If None is given, will attempt to guess. Defaults to None.
-        timezone_handling (int): Timezone handling. See description. Defaults to 0 (ignore timezone, return UTC).
-        fuzzy (Optional[Dict]): If dict supplied, fuzzy matching will be used and results returned in dict
-        include_microseconds (bool): Includes microseconds if True. Defaults to False.
-        zero_time (bool): Zero time elements of datetime if True. Defaults to False.
-        max_time (bool): Make date time component 23:59:59:999999. Defaults to False.
-        default_timezones (Optional[str]): Timezone information. Defaults to None. (Internal default).
+        string: Dataset date string
+        date_format: Date format. If None is given, will attempt to guess. Defaults to None.
+        timezone_handling: Timezone handling. See description. Defaults to 0 (ignore timezone, return UTC).
+        fuzzy: If dict supplied, fuzzy matching will be used and results returned in dict
+        include_microseconds: Includes microseconds if True. Defaults to False.
+        zero_time: Zero time elements of datetime if True. Defaults to False.
+        max_time: Make date time component 23:59:59:999999. Defaults to False.
+        default_timezones: Timezone information. Defaults to None. (Internal default).
 
     Returns:
-        datetime: The parsed date
+        The parsed date
     """
     if max_time:
         max_starttime = True
@@ -1073,10 +1070,10 @@ def get_timestamp_from_datetime(date: datetime) -> float:
     """Convert datetime to timestamp.
 
     Args:
-        date (datetime): Date to convert
+        date: Date to convert
 
     Returns:
-        float: Timestamp
+        Timestamp
     """
     if date.tzinfo is None:
         return (
@@ -1107,12 +1104,12 @@ def get_datetime_from_timestamp(
     """Convert timestamp to datetime.
 
     Args:
-        timestamp (float): Timestamp to convert
-        timezone (datetime.tzinfo): Timezone to use
-        today (datetime): Today's date. Defaults to now_utc.
+        timestamp: Timestamp to convert
+        timezone: Timezone to use
+        today: Today's date. Defaults to now_utc.
 
     Returns:
-        datetime: Date of timestamp
+        Date of timestamp
     """
     if timestamp > get_timestamp_from_datetime(today):
         timestamp = timestamp / 1000
@@ -1123,10 +1120,10 @@ def iso_string_from_datetime(date: datetime) -> str:
     """Convert datetime to ISO formatted date without any time elements
 
     Args:
-        date (datetime): Date to convert to string
+        date: Date to convert to string
 
     Returns:
-        str: ISO formatted date without any time elements
+        ISO formatted date without any time elements
     """
     return date.date().isoformat()
 
@@ -1135,10 +1132,10 @@ def get_quarter(date: datetime) -> int:
     """Get the quarter of the given date
 
     Args:
-        date (datetime): Date
+        date: Date
 
     Returns:
-        int: Quarter in which the given date is contained
+        Quarter in which the given date is contained
     """
     return (date.month - 1) // 3 + 1
 
@@ -1147,11 +1144,11 @@ def get_quarter_start(year: int, quarter: int) -> datetime:
     """Get the first day of the quarter in which a given date is contained
 
     Args:
-        year (int): Year
-        quarter (int): Quarter
+        year: Year
+        quarter: Quarter
 
     Returns:
-        datetime: First day of quarter
+        First day of quarter
     """
     month = 3 * (quarter - 1) + 1
     return datetime(year, month, 1, tzinfo=timezone.utc)
@@ -1163,13 +1160,13 @@ def get_quarter_end(
     """Get the last day of the quarter in which a given date is contained
 
     Args:
-        year (int): Year
-        quarter (int): Quarter
-        max_time (bool): Make date time component 23:59:59:999999. Defaults to True.
-        include_microseconds (bool): Includes microseconds if True. Defaults to False.
+        year: Year
+        quarter: Quarter
+        max_time: Make date time component 23:59:59:999999. Defaults to True.
+        include_microseconds: Includes microseconds if True. Defaults to False.
 
     Returns:
-        datetime: First day of quarter
+        First day of quarter
     """
     year = year + 3 * quarter // 12
     month = 3 * quarter % 12 + 1

@@ -1,7 +1,6 @@
 from abc import ABC, abstractmethod
-from typing import Any, Iterator, List, Tuple, Union
-
-from hdx.utilities.typehint import ListDict, ListTuple
+from collections.abc import Iterator, Sequence
+from typing import Any
 
 
 class DownloadError(Exception):
@@ -16,7 +15,7 @@ class BaseDownload(ABC):
         """Allow usage of with.
 
         Returns:
-            BaseDownload: Download object
+            Download object
         """
         return self
 
@@ -24,9 +23,9 @@ class BaseDownload(ABC):
         """Subclasses should define this to allow with usage.
 
         Args:
-            exc_type (Any): Exception type
-            exc_value (Any): Exception value
-            traceback (Any): Traceback
+            exc_type: Exception type
+            exc_value: Exception value
+            traceback: Traceback
 
         Returns:
             None
@@ -37,12 +36,12 @@ class BaseDownload(ABC):
         """Download file from url.
 
         Args:
-            url (str): URL or path to download
+            url: URL or path to download
             *args (Any): Positional arguments
             **kwargs (Any): Keyword arguments
 
         Returns:
-            str: Path of downloaded file
+            Path of downloaded file
         """
 
     @abstractmethod
@@ -50,12 +49,12 @@ class BaseDownload(ABC):
         """Download text from url.
 
         Args:
-            url (str): URL or path to download
+            url: URL or path to download
             *args (Any): Positional arguments
             **kwargs (Any): Keyword arguments
 
         Returns:
-            str: The text from the file
+            The text from the file
         """
 
     @abstractmethod
@@ -63,12 +62,12 @@ class BaseDownload(ABC):
         """Download YAML from url.
 
         Args:
-            url (str): URL or path to download
+            url: URL or path to download
             *args (Any): Positional arguments
             **kwargs (Any): Keyword arguments
 
         Returns:
-            Any: The data from the YAML file
+            The data from the YAML file
         """
 
     @abstractmethod
@@ -76,24 +75,24 @@ class BaseDownload(ABC):
         """Download JSON from url.
 
         Args:
-            url (str): URL or path to download
+            url: URL or path to download
             *args (Any): Positional arguments
             **kwargs (Any): Keyword arguments
 
         Returns:
-            Any: The data from the JSON file
+            The data from the JSON file
         """
 
     @abstractmethod
     def get_tabular_rows(
         self,
-        url: Union[str, ListTuple[str]],
+        url: str | Sequence[str],
         has_hxl: bool = False,
-        headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
+        headers: int | Sequence[int] | Sequence[str] = 1,
         dict_form: bool = False,
         *args: Any,
         **kwargs: Any,
-    ) -> Tuple[List[str], Iterator[ListDict]]:
+    ) -> tuple[list[str], Iterator[list | dict]]:
         """Returns header of tabular file pointed to by url and an iterator
         where each row is returned as a list or dictionary depending on the
         dict_rows argument.
@@ -107,13 +106,13 @@ class BaseDownload(ABC):
         or a list, defaulting to a list.
 
         Args:
-            url (Union[str, ListTuple[str]]): A single or list of URLs or paths to read from
-            has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
-            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
-            dict_form (bool): Return dict or list for each row. Defaults to False (list)
+            url: A single or list of URLs or paths to read from
+            has_hxl: Whether files have HXL hashtags. Ignored for single url. Defaults to False.
+            headers: Number of row(s) containing headers or list of headers. Defaults to 1.
+            dict_form: Return dict or list for each row. Defaults to False (list)
             *args (Any): Positional arguments
             **kwargs (Any): Keyword arguments
 
         Returns:
-            Tuple[List[str],Iterator[ListDict]]: Tuple (headers, iterator where each row is a list or dictionary)
+            Tuple (headers, iterator where each row is a list or dictionary)
         """

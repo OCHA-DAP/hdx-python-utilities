@@ -1,11 +1,10 @@
 import difflib
 import re
-from typing import Callable, Dict, List, Optional, Tuple
+from collections.abc import Callable, Sequence
 
 from pyphonetics import RefinedSoundex
 
 from hdx.utilities.text import normalise
-from hdx.utilities.typehint import ListTuple
 
 TEMPLATE_VARIABLES = re.compile("{{.*?}}")
 
@@ -13,25 +12,25 @@ TEMPLATE_VARIABLES = re.compile("{{.*?}}")
 class Phonetics(RefinedSoundex):
     def match(
         self,
-        possible_names: ListTuple,
+        possible_names: Sequence,
         name: str,
-        alternative_name: Optional[str] = None,
-        transform_possible_names: ListTuple[Callable] = [],
+        alternative_name: str | None = None,
+        transform_possible_names: Sequence[Callable] = [],
         threshold: int = 2,
-    ) -> Optional[int]:
+    ) -> int | None:
         """
         Match name to one of the given possible names. Returns None if no match
         or the index of the matching name
 
         Args:
-            possible_names (ListTuple): Possible names
-            name (str): Name to match
-            alternative_name (str): Alternative name to match. Defaults to None.
-            transform_possible_names (ListTuple[Callable]): Functions to transform possible names.
+            possible_names: Possible names
+            name: Name to match
+            alternative_name: Alternative name to match. Defaults to None.
+            transform_possible_names: Functions to transform possible names.
             threshold: Match threshold. Defaults to 2.
 
         Returns:
-            Optional[int]: Index of matching name from possible names or None
+            Index of matching name from possible names or None
         """
         mindistance = None
         matching_index = None
@@ -61,23 +60,23 @@ class Phonetics(RefinedSoundex):
 
 def get_code_from_name(
     name: str,
-    code_lookup: Dict[str, str],
-    unmatched: List[str],
+    code_lookup: dict[str, str],
+    unmatched: list[str],
     fuzzy_match: bool = True,
     match_threshold: int = 5,
-) -> Optional[str]:
+) -> str | None:
     """
     Given a name (org type, sector, etc), return the corresponding code.
 
     Args:
-        name (str): Name to match
-        code_lookup (dict): Dictionary of official names and codes
-        unmatched (List[str]): List of unmatched names
-        fuzzy_match (bool): Allow fuzzy matching or not
-        match_threshold (int): Match threshold
+        name: Name to match
+        code_lookup: Dictionary of official names and codes
+        unmatched: List of unmatched names
+        fuzzy_match: Allow fuzzy matching or not
+        match_threshold: Match threshold
 
     Returns:
-        Optional[str]: Matching code
+        Matching code
     """
     code = code_lookup.get(name)
     if code:
@@ -111,15 +110,15 @@ def get_code_from_name(
     return code
 
 
-def multiple_replace(string: str, replacements: Dict[str, str]) -> str:
+def multiple_replace(string: str, replacements: dict[str, str]) -> str:
     """Simultaneously replace multiple strings in a string.
 
     Args:
-        string (str): Input string
-        replacements (Dict[str,str]): Replacements dictionary
+        string: Input string
+        replacements: Replacements dictionary
 
     Returns:
-        str: String with replacements
+        String with replacements
     """
     if not replacements:
         return string
@@ -132,14 +131,14 @@ def multiple_replace(string: str, replacements: Dict[str, str]) -> str:
 
 def match_template_variables(
     string: str,
-) -> Tuple[Optional[str], Optional[str]]:
+) -> tuple[str | None, str | None]:
     """Try to match {{XXX}} in input string.
 
     Args:
-        string (str): String in which to look for template
+        string: String in which to look for template
 
     Returns:
-        Tuple[Optional[str], Optional[str]]: (Matched string with brackets, matched string without brackets)
+        (Matched string with brackets, matched string without brackets)
     """
     match = TEMPLATE_VARIABLES.search(string)
     if match:
@@ -148,18 +147,16 @@ def match_template_variables(
     return None, None
 
 
-def earliest_index(
-    string_to_search: str, strings_to_try: ListTuple[str]
-) -> Optional[int]:
+def earliest_index(string_to_search: str, strings_to_try: Sequence[str]) -> int | None:
     """Search a string for each of a list of strings and return the earliest
     index.
 
     Args:
-        string_to_search (str): String to search
-        strings_to_try (ListTuple[str]): Strings to try
+        string_to_search: String to search
+        strings_to_try: Strings to try
 
     Returns:
-        Optional[int]: Earliest index of the strings to try in string to search or None
+        Earliest index of the strings to try in string to search or None
     """
     after_string = len(string_to_search) + 1
     indices = []
@@ -182,18 +179,18 @@ def get_matching_text_in_strs(
     match_min_size: int = 30,
     ignore: str = "",
     end_characters: str = "",
-) -> List[str]:
+) -> list[str]:
     """Returns a list of matching blocks of text in a and b.
 
     Args:
-        a (str): First string to match
-        b (str): Second string to match
-        match_min_size (int): Minimum block size to match on. Defaults to 30.
-        ignore (str): Any characters to ignore in matching. Defaults to ''.
-        end_characters (str): End characters to look for. Defaults to ''.
+        a: First string to match
+        b: Second string to match
+        match_min_size: Minimum block size to match on. Defaults to 30.
+        ignore: Any characters to ignore in matching. Defaults to ''.
+        end_characters: End characters to look for. Defaults to ''.
 
     Returns:
-        List[str]: List of matching blocks of text
+        List of matching blocks of text
     """
     compare = difflib.SequenceMatcher(lambda x: x in ignore)
     compare.set_seqs(a=a, b=b)
@@ -216,7 +213,7 @@ def get_matching_text_in_strs(
 
 
 def get_matching_text(
-    string_list: List[str],
+    string_list: list[str],
     match_min_size: int = 30,
     ignore: str = "",
     end_characters: str = ".!\r\n",
@@ -225,13 +222,13 @@ def get_matching_text(
     followed by non-matching.
 
     Args:
-        string_list (List[str]): List of strings to match
-        match_min_size (int): Minimum block size to match on. Defaults to 30.
-        ignore (str): Any characters to ignore in matching. Defaults to ''.
-        end_characters (str): End characters to look for. Defaults to '.\r\n'.
+        string_list: List of strings to match
+        match_min_size: Minimum block size to match on. Defaults to 30.
+        ignore: Any characters to ignore in matching. Defaults to ''.
+        end_characters: End characters to look for. Defaults to '.\r\n'.
 
     Returns:
-        str: String containing matching blocks of text followed by non-matching
+        String containing matching blocks of text followed by non-matching
     """
     a = string_list[0]
     for i in range(1, len(string_list)):
@@ -248,7 +245,7 @@ def get_matching_text(
 
 
 def get_matching_then_nonmatching_text(
-    string_list: List[str],
+    string_list: list[str],
     separator: str = "",
     match_min_size: int = 30,
     ignore: str = "",
@@ -258,14 +255,14 @@ def get_matching_then_nonmatching_text(
     followed by non-matching.
 
     Args:
-        string_list (List[str]): List of strings to match
-        separator (str): Separator to add between blocks of text. Defaults to ''.
-        match_min_size (int): Minimum block size to match on. Defaults to 30.
-        ignore (str): Any characters to ignore in matching. Defaults to ''.
-        end_characters (str): End characters to look for. Defaults to '.\r\n'.
+        string_list: List of strings to match
+        separator: Separator to add between blocks of text. Defaults to ''.
+        match_min_size: Minimum block size to match on. Defaults to 30.
+        ignore: Any characters to ignore in matching. Defaults to ''.
+        end_characters: End characters to look for. Defaults to '.\r\n'.
 
     Returns:
-        str: String containing matching blocks of text followed by non-matching
+        String containing matching blocks of text followed by non-matching
     """
 
     def add_separator_if_needed(text_list):

@@ -5,7 +5,7 @@ import re
 import string
 import unicodedata
 from string import punctuation
-from typing import Any, List, Optional, Set
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -28,10 +28,10 @@ def normalise(text: str) -> str:
     characters are removed.
 
     Args:
-        text (str): Text to normalise
+        text: Text to normalise
 
     Returns:
-        str: Normalised text
+        Normalised text
     """
     chars = []
     space = False
@@ -54,11 +54,11 @@ def remove_end_characters(string: str, characters_to_remove: str = punctuation) 
     """Remove any characters at end of string that are in characters_to_remove.
 
     Args:
-        string (str): Input string
-        characters_to_remove (str): Characters to remove. Defaults to punctuation.
+        string: Input string
+        characters_to_remove: Characters to remove. Defaults to punctuation.
 
     Returns:
-        str: String with any characters at end of string that are in characters_to_remove removed
+        String with any characters at end of string that are in characters_to_remove removed
     """
     while string[-1] in characters_to_remove:
         string = string[:-1]
@@ -67,20 +67,20 @@ def remove_end_characters(string: str, characters_to_remove: str = punctuation) 
 
 def remove_from_end(
     string: str,
-    things_to_remove: List[str],
-    logging_text: Optional[str] = None,
+    things_to_remove: list[str],
+    logging_text: str | None = None,
     whole_words: bool = True,
 ) -> str:
     """Remove list of items from end of string, stripping any whitespace.
 
     Args:
-        string (str): Input string
-        things_to_remove (List[str]): Things to remove from the end of string
-        logging_text (Optional[str]): Text to log. Defaults to None.
-        whole_words (bool): Remove parts of or whole words. Defaults to True (whole words only).
+        string: Input string
+        things_to_remove: Things to remove from the end of string
+        logging_text: Text to log. Defaults to None.
+        whole_words: Remove parts of or whole words. Defaults to True (whole words only).
 
     Returns:
-        str: String with text removed
+        String with text removed
     """
     for thing in things_to_remove:
         thing_len = len(thing)
@@ -107,12 +107,12 @@ def remove_string(
     and any whitespace following the punctuation
 
     Args:
-        string (str): String to process
-        toremove (str): String to remove
-        end_characters_to_remove (str): Characters to remove. Defaults to punctuation.
+        string: String to process
+        toremove: String to remove
+        end_characters_to_remove: Characters to remove. Defaults to punctuation.
 
     Returns:
-        str: String with other string removed
+        String with other string removed
 
     """
     index = string.find(toremove)
@@ -123,14 +123,14 @@ def remove_string(
     return f"{newstring}{string[index + len(toremove) :]}"
 
 
-def get_words_in_sentence(sentence: str) -> List[str]:
+def get_words_in_sentence(sentence: str) -> list[str]:
     """Returns list of words in a sentence.
 
     Args:
-        sentence (str): Sentence
+        sentence: Sentence
 
     Returns:
-        List[str]: List of words in sentence
+        List of words in sentence
     """
     return re.sub("[" + punctuation.replace("'", "") + "]", " ", sentence).split()
 
@@ -139,12 +139,12 @@ def number_format(val: Any, format: str = "%.4f", trailing_zeros: bool = True) -
     """Format float-castable input as string.
 
     Args:
-        val (float): Number to format
-        format (str): Format to use. Defaults to %.4f.
-        trailing_zeros (bool): Leave trailing zeros. Defaults to True.
+        val: Number to format
+        format: Format to use. Defaults to %.4f.
+        trailing_zeros: Leave trailing zeros. Defaults to True.
 
     Returns:
-        str: Formatted number as string
+        Formatted number as string
     """
     if val == "" or val is None:
         return ""
@@ -156,7 +156,7 @@ def number_format(val: Any, format: str = "%.4f", trailing_zeros: bool = True) -
 
 def get_fraction_str(
     numerator: Any,
-    denominator: Optional[Any] = None,
+    denominator: Any | None = None,
     format: str = "%.4f",
     trailing_zeros: bool = True,
 ) -> str:
@@ -164,13 +164,13 @@ def get_fraction_str(
     format as string, returning '' for invalid numerator or 0 denominator.
 
     Args:
-        numerator (float): Numerator
-        denominator (Optional[float]): Denominator. Defaults to None.
-        format (str): Format to use. Defaults to %.4f.
-        trailing_zeros (bool): Leave trailing zeros. Defaults to True.
+        numerator: Numerator
+        denominator: Denominator. Defaults to None.
+        format: Format to use. Defaults to %.4f.
+        trailing_zeros: Leave trailing zeros. Defaults to True.
 
     Returns:
-        str: Formatted number as string
+        Formatted number as string
     """
     try:
         numerator = float(numerator)
@@ -185,16 +185,16 @@ def get_fraction_str(
     return ""
 
 
-def only_allowed_in_str(test_str: str, allowed_chars: Set) -> bool:
+def only_allowed_in_str(test_str: str, allowed_chars: set) -> bool:
     """Returns True if test string contains only allowed characters, False if
     not.
 
     Args:
-        test_str (str): Test string
-        allowed_chars (Set): Set of allowed characters
+        test_str: Test string
+        allowed_chars: Set of allowed characters
 
     Returns:
-        bool: True if test string contains only allowed characters, False if not
+        True if test string contains only allowed characters, False if not
     """
     return set(test_str) <= allowed_chars
 
@@ -207,10 +207,10 @@ def get_numeric_if_possible(value: Any) -> Any:
     float or int, taking into account commas and periods.
 
     Args:
-        value (Any): Value
+        value: Value
 
     Returns:
-        Any: Value
+        Value
     """
 
     def get_int_value(val, denominator):

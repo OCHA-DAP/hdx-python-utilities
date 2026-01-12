@@ -1,7 +1,8 @@
 """Utility to save state to a file and read it back."""
 
 import logging
-from typing import Any, Callable, Dict
+from collections.abc import Callable
+from typing import Any
 
 from hdx.utilities.dateparse import iso_string_from_datetime, parse_date
 from hdx.utilities.loader import load_text
@@ -19,8 +20,8 @@ class State:
     run the state is available in the repository.
 
     Args:
-        path (str): Path to save state file
-        read_fn (Callable[[str], Any]): Input state transformation. Defaults to lambda x: x.
+        path: Path to save state file
+        read_fn: Input state transformation. Defaults to lambda x: x.
         write_fn: Callable[[Any], str]: Output state transformation. Defaults to lambda x: x.
     """
 
@@ -39,7 +40,7 @@ class State:
         """Allow usage of with.
 
         Returns:
-            State: SavedState object
+            SavedState object
         """
         return self
 
@@ -47,9 +48,9 @@ class State:
         """Allow usage of with.
 
         Args:
-            exc_type (Any): Exception type
-            exc_value (Any): Exception value
-            traceback (Any): Traceback
+            exc_type: Exception type
+            exc_value: Exception value
+            traceback: Traceback
 
         Returns:
             None
@@ -60,7 +61,7 @@ class State:
         """Read state from file
 
         Returns:
-            Any: State
+            State
         """
         value = self.read_fn(load_text(self.path))
         logger.info(f"State read from {self.path} = {value}")
@@ -79,7 +80,7 @@ class State:
         """Get the state
 
         Returns:
-            Any: State
+            State
         """
         return self.state
 
@@ -87,7 +88,7 @@ class State:
         """Set the state
 
         Args:
-            state (Any): State
+            state: State
 
         Returns:
             None
@@ -95,17 +96,17 @@ class State:
         self.state = state
 
     @staticmethod
-    def dates_str_to_country_date_dict(dates_str: str) -> Dict:
+    def dates_str_to_country_date_dict(dates_str: str) -> dict:
         """Convert a comma separated string of key=date string pairs eg.
         "default=2017-01-01,afg=2019-01-01" to a dictionary of key date
         mappings eg.
         {"default": 2017-01-01 as datetime, "afg": 2019-01-01 as datetime}
 
         Args:
-            dates_str (str): Comma separated string of key=date string pairs
+            dates_str: Comma separated string of key=date string pairs
 
         Returns:
-            Dict: Dictionary of key date mappings
+            Dictionary of key date mappings
         """
         result = {}
         for keyvalue in dates_str.split(","):
@@ -114,17 +115,17 @@ class State:
         return result
 
     @staticmethod
-    def country_date_dict_to_dates_str(country_date_dict: Dict) -> str:
+    def country_date_dict_to_dates_str(country_date_dict: dict) -> str:
         """Convert a dictionary of key date mappings eg.
         {"default": 2017-01-01 as datetime, "afg": 2019-01-01 as datetime}
         to a comma separated string of key=date string pairs eg.
         "default=2017-01-01,afg=2019-01-01"
 
         Args:
-            country_date_dict (Dict): Dictionary of key date mappings
+            country_date_dict: Dictionary of key date mappings
 
         Returns:
-            str: Comma separated string of key=date string pairs
+            Comma separated string of key=date string pairs
         """
         strlist = []
         for key, value in country_date_dict.items():

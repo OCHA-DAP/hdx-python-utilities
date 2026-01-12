@@ -2,21 +2,21 @@
 
 import itertools
 import warnings
-from typing import Any, Callable, Dict, List, MutableMapping, Optional, Union
+from collections.abc import Callable, Mapping, MutableMapping, Sequence
+from typing import Any
 
 from hdx.utilities.frictionless_wrapper import get_frictionless_tableresource
-from hdx.utilities.typehint import ListDict, ListTuple, ListTupleDict
 
 
-def invert_dictionary(d: MutableMapping) -> Dict:
+def invert_dictionary(d: MutableMapping) -> dict:
     """Invert a dictionary from key - value to value - key. Assumes
     one to one mapping between keys and values.
 
     Args:
-        d (MutableMapping): Dictionary
+        d: Dictionary
 
     Returns:
-        Dict: Return inverse of dictionary
+        Return inverse of dictionary
     """
     return dict(zip(d.values(), d.keys()))
 
@@ -29,12 +29,12 @@ def merge_two_dictionaries(
     NOTE: tuples and arbitrary objects are not handled as it is totally ambiguous what should happen
 
     Args:
-        a (MutableMapping): dictionary to merge into
-        b (MutableMapping): dictionary to merge from
-        merge_lists (bool): Whether to merge lists (True) or replace lists (False). Default is False.
+        a: dictionary to merge into
+        b: dictionary to merge from
+        merge_lists: Whether to merge lists (True) or replace lists (False). Default is False.
 
     Returns:
-        MutableMapping: Merged dictionary
+        Merged dictionary
     """
     key = None
     # ## debug output
@@ -77,17 +77,17 @@ def merge_two_dictionaries(
 
 
 def merge_dictionaries(
-    dicts: ListTuple[MutableMapping], merge_lists: bool = False
+    dicts: Sequence[MutableMapping], merge_lists: bool = False
 ) -> MutableMapping:
     """Merges all dictionaries in dicts into a single dictionary and returns
     result.
 
     Args:
-        dicts (ListTuple[MutableMapping]): Dictionaries to merge into the first one in the list
-        merge_lists (bool): Whether to merge lists (True) or replace lists (False). Default is False.
+        dicts: Dictionaries to merge into the first one in the list
+        merge_lists: Whether to merge lists (True) or replace lists (False). Default is False.
 
     Returns:
-        MutableMapping: Merged dictionary
+        Merged dictionary
     """
     dict1 = dicts[0]
     for other_dict in dicts[1:]:
@@ -97,16 +97,16 @@ def merge_dictionaries(
 
 def dict_diff(
     d1: MutableMapping, d2: MutableMapping, no_key: str = "<KEYNOTFOUND>"
-) -> Dict:
+) -> dict:
     """Compares two dictionaries.
 
     Args:
-        d1 (Dict): First dictionary to compare
-        d2 (Dict): Second dictionary to compare
-        no_key (str): What value to use if key is not found Defaults to '<KEYNOTFOUND>'.
+        d1: First dictionary to compare
+        d2: Second dictionary to compare
+        no_key: What value to use if key is not found Defaults to '<KEYNOTFOUND>'.
 
     Returns:
-        Dict: Comparison dictionary
+        Comparison dictionary
     """
     d1keys = set(d1.keys())
     d2keys = set(d2.keys())
@@ -121,9 +121,9 @@ def dict_of_lists_add(dictionary: MutableMapping, key: Any, value: Any) -> None:
     """Add value to a list in a dictionary by key.
 
     Args:
-        dictionary (MutableMapping): Dictionary to which to add values
-        key (Any): Key within dictionary
-        value (Any): Value to add to list in dictionary
+        dictionary: Dictionary to which to add values
+        key: Key within dictionary
+        value: Value to add to list in dictionary
 
     Returns:
         None
@@ -137,9 +137,9 @@ def dict_of_sets_add(dictionary: MutableMapping, key: Any, value: Any) -> None:
     """Add value to a set in a dictionary by key.
 
     Args:
-        dictionary (MutableMapping): Dictionary to which to add values
-        key (Any): Key within dictionary
-        value (Any): Value to add to set in dictionary
+        dictionary: Dictionary to which to add values
+        key: Key within dictionary
+        value: Value to add to set in dictionary
 
     Returns:
         None
@@ -155,10 +155,10 @@ def dict_of_dicts_add(
     """Add key value pair to a dictionary within a dictionary by key.
 
     Args:
-        dictionary (MutableMapping): Dictionary to which to add values
-        parent_key (Any): Key within parent dictionary
-        key (Any): Key within dictionary
-        value (Any): Value to add to set in dictionary
+        dictionary: Dictionary to which to add values
+        parent_key: Key within parent dictionary
+        key: Key within dictionary
+        value: Value to add to set in dictionary
 
     Returns:
         None
@@ -169,18 +169,18 @@ def dict_of_dicts_add(
 
 
 def list_distribute_contents_simple(
-    input_list: ListTuple, function: Callable[[Any], Any] = lambda x: x
-) -> List:
+    input_list: Sequence, function: Callable[[Any], Any] = lambda x: x
+) -> list:
     """Distribute the contents of a list eg. [1, 1, 1, 2, 2, 3] -> [1, 2, 3, 1,
     2, 1]. List can contain complex types like dictionaries in which case the
     function can return the appropriate value eg.  lambda x: x[KEY]
 
     Args:
-        input_list (ListTuple): List to distribute values
-        function (Callable[[Any], Any]): Return value to use for distributing. Defaults to lambda x: x.
+        input_list: List to distribute values
+        function: Return value to use for distributing. Defaults to lambda x: x.
 
     Returns:
-        List: Distributed list
+        Distributed list
     """
     dictionary = {}
     for obj in input_list:
@@ -202,18 +202,18 @@ def list_distribute_contents_simple(
 
 
 def list_distribute_contents(
-    input_list: ListTuple, function: Callable[[Any], Any] = lambda x: x
-) -> List:
+    input_list: Sequence, function: Callable[[Any], Any] = lambda x: x
+) -> list:
     """Distribute the contents of a list eg. [1, 1, 1, 2, 2, 3] -> [1, 2, 1, 2,
     1, 3]. List can contain complex types like dictionaries in which case the
     function can return the appropriate value eg.  lambda x: x[KEY]
 
     Args:
-        input_list (ListTuple): List to distribute values
-        function (Callable[[Any], Any]): Return value to use for distributing. Defaults to lambda x: x.
+        input_list: List to distribute values
+        function: Return value to use for distributing. Defaults to lambda x: x.
 
     Returns:
-        List: Distributed list
+        Distributed list
     """
 
     def riffle_shuffle(piles_list):
@@ -247,16 +247,16 @@ def list_distribute_contents(
     return riffle_shuffle(intermediate_list)
 
 
-def extract_list_from_list_of_dict(list_of_dict: ListTuple[Dict], key: Any) -> List:
+def extract_list_from_list_of_dict(list_of_dict: Sequence[dict], key: Any) -> list:
     """Extract a list by looking up key in each member of a list of
     dictionaries.
 
     Args:
-        list_of_dict (ListTuple[Dict]): List of dictionaries
-        key (Any): Key to find in each dictionary
+        list_of_dict: List of dictionaries
+        key: Key to find in each dictionary
 
     Returns:
-        List: List containing values returned from each dictionary
+        List containing values returned from each dictionary
     """
     result = []
     for dictionary in list_of_dict:
@@ -271,20 +271,20 @@ def key_value_convert(
     dropfailedkeys: bool = False,
     dropfailedvalues: bool = False,
     exception: Exception = ValueError,
-) -> Dict:
+) -> dict:
     """Convert keys and/or values of dictionary using functions passed in as
     parameters.
 
     Args:
-        dictin (MutableMapping): Input dictionary
-        keyfn (Callable[[Any], Any]): Function to convert keys. Defaults to lambda x: x
-        valuefn (Callable[[Any], Any]): Function to convert values. Defaults to lambda x: x
-        dropfailedkeys (bool): Whether to drop dictionary entries where key conversion fails. Defaults to False.
-        dropfailedvalues (bool): Whether to drop dictionary entries where value conversion fails. Defaults to False.
-        exception (Exception): The exception to expect if keyfn or valuefn fail. Defaults to ValueError.
+        dictin: Input dictionary
+        keyfn: Function to convert keys. Defaults to lambda x: x
+        valuefn: Function to convert values. Defaults to lambda x: x
+        dropfailedkeys: Whether to drop dictionary entries where key conversion fails. Defaults to False.
+        dropfailedvalues: Whether to drop dictionary entries where value conversion fails. Defaults to False.
+        exception: The exception to expect if keyfn or valuefn fail. Defaults to ValueError.
 
     Returns:
-        Dict: New dictionary with converted keys and/or values
+        New dictionary with converted keys and/or values
     """
     dictout = {}
     for key in dictin:
@@ -305,59 +305,59 @@ def key_value_convert(
     return dictout
 
 
-def integer_key_convert(dictin: MutableMapping, dropfailedkeys: bool = False) -> Dict:
+def integer_key_convert(dictin: MutableMapping, dropfailedkeys: bool = False) -> dict:
     """Convert keys of dictionary to integers.
 
     Args:
-        dictin (MutableMapping): Input dictionary
-        dropfailedkeys (bool): Whether to drop dictionary entries where key conversion fails. Defaults to False.
+        dictin: Input dictionary
+        dropfailedkeys: Whether to drop dictionary entries where key conversion fails. Defaults to False.
 
     Returns:
-        Dict: Dictionary with keys converted to integers
+        Dictionary with keys converted to integers
     """
     return key_value_convert(dictin, keyfn=int, dropfailedkeys=dropfailedkeys)
 
 
 def integer_value_convert(
     dictin: MutableMapping, dropfailedvalues: bool = False
-) -> Dict:
+) -> dict:
     """Convert values of dictionary to integers.
 
     Args:
-        dictin (MutableMapping): Input dictionary
-        dropfailedvalues (bool): Whether to drop dictionary entries where key conversion fails. Defaults to False.
+        dictin: Input dictionary
+        dropfailedvalues: Whether to drop dictionary entries where key conversion fails. Defaults to False.
 
     Returns:
-        Dict: Dictionary with values converted to integers
+        Dictionary with values converted to integers
     """
     return key_value_convert(dictin, valuefn=int, dropfailedvalues=dropfailedvalues)
 
 
-def float_value_convert(dictin: MutableMapping, dropfailedvalues: bool = False) -> Dict:
+def float_value_convert(dictin: MutableMapping, dropfailedvalues: bool = False) -> dict:
     """Convert values of dictionary to floats.
 
     Args:
-        dictin (MutableMapping): Input dictionary
-        dropfailedvalues (bool): Whether to drop dictionary entries where key conversion fails. Defaults to False.
+        dictin: Input dictionary
+        dropfailedvalues: Whether to drop dictionary entries where key conversion fails. Defaults to False.
 
     Returns:
-        Dict: Dictionary with values converted to floats
+        Dictionary with values converted to floats
     """
     return key_value_convert(dictin, valuefn=float, dropfailedvalues=dropfailedvalues)
 
 
 def avg_dicts(
     dictin1: MutableMapping, dictin2: MutableMapping, dropmissing: bool = True
-) -> Dict:
+) -> dict:
     """Create a new dictionary from two dictionaries by averaging values.
 
     Args:
-        dictin1 (MutableMapping): First input dictionary
-        dictin2 (MutableMapping): Second input dictionary
-        dropmissing (bool): Whether to drop keys missing in one dictionary. Defaults to True.
+        dictin1: First input dictionary
+        dictin2: Second input dictionary
+        dropmissing: Whether to drop keys missing in one dictionary. Defaults to True.
 
     Returns:
-        Dict: Dictionary with values being average of 2 input dictionaries
+        Dictionary with values being average of 2 input dictionaries
     """
     dictout = {}
     for key in dictin1:
@@ -374,10 +374,10 @@ def avg_dicts(
 
 def read_list_from_csv(
     url: str,
-    headers: Union[int, ListTuple[int], ListTuple[str], None] = None,
+    headers: int | Sequence[int] | Sequence[str] | None = None,
     dict_form: bool = False,
     **kwargs: Any,
-) -> List[ListDict]:
+) -> list[list | dict]:
     """Read a list of rows in dict or list form from a csv. The headers
     argument is either a row number or list of row numbers (in case of multi-
     line headers) to be considered as headers (rows start counting at 1), or
@@ -385,13 +385,13 @@ def read_list_from_csv(
     be treated as containing values.
 
     Args:
-        url (str): URL or path to read from
-        headers (Union[int, ListTuple[int], ListTuple[str], None]): Row number of headers. Defaults to None.
-        dict_form (bool): Return dict (requires headers parameter) or list for each row. Defaults to False (list)
+        url: URL or path to read from
+        headers: Row number of headers. Defaults to None.
+        dict_form: Return dict (requires headers parameter) or list for each row. Defaults to False (list)
         **kwargs: Other arguments to pass to Tabulator Stream
 
     Returns:
-        List[ListDict]: List of rows in dict or list form
+        List of rows in dict or list form
     """
     if dict_form and headers is None:
         raise ValueError("If dict_form is True, headers must not be None!")
@@ -411,10 +411,10 @@ def read_list_from_csv(
 
 def write_list_to_csv(
     filepath: str,
-    rows: List[ListTupleDict],
-    headers: Union[int, ListTuple[str], None] = None,
-    columns: Union[ListTuple[int], ListTuple[str], None] = None,
-    encoding: Optional[str] = None,
+    rows: list[Sequence | Mapping],
+    headers: int | Sequence[str] | None = None,
+    columns: Sequence[int] | Sequence[str] | None = None,
+    encoding: str | None = None,
 ) -> None:
     """Write a list of rows in dict or list form to a csv. (The headers
     argument is either a row number (rows start counting at 1), or the actual
@@ -422,11 +422,11 @@ def write_list_to_csv(
     as containing values.)
 
     Args:
-        filepath (str): Path to write to
-        rows (List[ListTupleDict]): List of rows in dict or list form
-        headers (Union[int, ListTuple[str], None]): Headers to write. Defaults to None.
-        columns (Union[ListTuple[int], ListTuple[str], None]): Columns to write. Defaults to all.
-        encoding (Optional[str]): Encoding to use. Defaults to None (infer encoding).
+        filepath: Path to write to
+        rows: List of rows in dict or list form
+        headers: Headers to write. Defaults to None.
+        columns: Columns to write. Defaults to all.
+        encoding: Encoding to use. Defaults to None (infer encoding).
 
     Returns:
         None
@@ -476,15 +476,15 @@ def write_list_to_csv(
         resource.close()
 
 
-def args_to_dict(args: str) -> Dict:
+def args_to_dict(args: str) -> dict:
     """Convert command line arguments in a comma separated string to a
     dictionary.
 
     Args:
-        args (str): Command line arguments
+        args: Command line arguments
 
     Returns:
-        Dict: Dictionary of arguments
+        Dictionary of arguments
     """
     arguments = {}
     for arg in args.split(","):

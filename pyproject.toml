@@ -32,7 +32,7 @@ classifiers = [
     "Operating System :: MacOS",
     "Operating System :: Microsoft :: Windows",
 ]
-requires-python = ">=3.8"
+requires-python = ">=3.10"
 # Extras for frictionless[excel,json] added explicitly
 # for conda-forge compatibility
 dependencies = [

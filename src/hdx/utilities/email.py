@@ -2,13 +2,13 @@
 
 import logging
 import smtplib
+from collections.abc import Sequence
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from os.path import expanduser, join
-from typing import Any, List, Optional, Union
+from typing import Any
 
 from hdx.utilities.loader import load_json, load_yaml
-from hdx.utilities.typehint import ListTuple
 
 try:
     from email_validator import EmailNotValidError, validate_email
@@ -40,9 +40,9 @@ class Email:
 
     Args:
         **kwargs: See below
-        email_config_dict (dict): HDX configuration dictionary OR
-        email_config_json (str): Path to JSON HDX configuration OR
-        email_config_yaml (str): Path to YAML HDX configuration. Defaults to ~/hdx_email_configuration.yaml.
+        email_config_dict: HDX configuration dictionary OR
+        email_config_json: Path to JSON HDX configuration OR
+        email_config_yaml: Path to YAML HDX configuration. Defaults to ~/hdx_email_configuration.yaml.
     """
 
     default_email_config_yaml = join(expanduser("~"), "hdx_email_configuration.yaml")
@@ -152,10 +152,10 @@ class Email:
         """Get normalised email.
 
         Args:
-            email (str): Email address to normalise
+            email: Email address to normalise
 
         Returns:
-            str: Normalised email
+            Normalised email
         """
         try:
             v = validate_email(
@@ -168,15 +168,15 @@ class Email:
     @classmethod
     def get_normalised_emails(
         cls,
-        emails: Union[str, ListTuple[str]],
-    ) -> List[str]:
+        emails: str | Sequence[str],
+    ) -> list[str]:
         """Get list of normalised emails.
 
         Args:
-            emails (Union[str, ListTuple[str]]): Email address or addresses
+            emails: Email address or addresses
 
         Returns:
-            List[str]: Normalised emails
+            Normalised emails
         """
         if isinstance(emails, str):
             emails = (emails,)
@@ -190,29 +190,29 @@ class Email:
 
     def send(
         self,
-        to: Union[str, ListTuple[str]],
+        to: str | Sequence[str],
         subject: str,
         text_body: str,
-        html_body: Optional[str] = None,
-        sender: Optional[str] = None,
-        cc: Union[str, ListTuple[str], None] = None,
-        bcc: Union[str, ListTuple[str], None] = None,
+        html_body: str | None = None,
+        sender: str | None = None,
+        cc: str | Sequence[str] | None = None,
+        bcc: str | Sequence[str] | None = None,
         **kwargs: Any,
     ) -> None:
         """Send email. to, cc and bcc take either a string email address or a
         list of string email addresses. cc and bcc default to None.
 
         Args:
-            to (Union[str, ListTuple[str]]): Email recipient(s)
-            subject (str): Email subject
-            text_body (str): Plain text email body
-            html_body (Optional[str]): HTML email body
-            sender (Optional[str]): Email sender. Defaults to global sender.
-            cc (Union[str, ListTuple[str], None]): Email cc. Defaults to None.
-            bcc (Union[str, ListTuple[str], None]): Email bcc. Defaults to None.
+            to: Email recipient(s)
+            subject: Email subject
+            text_body: Plain text email body
+            html_body: HTML email body
+            sender: Email sender. Defaults to global sender.
+            cc: Email cc. Defaults to None.
+            bcc: Email bcc. Defaults to None.
             **kwargs: See below
-            mail_options (List): Mail options (see smtplib documentation)
-            rcpt_options (List): Recipient options (see smtplib documentation)
+            mail_options: Mail options (see smtplib documentation)
+            rcpt_options: Recipient options (see smtplib documentation)
 
         Returns:
             None

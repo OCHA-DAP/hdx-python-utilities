@@ -31,4 +31,4 @@ run = """
 
 [envs.hatch-static-analysis]
 config-path = "none"
-dependencies = ["ruff==0.9.10"]
+dependencies = ["ruff==0.14.10"]

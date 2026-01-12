@@ -1,9 +1,10 @@
 import logging
+from collections.abc import Iterator, Sequence
 from copy import deepcopy
 from os import mkdir
 from os.path import join
 from shutil import rmtree
-from typing import Any, Iterator, List, Optional, Tuple, Union
+from typing import Any
 
 from slugify import slugify
 
@@ -12,7 +13,6 @@ from hdx.utilities.downloader import Download
 from hdx.utilities.loader import load_json, load_text, load_yaml
 from hdx.utilities.path import get_filename_extension_from_url
 from hdx.utilities.saver import save_json, save_text, save_yaml
-from hdx.utilities.typehint import ListDict, ListTuple
 
 logger = logging.getLogger(__name__)
 
@@ -23,15 +23,15 @@ class Retrieve(BaseDownload):
     allows the use of a static fallback when downloading fails.
 
     Args:
-        downloader (Download): Download object
-        fallback_dir (str): Directory containing static fallback data
-        saved_dir (str): Directory to save or load downloaded data
-        temp_dir (str): Temporary directory for when data is not needed after downloading
-        save (bool): Whether to save downloaded data. Defaults to False.
-        use_saved (bool): Whether to use saved data. Defaults to False.
-        prefix (str): Prefix to add to filenames. Defaults to "".
-        delete (bool): Whether to delete saved_dir if save is True. Defaults to True.
-        log_level (int): Level at which to log messages. Defaults to logging.INFO.
+        downloader: Download object
+        fallback_dir: Directory containing static fallback data
+        saved_dir: Directory to save or load downloaded data
+        temp_dir: Temporary directory for when data is not needed after downloading
+        save: Whether to save downloaded data. Defaults to False.
+        use_saved: Whether to use saved data. Defaults to False.
+        prefix: Prefix to add to filenames. Defaults to "".
+        delete: Whether to delete saved_dir if save is True. Defaults to True.
+        log_level: Level at which to log messages. Defaults to logging.INFO.
     """
 
     retrievers = {}
@@ -63,10 +63,10 @@ class Retrieve(BaseDownload):
         """Check flags. Also delete saved_dir if save and delete are True.
 
         Args:
-            saved_dir (str): Directory to save or load downloaded data
-            save (bool): Whether to save downloaded data
-            use_saved (bool): Whether to use saved data
-            delete (bool): Whether to delete saved_dir if save is True
+            saved_dir: Directory to save or load downloaded data
+            save: Whether to save downloaded data
+            use_saved: Whether to use saved data
+            delete: Whether to delete saved_dir if save is True
 
         Returns:
             None
@@ -86,10 +86,10 @@ class Retrieve(BaseDownload):
         necessary.
 
         Args:
-            url (str): URL to download
+            url: URL to download
 
         Returns:
-            str: Url string to use in logs
+            Url string to use in logs
         """
         if len(url) > 100:
             return f"{url[:100]}..."
@@ -99,10 +99,10 @@ class Retrieve(BaseDownload):
         """Clone a given retriever but use the given downloader.
 
         Args:
-            downloader (Download): Downloader to use
+            downloader: Downloader to use
 
         Returns:
-            Retrieve: Cloned retriever
+            Cloned retriever
         """
         return Retrieve(
             downloader,
@@ -118,22 +118,22 @@ class Retrieve(BaseDownload):
     def get_filename(
         self,
         url: str,
-        filename: Optional[str] = None,
-        possible_extensions: Tuple[str, ...] = tuple(),
+        filename: str | None = None,
+        possible_extensions: tuple[str, ...] = tuple(),
         **kwargs: Any,
-    ) -> Tuple[str, Any]:
+    ) -> tuple[str, Any]:
         """Get filename from url and given parameters.
 
         Args:
-            url (str): Url from which to get filename
-            filename (optional[str]): Filename to use. Defaults to None (infer from url).
-            possible_extensions (Tuple[str, ...]): Possible extensions to look for in url
+            url: Url from which to get filename
+            filename: Filename to use. Defaults to None (infer from url).
+            possible_extensions: Possible extensions to look for in url
             **kwargs: See below
-            format (str): Given extension to look for in url
-            file_type (str): Given extension to look for in url
+            format: Given extension to look for in url
+            file_type: Given extension to look for in url
 
         Returns:
-            Tuple[str, Any]: Tuple of (filename, kwargs)
+            Tuple of (filename, kwargs)
         """
         prefix = kwargs.pop("file_prefix", self.prefix)
         if prefix:
@@ -168,7 +168,7 @@ class Retrieve(BaseDownload):
         """Set bearer token in downloader
 
         Args:
-            bearer_token (str): Bearer token
+            bearer_token: Bearer token
 
         Returns:
             None
@@ -178,8 +178,8 @@ class Retrieve(BaseDownload):
     def download_file(
         self,
         url: str,
-        filename: Optional[str] = None,
-        logstr: Optional[str] = None,
+        filename: str | None = None,
+        logstr: str | None = None,
         fallback: bool = False,
         log_level: int = None,
         **kwargs: Any,
@@ -187,15 +187,15 @@ class Retrieve(BaseDownload):
         """Retrieve file.
 
         Args:
-            url (str): URL to download
-            filename (Optional[str]): Filename of saved file. Defaults to getting from url.
-            logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
-            fallback (bool): Whether to use static fallback if download fails. Defaults to False.
-            log_level (int): Level at which to log messages. Overrides level from constructor.
+            url: URL to download
+            filename: Filename of saved file. Defaults to getting from url.
+            logstr: Text to use in log string to describe download. Defaults to filename.
+            fallback: Whether to use static fallback if download fails. Defaults to False.
+            log_level: Level at which to log messages. Overrides level from constructor.
             **kwargs: Parameters to pass to download_file call
 
         Returns:
-            str: Path to downloaded file
+            Path to downloaded file
         """
         if log_level is None:
             log_level = self.log_level
@@ -229,8 +229,8 @@ class Retrieve(BaseDownload):
     def download_text(
         self,
         url: str,
-        filename: Optional[str] = None,
-        logstr: Optional[str] = None,
+        filename: str | None = None,
+        logstr: str | None = None,
         fallback: bool = False,
         log_level: int = None,
         **kwargs: Any,
@@ -238,15 +238,15 @@ class Retrieve(BaseDownload):
         """Download text.
 
         Args:
-            url (str): URL to download
-            filename (Optional[str]): Filename of saved file. Defaults to getting from url.
-            logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
-            fallback (bool): Whether to use static fallback if download fails. Defaults to False.
-            log_level (int): Level at which to log messages. Overrides level from constructor.
+            url: URL to download
+            filename: Filename of saved file. Defaults to getting from url.
+            logstr: Text to use in log string to describe download. Defaults to filename.
+            fallback: Whether to use static fallback if download fails. Defaults to False.
+            log_level: Level at which to log messages. Overrides level from constructor.
             **kwargs: Parameters to pass to download_text call
 
         Returns:
-            str: The text from the file
+            The text from the file
         """
         if log_level is None:
             log_level = self.log_level
@@ -280,8 +280,8 @@ class Retrieve(BaseDownload):
     def download_yaml(
         self,
         url: str,
-        filename: Optional[str] = None,
-        logstr: Optional[str] = None,
+        filename: str | None = None,
+        logstr: str | None = None,
         fallback: bool = False,
         log_level: int = None,
         **kwargs: Any,
@@ -289,15 +289,15 @@ class Retrieve(BaseDownload):
         """Retrieve YAML.
 
         Args:
-            url (str): URL to download
-            filename (Optional[str]): Filename of saved file. Defaults to getting from url.
-            logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
-            fallback (bool): Whether to use static fallback if download fails. Defaults to False.
-            log_level (int): Level at which to log messages. Overrides level from constructor.
+            url: URL to download
+            filename: Filename of saved file. Defaults to getting from url.
+            logstr: Text to use in log string to describe download. Defaults to filename.
+            fallback: Whether to use static fallback if download fails. Defaults to False.
+            log_level: Level at which to log messages. Overrides level from constructor.
             **kwargs: Parameters to pass to download_yaml call
 
         Returns:
-            Any: The data from the YAML file
+            The data from the YAML file
         """
         if log_level is None:
             log_level = self.log_level
@@ -331,8 +331,8 @@ class Retrieve(BaseDownload):
     def download_json(
         self,
         url: str,
-        filename: Optional[str] = None,
-        logstr: Optional[str] = None,
+        filename: str | None = None,
+        logstr: str | None = None,
         fallback: bool = False,
         log_level: int = None,
         **kwargs: Any,
@@ -340,15 +340,15 @@ class Retrieve(BaseDownload):
         """Retrieve JSON.
 
         Args:
-            url (str): URL to download
-            filename (Optional[str]): Filename of saved file. Defaults to getting from url.
-            logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
-            fallback (bool): Whether to use static fallback if download fails. Defaults to False.
-            log_level (int): Level at which to log messages. Overrides level from constructor.
+            url: URL to download
+            filename: Filename of saved file. Defaults to getting from url.
+            logstr: Text to use in log string to describe download. Defaults to filename.
+            fallback: Whether to use static fallback if download fails. Defaults to False.
+            log_level: Level at which to log messages. Overrides level from constructor.
             **kwargs: Parameters to pass to download_json call
 
         Returns:
-            Any: The data from the JSON file
+            The data from the JSON file
         """
         if log_level is None:
             log_level = self.log_level
@@ -381,15 +381,15 @@ class Retrieve(BaseDownload):
 
     def get_tabular_rows(
         self,
-        url: Union[str, ListTuple[str]],
+        url: str | Sequence[str],
         has_hxl: bool = False,
-        headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
+        headers: int | Sequence[int] | Sequence[str] = 1,
         dict_form: bool = False,
-        filename: Optional[str] = None,
-        logstr: Optional[str] = None,
+        filename: str | None = None,
+        logstr: str | None = None,
         fallback: bool = False,
         **kwargs: Any,
-    ) -> Tuple[List[str], Iterator[ListDict]]:
+    ) -> tuple[list[str], Iterator[list | dict]]:
         """Returns header of tabular file(s) pointed to by url and an iterator
         where each row is returned as a list or dictionary depending on the
         dict_rows argument.
@@ -403,17 +403,17 @@ class Retrieve(BaseDownload):
         or a list, defaulting to a list.
 
         Args:
-            url (Union[str, ListTuple[str]]): A single or list of URLs or paths to read from
-            has_hxl (bool): Whether files have HXL hashtags. Defaults to False.
-            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
-            dict_form (bool): Return dict or list for each row. Defaults to False (list)
-            filename (Optional[str]): Filename of saved file. Defaults to getting from url.
-            logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
-            fallback (bool): Whether to use static fallback if download fails. Defaults to False.
+            url: A single or list of URLs or paths to read from
+            has_hxl: Whether files have HXL hashtags. Defaults to False.
+            headers: Number of row(s) containing headers or list of headers. Defaults to 1.
+            dict_form: Return dict or list for each row. Defaults to False (list)
+            filename: Filename of saved file. Defaults to getting from url.
+            logstr: Text to use in log string to describe download. Defaults to filename.
+            fallback: Whether to use static fallback if download fails. Defaults to False.
             **kwargs: Parameters to pass to download_file and get_tabular_rows calls
 
         Returns:
-            Tuple[List[str],Iterator[ListDict]]: Tuple (headers, iterator where each row is a list or dictionary)
+            Tuple (headers, iterator where each row is a list or dictionary)
         """
         if isinstance(url, list):
             is_list = True
@@ -443,7 +443,7 @@ class Retrieve(BaseDownload):
         temp_dir: str,
         save: bool = False,
         use_saved: bool = False,
-        ignore: ListTuple[str] = tuple(),
+        ignore: Sequence[str] = tuple(),
         delete: bool = True,
         **kwargs: Any,
     ) -> None:
@@ -454,13 +454,13 @@ class Retrieve(BaseDownload):
         when downloading fails.
 
         Args:
-            fallback_dir (str): Directory containing static fallback data
-            saved_dir (str): Directory to save or load downloaded data
-            temp_dir (str): Temporary directory for when data is not needed after downloading
-            save (bool): Whether to save downloaded data. Defaults to False.
-            use_saved (bool): Whether to use saved data. Defaults to False.
-            ignore (ListTuple[str]): Don't generate retrievers for these downloaders
-            delete (bool): Whether to delete saved_dir if save is True. Defaults to True.
+            fallback_dir: Directory containing static fallback data
+            saved_dir: Directory to save or load downloaded data
+            temp_dir: Temporary directory for when data is not needed after downloading
+            save: Whether to save downloaded data. Defaults to False.
+            use_saved: Whether to use saved data. Defaults to False.
+            ignore: Don't generate retrievers for these downloaders
+            delete: Whether to delete saved_dir if save is True. Defaults to True.
             **kwargs (Any): Any other arguments to pass.
 
         Returns:
@@ -483,14 +483,14 @@ class Retrieve(BaseDownload):
             )
 
     @classmethod
-    def get_retriever(cls, name: Optional[str] = None) -> "Retrieve":
+    def get_retriever(cls, name: str | None = None) -> "Retrieve":
         """Get a generated retriever given a name. If name is not supplied, the
         default one will be returned.
 
         Args:
-            name (Optional[str]): Name of retriever. Defaults to None (get default).
+            name: Name of retriever. Defaults to None (get default).
 
         Returns:
-            Retriever: Retriever object
+            Retriever object
         """
         return cls.retrievers.get(name, cls.retrievers["default"])

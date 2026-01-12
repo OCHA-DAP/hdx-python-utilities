@@ -2,10 +2,10 @@
 
 import logging
 import sys
-from typing import Any, Optional
+from collections.abc import Sequence
+from typing import Any
 
 from hdx.utilities.dictandlist import dict_of_sets_add
-from hdx.utilities.typehint import ListTuple
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +18,7 @@ class ErrorHandler:
     sorted.
 
     Args:
-        should_exit_on_error (bool): Whether to exit with a 1 code if there are errors. Default is False.
+        should_exit_on_error: Whether to exit with a 1 code if there are errors. Default is False.
 
     """
 
@@ -39,9 +39,9 @@ class ErrorHandler:
         error category - {text}
 
         Args:
-            message (str): Error message
-            category (str): Error category. Defaults to "".
-            message_type (str): The type of message (error or warning). Default is "error"
+            message: Error message
+            category: Error category. Defaults to "".
+            message_type: The type of message (error or warning). Default is "error"
 
         Returns:
             None
@@ -61,11 +61,11 @@ class ErrorHandler:
             error category - type n not found
 
         Args:
-            value_type (str): The type of value that is missing
-            value (Any): The specific missing value
+            value_type: The type of value that is missing
+            value: The specific missing value
 
         Returns:
-            str: A formatted message stating the missing value and its type
+            A formatted message stating the missing value and its type
         """
         return f"{value_type} {str(value)} not found"
 
@@ -82,10 +82,10 @@ class ErrorHandler:
             error category - type n not found
         identifier is usually a dataset name.
         Args:
-            value_type (str): Type of value e.g. "sector"
-            value (Any): Missing value
-            category (str): Error category. Defaults to "".
-            message_type (str): The type of message (error or warning). Default is "error"
+            value_type: Type of value e.g. "sector"
+            value: Missing value
+            category: Error category. Defaults to "".
+            message_type: The type of message (error or warning). Default is "error"
         Returns:
             None
         """
@@ -95,7 +95,7 @@ class ErrorHandler:
             message_type,
         )
 
-    def multi_valued_message(self, text: str, values: ListTuple) -> Optional[str]:
+    def multi_valued_message(self, text: str, values: Sequence) -> str | None:
         """
         Generate a formatted message for a list of values in a fixed format:
             error category - n {text}. First 10 values: n1,n2,n3...
@@ -103,11 +103,11 @@ class ErrorHandler:
         a dataset name. Values are cast to string.
 
         Args:
-            text (str): Descriptive text for the issue (e.g., "invalid values")
-            values (ListTuple): The list of related values of concern
+            text: Descriptive text for the issue (e.g., "invalid values")
+            values: The list of related values of concern
 
         Returns:
-            Optional[str]: A formatted string in the format defined above
+            A formatted string in the format defined above
         """
         if not values:
             return None
@@ -122,7 +122,7 @@ class ErrorHandler:
     def add_multi_valued(
         self,
         text: str,
-        values: ListTuple,
+        values: Sequence,
         category: str = "",
         message_type: str = "error",
     ) -> bool:
@@ -134,12 +134,12 @@ class ErrorHandler:
         a dataset name. Values are cast to string.
 
         Args:
-            text (str): Text to use e.g. "negative values removed"
-            values (ListTuple): List of values of concern
-            category (str): Error category. Defaults to "".
-            message_type (str): The type of message (error or warning). Default is "error"
+            text: Text to use e.g. "negative values removed"
+            values: List of values of concern
+            category: Error category. Defaults to "".
+            message_type: The type of message (error or warning). Default is "error"
         Returns:
-            bool: True if a message was added, False if not
+            True if a message was added, False if not
         """
         message = self.multi_valued_message(text, values)
         if message is None:

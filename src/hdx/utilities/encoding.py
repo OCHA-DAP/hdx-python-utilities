@@ -1,7 +1,6 @@
 """Encoding utilities."""
 
 import base64
-from typing import Tuple
 from urllib.parse import quote, unquote
 
 
@@ -9,10 +8,10 @@ def str_to_base64(string: str) -> str:
     """Base 64 encode string.
 
     Args:
-        string (str): String to encode
+        string: String to encode
 
     Returns:
-        str: Base 64 encoded string
+        Base 64 encoded string
     """
     return base64.urlsafe_b64encode(string.encode("utf-8")).decode("utf-8")
 
@@ -21,10 +20,10 @@ def base64_to_str(bstring: str) -> str:
     """Base 64 decode string.
 
     Args:
-        bstring (str): Base 64 encoded string to encode
+        bstring: Base 64 encoded string to encode
 
     Returns:
-        str: Decoded string
+        Decoded string
     """
     return base64.urlsafe_b64decode(bstring.encode("utf-8")).decode("utf-8")
 
@@ -36,11 +35,11 @@ def basicauth_encode(username: str, password: str) -> str:
     Inspired by: https://github.com/rdegges/python-basicauth/blob/master/basicauth.py#L16
 
     Args:
-        username (str): Username
-        password (str): Password
+        username: Username
+        password: Password
 
     Returns:
-        str: Basic authentication string
+        Basic authentication string
     """
     if ":" in username:
         raise ValueError
@@ -49,17 +48,17 @@ def basicauth_encode(username: str, password: str) -> str:
     return "Basic " + str_to_base64(username_password)
 
 
-def basicauth_decode(encoded_string: str) -> Tuple[str, str]:
+def basicauth_decode(encoded_string: str) -> tuple[str, str]:
     """Decode a HTTP basic authentication string. Returns a tuple of the form
     (username, password), and raises ValueError if decoding fails.
 
     Inspired by: https://github.com/rdegges/python-basicauth/blob/master/basicauth.py#L27
 
     Args:
-        encoded_string (str): String to decode
+        encoded_string: String to decode
 
     Returns:
-        Tuple[str, str]: Tuple of form (username, password)
+        Tuple of form (username, password)
     """
     split_encoded_string = encoded_string.strip().split(" ")
 

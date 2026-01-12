@@ -2,7 +2,7 @@
 
 import logging
 import os
-from typing import Any, Optional
+from typing import Any
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -21,9 +21,9 @@ class SessionError(Exception):
 
 
 def get_session(
-    user_agent: Optional[str] = None,
-    user_agent_config_yaml: Optional[str] = None,
-    user_agent_lookup: Optional[str] = None,
+    user_agent: str | None = None,
+    user_agent_config_yaml: str | None = None,
+    user_agent_lookup: str | None = None,
     use_env: bool = True,
     fail_on_missing_file: bool = True,
     verify: bool = True,
@@ -40,28 +40,28 @@ def get_session(
     extra_params_json and extra_params_yaml.
 
     Args:
-        user_agent (Optional[str]): User agent string. HDXPythonUtilities/X.X.X- is prefixed.
-        user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
-        user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
-        use_env (bool): Whether to read environment variables. Defaults to True.
-        fail_on_missing_file (bool): Raise an exception if any specified configuration files are missing. Defaults to True.
-        verify (bool): Whether to verify SSL certificates. Defaults to True.
-        retry_attempts (int): Number of retry attempts. Defaults to 5.
-        backoff_factor (int): Backoff factor for retry. Defaults to 1 (0s, 2s, 4s, 8s, 16s, 32s).
+        user_agent: User agent string. HDXPythonUtilities/X.X.X- is prefixed.
+        user_agent_config_yaml: Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
+        user_agent_lookup: Lookup key for YAML. Ignored if user_agent supplied.
+        use_env: Whether to read environment variables. Defaults to True.
+        fail_on_missing_file: Raise an exception if any specified configuration files are missing. Defaults to True.
+        verify: Whether to verify SSL certificates. Defaults to True.
+        retry_attempts: Number of retry attempts. Defaults to 5.
+        backoff_factor: Backoff factor for retry. Defaults to 1 (0s, 2s, 4s, 8s, 16s, 32s).
         **kwargs: See below
-        auth (Tuple[str, str]): Authorisation information in tuple form (user, pass) OR
-        basic_auth (str): Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
-        basic_auth_file (str): Path to file containing authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
-        bearer_token (str): Bearer token string OR
-        bearer_token_file (str): Path to file containing bearer token string OR
-        extra_params_dict (Dict): Extra parameters to put on end of url as a dictionary OR
-        extra_params_json (str): Path to JSON file containing extra parameters to put on end of url OR
-        extra_params_yaml (str): Path to YAML file containing extra parameters to put on end of url
-        extra_params_lookup (str): Lookup key for parameters. If not given assumes parameters are at root of the dict.
-        headers (Dict): Additional headers to add to request.
-        use_auth (str): If more than one auth found, specify which one to use, rather than failing.
-        status_forcelist (ListTuple[int]): HTTP statuses for which to force retry. Defaults to (429, 500, 502, 503, 504).
-        allowed_methods (ListTuple[str]): HTTP methods for which to force retry. Defaults to ("HEAD", "TRACE", "GET", "PUT", "OPTIONS", "DELETE").
+        auth: Authorisation information in tuple form (user, pass) OR
+        basic_auth: Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
+        basic_auth_file: Path to file containing authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
+        bearer_token: Bearer token string OR
+        bearer_token_file: Path to file containing bearer token string OR
+        extra_params_dict: Extra parameters to put on end of url as a dictionary OR
+        extra_params_json: Path to JSON file containing extra parameters to put on end of url OR
+        extra_params_yaml: Path to YAML file containing extra parameters to put on end of url
+        extra_params_lookup: Lookup key for parameters. If not given assumes parameters are at root of the dict.
+        headers: Additional headers to add to request.
+        use_auth: If more than one auth found, specify which one to use, rather than failing.
+        status_forcelist: HTTP statuses for which to force retry. Defaults to (429, 500, 502, 503, 504).
+        allowed_methods: HTTP methods for which to force retry. Defaults to ("HEAD", "TRACE", "GET", "PUT", "OPTIONS", "DELETE").
     """
     s = requests.Session()
     s.verify = verify

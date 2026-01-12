@@ -1,7 +1,6 @@
 """File compare utilities."""
 
 from os import linesep
-from typing import List
 
 try:
     from cydifflib import ndiff
@@ -9,16 +8,16 @@ except ImportError:
     from difflib import ndiff
 
 
-def compare_files(path1: str, path2: str, encoding: str = "utf-8") -> List[str]:
+def compare_files(path1: str, path2: str, encoding: str = "utf-8") -> list[str]:
     """Returns the delta between two files using -, ?, + format excluding lines
     that are the same.
 
     Args:
-        path1 (str): Path to first file
-        path2 (str): Path to second file
+        path1: Path to first file
+        path2: Path to second file
 
     Returns:
-        List[str]: Delta between the two files
+        Delta between the two files
     """
     diff = ndiff(
         open(path1, encoding=encoding).read().splitlines(),
@@ -33,8 +32,8 @@ def assert_files_same(path1: str, path2: str, encoding: str = "utf-8") -> None:
     -, ?, + format if not
 
     Args:
-        path1 (str): Path to first file
-        path2 (str): Path to second file
+        path1: Path to first file
+        path2: Path to second file
 
     Returns:
         None

@@ -3,7 +3,6 @@ import logging
 import zipfile
 from io import BytesIO, IOBase
 from os import fstat
-from typing import Tuple
 
 from openpyxl import load_workbook
 from openpyxl.utils.exceptions import InvalidFileException
@@ -19,10 +18,10 @@ def hash_excel_buffer(buffer: bytes) -> str:
     """Hash the sheets in an Excel XLSX file given in a buffer using MD5
 
     Args:
-        buffer (bytes): Excel XLSX file buffer
+        buffer: Excel XLSX file buffer
 
     Returns:
-        str: MD5 hash of the sheets
+        MD5 hash of the sheets
     """
     file_stream = BytesIO(buffer)
     md5hash = hashlib.md5()
@@ -56,10 +55,10 @@ def hash_excel_fp(fp: IOBase) -> str:
     """Hash the sheets in an Excel XLSX file given as a file pointer using MD5
 
     Args:
-        fp (IOBase): Excel file pointer
+        fp: Excel file pointer
 
     Returns:
-        str: MD5 hash of the sheets
+        MD5 hash of the sheets
     """
     return hash_excel_buffer(fp.read())
 
@@ -68,10 +67,10 @@ def crc_zip_buffer(buffer: bytes) -> str:
     """Get sum of CRC32s for all files in a zip given a buffer
 
     Args:
-         buffer (bytes): Zip in buffer
+         buffer: Zip in buffer
 
     Returns:
-        str: Sum of the CRC32
+        Sum of the CRC32
     """
 
     file_crcs = get_zip_crcs_buffer(buffer)
@@ -82,24 +81,24 @@ def crc_zip_fp(fp: IOBase) -> str:
     """Get sum of CRC32s for all files in a zip given a file pointer
 
     Args:
-        fp (IOBase): Zip file pointer
+        fp: Zip file pointer
 
     Returns:
-        str: Sum of the CRC32
+        Sum of the CRC32
     """
     file_crcs = get_zip_crcs_fp(fp)
     return get_crc_sum(file_crcs)
 
 
-def get_size_and_hash(filepath: str, file_format: str) -> Tuple[int, str]:
+def get_size_and_hash(filepath: str, file_format: str) -> tuple[int, str]:
     """Return the size and hash of file
 
     Args:
         filepath: Path to file
-        file_format (str): File format
+        file_format: File format
 
     Returns:
-        Tuple[int, str]: Tuple (size, hash)
+        Tuple (size, hash)
     """
     with open(filepath, "rb") as fp:
         size = fstat(fp.fileno()).st_size
