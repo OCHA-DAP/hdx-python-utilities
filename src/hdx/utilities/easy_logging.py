@@ -4,14 +4,13 @@ import logging
 import logging.config
 import sys
 from sys import stderr
-from typing import Optional
 
 from loguru import logger
 
 
 def setup_logging(
     console_log_level: str = "INFO",
-    log_file: Optional[str] = None,
+    log_file: str | None = None,
     file_log_level: str = "ERROR",
 ) -> None:
     """Setup logging configuration. Intercepts standard logging and outputs

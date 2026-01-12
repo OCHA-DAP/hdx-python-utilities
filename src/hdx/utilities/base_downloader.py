@@ -1,7 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import Any, Iterator, List, Tuple, Union
+from collections.abc import Iterator
+from typing import Any, Sequence
 
-from hdx.utilities.typehint import ListDict, ListTuple
+
 
 
 class DownloadError(Exception):
@@ -87,13 +88,13 @@ class BaseDownload(ABC):
     @abstractmethod
     def get_tabular_rows(
         self,
-        url: Union[str, ListTuple[str]],
+        url: str | Sequence[str],
         has_hxl: bool = False,
-        headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
+        headers: int | Sequence[int] | Sequence[str] = 1,
         dict_form: bool = False,
         *args: Any,
         **kwargs: Any,
-    ) -> Tuple[List[str], Iterator[ListDict]]:
+    ) -> tuple[list[str], Iterator[list | dict]]:
         """Returns header of tabular file pointed to by url and an iterator
         where each row is returned as a list or dictionary depending on the
         dict_rows argument.
@@ -107,13 +108,13 @@ class BaseDownload(ABC):
         or a list, defaulting to a list.
 
         Args:
-            url (Union[str, ListTuple[str]]): A single or list of URLs or paths to read from
+            url (Union[str, Sequence[str]]): A single or list of URLs or paths to read from
             has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
-            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            headers (Union[int, Sequence[int], Sequence[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             dict_form (bool): Return dict or list for each row. Defaults to False (list)
             *args (Any): Positional arguments
             **kwargs (Any): Keyword arguments
 
         Returns:
-            Tuple[List[str],Iterator[ListDict]]: Tuple (headers, iterator where each row is a list or dictionary)
+            Tuple[List[str],Iterator[list | dict]]: Tuple (headers, iterator where each row is a list or dictionary)
         """

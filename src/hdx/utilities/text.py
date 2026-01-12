@@ -5,7 +5,7 @@ import re
 import string
 import unicodedata
 from string import punctuation
-from typing import Any, List, Optional, Set
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -67,8 +67,8 @@ def remove_end_characters(string: str, characters_to_remove: str = punctuation) 
 
 def remove_from_end(
     string: str,
-    things_to_remove: List[str],
-    logging_text: Optional[str] = None,
+    things_to_remove: list[str],
+    logging_text: str | None = None,
     whole_words: bool = True,
 ) -> str:
     """Remove list of items from end of string, stripping any whitespace.
@@ -123,7 +123,7 @@ def remove_string(
     return f"{newstring}{string[index + len(toremove) :]}"
 
 
-def get_words_in_sentence(sentence: str) -> List[str]:
+def get_words_in_sentence(sentence: str) -> list[str]:
     """Returns list of words in a sentence.
 
     Args:
@@ -156,7 +156,7 @@ def number_format(val: Any, format: str = "%.4f", trailing_zeros: bool = True) -
 
 def get_fraction_str(
     numerator: Any,
-    denominator: Optional[Any] = None,
+    denominator: Any | None = None,
     format: str = "%.4f",
     trailing_zeros: bool = True,
 ) -> str:
@@ -185,7 +185,7 @@ def get_fraction_str(
     return ""
 
 
-def only_allowed_in_str(test_str: str, allowed_chars: Set) -> bool:
+def only_allowed_in_str(test_str: str, allowed_chars: set) -> bool:
     """Returns True if test string contains only allowed characters, False if
     not.
 

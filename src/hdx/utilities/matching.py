@@ -1,11 +1,12 @@
 import difflib
 import re
-from typing import Callable, Dict, List, Optional, Tuple
+from collections.abc import Callable
+from typing import Sequence
 
 from pyphonetics import RefinedSoundex
 
 from hdx.utilities.text import normalise
-from hdx.utilities.typehint import ListTuple
+
 
 TEMPLATE_VARIABLES = re.compile("{{.*?}}")
 
@@ -13,21 +14,21 @@ TEMPLATE_VARIABLES = re.compile("{{.*?}}")
 class Phonetics(RefinedSoundex):
     def match(
         self,
-        possible_names: ListTuple,
+        possible_names: Sequence,
         name: str,
-        alternative_name: Optional[str] = None,
-        transform_possible_names: ListTuple[Callable] = [],
+        alternative_name: str | None = None,
+        transform_possible_names: Sequence[Callable] = [],
         threshold: int = 2,
-    ) -> Optional[int]:
+    ) -> int | None:
         """
         Match name to one of the given possible names. Returns None if no match
         or the index of the matching name
 
         Args:
-            possible_names (ListTuple): Possible names
+            possible_names (Sequence): Possible names
             name (str): Name to match
             alternative_name (str): Alternative name to match. Defaults to None.
-            transform_possible_names (ListTuple[Callable]): Functions to transform possible names.
+            transform_possible_names (Sequence[Callable]): Functions to transform possible names.
             threshold: Match threshold. Defaults to 2.
 
         Returns:
@@ -61,11 +62,11 @@ class Phonetics(RefinedSoundex):
 
 def get_code_from_name(
     name: str,
-    code_lookup: Dict[str, str],
-    unmatched: List[str],
+    code_lookup: dict[str, str],
+    unmatched: list[str],
     fuzzy_match: bool = True,
     match_threshold: int = 5,
-) -> Optional[str]:
+) -> str | None:
     """
     Given a name (org type, sector, etc), return the corresponding code.
 
@@ -111,7 +112,7 @@ def get_code_from_name(
     return code
 
 
-def multiple_replace(string: str, replacements: Dict[str, str]) -> str:
+def multiple_replace(string: str, replacements: dict[str, str]) -> str:
     """Simultaneously replace multiple strings in a string.
 
     Args:
@@ -132,7 +133,7 @@ def multiple_replace(string: str, replacements: Dict[str, str]) -> str:
 
 def match_template_variables(
     string: str,
-) -> Tuple[Optional[str], Optional[str]]:
+) -> tuple[str | None, str | None]:
     """Try to match {{XXX}} in input string.
 
     Args:
@@ -148,15 +149,13 @@ def match_template_variables(
     return None, None
 
 
-def earliest_index(
-    string_to_search: str, strings_to_try: ListTuple[str]
-) -> Optional[int]:
+def earliest_index(string_to_search: str, strings_to_try: Sequence[str]) -> int | None:
     """Search a string for each of a list of strings and return the earliest
     index.
 
     Args:
         string_to_search (str): String to search
-        strings_to_try (ListTuple[str]): Strings to try
+        strings_to_try (Sequence[str]): Strings to try
 
     Returns:
         Optional[int]: Earliest index of the strings to try in string to search or None
@@ -182,7 +181,7 @@ def get_matching_text_in_strs(
     match_min_size: int = 30,
     ignore: str = "",
     end_characters: str = "",
-) -> List[str]:
+) -> list[str]:
     """Returns a list of matching blocks of text in a and b.
 
     Args:
@@ -216,7 +215,7 @@ def get_matching_text_in_strs(
 
 
 def get_matching_text(
-    string_list: List[str],
+    string_list: list[str],
     match_min_size: int = 30,
     ignore: str = "",
     end_characters: str = ".!\r\n",
@@ -248,7 +247,7 @@ def get_matching_text(
 
 
 def get_matching_then_nonmatching_text(
-    string_list: List[str],
+    string_list: list[str],
     separator: str = "",
     match_min_size: int = 30,
     ignore: str = "",

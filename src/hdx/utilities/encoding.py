@@ -1,7 +1,6 @@
 """Encoding utilities."""
 
 import base64
-from typing import Tuple
 from urllib.parse import quote, unquote
 
 
@@ -49,7 +48,7 @@ def basicauth_encode(username: str, password: str) -> str:
     return "Basic " + str_to_base64(username_password)
 
 
-def basicauth_decode(encoded_string: str) -> Tuple[str, str]:
+def basicauth_decode(encoded_string: str) -> tuple[str, str]:
     """Decode a HTTP basic authentication string. Returns a tuple of the form
     (username, password), and raises ValueError if decoding fails.
 

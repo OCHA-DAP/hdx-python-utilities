@@ -1,7 +1,6 @@
 """File compare utilities."""
 
 from os import linesep
-from typing import List
 
 try:
     from cydifflib import ndiff
@@ -9,7 +8,7 @@ except ImportError:
     from difflib import ndiff
 
 
-def compare_files(path1: str, path2: str, encoding: str = "utf-8") -> List[str]:
+def compare_files(path1: str, path2: str, encoding: str = "utf-8") -> list[str]:
     """Returns the delta between two files using -, ?, + format excluding lines
     that are the same.
 

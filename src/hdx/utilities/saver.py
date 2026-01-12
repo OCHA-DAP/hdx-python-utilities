@@ -3,8 +3,9 @@
 import csv
 import json
 from collections import OrderedDict
+from collections.abc import Callable, Iterable
 from os.path import join
-from typing import Any, Callable, Dict, Iterable, List, Optional, Union
+from typing import Any, Sequence, Mapping
 
 from ruamel.yaml import (
     YAML,
@@ -15,7 +16,7 @@ from ruamel.yaml import (
 
 from hdx.utilities.frictionless_wrapper import get_frictionless_tableresource
 from hdx.utilities.matching import match_template_variables
-from hdx.utilities.typehint import ListTuple, ListTupleDict
+
 
 
 class UnPrettyRTRepresenter(RoundTripRepresenter):
@@ -135,8 +136,8 @@ def save_json(
 
 
 def save_hxlated_output(
-    configuration: Dict,
-    rows: ListTuple[ListTupleDict],
+    configuration: dict,
+    rows: Sequence[Sequence | Mapping],
     includes_header: bool = True,
     includes_hxltags: bool = False,
     output_dir: str = "",
@@ -151,7 +152,7 @@ def save_hxlated_output(
 
     Args:
         configuration (Dict): Configuration for input and output
-        rows (ListTuple[ListTupleDict]): Rows of data
+        rows (Sequence[Sequence | Mapping]): Rows of data
         includes_header (bool): Whether rows includes header. Defaults to True,
         includes_hxltags (bool): Whether rows includes HXL hashtags. Defaults to False.
         output_dir (str): Output directory. Defaults to "".
@@ -273,13 +274,13 @@ def save_hxlated_output(
 
 def save_iterable(
     filepath: str,
-    rows: Iterable[ListTupleDict],
-    headers: Union[int, ListTuple[str], None] = None,
-    columns: Union[ListTuple[int], ListTuple[str], None] = None,
+    rows: Iterable[Sequence | Mapping],
+    headers: int | Sequence[str] | None = None,
+    columns: Sequence[int] | Sequence[str] | None = None,
     format: str = "csv",
-    encoding: Optional[str] = None,
-    row_function: Optional[Callable[[Dict], Optional[Dict]]] = None,
-) -> List:
+    encoding: str | None = None,
+    row_function: Callable[[dict], dict | None] | None = None,
+) -> list:
     """Save an iterable of rows in dict or list form to a csv. (The headers
     argument is either a row number (rows start counting at 1), or the actual
     headers defined as a list of strings. If not set, all rows will be treated
@@ -287,9 +288,9 @@ def save_iterable(
 
     Args:
         filepath (str): Path to write to
-        rows (Iterable[ListTupleDict]): List of rows in dict or list form
-        headers (Union[int, ListTuple[str], None]): Headers to write. Defaults to None.
-        columns (Union[ListTuple[int], ListTuple[str], None]): Columns to write. Defaults to all.
+        rows (Iterable[Sequence | Mapping]): List of rows in dict or list form
+        headers (Union[int, Sequence[str], None]): Headers to write. Defaults to None.
+        columns (Union[Sequence[int], Sequence[str], None]): Columns to write. Defaults to all.
         format (str): Format to write. Defaults to csv.
         encoding (Optional[str]): Encoding to use. Defaults to None (infer encoding).
         row_function (Optional[Callable[[Dict],Optional[Dict]]]): Row function to call for each row. Defaults to None.

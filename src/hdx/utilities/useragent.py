@@ -3,7 +3,7 @@
 import logging
 import os
 from os.path import expanduser, isfile, join
-from typing import Any, Dict, Optional
+from typing import Any
 
 from hdx.utilities import __version__
 from hdx.utilities.loader import load_yaml
@@ -39,7 +39,7 @@ class UserAgent:
         return kwargs
 
     @staticmethod
-    def _construct(configdict: Dict, prefix: str, ua: str) -> str:
+    def _construct(configdict: dict, prefix: str, ua: str) -> str:
         """Construct user agent.
 
         Args:
@@ -69,7 +69,7 @@ class UserAgent:
         cls,
         prefix: str,
         user_agent_config_yaml: str,
-        user_agent_lookup: Optional[str] = None,
+        user_agent_lookup: str | None = None,
     ) -> str:
         """Load user agent YAML file.
 
@@ -107,9 +107,9 @@ class UserAgent:
     @classmethod
     def _create(
         cls,
-        user_agent: Optional[str] = None,
-        user_agent_config_yaml: Optional[str] = None,
-        user_agent_lookup: Optional[str] = None,
+        user_agent: str | None = None,
+        user_agent_config_yaml: str | None = None,
+        user_agent_lookup: str | None = None,
         **kwargs: Any,
     ) -> str:
         """Get full user agent string.
@@ -145,9 +145,9 @@ class UserAgent:
     @classmethod
     def set_global(
         cls,
-        user_agent: Optional[str] = None,
-        user_agent_config_yaml: Optional[str] = None,
-        user_agent_lookup: Optional[str] = None,
+        user_agent: str | None = None,
+        user_agent_config_yaml: str | None = None,
+        user_agent_lookup: str | None = None,
         **kwargs: Any,
     ) -> None:
         """Set global user agent string.
@@ -167,9 +167,9 @@ class UserAgent:
     @classmethod
     def get(
         cls,
-        user_agent: Optional[str] = None,
-        user_agent_config_yaml: Optional[str] = None,
-        user_agent_lookup: Optional[str] = None,
+        user_agent: str | None = None,
+        user_agent_config_yaml: str | None = None,
+        user_agent_lookup: str | None = None,
         **kwargs: Any,
     ) -> str:
         """Get full user agent string from parameters if supplied falling back

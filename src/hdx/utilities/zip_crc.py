@@ -1,7 +1,6 @@
 import struct
 from io import IOBase
 from os import fstat
-from typing import Dict, Tuple
 
 EOCD_MIN_SIZE = 22
 MAX_COMMENT_SIZE = 65535
@@ -9,7 +8,7 @@ EOCD_SIGNATURE = b"PK\x05\x06"
 CD_HEADER_SIGNATURE = b"PK\x01\x02"
 
 
-def find_eocd_signature(tail_data: bytes) -> Tuple[int, int, int]:
+def find_eocd_signature(tail_data: bytes) -> tuple[int, int, int]:
     """Find EOCD Signature in zip file
 
     Args:
@@ -29,7 +28,7 @@ def find_eocd_signature(tail_data: bytes) -> Tuple[int, int, int]:
     return total_records, cd_offset, cd_end
 
 
-def parse_central_directory(data: bytes, num_records: int) -> Dict[str, int]:
+def parse_central_directory(data: bytes, num_records: int) -> dict[str, int]:
     """Parse zip file Central Directory and return dictionary with filepaths as keys
     and CRC32 as values.
 
@@ -77,7 +76,7 @@ def get_tail_start(size: int) -> int:
     return size - read_size
 
 
-def get_zip_tail_header(size: int) -> Dict[str, str]:
+def get_zip_tail_header(size: int) -> dict[str, str]:
     """Get a header for a GET request with range from starting offset of the tail
     to the end of a zip.
 
@@ -90,7 +89,7 @@ def get_zip_tail_header(size: int) -> Dict[str, str]:
     return {"Range": f"bytes={get_tail_start(size)}-"}
 
 
-def get_zip_cd_header(tail_data: bytes) -> Tuple[int, Dict]:
+def get_zip_cd_header(tail_data: bytes) -> tuple[int, dict]:
     """Get a header for a GET request with range for the Central Directory of a zip.
 
     Args:
@@ -105,7 +104,7 @@ def get_zip_cd_header(tail_data: bytes) -> Tuple[int, Dict]:
     return total_records, {"Range": f"bytes={cd_offset}-{cd_end - 1}"}
 
 
-def get_zip_crcs_buffer(buffer: bytes) -> Dict[str, int]:
+def get_zip_crcs_buffer(buffer: bytes) -> dict[str, int]:
     """Get CRC32 for each file in a zip given a buffer
 
     Args:
@@ -122,7 +121,7 @@ def get_zip_crcs_buffer(buffer: bytes) -> Dict[str, int]:
     return parse_central_directory(cd_data, num_records)
 
 
-def get_zip_crcs_fp(fp: IOBase) -> Dict[str, int]:
+def get_zip_crcs_fp(fp: IOBase) -> dict[str, int]:
     """Get CRC32 for each file in a zip given a file pointer
 
     Args:
@@ -143,7 +142,7 @@ def get_zip_crcs_fp(fp: IOBase) -> Dict[str, int]:
     return parse_central_directory(cd_data, num_records)
 
 
-def get_crc_sum(file_crcs: Dict[str, int]) -> str:
+def get_crc_sum(file_crcs: dict[str, int]) -> str:
     """Calculate the sum of the CRC32 for all files in a zip
 
     Args:

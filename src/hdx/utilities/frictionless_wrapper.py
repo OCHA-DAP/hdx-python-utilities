@@ -1,6 +1,6 @@
 """Frictionless wrapper"""
 
-from typing import Any, Optional, Tuple
+from typing import Any
 
 import requests
 from frictionless import (
@@ -15,7 +15,7 @@ from frictionless.formats import CsvControl, ExcelControl, JsonControl
 from frictionless.resources import TableResource
 
 
-def get_frictionless_control(**kwargs: Any) -> Tuple[Control, Any]:
+def get_frictionless_control(**kwargs: Any) -> tuple[Control, Any]:
     """Get Frictionless Control.
 
     Args:
@@ -68,7 +68,7 @@ def get_frictionless_control(**kwargs: Any) -> Tuple[Control, Any]:
     return control, kwargs
 
 
-def get_frictionless_detector(infer_types: bool, **kwargs: Any) -> Tuple[Detector, Any]:
+def get_frictionless_detector(infer_types: bool, **kwargs: Any) -> tuple[Detector, Any]:
     """Get Frictionless Detector.
 
     Args:
@@ -98,13 +98,13 @@ def get_frictionless_detector(infer_types: bool, **kwargs: Any) -> Tuple[Detecto
 
 def get_frictionless_dialect(
     ignore_blank_rows: bool, **kwargs: Any
-) -> Tuple[Dialect, Any]:
+) -> tuple[Dialect, Any]:
     """Get Frictionless Dialect.
 
     Args:
         ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
         **kwargs:
-        columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
+        columns (Union[Sequence[int], Sequence[str], None]): Columns to pick. Defaults to all.
         dialect (Dialect): This can be set to override the above. See Frictionless docs.
 
     Returns:
@@ -119,11 +119,11 @@ def get_frictionless_dialect(
 
 
 def get_frictionless_tableresource(
-    url: Optional[str] = None,
+    url: str | None = None,
     ignore_blank_rows: bool = True,
     infer_types: bool = False,
-    session: Optional[requests.Session] = None,
-    data: Optional[Any] = None,
+    session: requests.Session | None = None,
+    data: Any | None = None,
     **kwargs: Any,
 ) -> TableResource:
     """Get Frictionless TableResource. Either url or data must be supplied.
@@ -136,8 +136,8 @@ def get_frictionless_tableresource(
         data (Optional[Any]): Data to parse. Defaults to None.
         **kwargs:
         has_header (bool): Whether data has a header. Defaults to True.
-        headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers.  # pylint: disable=line-too-long
-        columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
+        headers (Union[int, Sequence[int], Sequence[str]]): Number of row(s) containing headers or list of headers.  # pylint: disable=line-too-long
+        columns (Union[Sequence[int], Sequence[str], None]): Columns to pick. Defaults to all.
         file_type (Optional[str]): Type of file. Defaults to inferring.
         format (Optional[str]): Type of file. Defaults to inferring.
         encoding (Optional[str]): Type of encoding. Defaults to inferring.

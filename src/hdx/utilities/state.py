@@ -1,7 +1,8 @@
 """Utility to save state to a file and read it back."""
 
 import logging
-from typing import Any, Callable, Dict
+from collections.abc import Callable
+from typing import Any
 
 from hdx.utilities.dateparse import iso_string_from_datetime, parse_date
 from hdx.utilities.loader import load_text
@@ -95,7 +96,7 @@ class State:
         self.state = state
 
     @staticmethod
-    def dates_str_to_country_date_dict(dates_str: str) -> Dict:
+    def dates_str_to_country_date_dict(dates_str: str) -> dict:
         """Convert a comma separated string of key=date string pairs eg.
         "default=2017-01-01,afg=2019-01-01" to a dictionary of key date
         mappings eg.
@@ -114,7 +115,7 @@ class State:
         return result
 
     @staticmethod
-    def country_date_dict_to_dates_str(country_date_dict: Dict) -> str:
+    def country_date_dict_to_dates_str(country_date_dict: dict) -> str:
         """Convert a dictionary of key date mappings eg.
         {"default": 2017-01-01 as datetime, "afg": 2019-01-01 as datetime}
         to a comma separated string of key=date string pairs eg.

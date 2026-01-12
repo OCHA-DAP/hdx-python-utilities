@@ -5,7 +5,6 @@ import time
 from calendar import monthrange
 from datetime import datetime, timedelta, timezone
 from io import StringIO
-from typing import Dict, Optional, Tuple
 
 import dateutil
 from dateutil.parser import ParserError, parserinfo
@@ -94,7 +93,7 @@ default_timezone_info = """-12 Y
 -9.5 MART MIT"""
 
 
-def get_tzinfos(timezone_info: str) -> Dict[str, int]:
+def get_tzinfos(timezone_info: str) -> dict[str, int]:
     """Get tzinfos dictionary used by dateutil from timezone information
     string.
 
@@ -117,7 +116,7 @@ default_tzinfos = get_tzinfos(default_timezone_info)
 
 # Ugly copy and paste of the whole _timelex class from dateutil to prevent
 # deprecation warnings
-class _timelex(object):
+class _timelex:
     # Fractional seconds are sometimes split by a comma
     _split_decimal = re.compile("([.,])")
 
@@ -129,9 +128,7 @@ class _timelex(object):
             instream = StringIO(instream)
         elif getattr(instream, "read", None) is None:
             raise TypeError(
-                "Parser must be a string or character stream, not {itype}".format(
-                    itype=instream.__class__.__name__
-                )
+                f"Parser must be a string or character stream, not {instream.__class__.__name__}"
             )
 
         self.instream = instream
@@ -823,15 +820,15 @@ def now_utc_notz() -> datetime:
 
 def parse_date_range(
     string: str,
-    date_format: Optional[str] = None,
+    date_format: str | None = None,
     timezone_handling: int = 0,
-    fuzzy: Optional[Dict] = None,
+    fuzzy: dict | None = None,
     include_microseconds: bool = False,
     zero_time: bool = False,
     max_starttime: bool = False,
     max_endtime: bool = False,
-    default_timezones: Optional[str] = None,
-) -> Tuple[datetime, datetime]:
+    default_timezones: str | None = None,
+) -> tuple[datetime, datetime]:
     """Parse date from string using specified date_format if given and return
     datetime date range in dictionary keys startdate and enddate. If no
     date_format is supplied, the function will guess, which for unambiguous
@@ -993,13 +990,13 @@ def parse_date_range(
 
 def parse_date(
     string: str,
-    date_format: Optional[str] = None,
+    date_format: str | None = None,
     timezone_handling: int = 0,
-    fuzzy: Optional[Dict] = None,
+    fuzzy: dict | None = None,
     include_microseconds: bool = False,
     zero_time: bool = False,
     max_time: bool = False,
-    default_timezones: Optional[str] = None,
+    default_timezones: str | None = None,
 ) -> datetime:
     """Parse date from string using specified date_format and return a datetime
     object. Raises exception for dates that are missing year, month or day. If

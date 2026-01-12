@@ -3,7 +3,6 @@ import logging
 import zipfile
 from io import BytesIO, IOBase
 from os import fstat
-from typing import Tuple
 
 from openpyxl import load_workbook
 from openpyxl.utils.exceptions import InvalidFileException
@@ -91,7 +90,7 @@ def crc_zip_fp(fp: IOBase) -> str:
     return get_crc_sum(file_crcs)
 
 
-def get_size_and_hash(filepath: str, file_format: str) -> Tuple[int, str]:
+def get_size_and_hash(filepath: str, file_format: str) -> tuple[int, str]:
     """Return the size and hash of file
 
     Args:

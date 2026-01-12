@@ -2,7 +2,7 @@
 
 import logging
 import os
-from typing import Any, Optional
+from typing import Any
 
 import requests
 from requests.adapters import HTTPAdapter
@@ -21,9 +21,9 @@ class SessionError(Exception):
 
 
 def get_session(
-    user_agent: Optional[str] = None,
-    user_agent_config_yaml: Optional[str] = None,
-    user_agent_lookup: Optional[str] = None,
+    user_agent: str | None = None,
+    user_agent_config_yaml: str | None = None,
+    user_agent_lookup: str | None = None,
     use_env: bool = True,
     fail_on_missing_file: bool = True,
     verify: bool = True,
@@ -60,8 +60,8 @@ def get_session(
         extra_params_lookup (str): Lookup key for parameters. If not given assumes parameters are at root of the dict.
         headers (Dict): Additional headers to add to request.
         use_auth (str): If more than one auth found, specify which one to use, rather than failing.
-        status_forcelist (ListTuple[int]): HTTP statuses for which to force retry. Defaults to (429, 500, 502, 503, 504).
-        allowed_methods (ListTuple[str]): HTTP methods for which to force retry. Defaults to ("HEAD", "TRACE", "GET", "PUT", "OPTIONS", "DELETE").
+        status_forcelist (Sequence[int]): HTTP statuses for which to force retry. Defaults to (429, 500, 502, 503, 504).
+        allowed_methods (Sequence[str]): HTTP methods for which to force retry. Defaults to ("HEAD", "TRACE", "GET", "PUT", "OPTIONS", "DELETE").
     """
     s = requests.Session()
     s.verify = verify

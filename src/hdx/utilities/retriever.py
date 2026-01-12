@@ -1,9 +1,10 @@
 import logging
+from collections.abc import Iterator
 from copy import deepcopy
 from os import mkdir
 from os.path import join
 from shutil import rmtree
-from typing import Any, Iterator, List, Optional, Tuple, Union
+from typing import Any, Sequence
 
 from slugify import slugify
 
@@ -12,7 +13,7 @@ from hdx.utilities.downloader import Download
 from hdx.utilities.loader import load_json, load_text, load_yaml
 from hdx.utilities.path import get_filename_extension_from_url
 from hdx.utilities.saver import save_json, save_text, save_yaml
-from hdx.utilities.typehint import ListDict, ListTuple
+
 
 logger = logging.getLogger(__name__)
 
@@ -118,10 +119,10 @@ class Retrieve(BaseDownload):
     def get_filename(
         self,
         url: str,
-        filename: Optional[str] = None,
-        possible_extensions: Tuple[str, ...] = tuple(),
+        filename: str | None = None,
+        possible_extensions: tuple[str, ...] = tuple(),
         **kwargs: Any,
-    ) -> Tuple[str, Any]:
+    ) -> tuple[str, Any]:
         """Get filename from url and given parameters.
 
         Args:
@@ -178,8 +179,8 @@ class Retrieve(BaseDownload):
     def download_file(
         self,
         url: str,
-        filename: Optional[str] = None,
-        logstr: Optional[str] = None,
+        filename: str | None = None,
+        logstr: str | None = None,
         fallback: bool = False,
         log_level: int = None,
         **kwargs: Any,
@@ -229,8 +230,8 @@ class Retrieve(BaseDownload):
     def download_text(
         self,
         url: str,
-        filename: Optional[str] = None,
-        logstr: Optional[str] = None,
+        filename: str | None = None,
+        logstr: str | None = None,
         fallback: bool = False,
         log_level: int = None,
         **kwargs: Any,
@@ -280,8 +281,8 @@ class Retrieve(BaseDownload):
     def download_yaml(
         self,
         url: str,
-        filename: Optional[str] = None,
-        logstr: Optional[str] = None,
+        filename: str | None = None,
+        logstr: str | None = None,
         fallback: bool = False,
         log_level: int = None,
         **kwargs: Any,
@@ -331,8 +332,8 @@ class Retrieve(BaseDownload):
     def download_json(
         self,
         url: str,
-        filename: Optional[str] = None,
-        logstr: Optional[str] = None,
+        filename: str | None = None,
+        logstr: str | None = None,
         fallback: bool = False,
         log_level: int = None,
         **kwargs: Any,
@@ -381,15 +382,15 @@ class Retrieve(BaseDownload):
 
     def get_tabular_rows(
         self,
-        url: Union[str, ListTuple[str]],
+        url: str | Sequence[str],
         has_hxl: bool = False,
-        headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
+        headers: int | Sequence[int] | Sequence[str] = 1,
         dict_form: bool = False,
-        filename: Optional[str] = None,
-        logstr: Optional[str] = None,
+        filename: str | None = None,
+        logstr: str | None = None,
         fallback: bool = False,
         **kwargs: Any,
-    ) -> Tuple[List[str], Iterator[ListDict]]:
+    ) -> tuple[list[str], Iterator[list | dict]]:
         """Returns header of tabular file(s) pointed to by url and an iterator
         where each row is returned as a list or dictionary depending on the
         dict_rows argument.
@@ -403,9 +404,9 @@ class Retrieve(BaseDownload):
         or a list, defaulting to a list.
 
         Args:
-            url (Union[str, ListTuple[str]]): A single or list of URLs or paths to read from
+            url (Union[str, Sequence[str]]): A single or list of URLs or paths to read from
             has_hxl (bool): Whether files have HXL hashtags. Defaults to False.
-            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            headers (Union[int, Sequence[int], Sequence[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             dict_form (bool): Return dict or list for each row. Defaults to False (list)
             filename (Optional[str]): Filename of saved file. Defaults to getting from url.
             logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
@@ -413,7 +414,7 @@ class Retrieve(BaseDownload):
             **kwargs: Parameters to pass to download_file and get_tabular_rows calls
 
         Returns:
-            Tuple[List[str],Iterator[ListDict]]: Tuple (headers, iterator where each row is a list or dictionary)
+            Tuple[List[str],Iterator[list | dict]]: Tuple (headers, iterator where each row is a list or dictionary)
         """
         if isinstance(url, list):
             is_list = True
@@ -443,7 +444,7 @@ class Retrieve(BaseDownload):
         temp_dir: str,
         save: bool = False,
         use_saved: bool = False,
-        ignore: ListTuple[str] = tuple(),
+        ignore: Sequence[str] = tuple(),
         delete: bool = True,
         **kwargs: Any,
     ) -> None:
@@ -459,7 +460,7 @@ class Retrieve(BaseDownload):
             temp_dir (str): Temporary directory for when data is not needed after downloading
             save (bool): Whether to save downloaded data. Defaults to False.
             use_saved (bool): Whether to use saved data. Defaults to False.
-            ignore (ListTuple[str]): Don't generate retrievers for these downloaders
+            ignore (Sequence[str]): Don't generate retrievers for these downloaders
             delete (bool): Whether to delete saved_dir if save is True. Defaults to True.
             **kwargs (Any): Any other arguments to pass.
 
@@ -483,7 +484,7 @@ class Retrieve(BaseDownload):
             )
 
     @classmethod
-    def get_retriever(cls, name: Optional[str] = None) -> "Retrieve":
+    def get_retriever(cls, name: str | None = None) -> "Retrieve":
         """Get a generated retriever given a name. If name is not supplied, the
         default one will be returned.
 

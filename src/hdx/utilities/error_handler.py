@@ -2,10 +2,10 @@
 
 import logging
 import sys
-from typing import Any, Optional
+from typing import Any, Sequence
 
 from hdx.utilities.dictandlist import dict_of_sets_add
-from hdx.utilities.typehint import ListTuple
+
 
 logger = logging.getLogger(__name__)
 
@@ -95,7 +95,7 @@ class ErrorHandler:
             message_type,
         )
 
-    def multi_valued_message(self, text: str, values: ListTuple) -> Optional[str]:
+    def multi_valued_message(self, text: str, values: Sequence) -> str | None:
         """
         Generate a formatted message for a list of values in a fixed format:
             error category - n {text}. First 10 values: n1,n2,n3...
@@ -104,7 +104,7 @@ class ErrorHandler:
 
         Args:
             text (str): Descriptive text for the issue (e.g., "invalid values")
-            values (ListTuple): The list of related values of concern
+            values (Sequence): The list of related values of concern
 
         Returns:
             Optional[str]: A formatted string in the format defined above
@@ -122,7 +122,7 @@ class ErrorHandler:
     def add_multi_valued(
         self,
         text: str,
-        values: ListTuple,
+        values: Sequence,
         category: str = "",
         message_type: str = "error",
     ) -> bool:
@@ -135,7 +135,7 @@ class ErrorHandler:
 
         Args:
             text (str): Text to use e.g. "negative values removed"
-            values (ListTuple): List of values of concern
+            values (Sequence): List of values of concern
             category (str): Error category. Defaults to "".
             message_type (str): The type of message (error or warning). Default is "error"
         Returns:

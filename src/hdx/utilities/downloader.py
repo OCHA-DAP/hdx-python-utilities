@@ -2,17 +2,19 @@
 
 import hashlib
 import logging
+from collections.abc import Callable, Iterator
 from copy import deepcopy
 from os import remove
 from os.path import exists, isfile, join, split, splitext
 from pathlib import Path
-from typing import Any, Callable, Dict, Iterator, List, Optional, Tuple, Union
+from typing import Any, Sequence
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import requests
 from frictionless import FrictionlessException
 from frictionless.resources import TableResource
-from ratelimit import RateLimitDecorator, sleep_and_retry
+from ratelimit import sleep_and_retry
+from ratelimit.decorators import RateLimitDecorator
 from requests import Request
 from ruamel.yaml import YAML
 from xlsx2csv import Xlsx2csv
@@ -21,7 +23,7 @@ from hdx.utilities.base_downloader import BaseDownload, DownloadError
 from hdx.utilities.frictionless_wrapper import get_frictionless_tableresource
 from hdx.utilities.path import get_filename_from_url, get_temp_dir
 from hdx.utilities.session import get_session
-from hdx.utilities.typehint import ListDict, ListTuple
+
 
 logger = logging.getLogger(__name__)
 
@@ -55,7 +57,7 @@ class Download(BaseDownload):
         extra_params_lookup (str): Lookup key for parameters. If not given assumes parameters are at root of the dict.
         headers (Dict): Additional headers to add to request.
         use_auth (str): If more than one auth found, specify which one to use, rather than failing.
-        status_forcelist (ListTuple[int]): HTTP statuses for which to force retry
+        status_forcelist (Sequence[int]): HTTP statuses for which to force retry
         allowed_methods (iterable): HTTP methods for which to force retry. Defaults t0 frozenset(['GET']).
     """
 
@@ -63,13 +65,13 @@ class Download(BaseDownload):
 
     def __init__(
         self,
-        user_agent: Optional[str] = None,
-        user_agent_config_yaml: Optional[str] = None,
-        user_agent_lookup: Optional[str] = None,
+        user_agent: str | None = None,
+        user_agent_config_yaml: str | None = None,
+        user_agent_lookup: str | None = None,
         use_env: bool = True,
         fail_on_missing_file: bool = True,
         verify: bool = True,
-        rate_limit: Optional[Dict] = None,
+        rate_limit: dict | None = None,
         **kwargs: Any,
     ) -> None:
         session = kwargs.get("session")
@@ -132,9 +134,9 @@ class Download(BaseDownload):
     @staticmethod
     def get_path_for_url(
         url: str,
-        folder: Optional[str] = None,
-        filename: Optional[str] = None,
-        path: Optional[str] = None,
+        folder: str | None = None,
+        filename: str | None = None,
+        path: str | None = None,
         overwrite: bool = False,
         keep: bool = False,
     ) -> str:
@@ -190,7 +192,7 @@ class Download(BaseDownload):
         return preparedrequest.url
 
     @staticmethod
-    def get_url_for_get(url: str, parameters: Optional[Dict] = None) -> str:
+    def get_url_for_get(url: str, parameters: dict | None = None) -> str:
         """Get full url for GET request including parameters.
 
         Args:
@@ -209,8 +211,8 @@ class Download(BaseDownload):
 
     @staticmethod
     def get_url_params_for_post(
-        url: str, parameters: Optional[Dict] = None
-    ) -> Tuple[str, Dict]:
+        url: str, parameters: dict | None = None
+    ) -> tuple[str, dict]:
         """Get full url for POST request and all parameters including any in
         the url.
 
@@ -231,16 +233,16 @@ class Download(BaseDownload):
 
     @staticmethod
     def hxl_row(
-        headers: ListTuple[str],
-        hxltags: Dict[str, str],
+        headers: Sequence[str],
+        hxltags: dict[str, str],
         dict_form: bool = False,
-    ) -> Union[List[str], Dict[str, str]]:
+    ) -> list[str] | dict[str, str]:
         """Return HXL tag row for header row given list of headers and
         dictionary with header to HXL hashtag mappings. Return list or
         dictionary depending upon the dict_form argument.
 
         Args:
-            headers (ListTuple[str]): Headers for which to get HXL hashtags
+            headers (Sequence[str]): Headers for which to get HXL hashtags
             hxltags (Dict[str,str]): Header to HXL hashtag mapping
             dict_form (bool): Return dict or list. Defaults to False (list)
 
@@ -256,10 +258,10 @@ class Download(BaseDownload):
         url: str,
         stream: bool = True,
         post: bool = False,
-        parameters: Optional[Dict] = None,
-        timeout: Optional[float] = None,
-        headers: Optional[Dict] = None,
-        encoding: Optional[str] = None,
+        parameters: dict | None = None,
+        timeout: float | None = None,
+        headers: dict | None = None,
+        encoding: str | None = None,
         json_string: bool = False,
     ) -> requests.Response:
         """Setup download from provided url returning the response.
@@ -384,9 +386,9 @@ class Download(BaseDownload):
     def stream_file(
         self,
         url: str,
-        folder: Optional[str] = None,
-        filename: Optional[str] = None,
-        path: Optional[str] = None,
+        folder: str | None = None,
+        filename: str | None = None,
+        path: str | None = None,
         overwrite: bool = False,
         keep: bool = False,
     ) -> str:
@@ -607,8 +609,8 @@ class Download(BaseDownload):
             infer_types (bool): Whether to infer types. Defaults to False (strings).
             **kwargs:
             has_header (bool): Whether data has a header. Defaults to True.
-            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers
-            columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
+            headers (Union[int, Sequence[int], Sequence[str]]): Number of row(s) containing headers or list of headers
+            columns (Union[Sequence[int], Sequence[str], None]): Columns to pick. Defaults to all.
             format (Optional[str]): Type of file. Defaults to inferring.
             file_type (Optional[str]): Type of file. Defaults to inferring.
             encoding (Optional[str]): Type of encoding. Defaults to inferring.
@@ -618,7 +620,7 @@ class Download(BaseDownload):
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
             fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
-            columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
+            columns (Union[Sequence[int], Sequence[str], None]): Columns to pick. Defaults to all.
             default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
             null_values (List[Any]): Values that will return None. Defaults to [""].
@@ -642,15 +644,15 @@ class Download(BaseDownload):
     def _get_tabular_rows(
         self,
         url: str,
-        headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
+        headers: int | Sequence[int] | Sequence[str] = 1,
         dict_form: bool = False,
         include_headers: bool = False,
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
-        header_insertions: Optional[ListTuple[Tuple[int, str]]] = None,
-        row_function: Optional[Callable[[List[str], ListDict], ListDict]] = None,
+        header_insertions: Sequence[tuple[int, str]] | None = None,
+        row_function: Callable[[list[str], list | dict], list | dict] | None = None,
         **kwargs: Any,
-    ) -> Tuple[List[str], Iterator[ListDict]]:
+    ) -> tuple[list[str], Iterator[list | dict]]:
         """Returns header of tabular file pointed to by url and an iterator
         where each row is returned as a list or dictionary depending on the
         dict_form argument. The headers argument is either a row number or list
@@ -669,13 +671,13 @@ class Download(BaseDownload):
 
         Args:
             url (str): URL or path to read from
-            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            headers (Union[int, Sequence[int], Sequence[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             dict_form (bool): Return dict or list for each row. Defaults to False (list)
             include_headers (bool): Whether to include headers in iterator. Defaults to False.
             ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
             infer_types (bool): Whether to infer types. Defaults to False (strings).
-            header_insertions (Optional[ListTuple[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
-            row_function (Optional[Callable[[List[str],ListDict],ListDict]]): Function to call for each row. Defaults to None.
+            header_insertions (Optional[Sequence[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
+            row_function (Optional[Callable[[List[str],list | dict],list | dict]]): Function to call for each row. Defaults to None.
             **kwargs:
             format (Optional[str]): Type of file. Defaults to inferring.
             file_type (Optional[str]): Type of file. Defaults to inferring.
@@ -687,7 +689,7 @@ class Download(BaseDownload):
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
             fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
-            columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
+            columns (Union[Sequence[int], Sequence[str], None]): Columns to pick. Defaults to all.
             default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
             null_values (List[Any]): Values that will return None. Defaults to [""].
@@ -697,7 +699,7 @@ class Download(BaseDownload):
             schema (Schema): This can be set to override the above. See Frictionless docs.
 
         Returns:
-            Tuple[List[str],Iterator[ListDict]]: Tuple (headers, iterator where each row is a list or dictionary)
+            Tuple[List[str],Iterator[list | dict]]: Tuple (headers, iterator where each row is a list or dictionary)
         """
         if headers is None:
             raise DownloadError("Argument headers cannot be None!")
@@ -751,17 +753,17 @@ class Download(BaseDownload):
 
     def get_tabular_rows(
         self,
-        url: Union[str, ListTuple[str]],
+        url: str | Sequence[str],
         has_hxl: bool = False,
-        headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
+        headers: int | Sequence[int] | Sequence[str] = 1,
         dict_form: bool = False,
         include_headers: bool = False,
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
-        header_insertions: Optional[ListTuple[Tuple[int, str]]] = None,
-        row_function: Optional[Callable[[List[str], ListDict], ListDict]] = None,
+        header_insertions: Sequence[tuple[int, str]] | None = None,
+        row_function: Callable[[list[str], list | dict], list | dict] | None = None,
         **kwargs: Any,
-    ) -> Tuple[List[str], Iterator[ListDict]]:
+    ) -> tuple[list[str], Iterator[list | dict]]:
         """Returns header of tabular file(s) pointed to by url and an iterator
         where each row is returned as a list or dictionary depending on the
         dict_rows argument.
@@ -782,15 +784,15 @@ class Download(BaseDownload):
         outputs a modified row or None to ignore the row.
 
         Args:
-            url (Union[str, ListTuple[str]]): A single or list of URLs or paths to read from
+            url (Union[str, Sequence[str]]): A single or list of URLs or paths to read from
             has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
-            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            headers (Union[int, Sequence[int], Sequence[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             dict_form (bool): Return dict or list for each row. Defaults to False (list)
             include_headers (bool): Whether to include headers in iterator. Defaults to False.
             ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
             infer_types (bool): Whether to infer types. Defaults to False (strings).
-            header_insertions (Optional[ListTuple[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
-            row_function (Optional[Callable[[List[str],ListDict],ListDict]]): Function to call for each row. Defaults to None.
+            header_insertions (Optional[Sequence[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
+            row_function (Optional[Callable[[List[str],list | dict],list | dict]]): Function to call for each row. Defaults to None.
             **kwargs:
             format (Optional[str]): Type of file. Defaults to inferring.
             file_type (Optional[str]): Type of file. Defaults to inferring.
@@ -802,7 +804,7 @@ class Download(BaseDownload):
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
             fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
-            columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
+            columns (Union[Sequence[int], Sequence[str], None]): Columns to pick. Defaults to all.
             default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
             null_values (List[Any]): Values that will return None. Defaults to [""].
@@ -812,7 +814,7 @@ class Download(BaseDownload):
             schema (Schema): This can be set to override the above. See Frictionless docs.
 
         Returns:
-            Tuple[List[str],Iterator[ListDict]]: Tuple (headers, iterator where each row is a list or dictionary)
+            Tuple[List[str],Iterator[list | dict]]: Tuple (headers, iterator where each row is a list or dictionary)
         """
         if isinstance(url, list):
             is_list = True
@@ -858,16 +860,16 @@ class Download(BaseDownload):
 
     def get_tabular_rows_as_list(
         self,
-        url: Union[str, ListTuple[str]],
+        url: str | Sequence[str],
         has_hxl: bool = False,
-        headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
+        headers: int | Sequence[int] | Sequence[str] = 1,
         include_headers: bool = True,
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
-        header_insertions: Optional[ListTuple[Tuple[int, str]]] = None,
-        row_function: Optional[Callable[[List[str], ListDict], ListDict]] = None,
+        header_insertions: Sequence[tuple[int, str]] | None = None,
+        row_function: Callable[[list[str], list | dict], list | dict] | None = None,
         **kwargs: Any,
-    ) -> Tuple[List[str], Iterator[List]]:
+    ) -> tuple[list[str], Iterator[list]]:
         """Returns headers and an iterator where each row is returned as a
         list.
 
@@ -886,14 +888,14 @@ class Download(BaseDownload):
         argument) and outputs a modified row or None to ignore the row.
 
         Args:
-            url (Union[str, ListTuple[str]]): A single or list of URLs or paths to read from
+            url (Union[str, Sequence[str]]): A single or list of URLs or paths to read from
             has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
-            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            headers (Union[int, Sequence[int], Sequence[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             include_headers (bool): Whether to include headers in iterator. Defaults to True.
             ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
             infer_types (bool): Whether to infer types. Defaults to False (strings).
-            header_insertions (Optional[ListTuple[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
-            row_function (Optional[Callable[[List[str],ListDict],ListDict]]): Function to call for each row. Defaults to None.
+            header_insertions (Optional[Sequence[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
+            row_function (Optional[Callable[[List[str],list | dict],list | dict]]): Function to call for each row. Defaults to None.
             **kwargs:
             format (Optional[str]): Type of file. Defaults to inferring.
             file_type (Optional[str]): Type of file. Defaults to inferring.
@@ -905,7 +907,7 @@ class Download(BaseDownload):
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
             fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
-            columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
+            columns (Union[Sequence[int], Sequence[str], None]): Columns to pick. Defaults to all.
             default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
             null_values (List[Any]): Values that will return None. Defaults to [""].
@@ -934,15 +936,15 @@ class Download(BaseDownload):
 
     def get_tabular_rows_as_dict(
         self,
-        url: Union[str, ListTuple[str]],
+        url: str | Sequence[str],
         has_hxl: bool = False,
-        headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
+        headers: int | Sequence[int] | Sequence[str] = 1,
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
-        header_insertions: Optional[ListTuple[Tuple[int, str]]] = None,
-        row_function: Optional[Callable[[List[str], ListDict], ListDict]] = None,
+        header_insertions: Sequence[tuple[int, str]] | None = None,
+        row_function: Callable[[list[str], list | dict], list | dict] | None = None,
         **kwargs: Any,
-    ) -> Tuple[List[str], Iterator[Dict]]:
+    ) -> tuple[list[str], Iterator[dict]]:
         """Returns headers and an iterator where each row is returned as a
         dictionary.
 
@@ -961,13 +963,13 @@ class Download(BaseDownload):
         argument) and outputs a modified row or None to ignore the row.
 
         Args:
-            url (Union[str, ListTuple[str]]): A single or list of URLs or paths to read from
+            url (Union[str, Sequence[str]]): A single or list of URLs or paths to read from
             has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
-            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            headers (Union[int, Sequence[int], Sequence[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
             infer_types (bool): Whether to infer types. Defaults to False (strings).
-            header_insertions (Optional[ListTuple[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
-            row_function (Optional[Callable[[List[str],ListDict],ListDict]]): Function to call for each row. Defaults to None.
+            header_insertions (Optional[Sequence[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
+            row_function (Optional[Callable[[List[str],list | dict],list | dict]]): Function to call for each row. Defaults to None.
             **kwargs:
             format (Optional[str]): Type of file. Defaults to inferring.
             file_type (Optional[str]): Type of file. Defaults to inferring.
@@ -979,7 +981,7 @@ class Download(BaseDownload):
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
             fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
-            columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
+            columns (Union[Sequence[int], Sequence[str], None]): Columns to pick. Defaults to all.
             default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
             null_values (List[Any]): Values that will return None. Defaults to [""].
@@ -1008,16 +1010,16 @@ class Download(BaseDownload):
 
     def download_tabular_key_value(
         self,
-        url: Union[str, ListTuple[str]],
+        url: str | Sequence[str],
         has_hxl: bool = False,
-        headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
+        headers: int | Sequence[int] | Sequence[str] = 1,
         include_headers: bool = True,
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
-        header_insertions: Optional[ListTuple[Tuple[int, str]]] = None,
-        row_function: Optional[Callable[[List[str], ListDict], ListDict]] = None,
+        header_insertions: Sequence[tuple[int, str]] | None = None,
+        row_function: Callable[[list[str], list | dict], list | dict] | None = None,
         **kwargs: Any,
-    ) -> Dict:
+    ) -> dict:
         """Download 2 column csv from url and return a dictionary of keys
         (first column) and values (second column).
 
@@ -1037,14 +1039,14 @@ class Download(BaseDownload):
 
 
         Args:
-            url (Union[str, ListTuple[str]]): A single or list of URLs or paths to read from
+            url (Union[str, Sequence[str]]): A single or list of URLs or paths to read from
             has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
-            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            headers (Union[int, Sequence[int], Sequence[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             include_headers (bool): Whether to include headers in iterator. Defaults to True.
             ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
             infer_types (bool): Whether to infer types. Defaults to False (strings).
-            header_insertions (Optional[ListTuple[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
-            row_function (Optional[Callable[[List[str],ListDict],ListDict]]): Function to call for each row. Defaults to None.
+            header_insertions (Optional[Sequence[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
+            row_function (Optional[Callable[[List[str],list | dict],list | dict]]): Function to call for each row. Defaults to None.
             **kwargs:
             format (Optional[str]): Type of file. Defaults to inferring.
             file_type (Optional[str]): Type of file. Defaults to inferring.
@@ -1055,7 +1057,7 @@ class Download(BaseDownload):
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
             fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
-            columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
+            columns (Union[Sequence[int], Sequence[str], None]): Columns to pick. Defaults to all.
             default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
             null_values (List[Any]): Values that will return None. Defaults to [""]
@@ -1087,16 +1089,16 @@ class Download(BaseDownload):
 
     def download_tabular_rows_as_dicts(
         self,
-        url: Union[str, ListTuple[str]],
+        url: str | Sequence[str],
         has_hxl: bool = False,
-        headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
+        headers: int | Sequence[int] | Sequence[str] = 1,
         keycolumn: int = 1,
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
-        header_insertions: Optional[ListTuple[Tuple[int, str]]] = None,
-        row_function: Optional[Callable[[List[str], ListDict], ListDict]] = None,
+        header_insertions: Sequence[tuple[int, str]] | None = None,
+        row_function: Callable[[list[str], list | dict], list | dict] | None = None,
         **kwargs: Any,
-    ) -> Dict[str, Dict]:
+    ) -> dict[str, dict]:
         """Download multicolumn csv from url and return dictionary where keys
         are first column and values are dictionaries with keys from column
         headers and values from columns beneath.
@@ -1116,14 +1118,14 @@ class Download(BaseDownload):
         argument) and outputs a modified row or None to ignore the row.
 
         Args:
-            url (Union[str, ListTuple[str]]): A single or list of URLs or paths to read from
+            url (Union[str, Sequence[str]]): A single or list of URLs or paths to read from
             has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
-            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            headers (Union[int, Sequence[int], Sequence[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             keycolumn (int): Number of column to be used for key. Defaults to 1.
             ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
             infer_types (bool): Whether to infer types. Defaults to False (strings).
-            header_insertions (Optional[ListTuple[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
-            row_function (Optional[Callable[[List[str],ListDict],ListDict]]): Function to call for each row. Defaults to None.
+            header_insertions (Optional[Sequence[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
+            row_function (Optional[Callable[[List[str],list | dict],list | dict]]): Function to call for each row. Defaults to None.
             **kwargs:
             format (Optional[str]): Type of file. Defaults to inferring.
             file_type (Optional[str]): Type of file. Defaults to inferring.
@@ -1134,7 +1136,7 @@ class Download(BaseDownload):
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
             fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
-            columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
+            columns (Union[Sequence[int], Sequence[str], None]): Columns to pick. Defaults to all.
             default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
             null_values (List[Any]): Values that will return None. Defaults to [""].
@@ -1170,16 +1172,16 @@ class Download(BaseDownload):
 
     def download_tabular_cols_as_dicts(
         self,
-        url: Union[str, ListTuple[str]],
+        url: str | Sequence[str],
         has_hxl: bool = False,
-        headers: Union[int, ListTuple[int], ListTuple[str]] = 1,
+        headers: int | Sequence[int] | Sequence[str] = 1,
         keycolumn: int = 1,
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
-        header_insertions: Optional[ListTuple[Tuple[int, str]]] = None,
-        row_function: Optional[Callable[[List[str], ListDict], ListDict]] = None,
+        header_insertions: Sequence[tuple[int, str]] | None = None,
+        row_function: Callable[[list[str], list | dict], list | dict] | None = None,
         **kwargs: Any,
-    ) -> Dict[str, Dict]:
+    ) -> dict[str, dict]:
         """Download multicolumn csv from url and return dictionary where keys
         are header names and values are dictionaries with keys from first
         column and values from other columns.
@@ -1199,14 +1201,14 @@ class Download(BaseDownload):
         argument) and outputs a modified row or None to ignore the row.
 
         Args:
-            url (Union[str, ListTuple[str]]): A single or list of URLs or paths to read from
+            url (Union[str, Sequence[str]]): A single or list of URLs or paths to read from
             has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
-            headers (Union[int, ListTuple[int], ListTuple[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
+            headers (Union[int, Sequence[int], Sequence[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
             keycolumn (int): Number of column to be used for key. Defaults to 1.
             ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
             infer_types (bool): Whether to infer types. Defaults to False (strings).
-            header_insertions (Optional[ListTuple[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
-            row_function (Optional[Callable[[List[str],ListDict],ListDict]]): Function to call for each row. Defaults to None.
+            header_insertions (Optional[Sequence[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
+            row_function (Optional[Callable[[List[str],list | dict],list | dict]]): Function to call for each row. Defaults to None.
             **kwargs:
             format (Optional[str]): Type of file. Defaults to inferring.
             file_type (Optional[str]): Type of file. Defaults to inferring.
@@ -1217,7 +1219,7 @@ class Download(BaseDownload):
             sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
             fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
             http_session (Session): Session object to use. Defaults to downloader session.
-            columns (Union[ListTuple[int], ListTuple[str], None]): Columns to pick. Defaults to all.
+            columns (Union[Sequence[int], Sequence[str], None]): Columns to pick. Defaults to all.
             default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
             float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
             null_values (List[Any]): Values that will return None. Defaults to [""].
@@ -1254,11 +1256,11 @@ class Download(BaseDownload):
         return output_dict
 
     @staticmethod
-    def get_column_positions(headers: ListTuple[str]) -> Dict[str, int]:
+    def get_column_positions(headers: Sequence[str]) -> dict[str, int]:
         """Get mapping of headers to column positions.
 
         Args:
-            headers (ListTuple[str]): List of headers
+            headers (Sequence[str]): List of headers
 
         Returns:
             Dict[str,int]: Dictionary where keys are header names and values are header positions
@@ -1271,13 +1273,13 @@ class Download(BaseDownload):
     @classmethod
     def generate_downloaders(
         cls,
-        custom_configs: Dict[str, Dict],
-        user_agent: Optional[str] = None,
-        user_agent_config_yaml: Optional[str] = None,
-        user_agent_lookup: Optional[str] = None,
+        custom_configs: dict[str, dict],
+        user_agent: str | None = None,
+        user_agent_config_yaml: str | None = None,
+        user_agent_lookup: str | None = None,
         use_env: bool = True,
         fail_on_missing_file: bool = True,
-        rate_limit: Optional[Dict] = None,
+        rate_limit: dict | None = None,
         **kwargs: Any,
     ) -> None:
         """Generate downloaders. Requires either global user agent to be set or
@@ -1308,8 +1310,8 @@ class Download(BaseDownload):
             extra_params_lookup (str): Lookup key for parameters. If not given assumes parameters are at root of the dict.
             headers (Dict): Additional headers to add to request.
             use_auth (str): If more than one auth found, specify which one to use, rather than failing.
-            status_forcelist (ListTuple[int]): HTTP statuses for which to force retry. Defaults to (429, 500, 502, 503, 504).
-            allowed_methods (ListTuple[str]): HTTP methods for which to force retry. Defaults to ("HEAD", "TRACE", "GET", "PUT", "OPTIONS", "DELETE").
+            status_forcelist (Sequence[int]): HTTP statuses for which to force retry. Defaults to (429, 500, 502, 503, 504).
+            allowed_methods (Sequence[str]): HTTP methods for which to force retry. Defaults to ("HEAD", "TRACE", "GET", "PUT", "OPTIONS", "DELETE").
 
         Returns:
             None
@@ -1328,7 +1330,7 @@ class Download(BaseDownload):
             cls.downloaders[name] = cls(**args_copy)
 
     @classmethod
-    def get_downloader(cls, name: Optional[str] = None) -> "Download":
+    def get_downloader(cls, name: str | None = None) -> "Download":
         """Get a generated downloader given a name. If name is not supplied,
         the default one will be returned.
 
