@@ -20,8 +20,8 @@ class State:
     run the state is available in the repository.
 
     Args:
-        path (str): Path to save state file
-        read_fn (Callable[[str], Any]): Input state transformation. Defaults to lambda x: x.
+        path: Path to save state file
+        read_fn: Input state transformation. Defaults to lambda x: x.
         write_fn: Callable[[Any], str]: Output state transformation. Defaults to lambda x: x.
     """
 
@@ -48,9 +48,9 @@ class State:
         """Allow usage of with.
 
         Args:
-            exc_type (Any): Exception type
-            exc_value (Any): Exception value
-            traceback (Any): Traceback
+            exc_type: Exception type
+            exc_value: Exception value
+            traceback: Traceback
 
         Returns:
             None
@@ -88,7 +88,7 @@ class State:
         """Set the state
 
         Args:
-            state (Any): State
+            state: State
 
         Returns:
             None
@@ -103,7 +103,7 @@ class State:
         {"default": 2017-01-01 as datetime, "afg": 2019-01-01 as datetime}
 
         Args:
-            dates_str (str): Comma separated string of key=date string pairs
+            dates_str: Comma separated string of key=date string pairs
 
         Returns:
             Dict: Dictionary of key date mappings
@@ -122,7 +122,7 @@ class State:
         "default=2017-01-01,afg=2019-01-01"
 
         Args:
-            country_date_dict (Dict): Dictionary of key date mappings
+            country_date_dict: Dictionary of key date mappings
 
         Returns:
             str: Comma separated string of key=date string pairs

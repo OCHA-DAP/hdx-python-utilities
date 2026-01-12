@@ -38,27 +38,27 @@ class Download(BaseDownload):
     extra_params_json and extra_params_yaml.
 
     Args:
-        user_agent (Optional[str]): User agent string. HDXPythonUtilities/X.X.X- is prefixed.
-        user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
-        user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
-        use_env (bool): Whether to read environment variables. Defaults to True.
-        fail_on_missing_file (bool): Raise an exception if any specified configuration files are missing. Defaults to True.
-        verify (bool): Whether to verify SSL certificates. Defaults to True.
-        rate_limit (Optional[Dict]): Rate limiting per host eg. {"calls": 1, "period": 0.1}. Defaults to None.
+        user_agent: User agent string. HDXPythonUtilities/X.X.X- is prefixed.
+        user_agent_config_yaml: Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
+        user_agent_lookup: Lookup key for YAML. Ignored if user_agent supplied.
+        use_env: Whether to read environment variables. Defaults to True.
+        fail_on_missing_file: Raise an exception if any specified configuration files are missing. Defaults to True.
+        verify: Whether to verify SSL certificates. Defaults to True.
+        rate_limit: Rate limiting per host eg. {"calls": 1, "period": 0.1}. Defaults to None.
         **kwargs: See below
-        auth (Tuple[str, str]): Authorisation information in tuple form (user, pass) OR
-        basic_auth (str): Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
-        basic_auth_file (str): Path to file containing authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx)
-        bearer_token (str): Bearer token string OR
-        bearer_token_file (str): Path to file containing bearer token string OR
-        extra_params_dict (Dict[str, str]): Extra parameters to put on end of url as a dictionary OR
-        extra_params_json (str): Path to JSON file containing extra parameters to put on end of url OR
-        extra_params_yaml (str): Path to YAML file containing extra parameters to put on end of url
-        extra_params_lookup (str): Lookup key for parameters. If not given assumes parameters are at root of the dict.
-        headers (Dict): Additional headers to add to request.
-        use_auth (str): If more than one auth found, specify which one to use, rather than failing.
-        status_forcelist (Sequence[int]): HTTP statuses for which to force retry
-        allowed_methods (iterable): HTTP methods for which to force retry. Defaults t0 frozenset(['GET']).
+        auth: Authorisation information in tuple form (user, pass) OR
+        basic_auth: Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
+        basic_auth_file: Path to file containing authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx)
+        bearer_token: Bearer token string OR
+        bearer_token_file: Path to file containing bearer token string OR
+        extra_params_dict: Extra parameters to put on end of url as a dictionary OR
+        extra_params_json: Path to JSON file containing extra parameters to put on end of url OR
+        extra_params_yaml: Path to YAML file containing extra parameters to put on end of url
+        extra_params_lookup: Lookup key for parameters. If not given assumes parameters are at root of the dict.
+        headers: Additional headers to add to request.
+        use_auth: If more than one auth found, specify which one to use, rather than failing.
+        status_forcelist: HTTP statuses for which to force retry
+        allowed_methods: HTTP methods for which to force retry. Defaults t0 frozenset(['GET']).
     """
 
     downloaders = {}
@@ -122,9 +122,9 @@ class Download(BaseDownload):
         """Allow usage of with.
 
         Args:
-            exc_type (Any): Exception type
-            exc_value (Any): Exception value
-            traceback (Any): Traceback
+            exc_type: Exception type
+            exc_value: Exception value
+            traceback: Traceback
 
         Returns:
             None
@@ -144,12 +144,12 @@ class Download(BaseDownload):
         folder if no folder supplied, ensuring uniqueness.
 
         Args:
-            url (str): URL to download
-            folder (Optional[str]): Folder to download it to. Defaults to None (temporary folder).
-            filename (Optional[str]): Filename to use for downloaded file. Defaults to None (derive from the url).
-            path (Optional[str]): Full path to use for downloaded file. Defaults to None (use folder and filename).
-            overwrite (bool): Whether to overwrite existing file. Defaults to False.
-            keep (bool): Whether to keep already downloaded file. Defaults to False.
+            url: URL to download
+            folder: Folder to download it to. Defaults to None (temporary folder).
+            filename: Filename to use for downloaded file. Defaults to None (derive from the url).
+            path: Full path to use for downloaded file. Defaults to None (use folder and filename).
+            overwrite: Whether to overwrite existing file. Defaults to False.
+            keep: Whether to keep already downloaded file. Defaults to False.
 
         Returns:
             str: Path of downloaded file
@@ -182,7 +182,7 @@ class Download(BaseDownload):
         """Get full url including any additional parameters.
 
         Args:
-            url (str): URL for which to get full url
+            url: URL for which to get full url
 
         Returns:
             str: Full url including any additional parameters
@@ -196,8 +196,8 @@ class Download(BaseDownload):
         """Get full url for GET request including parameters.
 
         Args:
-            url (str): URL to download
-            parameters (Optional[Dict]): Parameters to pass. Defaults to None.
+            url: URL to download
+            parameters: Parameters to pass. Defaults to None.
 
         Returns:
             str: Full url
@@ -217,8 +217,8 @@ class Download(BaseDownload):
         the url.
 
         Args:
-            url (str): URL to download
-            parameters (Optional[Dict]): Parameters to pass. Defaults to None.
+            url: URL to download
+            parameters: Parameters to pass. Defaults to None.
 
         Returns:
             Tuple[str, Dict]: (Full url, parameters)
@@ -242,9 +242,9 @@ class Download(BaseDownload):
         dictionary depending upon the dict_form argument.
 
         Args:
-            headers (Sequence[str]): Headers for which to get HXL hashtags
-            hxltags (Dict[str,str]): Header to HXL hashtag mapping
-            dict_form (bool): Return dict or list. Defaults to False (list)
+            headers: Headers for which to get HXL hashtags
+            hxltags: Header to HXL hashtag mapping
+            dict_form: Return dict or list. Defaults to False (list)
 
         Returns:
             Union[List[str],Dict[str,str]]: Return either a list or dictionary conating HXL hashtags
@@ -267,14 +267,14 @@ class Download(BaseDownload):
         """Setup download from provided url returning the response.
 
         Args:
-            url (str): URL or path to download
-            stream (bool): Whether to stream download. Defaults to True.
-            post (bool): Whether to use POST instead of GET. Defaults to False.
-            parameters (Optional[Dict]): Parameters to pass. Defaults to None.
-            timeout (Optional[float]): Timeout for connecting to URL. Defaults to None (no timeout).
-            headers (Optional[Dict]): Headers to pass. Defaults to None.
-            encoding (Optional[str]): Encoding to use for text response. Defaults to None (best guess).
-            json_string (bool): Whether to post parameters as JSON string. Defaults to False.
+            url: URL or path to download
+            stream: Whether to stream download. Defaults to True.
+            post: Whether to use POST instead of GET. Defaults to False.
+            parameters: Parameters to pass. Defaults to None.
+            timeout: Timeout for connecting to URL. Defaults to None (no timeout).
+            headers: Headers to pass. Defaults to None.
+            encoding: Encoding to use for text response. Defaults to None (best guess).
+            json_string: Whether to post parameters as JSON string. Defaults to False.
 
         Returns:
             requests.Response: requests.Response object
@@ -325,7 +325,7 @@ class Download(BaseDownload):
         """Set bearer token
 
         Args:
-            bearer_token (str): Bearer token
+            bearer_token: Bearer token
 
         Returns:
             None
@@ -342,7 +342,7 @@ class Download(BaseDownload):
         first.
 
         Args:
-            url (str): URL or path to download
+            url: URL or path to download
 
         Returns:
             str: MD5 hash of file
@@ -363,8 +363,8 @@ class Download(BaseDownload):
         method first.
 
         Args:
-            path (str): Path for downloaded file
-            errormsg (str): Error message to display if there is a problem
+            path: Path for downloaded file
+            errormsg: Error message to display if there is a problem
 
         Returns:
             str: Path of downloaded file
@@ -396,12 +396,12 @@ class Download(BaseDownload):
         folder if no folder supplied. Must call setup method first.
 
         Args:
-            url (str): URL or path to download
-            folder (Optional[str]): Folder to download it to. Defaults to None (temporary folder).
-            filename (Optional[str]): Filename to use for downloaded file. Defaults to None (derive from the url).
-            path (Optional[str]): Full path to use for downloaded file. Defaults to None (use folder and filename).
-            overwrite (bool): Whether to overwrite existing file. Defaults to False.
-            keep (bool): Whether to keep already downloaded file. Defaults to False.
+            url: URL or path to download
+            folder: Folder to download it to. Defaults to None (temporary folder).
+            filename: Filename to use for downloaded file. Defaults to None (derive from the url).
+            path: Full path to use for downloaded file. Defaults to None (use folder and filename).
+            overwrite: Whether to overwrite existing file. Defaults to False.
+            keep: Whether to keep already downloaded file. Defaults to False.
 
         Returns:
             str: Path of downloaded file
@@ -422,19 +422,19 @@ class Download(BaseDownload):
         folder if no folder supplied.
 
         Args:
-            url (str): URL or path to download
+            url: URL or path to download
             **kwargs: See below
-            folder (str): Folder to download it to. Defaults to temporary folder.
-            filename (str): Filename to use for downloaded file. Defaults to deriving from url.
-            path (str): Full path to use for downloaded file instead of folder and filename.
-            overwrite (bool): Whether to overwrite existing file. Defaults to False.
-            keep (bool): Whether to keep already downloaded file. Defaults to False.
-            post (bool): Whether to use POST instead of GET. Defaults to False.
-            parameters (Dict): Parameters to pass. Defaults to None.
-            timeout (float): Timeout for connecting to URL. Defaults to None (no timeout).
-            headers (Dict): Headers to pass. Defaults to None.
-            encoding (str): Encoding to use for text response. Defaults to None (best guess).
-            json_string (bool): Whether to post parameters as JSON string. Defaults to False.
+            folder: Folder to download it to. Defaults to temporary folder.
+            filename: Filename to use for downloaded file. Defaults to deriving from url.
+            path: Full path to use for downloaded file instead of folder and filename.
+            overwrite: Whether to overwrite existing file. Defaults to False.
+            keep: Whether to keep already downloaded file. Defaults to False.
+            post: Whether to use POST instead of GET. Defaults to False.
+            parameters: Parameters to pass. Defaults to None.
+            timeout: Timeout for connecting to URL. Defaults to None (no timeout).
+            headers: Headers to pass. Defaults to None.
+            encoding: Encoding to use for text response. Defaults to None (best guess).
+            json_string: Whether to post parameters as JSON string. Defaults to False.
 
         Returns:
             str: Path of downloaded file
@@ -465,14 +465,14 @@ class Download(BaseDownload):
         """Download url.
 
         Args:
-            url (str): URL or path to download
+            url: URL or path to download
             **kwargs: See below
-            post (bool): Whether to use POST instead of GET. Defaults to False.
-            parameters (Dict): Parameters to pass. Defaults to None.
-            timeout (float): Timeout for connecting to URL. Defaults to None (no timeout).
-            headers (Dict): Headers to pass. Defaults to None.
-            encoding (str): Encoding to use for text response. Defaults to None (best guess).
-            json_string (bool): Whether to post parameters as JSON string. Defaults to False.
+            post: Whether to use POST instead of GET. Defaults to False.
+            parameters: Parameters to pass. Defaults to None.
+            timeout: Timeout for connecting to URL. Defaults to None (no timeout).
+            headers: Headers to pass. Defaults to None.
+            encoding: Encoding to use for text response. Defaults to None (best guess).
+            json_string: Whether to post parameters as JSON string. Defaults to False.
 
         Returns:
             requests.Response: Response
@@ -492,7 +492,7 @@ class Download(BaseDownload):
         """Get a particular response header of download.
 
         Args:
-            header (str): Header for which to get value
+            header: Header for which to get value
 
         Returns:
             Any: Response header's value
@@ -544,13 +544,13 @@ class Download(BaseDownload):
         """Download url as text.
 
         Args:
-            url (str): URL or path to download
+            url: URL or path to download
             **kwargs: See below
-            post (bool): Whether to use POST instead of GET. Defaults to False.
-            parameters (Dict): Parameters to pass. Defaults to None.
-            timeout (float): Timeout for connecting to URL. Defaults to None (no timeout).
-            headers (Dict): Headers to pass. Defaults to None.
-            encoding (str): Encoding to use for text response. Defaults to None (best guess).
+            post: Whether to use POST instead of GET. Defaults to False.
+            parameters: Parameters to pass. Defaults to None.
+            timeout: Timeout for connecting to URL. Defaults to None (no timeout).
+            headers: Headers to pass. Defaults to None.
+            encoding: Encoding to use for text response. Defaults to None (best guess).
 
         Returns:
             str: Text content of download
@@ -562,13 +562,13 @@ class Download(BaseDownload):
         """Download url as YAML.
 
         Args:
-            url (str): URL or path to download
+            url: URL or path to download
             **kwargs: See below
-            post (bool): Whether to use POST instead of GET. Defaults to False.
-            parameters (Dict): Parameters to pass. Defaults to None.
-            timeout (float): Timeout for connecting to URL. Defaults to None (no timeout).
-            headers (Dict): Headers to pass. Defaults to None.
-            encoding (str): Encoding to use for text response. Defaults to None (best guess).
+            post: Whether to use POST instead of GET. Defaults to False.
+            parameters: Parameters to pass. Defaults to None.
+            timeout: Timeout for connecting to URL. Defaults to None (no timeout).
+            headers: Headers to pass. Defaults to None.
+            encoding: Encoding to use for text response. Defaults to None (best guess).
 
         Returns:
             str: YAML content of download
@@ -580,13 +580,13 @@ class Download(BaseDownload):
         """Download url as JSON.
 
         Args:
-            url (str): URL or path to download
+            url: URL or path to download
             **kwargs: See below
-            post (bool): Whether to use POST instead of GET. Defaults to False.
-            parameters (Dict): Parameters to pass. Defaults to None.
-            timeout (float): Timeout for connecting to URL. Defaults to None (no timeout).
-            headers (Dict): Headers to pass. Defaults to None.
-            encoding (str): Encoding to use for text response. Defaults to None (best guess).
+            post: Whether to use POST instead of GET. Defaults to False.
+            parameters: Parameters to pass. Defaults to None.
+            timeout: Timeout for connecting to URL. Defaults to None (no timeout).
+            headers: Headers to pass. Defaults to None.
+            encoding: Encoding to use for text response. Defaults to None (best guess).
 
         Returns:
             str: JSON content of download
@@ -604,30 +604,30 @@ class Download(BaseDownload):
         """Get Frictionless TableResource.
 
         Args:
-            url (str): URL or path to download
-            ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
-            infer_types (bool): Whether to infer types. Defaults to False (strings).
+            url: URL or path to download
+            ignore_blank_rows: Whether to ignore blank rows. Defaults to True.
+            infer_types: Whether to infer types. Defaults to False (strings).
             **kwargs:
-            has_header (bool): Whether data has a header. Defaults to True.
-            headers (Union[int, Sequence[int], Sequence[str]]): Number of row(s) containing headers or list of headers
-            columns (Union[Sequence[int], Sequence[str], None]): Columns to pick. Defaults to all.
-            format (Optional[str]): Type of file. Defaults to inferring.
-            file_type (Optional[str]): Type of file. Defaults to inferring.
-            encoding (Optional[str]): Type of encoding. Defaults to inferring.
-            compression (Optional[str]): Type of compression. Defaults to inferring.
-            delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
-            skip_initial_space (bool): Ignore whitespace straight after delimiter. Defaults to False.
-            sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
-            fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
-            http_session (Session): Session object to use. Defaults to downloader session.
-            columns (Union[Sequence[int], Sequence[str], None]): Columns to pick. Defaults to all.
-            default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
-            float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
-            null_values (List[Any]): Values that will return None. Defaults to [""].
-            dialect (Dialect): This can be set to override the above. See Frictionless docs.
-            detector (Detector): This can be set to override the above. See Frictionless docs.
-            layout (Layout): This can be set to override the above. See Frictionless docs.
-            schema (Schema): This can be set to override the above. See Frictionless docs.
+            has_header: Whether data has a header. Defaults to True.
+            headers: Number of row(s) containing headers or list of headers
+            columns: Columns to pick. Defaults to all.
+            format: Type of file. Defaults to inferring.
+            file_type: Type of file. Defaults to inferring.
+            encoding: Type of encoding. Defaults to inferring.
+            compression: Type of compression. Defaults to inferring.
+            delimiter: Delimiter for values in csv rows. Defaults to inferring.
+            skip_initial_space: Ignore whitespace straight after delimiter. Defaults to False.
+            sheet: Sheet in Excel. Defaults to inferring.
+            fill_merged_cells: Whether to fill merged cells. Defaults to True.
+            http_session: Session object to use. Defaults to downloader session.
+            columns: Columns to pick. Defaults to all.
+            default_type: Default field type if infer_types False. Defaults to string.
+            float_numbers: Use float not Decimal if infer_types True. Defaults to True.
+            null_values: Values that will return None. Defaults to [""].
+            dialect: This can be set to override the above. See Frictionless docs.
+            detector: This can be set to override the above. See Frictionless docs.
+            layout: This can be set to override the above. See Frictionless docs.
+            schema: This can be set to override the above. See Frictionless docs.
 
         Returns:
             TableResource: frictionless TableResource object
@@ -670,33 +670,33 @@ class Download(BaseDownload):
         outputs a modified row or None to ignore the row.
 
         Args:
-            url (str): URL or path to read from
-            headers (Union[int, Sequence[int], Sequence[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
-            dict_form (bool): Return dict or list for each row. Defaults to False (list)
-            include_headers (bool): Whether to include headers in iterator. Defaults to False.
-            ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
-            infer_types (bool): Whether to infer types. Defaults to False (strings).
-            header_insertions (Optional[Sequence[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
-            row_function (Optional[Callable[[List[str],list | dict],list | dict]]): Function to call for each row. Defaults to None.
+            url: URL or path to read from
+            headers: Number of row(s) containing headers or list of headers. Defaults to 1.
+            dict_form: Return dict or list for each row. Defaults to False (list)
+            include_headers: Whether to include headers in iterator. Defaults to False.
+            ignore_blank_rows: Whether to ignore blank rows. Defaults to True.
+            infer_types: Whether to infer types. Defaults to False (strings).
+            header_insertions: List of (position, header) to insert. Defaults to None.
+            row_function: Function to call for each row. Defaults to None.
             **kwargs:
-            format (Optional[str]): Type of file. Defaults to inferring.
-            file_type (Optional[str]): Type of file. Defaults to inferring.
-            xlsx2csv (bool): Whether to convert xlsx files. Defaults to False.
-            encoding (Optional[str]): Type of encoding. Defaults to inferring.
-            compression (Optional[str]): Type of compression. Defaults to inferring.
-            delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
-            skip_initial_space (bool): Ignore whitespace straight after delimiter. Defaults to False.
-            sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
-            fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
-            http_session (Session): Session object to use. Defaults to downloader session.
-            columns (Union[Sequence[int], Sequence[str], None]): Columns to pick. Defaults to all.
-            default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
-            float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
-            null_values (List[Any]): Values that will return None. Defaults to [""].
-            dialect (Dialect): This can be set to override the above. See Frictionless docs.
-            detector (Detector): This can be set to override the above. See Frictionless docs.
-            layout (Layout): This can be set to override the above. See Frictionless docs.
-            schema (Schema): This can be set to override the above. See Frictionless docs.
+            format: Type of file. Defaults to inferring.
+            file_type: Type of file. Defaults to inferring.
+            xlsx2csv: Whether to convert xlsx files. Defaults to False.
+            encoding: Type of encoding. Defaults to inferring.
+            compression: Type of compression. Defaults to inferring.
+            delimiter: Delimiter for values in csv rows. Defaults to inferring.
+            skip_initial_space: Ignore whitespace straight after delimiter. Defaults to False.
+            sheet: Sheet in Excel. Defaults to inferring.
+            fill_merged_cells: Whether to fill merged cells. Defaults to True.
+            http_session: Session object to use. Defaults to downloader session.
+            columns: Columns to pick. Defaults to all.
+            default_type: Default field type if infer_types False. Defaults to string.
+            float_numbers: Use float not Decimal if infer_types True. Defaults to True.
+            null_values: Values that will return None. Defaults to [""].
+            dialect: This can be set to override the above. See Frictionless docs.
+            detector: This can be set to override the above. See Frictionless docs.
+            layout: This can be set to override the above. See Frictionless docs.
+            schema: This can be set to override the above. See Frictionless docs.
 
         Returns:
             Tuple[List[str],Iterator[list | dict]]: Tuple (headers, iterator where each row is a list or dictionary)
@@ -784,34 +784,34 @@ class Download(BaseDownload):
         outputs a modified row or None to ignore the row.
 
         Args:
-            url (Union[str, Sequence[str]]): A single or list of URLs or paths to read from
-            has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
-            headers (Union[int, Sequence[int], Sequence[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
-            dict_form (bool): Return dict or list for each row. Defaults to False (list)
-            include_headers (bool): Whether to include headers in iterator. Defaults to False.
-            ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
-            infer_types (bool): Whether to infer types. Defaults to False (strings).
-            header_insertions (Optional[Sequence[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
-            row_function (Optional[Callable[[List[str],list | dict],list | dict]]): Function to call for each row. Defaults to None.
+            url: A single or list of URLs or paths to read from
+            has_hxl: Whether files have HXL hashtags. Ignored for single url. Defaults to False.
+            headers: Number of row(s) containing headers or list of headers. Defaults to 1.
+            dict_form: Return dict or list for each row. Defaults to False (list)
+            include_headers: Whether to include headers in iterator. Defaults to False.
+            ignore_blank_rows: Whether to ignore blank rows. Defaults to True.
+            infer_types: Whether to infer types. Defaults to False (strings).
+            header_insertions: List of (position, header) to insert. Defaults to None.
+            row_function: Function to call for each row. Defaults to None.
             **kwargs:
-            format (Optional[str]): Type of file. Defaults to inferring.
-            file_type (Optional[str]): Type of file. Defaults to inferring.
-            xlsx2csv (bool): Whether to convert xlsx files. Defaults to False.
-            encoding (Optional[str]): Type of encoding. Defaults to inferring.
-            compression (Optional[str]): Type of compression. Defaults to inferring.
-            delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
-            skip_initial_space (bool): Ignore whitespace straight after delimiter. Defaults to False.
-            sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
-            fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
-            http_session (Session): Session object to use. Defaults to downloader session.
-            columns (Union[Sequence[int], Sequence[str], None]): Columns to pick. Defaults to all.
-            default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
-            float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
-            null_values (List[Any]): Values that will return None. Defaults to [""].
-            dialect (Dialect): This can be set to override the above. See Frictionless docs.
-            detector (Detector): This can be set to override the above. See Frictionless docs.
-            layout (Layout): This can be set to override the above. See Frictionless docs.
-            schema (Schema): This can be set to override the above. See Frictionless docs.
+            format: Type of file. Defaults to inferring.
+            file_type: Type of file. Defaults to inferring.
+            xlsx2csv: Whether to convert xlsx files. Defaults to False.
+            encoding: Type of encoding. Defaults to inferring.
+            compression: Type of compression. Defaults to inferring.
+            delimiter: Delimiter for values in csv rows. Defaults to inferring.
+            skip_initial_space: Ignore whitespace straight after delimiter. Defaults to False.
+            sheet: Sheet in Excel. Defaults to inferring.
+            fill_merged_cells: Whether to fill merged cells. Defaults to True.
+            http_session: Session object to use. Defaults to downloader session.
+            columns: Columns to pick. Defaults to all.
+            default_type: Default field type if infer_types False. Defaults to string.
+            float_numbers: Use float not Decimal if infer_types True. Defaults to True.
+            null_values: Values that will return None. Defaults to [""].
+            dialect: This can be set to override the above. See Frictionless docs.
+            detector: This can be set to override the above. See Frictionless docs.
+            layout: This can be set to override the above. See Frictionless docs.
+            schema: This can be set to override the above. See Frictionless docs.
 
         Returns:
             Tuple[List[str],Iterator[list | dict]]: Tuple (headers, iterator where each row is a list or dictionary)
@@ -888,33 +888,33 @@ class Download(BaseDownload):
         argument) and outputs a modified row or None to ignore the row.
 
         Args:
-            url (Union[str, Sequence[str]]): A single or list of URLs or paths to read from
-            has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
-            headers (Union[int, Sequence[int], Sequence[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
-            include_headers (bool): Whether to include headers in iterator. Defaults to True.
-            ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
-            infer_types (bool): Whether to infer types. Defaults to False (strings).
-            header_insertions (Optional[Sequence[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
-            row_function (Optional[Callable[[List[str],list | dict],list | dict]]): Function to call for each row. Defaults to None.
+            url: A single or list of URLs or paths to read from
+            has_hxl: Whether files have HXL hashtags. Ignored for single url. Defaults to False.
+            headers: Number of row(s) containing headers or list of headers. Defaults to 1.
+            include_headers: Whether to include headers in iterator. Defaults to True.
+            ignore_blank_rows: Whether to ignore blank rows. Defaults to True.
+            infer_types: Whether to infer types. Defaults to False (strings).
+            header_insertions: List of (position, header) to insert. Defaults to None.
+            row_function: Function to call for each row. Defaults to None.
             **kwargs:
-            format (Optional[str]): Type of file. Defaults to inferring.
-            file_type (Optional[str]): Type of file. Defaults to inferring.
-            xlsx2csv (bool): Whether to convert xlsx files. Defaults to False.
-            encoding (Optional[str]): Type of encoding. Defaults to inferring.
-            compression (Optional[str]): Type of compression. Defaults to inferring.
-            delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
-            skip_initial_space (bool): Ignore whitespace straight after delimiter. Defaults to False.
-            sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
-            fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
-            http_session (Session): Session object to use. Defaults to downloader session.
-            columns (Union[Sequence[int], Sequence[str], None]): Columns to pick. Defaults to all.
-            default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
-            float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
-            null_values (List[Any]): Values that will return None. Defaults to [""].
-            dialect (Dialect): This can be set to override the above. See Frictionless docs.
-            detector (Detector): This can be set to override the above. See Frictionless docs.
-            layout (Layout): This can be set to override the above. See Frictionless docs.
-            schema (Schema): This can be set to override the above. See Frictionless docs.
+            format: Type of file. Defaults to inferring.
+            file_type: Type of file. Defaults to inferring.
+            xlsx2csv: Whether to convert xlsx files. Defaults to False.
+            encoding: Type of encoding. Defaults to inferring.
+            compression: Type of compression. Defaults to inferring.
+            delimiter: Delimiter for values in csv rows. Defaults to inferring.
+            skip_initial_space: Ignore whitespace straight after delimiter. Defaults to False.
+            sheet: Sheet in Excel. Defaults to inferring.
+            fill_merged_cells: Whether to fill merged cells. Defaults to True.
+            http_session: Session object to use. Defaults to downloader session.
+            columns: Columns to pick. Defaults to all.
+            default_type: Default field type if infer_types False. Defaults to string.
+            float_numbers: Use float not Decimal if infer_types True. Defaults to True.
+            null_values: Values that will return None. Defaults to [""].
+            dialect: This can be set to override the above. See Frictionless docs.
+            detector: This can be set to override the above. See Frictionless docs.
+            layout: This can be set to override the above. See Frictionless docs.
+            schema: This can be set to override the above. See Frictionless docs.
 
         Returns:
             Tuple[List[str],Iterator[List]]: Tuple (headers, iterator where each row is a list)
@@ -963,32 +963,32 @@ class Download(BaseDownload):
         argument) and outputs a modified row or None to ignore the row.
 
         Args:
-            url (Union[str, Sequence[str]]): A single or list of URLs or paths to read from
-            has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
-            headers (Union[int, Sequence[int], Sequence[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
-            ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
-            infer_types (bool): Whether to infer types. Defaults to False (strings).
-            header_insertions (Optional[Sequence[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
-            row_function (Optional[Callable[[List[str],list | dict],list | dict]]): Function to call for each row. Defaults to None.
+            url: A single or list of URLs or paths to read from
+            has_hxl: Whether files have HXL hashtags. Ignored for single url. Defaults to False.
+            headers: Number of row(s) containing headers or list of headers. Defaults to 1.
+            ignore_blank_rows: Whether to ignore blank rows. Defaults to True.
+            infer_types: Whether to infer types. Defaults to False (strings).
+            header_insertions: List of (position, header) to insert. Defaults to None.
+            row_function: Function to call for each row. Defaults to None.
             **kwargs:
-            format (Optional[str]): Type of file. Defaults to inferring.
-            file_type (Optional[str]): Type of file. Defaults to inferring.
-            xlsx2csv (bool): Whether to convert xlsx files. Defaults to False.
-            encoding (Optional[str]): Type of encoding. Defaults to inferring.
-            compression (Optional[str]): Type of compression. Defaults to inferring.
-            delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
-            skip_initial_space (bool): Ignore whitespace straight after delimiter. Defaults to False.
-            sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
-            fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
-            http_session (Session): Session object to use. Defaults to downloader session.
-            columns (Union[Sequence[int], Sequence[str], None]): Columns to pick. Defaults to all.
-            default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
-            float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
-            null_values (List[Any]): Values that will return None. Defaults to [""].
-            dialect (Dialect): This can be set to override the above. See Frictionless docs.
-            detector (Detector): This can be set to override the above. See Frictionless docs.
-            layout (Layout): This can be set to override the above. See Frictionless docs.
-            schema (Schema): This can be set to override the above. See Frictionless docs.
+            format: Type of file. Defaults to inferring.
+            file_type: Type of file. Defaults to inferring.
+            xlsx2csv: Whether to convert xlsx files. Defaults to False.
+            encoding: Type of encoding. Defaults to inferring.
+            compression: Type of compression. Defaults to inferring.
+            delimiter: Delimiter for values in csv rows. Defaults to inferring.
+            skip_initial_space: Ignore whitespace straight after delimiter. Defaults to False.
+            sheet: Sheet in Excel. Defaults to inferring.
+            fill_merged_cells: Whether to fill merged cells. Defaults to True.
+            http_session: Session object to use. Defaults to downloader session.
+            columns: Columns to pick. Defaults to all.
+            default_type: Default field type if infer_types False. Defaults to string.
+            float_numbers: Use float not Decimal if infer_types True. Defaults to True.
+            null_values: Values that will return None. Defaults to [""].
+            dialect: This can be set to override the above. See Frictionless docs.
+            detector: This can be set to override the above. See Frictionless docs.
+            layout: This can be set to override the above. See Frictionless docs.
+            schema: This can be set to override the above. See Frictionless docs.
 
         Returns:
             Tuple[List[str], Iterator[Dict]]: Tuple (headers, iterator where each row is a dictionary)
@@ -1039,32 +1039,32 @@ class Download(BaseDownload):
 
 
         Args:
-            url (Union[str, Sequence[str]]): A single or list of URLs or paths to read from
-            has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
-            headers (Union[int, Sequence[int], Sequence[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
-            include_headers (bool): Whether to include headers in iterator. Defaults to True.
-            ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
-            infer_types (bool): Whether to infer types. Defaults to False (strings).
-            header_insertions (Optional[Sequence[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
-            row_function (Optional[Callable[[List[str],list | dict],list | dict]]): Function to call for each row. Defaults to None.
+            url: A single or list of URLs or paths to read from
+            has_hxl: Whether files have HXL hashtags. Ignored for single url. Defaults to False.
+            headers: Number of row(s) containing headers or list of headers. Defaults to 1.
+            include_headers: Whether to include headers in iterator. Defaults to True.
+            ignore_blank_rows: Whether to ignore blank rows. Defaults to True.
+            infer_types: Whether to infer types. Defaults to False (strings).
+            header_insertions: List of (position, header) to insert. Defaults to None.
+            row_function: Function to call for each row. Defaults to None.
             **kwargs:
-            format (Optional[str]): Type of file. Defaults to inferring.
-            file_type (Optional[str]): Type of file. Defaults to inferring.
-            encoding (Optional[str]): Type of encoding. Defaults to inferring.
-            compression (Optional[str]): Type of compression. Defaults to inferring.
-            delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
-            skip_initial_space (bool): Ignore whitespace straight after delimiter. Defaults to False.
-            sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
-            fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
-            http_session (Session): Session object to use. Defaults to downloader session.
-            columns (Union[Sequence[int], Sequence[str], None]): Columns to pick. Defaults to all.
-            default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
-            float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
-            null_values (List[Any]): Values that will return None. Defaults to [""]
-            dialect (Dialect): This can be set to override the above. See Frictionless docs.
-            detector (Detector): This can be set to override the above. See Frictionless docs.
-            layout (Layout): This can be set to override the above. See Frictionless docs.
-            schema (Schema): This can be set to override the above. See Frictionless docs.
+            format: Type of file. Defaults to inferring.
+            file_type: Type of file. Defaults to inferring.
+            encoding: Type of encoding. Defaults to inferring.
+            compression: Type of compression. Defaults to inferring.
+            delimiter: Delimiter for values in csv rows. Defaults to inferring.
+            skip_initial_space: Ignore whitespace straight after delimiter. Defaults to False.
+            sheet: Sheet in Excel. Defaults to inferring.
+            fill_merged_cells: Whether to fill merged cells. Defaults to True.
+            http_session: Session object to use. Defaults to downloader session.
+            columns: Columns to pick. Defaults to all.
+            default_type: Default field type if infer_types False. Defaults to string.
+            float_numbers: Use float not Decimal if infer_types True. Defaults to True.
+            null_values: Values that will return None. Defaults to [""]
+            dialect: This can be set to override the above. See Frictionless docs.
+            detector: This can be set to override the above. See Frictionless docs.
+            layout: This can be set to override the above. See Frictionless docs.
+            schema: This can be set to override the above. See Frictionless docs.
 
         Returns:
             Dict: Dictionary keys (first column) and values (second column)
@@ -1118,32 +1118,32 @@ class Download(BaseDownload):
         argument) and outputs a modified row or None to ignore the row.
 
         Args:
-            url (Union[str, Sequence[str]]): A single or list of URLs or paths to read from
-            has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
-            headers (Union[int, Sequence[int], Sequence[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
-            keycolumn (int): Number of column to be used for key. Defaults to 1.
-            ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
-            infer_types (bool): Whether to infer types. Defaults to False (strings).
-            header_insertions (Optional[Sequence[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
-            row_function (Optional[Callable[[List[str],list | dict],list | dict]]): Function to call for each row. Defaults to None.
+            url: A single or list of URLs or paths to read from
+            has_hxl: Whether files have HXL hashtags. Ignored for single url. Defaults to False.
+            headers: Number of row(s) containing headers or list of headers. Defaults to 1.
+            keycolumn: Number of column to be used for key. Defaults to 1.
+            ignore_blank_rows: Whether to ignore blank rows. Defaults to True.
+            infer_types: Whether to infer types. Defaults to False (strings).
+            header_insertions: List of (position, header) to insert. Defaults to None.
+            row_function: Function to call for each row. Defaults to None.
             **kwargs:
-            format (Optional[str]): Type of file. Defaults to inferring.
-            file_type (Optional[str]): Type of file. Defaults to inferring.
-            encoding (Optional[str]): Type of encoding. Defaults to inferring.
-            compression (Optional[str]): Type of compression. Defaults to inferring.
-            delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
-            skip_initial_space (bool): Ignore whitespace straight after delimiter. Defaults to False.
-            sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
-            fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
-            http_session (Session): Session object to use. Defaults to downloader session.
-            columns (Union[Sequence[int], Sequence[str], None]): Columns to pick. Defaults to all.
-            default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
-            float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
-            null_values (List[Any]): Values that will return None. Defaults to [""].
-            dialect (Dialect): This can be set to override the above. See Frictionless docs.
-            detector (Detector): This can be set to override the above. See Frictionless docs.
-            layout (Layout): This can be set to override the above. See Frictionless docs.
-            schema (Schema): This can be set to override the above. See Frictionless docs.
+            format: Type of file. Defaults to inferring.
+            file_type: Type of file. Defaults to inferring.
+            encoding: Type of encoding. Defaults to inferring.
+            compression: Type of compression. Defaults to inferring.
+            delimiter: Delimiter for values in csv rows. Defaults to inferring.
+            skip_initial_space: Ignore whitespace straight after delimiter. Defaults to False.
+            sheet: Sheet in Excel. Defaults to inferring.
+            fill_merged_cells: Whether to fill merged cells. Defaults to True.
+            http_session: Session object to use. Defaults to downloader session.
+            columns: Columns to pick. Defaults to all.
+            default_type: Default field type if infer_types False. Defaults to string.
+            float_numbers: Use float not Decimal if infer_types True. Defaults to True.
+            null_values: Values that will return None. Defaults to [""].
+            dialect: This can be set to override the above. See Frictionless docs.
+            detector: This can be set to override the above. See Frictionless docs.
+            layout: This can be set to override the above. See Frictionless docs.
+            schema: This can be set to override the above. See Frictionless docs.
 
         Returns:
             Dict[str,Dict]: Dictionary where keys are first column and values are dictionaries with keys from column
@@ -1201,32 +1201,32 @@ class Download(BaseDownload):
         argument) and outputs a modified row or None to ignore the row.
 
         Args:
-            url (Union[str, Sequence[str]]): A single or list of URLs or paths to read from
-            has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
-            headers (Union[int, Sequence[int], Sequence[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
-            keycolumn (int): Number of column to be used for key. Defaults to 1.
-            ignore_blank_rows (bool): Whether to ignore blank rows. Defaults to True.
-            infer_types (bool): Whether to infer types. Defaults to False (strings).
-            header_insertions (Optional[Sequence[Tuple[int,str]]]): List of (position, header) to insert. Defaults to None.
-            row_function (Optional[Callable[[List[str],list | dict],list | dict]]): Function to call for each row. Defaults to None.
+            url: A single or list of URLs or paths to read from
+            has_hxl: Whether files have HXL hashtags. Ignored for single url. Defaults to False.
+            headers: Number of row(s) containing headers or list of headers. Defaults to 1.
+            keycolumn: Number of column to be used for key. Defaults to 1.
+            ignore_blank_rows: Whether to ignore blank rows. Defaults to True.
+            infer_types: Whether to infer types. Defaults to False (strings).
+            header_insertions: List of (position, header) to insert. Defaults to None.
+            row_function: Function to call for each row. Defaults to None.
             **kwargs:
-            format (Optional[str]): Type of file. Defaults to inferring.
-            file_type (Optional[str]): Type of file. Defaults to inferring.
-            encoding (Optional[str]): Type of encoding. Defaults to inferring.
-            compression (Optional[str]): Type of compression. Defaults to inferring.
-            delimiter (Optional[str]): Delimiter for values in csv rows. Defaults to inferring.
-            skip_initial_space (bool): Ignore whitespace straight after delimiter. Defaults to False.
-            sheet (Optional[Union[int, str]): Sheet in Excel. Defaults to inferring.
-            fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
-            http_session (Session): Session object to use. Defaults to downloader session.
-            columns (Union[Sequence[int], Sequence[str], None]): Columns to pick. Defaults to all.
-            default_type (Optional[str]): Default field type if infer_types False. Defaults to string.
-            float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
-            null_values (List[Any]): Values that will return None. Defaults to [""].
-            dialect (Dialect): This can be set to override the above. See Frictionless docs.
-            detector (Detector): This can be set to override the above. See Frictionless docs.
-            layout (Layout): This can be set to override the above. See Frictionless docs.
-            schema (Schema): This can be set to override the above. See Frictionless docs.
+            format: Type of file. Defaults to inferring.
+            file_type: Type of file. Defaults to inferring.
+            encoding: Type of encoding. Defaults to inferring.
+            compression: Type of compression. Defaults to inferring.
+            delimiter: Delimiter for values in csv rows. Defaults to inferring.
+            skip_initial_space: Ignore whitespace straight after delimiter. Defaults to False.
+            sheet: Sheet in Excel. Defaults to inferring.
+            fill_merged_cells: Whether to fill merged cells. Defaults to True.
+            http_session: Session object to use. Defaults to downloader session.
+            columns: Columns to pick. Defaults to all.
+            default_type: Default field type if infer_types False. Defaults to string.
+            float_numbers: Use float not Decimal if infer_types True. Defaults to True.
+            null_values: Values that will return None. Defaults to [""].
+            dialect: This can be set to override the above. See Frictionless docs.
+            detector: This can be set to override the above. See Frictionless docs.
+            layout: This can be set to override the above. See Frictionless docs.
+            schema: This can be set to override the above. See Frictionless docs.
 
         Returns:
             Dict[str,Dict]: Dictionary where keys are header names and values are dictionaries with keys from first column
@@ -1260,7 +1260,7 @@ class Download(BaseDownload):
         """Get mapping of headers to column positions.
 
         Args:
-            headers (Sequence[str]): List of headers
+            headers: List of headers
 
         Returns:
             Dict[str,int]: Dictionary where keys are header names and values are header positions
@@ -1291,27 +1291,27 @@ class Download(BaseDownload):
         this method).
 
         Args:
-            custom_configs (Dict[str, Dict]): Optional dictionary of custom configurations.
-            user_agent (Optional[str]): User agent string. HDXPythonUtilities/X.X.X- is prefixed.
-            user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
-            user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
-            use_env (bool): Whether to read environment variables. Defaults to True.
-            fail_on_missing_file (bool): Raise an exception if any specified configuration files are missing. Defaults to True.
-            rate_limit (Optional[Dict]): Rate limiting per host eg. {"calls": 1, "period": 0.1}. Defaults to None.
+            custom_configs: Optional dictionary of custom configurations.
+            user_agent: User agent string. HDXPythonUtilities/X.X.X- is prefixed.
+            user_agent_config_yaml: Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
+            user_agent_lookup: Lookup key for YAML. Ignored if user_agent supplied.
+            use_env: Whether to read environment variables. Defaults to True.
+            fail_on_missing_file: Raise an exception if any specified configuration files are missing. Defaults to True.
+            rate_limit: Rate limiting per host eg. {"calls": 1, "period": 0.1}. Defaults to None.
             **kwargs: See below
-            auth (Tuple[str, str]): Authorisation information in tuple form (user, pass) OR
-            basic_auth (str): Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
-            basic_auth_file (str): Path to file containing authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx)
-            bearer_token (str): Bearer token string OR
-            bearer_token_file (str): Path to file containing bearer token string OR
-            extra_params_dict (Dict[str, str]): Extra parameters to put on end of url as a dictionary OR
-            extra_params_json (str): Path to JSON file containing extra parameters to put on end of url OR
-            extra_params_yaml (str): Path to YAML file containing extra parameters to put on end of url
-            extra_params_lookup (str): Lookup key for parameters. If not given assumes parameters are at root of the dict.
-            headers (Dict): Additional headers to add to request.
-            use_auth (str): If more than one auth found, specify which one to use, rather than failing.
-            status_forcelist (Sequence[int]): HTTP statuses for which to force retry. Defaults to (429, 500, 502, 503, 504).
-            allowed_methods (Sequence[str]): HTTP methods for which to force retry. Defaults to ("HEAD", "TRACE", "GET", "PUT", "OPTIONS", "DELETE").
+            auth: Authorisation information in tuple form (user, pass) OR
+            basic_auth: Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
+            basic_auth_file: Path to file containing authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx)
+            bearer_token: Bearer token string OR
+            bearer_token_file: Path to file containing bearer token string OR
+            extra_params_dict: Extra parameters to put on end of url as a dictionary OR
+            extra_params_json: Path to JSON file containing extra parameters to put on end of url OR
+            extra_params_yaml: Path to YAML file containing extra parameters to put on end of url
+            extra_params_lookup: Lookup key for parameters. If not given assumes parameters are at root of the dict.
+            headers: Additional headers to add to request.
+            use_auth: If more than one auth found, specify which one to use, rather than failing.
+            status_forcelist: HTTP statuses for which to force retry. Defaults to (429, 500, 502, 503, 504).
+            allowed_methods: HTTP methods for which to force retry. Defaults to ("HEAD", "TRACE", "GET", "PUT", "OPTIONS", "DELETE").
 
         Returns:
             None
@@ -1335,7 +1335,7 @@ class Download(BaseDownload):
         the default one will be returned.
 
         Args:
-            name (Optional[str]): Name of downloader. Defaults to None (get default).
+            name: Name of downloader. Defaults to None (get default).
 
         Returns:
             Download: Downloader object

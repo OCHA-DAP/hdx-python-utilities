@@ -28,11 +28,11 @@ if BeautifulSoup is not None:
         agent to be set or appropriate user agent parameter(s) to be completed.
 
         Args:
-            url (str): url to read
-            downloader (Download): Download object. Defaults to creating a Download object with given user agent values.
-            user_agent (Optional[str]): User agent string. HDXPythonUtilities/X.X.X- is prefixed.
-            user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
-            user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
+            url: url to read
+            downloader: Download object. Defaults to creating a Download object with given user agent values.
+            user_agent: User agent string. HDXPythonUtilities/X.X.X- is prefixed.
+            user_agent_config_yaml: Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
+            user_agent_lookup: Lookup key for YAML. Ignored if user_agent supplied.
 
         Returns:
             BeautifulSoup: The BeautifulSoup object for a url
@@ -49,7 +49,7 @@ if BeautifulSoup is not None:
         newlines and with &nbsp replaced with space.
 
         Args:
-            tag (Tag): BeautifulSoup tag
+            tag: BeautifulSoup tag
 
         Returns:
             str: Text of tag stripped of leading and trailing whitespace and newlines and with &nbsp replaced with space
@@ -60,7 +60,7 @@ if BeautifulSoup is not None:
         """Extract HTML table as list of dictionaries.
 
         Args:
-            tabletag (Tag): BeautifulSoup tag
+            tabletag: BeautifulSoup tag
 
         Returns:
             str: Text of tag stripped of leading and trailing whitespace and newlines and with &nbsp replaced with space

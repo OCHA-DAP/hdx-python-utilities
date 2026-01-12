@@ -25,9 +25,9 @@ class BaseDownload(ABC):
         """Subclasses should define this to allow with usage.
 
         Args:
-            exc_type (Any): Exception type
-            exc_value (Any): Exception value
-            traceback (Any): Traceback
+            exc_type: Exception type
+            exc_value: Exception value
+            traceback: Traceback
 
         Returns:
             None
@@ -38,7 +38,7 @@ class BaseDownload(ABC):
         """Download file from url.
 
         Args:
-            url (str): URL or path to download
+            url: URL or path to download
             *args (Any): Positional arguments
             **kwargs (Any): Keyword arguments
 
@@ -51,7 +51,7 @@ class BaseDownload(ABC):
         """Download text from url.
 
         Args:
-            url (str): URL or path to download
+            url: URL or path to download
             *args (Any): Positional arguments
             **kwargs (Any): Keyword arguments
 
@@ -64,7 +64,7 @@ class BaseDownload(ABC):
         """Download YAML from url.
 
         Args:
-            url (str): URL or path to download
+            url: URL or path to download
             *args (Any): Positional arguments
             **kwargs (Any): Keyword arguments
 
@@ -77,7 +77,7 @@ class BaseDownload(ABC):
         """Download JSON from url.
 
         Args:
-            url (str): URL or path to download
+            url: URL or path to download
             *args (Any): Positional arguments
             **kwargs (Any): Keyword arguments
 
@@ -108,10 +108,10 @@ class BaseDownload(ABC):
         or a list, defaulting to a list.
 
         Args:
-            url (Union[str, Sequence[str]]): A single or list of URLs or paths to read from
-            has_hxl (bool): Whether files have HXL hashtags. Ignored for single url. Defaults to False.
-            headers (Union[int, Sequence[int], Sequence[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
-            dict_form (bool): Return dict or list for each row. Defaults to False (list)
+            url: A single or list of URLs or paths to read from
+            has_hxl: Whether files have HXL hashtags. Ignored for single url. Defaults to False.
+            headers: Number of row(s) containing headers or list of headers. Defaults to 1.
+            dict_form: Return dict or list for each row. Defaults to False (list)
             *args (Any): Positional arguments
             **kwargs (Any): Keyword arguments
 

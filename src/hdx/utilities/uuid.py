@@ -14,8 +14,8 @@ def is_valid_uuid(uuid_to_test: str, version: int = 4) -> bool:
     """Check if uuid_to_test is a valid UUID.
 
     Args:
-        uuid_to_test (str): UUID to test for validity
-        version (int): UUID version. Defaults to 4.
+        uuid_to_test: UUID to test for validity
+        version: UUID version. Defaults to 4.
 
     Returns:
         str: Current script's directory

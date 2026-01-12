@@ -28,7 +28,7 @@ def normalise(text: str) -> str:
     characters are removed.
 
     Args:
-        text (str): Text to normalise
+        text: Text to normalise
 
     Returns:
         str: Normalised text
@@ -54,8 +54,8 @@ def remove_end_characters(string: str, characters_to_remove: str = punctuation) 
     """Remove any characters at end of string that are in characters_to_remove.
 
     Args:
-        string (str): Input string
-        characters_to_remove (str): Characters to remove. Defaults to punctuation.
+        string: Input string
+        characters_to_remove: Characters to remove. Defaults to punctuation.
 
     Returns:
         str: String with any characters at end of string that are in characters_to_remove removed
@@ -74,10 +74,10 @@ def remove_from_end(
     """Remove list of items from end of string, stripping any whitespace.
 
     Args:
-        string (str): Input string
-        things_to_remove (List[str]): Things to remove from the end of string
-        logging_text (Optional[str]): Text to log. Defaults to None.
-        whole_words (bool): Remove parts of or whole words. Defaults to True (whole words only).
+        string: Input string
+        things_to_remove: Things to remove from the end of string
+        logging_text: Text to log. Defaults to None.
+        whole_words: Remove parts of or whole words. Defaults to True (whole words only).
 
     Returns:
         str: String with text removed
@@ -107,9 +107,9 @@ def remove_string(
     and any whitespace following the punctuation
 
     Args:
-        string (str): String to process
-        toremove (str): String to remove
-        end_characters_to_remove (str): Characters to remove. Defaults to punctuation.
+        string: String to process
+        toremove: String to remove
+        end_characters_to_remove: Characters to remove. Defaults to punctuation.
 
     Returns:
         str: String with other string removed
@@ -127,7 +127,7 @@ def get_words_in_sentence(sentence: str) -> list[str]:
     """Returns list of words in a sentence.
 
     Args:
-        sentence (str): Sentence
+        sentence: Sentence
 
     Returns:
         List[str]: List of words in sentence
@@ -139,9 +139,9 @@ def number_format(val: Any, format: str = "%.4f", trailing_zeros: bool = True) -
     """Format float-castable input as string.
 
     Args:
-        val (float): Number to format
-        format (str): Format to use. Defaults to %.4f.
-        trailing_zeros (bool): Leave trailing zeros. Defaults to True.
+        val: Number to format
+        format: Format to use. Defaults to %.4f.
+        trailing_zeros: Leave trailing zeros. Defaults to True.
 
     Returns:
         str: Formatted number as string
@@ -164,10 +164,10 @@ def get_fraction_str(
     format as string, returning '' for invalid numerator or 0 denominator.
 
     Args:
-        numerator (float): Numerator
-        denominator (Optional[float]): Denominator. Defaults to None.
-        format (str): Format to use. Defaults to %.4f.
-        trailing_zeros (bool): Leave trailing zeros. Defaults to True.
+        numerator: Numerator
+        denominator: Denominator. Defaults to None.
+        format: Format to use. Defaults to %.4f.
+        trailing_zeros: Leave trailing zeros. Defaults to True.
 
     Returns:
         str: Formatted number as string
@@ -190,8 +190,8 @@ def only_allowed_in_str(test_str: str, allowed_chars: set) -> bool:
     not.
 
     Args:
-        test_str (str): Test string
-        allowed_chars (Set): Set of allowed characters
+        test_str: Test string
+        allowed_chars: Set of allowed characters
 
     Returns:
         bool: True if test string contains only allowed characters, False if not
@@ -207,7 +207,7 @@ def get_numeric_if_possible(value: Any) -> Any:
     float or int, taking into account commas and periods.
 
     Args:
-        value (Any): Value
+        value: Value
 
     Returns:
         Any: Value

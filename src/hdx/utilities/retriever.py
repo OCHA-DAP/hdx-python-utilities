@@ -24,15 +24,15 @@ class Retrieve(BaseDownload):
     allows the use of a static fallback when downloading fails.
 
     Args:
-        downloader (Download): Download object
-        fallback_dir (str): Directory containing static fallback data
-        saved_dir (str): Directory to save or load downloaded data
-        temp_dir (str): Temporary directory for when data is not needed after downloading
-        save (bool): Whether to save downloaded data. Defaults to False.
-        use_saved (bool): Whether to use saved data. Defaults to False.
-        prefix (str): Prefix to add to filenames. Defaults to "".
-        delete (bool): Whether to delete saved_dir if save is True. Defaults to True.
-        log_level (int): Level at which to log messages. Defaults to logging.INFO.
+        downloader: Download object
+        fallback_dir: Directory containing static fallback data
+        saved_dir: Directory to save or load downloaded data
+        temp_dir: Temporary directory for when data is not needed after downloading
+        save: Whether to save downloaded data. Defaults to False.
+        use_saved: Whether to use saved data. Defaults to False.
+        prefix: Prefix to add to filenames. Defaults to "".
+        delete: Whether to delete saved_dir if save is True. Defaults to True.
+        log_level: Level at which to log messages. Defaults to logging.INFO.
     """
 
     retrievers = {}
@@ -64,10 +64,10 @@ class Retrieve(BaseDownload):
         """Check flags. Also delete saved_dir if save and delete are True.
 
         Args:
-            saved_dir (str): Directory to save or load downloaded data
-            save (bool): Whether to save downloaded data
-            use_saved (bool): Whether to use saved data
-            delete (bool): Whether to delete saved_dir if save is True
+            saved_dir: Directory to save or load downloaded data
+            save: Whether to save downloaded data
+            use_saved: Whether to use saved data
+            delete: Whether to delete saved_dir if save is True
 
         Returns:
             None
@@ -87,7 +87,7 @@ class Retrieve(BaseDownload):
         necessary.
 
         Args:
-            url (str): URL to download
+            url: URL to download
 
         Returns:
             str: Url string to use in logs
@@ -100,7 +100,7 @@ class Retrieve(BaseDownload):
         """Clone a given retriever but use the given downloader.
 
         Args:
-            downloader (Download): Downloader to use
+            downloader: Downloader to use
 
         Returns:
             Retrieve: Cloned retriever
@@ -126,12 +126,12 @@ class Retrieve(BaseDownload):
         """Get filename from url and given parameters.
 
         Args:
-            url (str): Url from which to get filename
-            filename (optional[str]): Filename to use. Defaults to None (infer from url).
-            possible_extensions (Tuple[str, ...]): Possible extensions to look for in url
+            url: Url from which to get filename
+            filename: Filename to use. Defaults to None (infer from url).
+            possible_extensions: Possible extensions to look for in url
             **kwargs: See below
-            format (str): Given extension to look for in url
-            file_type (str): Given extension to look for in url
+            format: Given extension to look for in url
+            file_type: Given extension to look for in url
 
         Returns:
             Tuple[str, Any]: Tuple of (filename, kwargs)
@@ -169,7 +169,7 @@ class Retrieve(BaseDownload):
         """Set bearer token in downloader
 
         Args:
-            bearer_token (str): Bearer token
+            bearer_token: Bearer token
 
         Returns:
             None
@@ -188,11 +188,11 @@ class Retrieve(BaseDownload):
         """Retrieve file.
 
         Args:
-            url (str): URL to download
-            filename (Optional[str]): Filename of saved file. Defaults to getting from url.
-            logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
-            fallback (bool): Whether to use static fallback if download fails. Defaults to False.
-            log_level (int): Level at which to log messages. Overrides level from constructor.
+            url: URL to download
+            filename: Filename of saved file. Defaults to getting from url.
+            logstr: Text to use in log string to describe download. Defaults to filename.
+            fallback: Whether to use static fallback if download fails. Defaults to False.
+            log_level: Level at which to log messages. Overrides level from constructor.
             **kwargs: Parameters to pass to download_file call
 
         Returns:
@@ -239,11 +239,11 @@ class Retrieve(BaseDownload):
         """Download text.
 
         Args:
-            url (str): URL to download
-            filename (Optional[str]): Filename of saved file. Defaults to getting from url.
-            logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
-            fallback (bool): Whether to use static fallback if download fails. Defaults to False.
-            log_level (int): Level at which to log messages. Overrides level from constructor.
+            url: URL to download
+            filename: Filename of saved file. Defaults to getting from url.
+            logstr: Text to use in log string to describe download. Defaults to filename.
+            fallback: Whether to use static fallback if download fails. Defaults to False.
+            log_level: Level at which to log messages. Overrides level from constructor.
             **kwargs: Parameters to pass to download_text call
 
         Returns:
@@ -290,11 +290,11 @@ class Retrieve(BaseDownload):
         """Retrieve YAML.
 
         Args:
-            url (str): URL to download
-            filename (Optional[str]): Filename of saved file. Defaults to getting from url.
-            logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
-            fallback (bool): Whether to use static fallback if download fails. Defaults to False.
-            log_level (int): Level at which to log messages. Overrides level from constructor.
+            url: URL to download
+            filename: Filename of saved file. Defaults to getting from url.
+            logstr: Text to use in log string to describe download. Defaults to filename.
+            fallback: Whether to use static fallback if download fails. Defaults to False.
+            log_level: Level at which to log messages. Overrides level from constructor.
             **kwargs: Parameters to pass to download_yaml call
 
         Returns:
@@ -341,11 +341,11 @@ class Retrieve(BaseDownload):
         """Retrieve JSON.
 
         Args:
-            url (str): URL to download
-            filename (Optional[str]): Filename of saved file. Defaults to getting from url.
-            logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
-            fallback (bool): Whether to use static fallback if download fails. Defaults to False.
-            log_level (int): Level at which to log messages. Overrides level from constructor.
+            url: URL to download
+            filename: Filename of saved file. Defaults to getting from url.
+            logstr: Text to use in log string to describe download. Defaults to filename.
+            fallback: Whether to use static fallback if download fails. Defaults to False.
+            log_level: Level at which to log messages. Overrides level from constructor.
             **kwargs: Parameters to pass to download_json call
 
         Returns:
@@ -404,13 +404,13 @@ class Retrieve(BaseDownload):
         or a list, defaulting to a list.
 
         Args:
-            url (Union[str, Sequence[str]]): A single or list of URLs or paths to read from
-            has_hxl (bool): Whether files have HXL hashtags. Defaults to False.
-            headers (Union[int, Sequence[int], Sequence[str]]): Number of row(s) containing headers or list of headers. Defaults to 1.
-            dict_form (bool): Return dict or list for each row. Defaults to False (list)
-            filename (Optional[str]): Filename of saved file. Defaults to getting from url.
-            logstr (Optional[str]): Text to use in log string to describe download. Defaults to filename.
-            fallback (bool): Whether to use static fallback if download fails. Defaults to False.
+            url: A single or list of URLs or paths to read from
+            has_hxl: Whether files have HXL hashtags. Defaults to False.
+            headers: Number of row(s) containing headers or list of headers. Defaults to 1.
+            dict_form: Return dict or list for each row. Defaults to False (list)
+            filename: Filename of saved file. Defaults to getting from url.
+            logstr: Text to use in log string to describe download. Defaults to filename.
+            fallback: Whether to use static fallback if download fails. Defaults to False.
             **kwargs: Parameters to pass to download_file and get_tabular_rows calls
 
         Returns:
@@ -455,13 +455,13 @@ class Retrieve(BaseDownload):
         when downloading fails.
 
         Args:
-            fallback_dir (str): Directory containing static fallback data
-            saved_dir (str): Directory to save or load downloaded data
-            temp_dir (str): Temporary directory for when data is not needed after downloading
-            save (bool): Whether to save downloaded data. Defaults to False.
-            use_saved (bool): Whether to use saved data. Defaults to False.
-            ignore (Sequence[str]): Don't generate retrievers for these downloaders
-            delete (bool): Whether to delete saved_dir if save is True. Defaults to True.
+            fallback_dir: Directory containing static fallback data
+            saved_dir: Directory to save or load downloaded data
+            temp_dir: Temporary directory for when data is not needed after downloading
+            save: Whether to save downloaded data. Defaults to False.
+            use_saved: Whether to use saved data. Defaults to False.
+            ignore: Don't generate retrievers for these downloaders
+            delete: Whether to delete saved_dir if save is True. Defaults to True.
             **kwargs (Any): Any other arguments to pass.
 
         Returns:
@@ -489,7 +489,7 @@ class Retrieve(BaseDownload):
         default one will be returned.
 
         Args:
-            name (Optional[str]): Name of retriever. Defaults to None (get default).
+            name: Name of retriever. Defaults to None (get default).
 
         Returns:
             Retriever: Retriever object

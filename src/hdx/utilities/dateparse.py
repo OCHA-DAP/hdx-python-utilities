@@ -98,7 +98,7 @@ def get_tzinfos(timezone_info: str) -> dict[str, int]:
     string.
 
     Args:
-        timezone_info (str): Timezones information string
+        timezone_info: Timezones information string
 
     Returns:
         Dict[str, int]: tzinfos dictionary
@@ -861,15 +861,15 @@ def parse_date_range(
         -10 W CKT HAST HST TAHT TKT
 
     Args:
-        string (str): Dataset date string
-        date_format (Optional[str]): Date format. If None is given, will attempt to guess. Defaults to None.
-        timezone_handling (int): Timezone handling. See description. Defaults to 0 (ignore timezone, return UTC).
-        fuzzy (Optional[Dict]): If dict supplied, fuzzy matching will be used and results returned in dict
-        include_microseconds (bool): Includes microseconds if True. Defaults to False.
-        zero_time (bool): Zero time elements of datetime if True. Defaults to False.
-        max_starttime (bool): Make start date time component 23:59:59:999999. Defaults to False.
-        max_endtime (bool): Make end date time component 23:59:59:999999. Defaults to False.
-        default_timezones (Optional[str]): Timezone information. Defaults to None. (Internal default).
+        string: Dataset date string
+        date_format: Date format. If None is given, will attempt to guess. Defaults to None.
+        timezone_handling: Timezone handling. See description. Defaults to 0 (ignore timezone, return UTC).
+        fuzzy: If dict supplied, fuzzy matching will be used and results returned in dict
+        include_microseconds: Includes microseconds if True. Defaults to False.
+        zero_time: Zero time elements of datetime if True. Defaults to False.
+        max_starttime: Make start date time component 23:59:59:999999. Defaults to False.
+        max_endtime: Make end date time component 23:59:59:999999. Defaults to False.
+        default_timezones: Timezone information. Defaults to None. (Internal default).
 
     Returns:
         Tuple[datetime,datetime]: Tuple containing start date and end date
@@ -1030,14 +1030,14 @@ def parse_date(
         -10 W CKT HAST HST TAHT TKT
 
     Args:
-        string (str): Dataset date string
-        date_format (Optional[str]): Date format. If None is given, will attempt to guess. Defaults to None.
-        timezone_handling (int): Timezone handling. See description. Defaults to 0 (ignore timezone, return UTC).
-        fuzzy (Optional[Dict]): If dict supplied, fuzzy matching will be used and results returned in dict
-        include_microseconds (bool): Includes microseconds if True. Defaults to False.
-        zero_time (bool): Zero time elements of datetime if True. Defaults to False.
-        max_time (bool): Make date time component 23:59:59:999999. Defaults to False.
-        default_timezones (Optional[str]): Timezone information. Defaults to None. (Internal default).
+        string: Dataset date string
+        date_format: Date format. If None is given, will attempt to guess. Defaults to None.
+        timezone_handling: Timezone handling. See description. Defaults to 0 (ignore timezone, return UTC).
+        fuzzy: If dict supplied, fuzzy matching will be used and results returned in dict
+        include_microseconds: Includes microseconds if True. Defaults to False.
+        zero_time: Zero time elements of datetime if True. Defaults to False.
+        max_time: Make date time component 23:59:59:999999. Defaults to False.
+        default_timezones: Timezone information. Defaults to None. (Internal default).
 
     Returns:
         datetime: The parsed date
@@ -1070,7 +1070,7 @@ def get_timestamp_from_datetime(date: datetime) -> float:
     """Convert datetime to timestamp.
 
     Args:
-        date (datetime): Date to convert
+        date: Date to convert
 
     Returns:
         float: Timestamp
@@ -1104,9 +1104,9 @@ def get_datetime_from_timestamp(
     """Convert timestamp to datetime.
 
     Args:
-        timestamp (float): Timestamp to convert
-        timezone (datetime.tzinfo): Timezone to use
-        today (datetime): Today's date. Defaults to now_utc.
+        timestamp: Timestamp to convert
+        timezone: Timezone to use
+        today: Today's date. Defaults to now_utc.
 
     Returns:
         datetime: Date of timestamp
@@ -1120,7 +1120,7 @@ def iso_string_from_datetime(date: datetime) -> str:
     """Convert datetime to ISO formatted date without any time elements
 
     Args:
-        date (datetime): Date to convert to string
+        date: Date to convert to string
 
     Returns:
         str: ISO formatted date without any time elements
@@ -1132,7 +1132,7 @@ def get_quarter(date: datetime) -> int:
     """Get the quarter of the given date
 
     Args:
-        date (datetime): Date
+        date: Date
 
     Returns:
         int: Quarter in which the given date is contained
@@ -1144,8 +1144,8 @@ def get_quarter_start(year: int, quarter: int) -> datetime:
     """Get the first day of the quarter in which a given date is contained
 
     Args:
-        year (int): Year
-        quarter (int): Quarter
+        year: Year
+        quarter: Quarter
 
     Returns:
         datetime: First day of quarter
@@ -1160,10 +1160,10 @@ def get_quarter_end(
     """Get the last day of the quarter in which a given date is contained
 
     Args:
-        year (int): Year
-        quarter (int): Quarter
-        max_time (bool): Make date time component 23:59:59:999999. Defaults to True.
-        include_microseconds (bool): Includes microseconds if True. Defaults to False.
+        year: Year
+        quarter: Quarter
+        max_time: Make date time component 23:59:59:999999. Defaults to True.
+        include_microseconds: Includes microseconds if True. Defaults to False.
 
     Returns:
         datetime: First day of quarter

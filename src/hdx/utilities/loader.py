@@ -26,13 +26,13 @@ def load_text(
     """Load file into a string removing newlines.
 
     Args:
-        path (str): Path to file
-        encoding (str): Encoding of file. Defaults to utf-8.
-        strip (bool): Whether to strip whitespace from start and end. Defaults to False.
-        replace_newlines (Optional[str]): String with which to replace newlines. Defaults to None (don't replace). (deprecated 2024-02-07)
-        replace_line_separators (Optional[str]): String with which to replace newlines. Defaults to None (don't replace).
-        loaderror_if_empty (bool): Whether to raise LoadError if file is empty. Default to True.
-        default_line_separator (str): line separator to be replaced if replace_line_separators is not None
+        path: Path to file
+        encoding: Encoding of file. Defaults to utf-8.
+        strip: Whether to strip whitespace from start and end. Defaults to False.
+        replace_newlines: String with which to replace newlines. Defaults to None (don't replace). (deprecated 2024-02-07)
+        replace_line_separators: String with which to replace newlines. Defaults to None (don't replace).
+        loaderror_if_empty: Whether to raise LoadError if file is empty. Default to True.
+        default_line_separator: line separator to be replaced if replace_line_separators is not None
 
     Returns:
         str: String contents of file
@@ -64,9 +64,9 @@ def load_yaml(
     """Load YAML file into an ordered dictionary.
 
     Args:
-        path (str): Path to YAML file
-        encoding (str): Encoding of file. Defaults to utf-8.
-        loaderror_if_empty (bool): Whether to raise LoadError if file is empty. Default to True.
+        path: Path to YAML file
+        encoding: Encoding of file. Defaults to utf-8.
+        loaderror_if_empty: Whether to raise LoadError if file is empty. Default to True.
 
     Returns:
         Any: The data from the YAML file
@@ -88,9 +88,9 @@ def load_json(
     """Load JSON file into an ordered dictionary (dict for Python 3.7+)
 
     Args:
-        path (str): Path to JSON file
-        encoding (str): Encoding of file. Defaults to utf-8.
-        loaderror_if_empty (bool): Whether to raise LoadError if file is empty. Default to True.
+        path: Path to JSON file
+        encoding: Encoding of file. Defaults to utf-8.
+        loaderror_if_empty: Whether to raise LoadError if file is empty. Default to True.
 
     Returns:
         Any: The data from the JSON file
@@ -114,9 +114,9 @@ def load_and_merge_yaml(
     dictionary.
 
     Args:
-        paths (Sequence[str]): Paths to YAML files
-        encoding (str): Encoding of file. Defaults to utf-8.
-        loaderror_if_empty (bool): Whether to raise LoadError if any file is empty. Default to True.
+        paths: Paths to YAML files
+        encoding: Encoding of file. Defaults to utf-8.
+        loaderror_if_empty: Whether to raise LoadError if any file is empty. Default to True.
 
     Returns:
         Mapping: Dictionary of merged YAML files
@@ -137,9 +137,9 @@ def load_and_merge_json(
     dictionary.
 
     Args:
-        paths (Sequence[str]): Paths to JSON files
-        encoding (str): Encoding of file. Defaults to utf-8.
-        loaderror_if_empty (bool): Whether to raise LoadError if any file is empty. Default to True.
+        paths: Paths to JSON files
+        encoding: Encoding of file. Defaults to utf-8.
+        loaderror_if_empty: Whether to raise LoadError if any file is empty. Default to True.
 
     Returns:
         Mapping: Dictionary of merged JSON files
@@ -160,10 +160,10 @@ def load_yaml_into_existing_dict(
     """Merge YAML file that is in dictionary form into existing dictionary.
 
     Args:
-        data (dict): Dictionary to merge into
-        path (str): YAML file to load and merge
-        encoding (str): Encoding of file. Defaults to utf-8.
-        loaderror_if_empty (bool): Whether to raise LoadError if file is empty. Default to True.
+        data: Dictionary to merge into
+        path: YAML file to load and merge
+        encoding: Encoding of file. Defaults to utf-8.
+        loaderror_if_empty: Whether to raise LoadError if file is empty. Default to True.
 
     Returns:
         Mapping: YAML file merged into dictionary
@@ -181,10 +181,10 @@ def load_json_into_existing_dict(
     """Merge JSON file that is in dictionary form into existing dictionary.
 
     Args:
-        data (dict): Dictionary to merge into
-        path (str): JSON file to load and merge
-        encoding (str): Encoding of file. Defaults to utf-8.
-        loaderror_if_empty (bool): Whether to raise LoadError if file is empty. Default to True.
+        data: Dictionary to merge into
+        path: JSON file to load and merge
+        encoding: Encoding of file. Defaults to utf-8.
+        loaderror_if_empty: Whether to raise LoadError if file is empty. Default to True.
 
     Returns:
         Mapping: JSON file merged into dictionary

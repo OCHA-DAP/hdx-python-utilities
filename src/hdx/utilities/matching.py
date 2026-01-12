@@ -25,10 +25,10 @@ class Phonetics(RefinedSoundex):
         or the index of the matching name
 
         Args:
-            possible_names (Sequence): Possible names
-            name (str): Name to match
-            alternative_name (str): Alternative name to match. Defaults to None.
-            transform_possible_names (Sequence[Callable]): Functions to transform possible names.
+            possible_names: Possible names
+            name: Name to match
+            alternative_name: Alternative name to match. Defaults to None.
+            transform_possible_names: Functions to transform possible names.
             threshold: Match threshold. Defaults to 2.
 
         Returns:
@@ -71,11 +71,11 @@ def get_code_from_name(
     Given a name (org type, sector, etc), return the corresponding code.
 
     Args:
-        name (str): Name to match
-        code_lookup (dict): Dictionary of official names and codes
-        unmatched (List[str]): List of unmatched names
-        fuzzy_match (bool): Allow fuzzy matching or not
-        match_threshold (int): Match threshold
+        name: Name to match
+        code_lookup: Dictionary of official names and codes
+        unmatched: List of unmatched names
+        fuzzy_match: Allow fuzzy matching or not
+        match_threshold: Match threshold
 
     Returns:
         Optional[str]: Matching code
@@ -116,8 +116,8 @@ def multiple_replace(string: str, replacements: dict[str, str]) -> str:
     """Simultaneously replace multiple strings in a string.
 
     Args:
-        string (str): Input string
-        replacements (Dict[str,str]): Replacements dictionary
+        string: Input string
+        replacements: Replacements dictionary
 
     Returns:
         str: String with replacements
@@ -137,7 +137,7 @@ def match_template_variables(
     """Try to match {{XXX}} in input string.
 
     Args:
-        string (str): String in which to look for template
+        string: String in which to look for template
 
     Returns:
         Tuple[Optional[str], Optional[str]]: (Matched string with brackets, matched string without brackets)
@@ -154,8 +154,8 @@ def earliest_index(string_to_search: str, strings_to_try: Sequence[str]) -> int 
     index.
 
     Args:
-        string_to_search (str): String to search
-        strings_to_try (Sequence[str]): Strings to try
+        string_to_search: String to search
+        strings_to_try: Strings to try
 
     Returns:
         Optional[int]: Earliest index of the strings to try in string to search or None
@@ -185,11 +185,11 @@ def get_matching_text_in_strs(
     """Returns a list of matching blocks of text in a and b.
 
     Args:
-        a (str): First string to match
-        b (str): Second string to match
-        match_min_size (int): Minimum block size to match on. Defaults to 30.
-        ignore (str): Any characters to ignore in matching. Defaults to ''.
-        end_characters (str): End characters to look for. Defaults to ''.
+        a: First string to match
+        b: Second string to match
+        match_min_size: Minimum block size to match on. Defaults to 30.
+        ignore: Any characters to ignore in matching. Defaults to ''.
+        end_characters: End characters to look for. Defaults to ''.
 
     Returns:
         List[str]: List of matching blocks of text
@@ -224,10 +224,10 @@ def get_matching_text(
     followed by non-matching.
 
     Args:
-        string_list (List[str]): List of strings to match
-        match_min_size (int): Minimum block size to match on. Defaults to 30.
-        ignore (str): Any characters to ignore in matching. Defaults to ''.
-        end_characters (str): End characters to look for. Defaults to '.\r\n'.
+        string_list: List of strings to match
+        match_min_size: Minimum block size to match on. Defaults to 30.
+        ignore: Any characters to ignore in matching. Defaults to ''.
+        end_characters: End characters to look for. Defaults to '.\r\n'.
 
     Returns:
         str: String containing matching blocks of text followed by non-matching
@@ -257,11 +257,11 @@ def get_matching_then_nonmatching_text(
     followed by non-matching.
 
     Args:
-        string_list (List[str]): List of strings to match
-        separator (str): Separator to add between blocks of text. Defaults to ''.
-        match_min_size (int): Minimum block size to match on. Defaults to 30.
-        ignore (str): Any characters to ignore in matching. Defaults to ''.
-        end_characters (str): End characters to look for. Defaults to '.\r\n'.
+        string_list: List of strings to match
+        separator: Separator to add between blocks of text. Defaults to ''.
+        match_min_size: Minimum block size to match on. Defaults to 30.
+        ignore: Any characters to ignore in matching. Defaults to ''.
+        end_characters: End characters to look for. Defaults to '.\r\n'.
 
     Returns:
         str: String containing matching blocks of text followed by non-matching

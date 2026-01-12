@@ -55,9 +55,9 @@ def save_text(string: str, path: str, encoding: str = "utf-8") -> None:
     """Save text string to file.
 
     Args:
-        string (str): String to save
-        path (str): Path to file
-        encoding (str): Encoding of file. Defaults to utf-8.
+        string: String to save
+        path: Path to file
+        encoding: Encoding of file. Defaults to utf-8.
 
     Returns:
         None
@@ -76,11 +76,11 @@ def save_yaml(
     """Save dictionary to YAML file preserving order if it is an OrderedDict.
 
     Args:
-        object (Any): Python object to save
-        path (str): Path to YAML file
-        encoding (str): Encoding of file. Defaults to utf-8.
-        pretty (bool): Whether to pretty print. Defaults to False.
-        sortkeys (bool): Whether to sort dictionary keys. Defaults to False.
+        object: Python object to save
+        path: Path to YAML file
+        encoding: Encoding of file. Defaults to utf-8.
+        pretty: Whether to pretty print. Defaults to False.
+        sortkeys: Whether to sort dictionary keys. Defaults to False.
 
     Returns:
         None
@@ -110,11 +110,11 @@ def save_json(
     """Save dictionary to JSON file preserving order if it is an OrderedDict.
 
     Args:
-        object (Any): Python object to save
-        path (str): Path to JSON file
-        encoding (str): Encoding of file. Defaults to utf-8.
-        pretty (bool): Whether to pretty print. Defaults to False.
-        sortkeys (bool): Whether to sort dictionary keys. Defaults to False.
+        object: Python object to save
+        path: Path to JSON file
+        encoding: Encoding of file. Defaults to utf-8.
+        pretty: Whether to pretty print. Defaults to False.
+        sortkeys: Whether to sort dictionary keys. Defaults to False.
 
     Returns:
         None
@@ -151,11 +151,11 @@ def save_hxlated_output(
     variables needed by the metadata defined in the configuration.
 
     Args:
-        configuration (Dict): Configuration for input and output
-        rows (Sequence[Sequence | Mapping]): Rows of data
-        includes_header (bool): Whether rows includes header. Defaults to True,
-        includes_hxltags (bool): Whether rows includes HXL hashtags. Defaults to False.
-        output_dir (str): Output directory. Defaults to "".
+        configuration: Configuration for input and output
+        rows: Rows of data
+        includes_header: Whether rows includes header. Defaults to True,
+        includes_hxltags: Whether rows includes HXL hashtags. Defaults to False.
+        output_dir: Output directory. Defaults to "".
         **kwargs: Variables to use when evaluating template arguments
 
     Returns:
@@ -287,13 +287,13 @@ def save_iterable(
     as containing values.)
 
     Args:
-        filepath (str): Path to write to
-        rows (Iterable[Sequence | Mapping]): List of rows in dict or list form
-        headers (Union[int, Sequence[str], None]): Headers to write. Defaults to None.
-        columns (Union[Sequence[int], Sequence[str], None]): Columns to write. Defaults to all.
-        format (str): Format to write. Defaults to csv.
-        encoding (Optional[str]): Encoding to use. Defaults to None (infer encoding).
-        row_function (Optional[Callable[[Dict],Optional[Dict]]]): Row function to call for each row. Defaults to None.
+        filepath: Path to write to
+        rows: List of rows in dict or list form
+        headers: Headers to write. Defaults to None.
+        columns: Columns to write. Defaults to all.
+        format: Format to write. Defaults to csv.
+        encoding: Encoding to use. Defaults to None (infer encoding).
+        row_function: Row function to call for each row. Defaults to None.
 
     Returns:
         List: List of rows written to file

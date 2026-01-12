@@ -8,7 +8,7 @@ def str_to_base64(string: str) -> str:
     """Base 64 encode string.
 
     Args:
-        string (str): String to encode
+        string: String to encode
 
     Returns:
         str: Base 64 encoded string
@@ -20,7 +20,7 @@ def base64_to_str(bstring: str) -> str:
     """Base 64 decode string.
 
     Args:
-        bstring (str): Base 64 encoded string to encode
+        bstring: Base 64 encoded string to encode
 
     Returns:
         str: Decoded string
@@ -35,8 +35,8 @@ def basicauth_encode(username: str, password: str) -> str:
     Inspired by: https://github.com/rdegges/python-basicauth/blob/master/basicauth.py#L16
 
     Args:
-        username (str): Username
-        password (str): Password
+        username: Username
+        password: Password
 
     Returns:
         str: Basic authentication string
@@ -55,7 +55,7 @@ def basicauth_decode(encoded_string: str) -> tuple[str, str]:
     Inspired by: https://github.com/rdegges/python-basicauth/blob/master/basicauth.py#L27
 
     Args:
-        encoded_string (str): String to decode
+        encoded_string: String to decode
 
     Returns:
         Tuple[str, str]: Tuple of form (username, password)

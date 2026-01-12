@@ -17,9 +17,9 @@ def setup_logging(
     errors to a file.
 
     Args:
-        console_log_level (str): Log level to use for console output. Defaults to INFO.
-        log_file (Optional[str]): Path of log file. Defaults to None (No log file).
-        file_log_level (str): Log level to use for console output. Defaults to ERROR.
+        console_log_level: Log level to use for console output. Defaults to INFO.
+        log_file: Path of log file. Defaults to None (No log file).
+        file_log_level: Log level to use for console output. Defaults to ERROR.
 
     Returns:
         None

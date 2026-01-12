@@ -18,7 +18,7 @@ def hash_excel_buffer(buffer: bytes) -> str:
     """Hash the sheets in an Excel XLSX file given in a buffer using MD5
 
     Args:
-        buffer (bytes): Excel XLSX file buffer
+        buffer: Excel XLSX file buffer
 
     Returns:
         str: MD5 hash of the sheets
@@ -55,7 +55,7 @@ def hash_excel_fp(fp: IOBase) -> str:
     """Hash the sheets in an Excel XLSX file given as a file pointer using MD5
 
     Args:
-        fp (IOBase): Excel file pointer
+        fp: Excel file pointer
 
     Returns:
         str: MD5 hash of the sheets
@@ -67,7 +67,7 @@ def crc_zip_buffer(buffer: bytes) -> str:
     """Get sum of CRC32s for all files in a zip given a buffer
 
     Args:
-         buffer (bytes): Zip in buffer
+         buffer: Zip in buffer
 
     Returns:
         str: Sum of the CRC32
@@ -81,7 +81,7 @@ def crc_zip_fp(fp: IOBase) -> str:
     """Get sum of CRC32s for all files in a zip given a file pointer
 
     Args:
-        fp (IOBase): Zip file pointer
+        fp: Zip file pointer
 
     Returns:
         str: Sum of the CRC32
@@ -95,7 +95,7 @@ def get_size_and_hash(filepath: str, file_format: str) -> tuple[int, str]:
 
     Args:
         filepath: Path to file
-        file_format (str): File format
+        file_format: File format
 
     Returns:
         Tuple[int, str]: Tuple (size, hash)

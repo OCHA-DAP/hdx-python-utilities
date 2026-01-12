@@ -25,7 +25,7 @@ class UserAgent:
 
         Args:
             **kwargs: See below
-            user_agent (str): User agent string.
+            user_agent: User agent string.
 
         Returns:
             kwargs: Changed keyword arguments
@@ -43,9 +43,9 @@ class UserAgent:
         """Construct user agent.
 
         Args:
-            configdict (str): Additional configuration for user agent
-            prefix (str): Text to put at start of user agent
-            ua (str): Custom user agent text
+            configdict: Additional configuration for user agent
+            prefix: Text to put at start of user agent
+            ua: Custom user agent text
 
         Returns:
             str: Full user agent string
@@ -74,9 +74,9 @@ class UserAgent:
         """Load user agent YAML file.
 
         Args:
-            prefix (str): Text to put at start of user agent
-            user_agent_config_yaml (str): Path to user agent YAML file
-            user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
+            prefix: Text to put at start of user agent
+            user_agent_config_yaml: Path to user agent YAML file
+            user_agent_lookup: Lookup key for YAML. Ignored if user_agent supplied.
 
         Returns:
             str: user agent
@@ -115,9 +115,9 @@ class UserAgent:
         """Get full user agent string.
 
         Args:
-            user_agent (Optional[str]): User agent string. HDXPythonLibrary/X.X.X- is prefixed.
-            user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
-            user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
+            user_agent: User agent string. HDXPythonLibrary/X.X.X- is prefixed.
+            user_agent_config_yaml: Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
+            user_agent_lookup: Lookup key for YAML. Ignored if user_agent supplied.
 
         Returns:
             str: Full user agent string
@@ -153,9 +153,9 @@ class UserAgent:
         """Set global user agent string.
 
         Args:
-            user_agent (Optional[str]): User agent string. HDXPythonLibrary/X.X.X- is prefixed.
-            user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
-            user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
+            user_agent: User agent string. HDXPythonLibrary/X.X.X- is prefixed.
+            user_agent_config_yaml: Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
+            user_agent_lookup: Lookup key for YAML. Ignored if user_agent supplied.
 
         Returns:
             None
@@ -176,9 +176,9 @@ class UserAgent:
         on global user agent if set.
 
         Args:
-            user_agent (Optional[str]): User agent string. HDXPythonLibrary/X.X.X- is prefixed.
-            user_agent_config_yaml (Optional[str]): Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
-            user_agent_lookup (Optional[str]): Lookup key for YAML. Ignored if user_agent supplied.
+            user_agent: User agent string. HDXPythonLibrary/X.X.X- is prefixed.
+            user_agent_config_yaml: Path to YAML user agent configuration. Ignored if user_agent supplied. Defaults to ~/.useragent.yaml.
+            user_agent_lookup: Lookup key for YAML. Ignored if user_agent supplied.
 
         Returns:
             str: Full user agent string
