@@ -26,8 +26,3 @@ repos:
         files: pyproject.toml
         args: [ pyproject.toml, --resolver=backtracking, --upgrade, -q,
                 -o, requirements.txt ]
-      - id: pip-compile
-        name: pip-compile requirements-test.txt
-        files: pyproject.toml
-        args: [ pyproject.toml, --resolver=backtracking, --upgrade, -q,
-                --extra, test, -c, requirements.txt, -o, requirements-test.txt ]
