@@ -15,7 +15,7 @@ def find_eocd_signature(tail_data: bytes) -> tuple[int, int, int]:
         tail_data: Data to search for EOCD
 
     Returns:
-        Tuple[int, int, int]: (total_records, cd_offset, cd_end) or (-1, -1, -1) on failure
+        (total_records, cd_offset, cd_end) or (-1, -1, -1) on failure
     """
     eocd_pos = tail_data.rfind(EOCD_SIGNATURE)
     if eocd_pos == -1:
@@ -37,7 +37,7 @@ def parse_central_directory(data: bytes, num_records: int) -> dict[str, int]:
         num_records: Number of files in zip
 
     Returns:
-        Dict[str, int]: Dictionary of filepath to file CRC32
+        Dictionary of filepath to file CRC32
     """
     results = {}
     offset = 0
@@ -70,7 +70,7 @@ def get_tail_start(size: int) -> int:
         size: File size
 
     Returns:
-        int: Starting offset of the tail of a zip
+        Starting offset of the tail of a zip
     """
     read_size = min(size, MAX_COMMENT_SIZE + EOCD_MIN_SIZE)
     return size - read_size
@@ -84,7 +84,7 @@ def get_zip_tail_header(size: int) -> dict[str, str]:
         size: File size
 
     Returns:
-        Dict[str, str]: Header for GET request
+        Header for GET request
     """
     return {"Range": f"bytes={get_tail_start(size)}-"}
 
@@ -96,7 +96,7 @@ def get_zip_cd_header(tail_data: bytes) -> tuple[int, dict]:
         tail_data: Data to search for EOCD
 
     Returns:
-        Tuple[int, Dict]: (total_records, CD range header) or (-1, {}) on failure
+        (total_records, CD range header) or (-1, {}) on failure
     """
     total_records, cd_offset, cd_end = find_eocd_signature(tail_data)
     if total_records == -1:
@@ -111,7 +111,7 @@ def get_zip_crcs_buffer(buffer: bytes) -> dict[str, int]:
         buffer: Zip in buffer
 
     Returns:
-        Dict[str, int]: Dictionary of filepath to file CRC32
+        Dictionary of filepath to file CRC32
     """
     tail_data = buffer[get_tail_start(len(buffer)) :]
     num_records, cd_offset, cd_end = find_eocd_signature(tail_data)
@@ -128,7 +128,7 @@ def get_zip_crcs_fp(fp: IOBase) -> dict[str, int]:
         fp: Zip file pointer
 
     Returns:
-        Dict[str, int]: Dictionary of filepath to file CRC32
+        Dictionary of filepath to file CRC32
     """
     size = fstat(fp.fileno()).st_size
     tail_start = get_tail_start(size)
@@ -149,7 +149,7 @@ def get_crc_sum(file_crcs: dict[str, int]) -> str:
         file_crcs: Dictionary of filepath to file CRC32
 
     Returns:
-        str: Sum of the CRC32
+        Sum of the CRC32
     """
     crc_sum = 0
     for crc in file_crcs.values():

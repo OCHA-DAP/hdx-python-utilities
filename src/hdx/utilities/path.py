@@ -17,7 +17,7 @@ from os.path import (
 )
 from shutil import rmtree
 from tempfile import gettempdir
-from typing import Any, Sequence
+from typing import Any, Sequence, Generator
 from urllib.parse import unquote_plus, urlsplit
 
 from slugify import slugify
@@ -42,7 +42,7 @@ def script_dir(pyobject: Any, follow_symlinks: bool = True) -> str:
         follow_symlinks: Follow symlinks or not. Defaults to True.
 
     Returns:
-        str: Current script's directory
+        Current script's directory
     """
     if getattr(sys, "frozen", False):  # py2exe, PyInstaller, cx_Freeze
         path = abspath(sys.executable)  # pragma: no cover
@@ -64,7 +64,7 @@ def script_dir_plus_file(
         follow_symlinks: Follow symlinks or not. Defaults to True.
 
     Returns:
-        str: Current script's directory and with filename appended
+        Current script's directory and with filename appended
     """
     return join(script_dir(pyobject, follow_symlinks), filename)
 
@@ -85,7 +85,7 @@ def get_temp_dir(
         tempdir: Folder to use as temporary directory. Defaults to None (TEMP_DIR or os.gettempdir).
 
     Returns:
-        str: A temporary directory
+        A temporary directory
     """
     if tempdir is None:
         tempdir = getenv("TEMP_DIR", gettempdir())
@@ -107,7 +107,7 @@ def temp_dir(
     delete_on_success: bool = True,
     delete_on_failure: bool = True,
     tempdir: str | None = None,
-) -> str:
+) -> Generator[str, Any, None]:
     """Get a temporary directory optionally with folder appended (and created
     if it doesn't exist)
 
@@ -119,7 +119,7 @@ def temp_dir(
         tempdir: Folder to use as temporary directory. Defaults to None (TEMP_DIR or os.gettempdir).
 
     Returns:
-        str: A temporary directory
+        A temporary directory
     """
     tempdir = get_temp_dir(folder, delete_if_exists=delete_if_exists, tempdir=tempdir)
     try:
@@ -141,7 +141,7 @@ def read_or_create_batch(folder: str, batch: str | None = None) -> str:
         batch: Batch to use if there isn't one in a file already.
 
     Returns:
-        str: Batch
+        Batch
     """
     batch_file = join(folder, "batch.txt")
     if exists(batch_file):
@@ -163,7 +163,7 @@ def temp_dir_batch(
     delete_on_failure: bool = True,
     batch: str | None = None,
     tempdir: str | None = None,
-) -> dict:
+) -> Generator[dict, Any, None]:
     """Get a temporary directory and batch id. Yields a dictionary with key
     folder which is the temporary directory optionally with folder appended
     (and created if it doesn't exist). In key batch is a batch code to be
@@ -178,7 +178,7 @@ def temp_dir_batch(
         tempdir: Folder to use as temporary directory. Defaults to None (TEMP_DIR or os.gettempdir).
 
     Returns:
-        Dict: Dictionary containing temporary directory in key folder and batch id in key batch
+        Dictionary containing temporary directory in key folder and batch id in key batch
     """
     with temp_dir(
         folder,
@@ -202,7 +202,7 @@ def get_wheretostart(text: str, message: str, key: str) -> str | None:
         key: Key to comapre with
 
     Returns:
-        Optional[str]: A string or None
+        A string or None
     """
     upper_text = text.upper()
     if upper_text == "RESET":
@@ -220,7 +220,7 @@ def progress_storing_folder(
     iterator: Iterable[dict],
     key: str,
     wheretostart: str | None = None,
-) -> tuple[dict, dict]:
+) -> Generator[tuple[dict, dict], Any, None]:
     """Store progress in folder in key folder of info dictionary parameter.
     Yields 2 dictionaries. The first is the info dictionary. It contains in key
     folder the folder being used to store progress and in key progress the
@@ -236,7 +236,7 @@ def progress_storing_folder(
         wheretostart: Where in iterator to start
 
     Returns:
-        Tuple[Dict,Dict]: A tuple of the form (info dictionary, next object in iterator)
+        A tuple of the form (info dictionary, next object in iterator)
     """
     folder = info["folder"]
     progress_file = join(folder, "progress.txt")
@@ -279,7 +279,7 @@ def progress_storing_folder(
 @contextlib.contextmanager
 def wheretostart_tempdir_batch(
     folder: str, batch: str | None = None, tempdir: str | None = None
-) -> dict:
+) -> Generator[dict, Any, None]:
     """Get a temporary directory and batch id. Deletes any existing folder if
     WHERETOSTART environment variable is set to RESET. Yields a dictionary with
     key folder which is the temporary directory optionally with folder appended
@@ -292,7 +292,7 @@ def wheretostart_tempdir_batch(
         tempdir: Folder to use as temporary directory. Defaults to None (TEMP_DIR or os.gettempdir).
 
     Returns:
-        Dict: Dictionary containing temporary directory in key folder and batch id in key batch
+        Dictionary containing temporary directory in key folder and batch id in key batch
     """
     delete_if_exists = False
     wheretostart = getenv("WHERETOSTART")
@@ -317,7 +317,7 @@ def progress_storing_tempdir(
     key: str,
     batch: str | None = None,
     tempdir: str | None = None,
-) -> tuple[dict, dict]:
+) -> Generator[tuple[dict, dict], Any, None]:
     """Store progress in temporary directory. The folder persists until the
     final iteration allowing which iteration to start at and the batch code to
     be persisted between runs. Yields 2 dictionaries. The first contains key
@@ -338,7 +338,7 @@ def progress_storing_tempdir(
         tempdir: Folder to use as temporary directory. Defaults to None (TEMP_DIR or os.gettempdir).
 
     Returns:
-        Tuple[Dict,Dict]: A tuple of the form (info dictionary, next object in iterator)
+        A tuple of the form (info dictionary, next object in iterator)
     """
     with wheretostart_tempdir_batch(folder, batch=batch, tempdir=tempdir) as info:
         yield from progress_storing_folder(info, iterator, key)
@@ -349,7 +349,7 @@ def multiple_progress_storing_tempdir(
     iterators: Sequence[Iterable[dict]],
     keys: Sequence[str],
     batch: str | None = None,
-) -> tuple[dict, dict]:
+) -> Generator[tuple[int, dict, dict], Any, None]:
     """Store progress in temporary directory. The folder persists until the
     final iteration of the last iterator allowing which iteration to start at
     and the batch code to be persisted between runs. Yields 2 dictionaries. The
@@ -370,7 +370,7 @@ def multiple_progress_storing_tempdir(
         batch: Batch to use if there isn't one in a file already.
 
     Returns:
-        Tuple[int, Dict,Dict]: A tuple of the form (iterator index, info dictionary, next object in iterator)
+        A tuple of the form (iterator index, info dictionary, next object in iterator)
     """
     delete_if_exists = False
     wheretostartenv = getenv("WHERETOSTART")
@@ -427,7 +427,7 @@ def get_filename_extension_from_url(
         use_query: Include query parameters as well. Defaults to False.
 
     Returns:
-        Tuple[str,str]: Tuple of (filename, extension)
+        Tuple of (filename, extension)
     """
     split_url = urlsplit(unquote_plus(url))
     urlpath = split_url.path
@@ -459,7 +459,7 @@ def get_filename_from_url(
         use_query: Include query parameters as well. Defaults to False.
 
     Returns:
-        str: filename
+        filename
     """
     filename, extension = get_filename_extension_from_url(url, second_last, use_query)
     return f"{filename}{extension}"

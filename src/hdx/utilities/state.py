@@ -40,7 +40,7 @@ class State:
         """Allow usage of with.
 
         Returns:
-            State: SavedState object
+            SavedState object
         """
         return self
 
@@ -61,7 +61,7 @@ class State:
         """Read state from file
 
         Returns:
-            Any: State
+            State
         """
         value = self.read_fn(load_text(self.path))
         logger.info(f"State read from {self.path} = {value}")
@@ -80,7 +80,7 @@ class State:
         """Get the state
 
         Returns:
-            Any: State
+            State
         """
         return self.state
 
@@ -106,7 +106,7 @@ class State:
             dates_str: Comma separated string of key=date string pairs
 
         Returns:
-            Dict: Dictionary of key date mappings
+            Dictionary of key date mappings
         """
         result = {}
         for keyvalue in dates_str.split(","):
@@ -125,7 +125,7 @@ class State:
             country_date_dict: Dictionary of key date mappings
 
         Returns:
-            str: Comma separated string of key=date string pairs
+            Comma separated string of key=date string pairs
         """
         strlist = []
         for key, value in country_date_dict.items():

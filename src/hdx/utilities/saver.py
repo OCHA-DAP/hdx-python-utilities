@@ -296,7 +296,7 @@ def save_iterable(
         row_function: Row function to call for each row. Defaults to None.
 
     Returns:
-        List: List of rows written to file
+        List of rows written to file
     """
     if row_function is None:
 

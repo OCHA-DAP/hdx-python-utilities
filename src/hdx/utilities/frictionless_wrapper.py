@@ -32,7 +32,7 @@ def get_frictionless_control(**kwargs: Any) -> tuple[Control, Any]:
         control: This can be set to override the above. See Frictionless docs.
 
     Returns:
-        Tuple[Control, Any]: (frictionless Control object, kwargs)
+        (frictionless Control object, kwargs)
     """
     control = kwargs.get("control")
     file_type = kwargs.pop("file_type", None)
@@ -80,7 +80,7 @@ def get_frictionless_detector(infer_types: bool, **kwargs: Any) -> tuple[Detecto
         detector: This can be set to override the above. See Frictionless docs.
 
     Returns:
-        Tuple[Detector, Any]: (frictionless Detector object, kwargs)
+        (frictionless Detector object, kwargs)
     """
     detector = kwargs.get("detector", Detector())
     if infer_types:
@@ -108,7 +108,7 @@ def get_frictionless_dialect(
         dialect: This can be set to override the above. See Frictionless docs.
 
     Returns:
-        Tuple[Dialect, Any]: (frictionless Dialect object, Any)
+        (frictionless Dialect object, Any)
     """
     dialect = kwargs.get("dialect", Dialect())
     columns = kwargs.pop("columns", None)
@@ -159,7 +159,7 @@ def get_frictionless_tableresource(
         schema: This can be set to override the above. See Frictionless docs.
 
     Returns:
-        TableResource: frictionless TableResource object
+        frictionless TableResource object
     """
     if not url and not data:
         error = ResourceError(note="Neither url or data supplied!")

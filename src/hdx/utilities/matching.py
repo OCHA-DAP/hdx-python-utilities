@@ -32,7 +32,7 @@ class Phonetics(RefinedSoundex):
             threshold: Match threshold. Defaults to 2.
 
         Returns:
-            Optional[int]: Index of matching name from possible names or None
+            Index of matching name from possible names or None
         """
         mindistance = None
         matching_index = None
@@ -78,7 +78,7 @@ def get_code_from_name(
         match_threshold: Match threshold
 
     Returns:
-        Optional[str]: Matching code
+        Matching code
     """
     code = code_lookup.get(name)
     if code:
@@ -120,7 +120,7 @@ def multiple_replace(string: str, replacements: dict[str, str]) -> str:
         replacements: Replacements dictionary
 
     Returns:
-        str: String with replacements
+        String with replacements
     """
     if not replacements:
         return string
@@ -140,7 +140,7 @@ def match_template_variables(
         string: String in which to look for template
 
     Returns:
-        Tuple[Optional[str], Optional[str]]: (Matched string with brackets, matched string without brackets)
+        (Matched string with brackets, matched string without brackets)
     """
     match = TEMPLATE_VARIABLES.search(string)
     if match:
@@ -158,7 +158,7 @@ def earliest_index(string_to_search: str, strings_to_try: Sequence[str]) -> int 
         strings_to_try: Strings to try
 
     Returns:
-        Optional[int]: Earliest index of the strings to try in string to search or None
+        Earliest index of the strings to try in string to search or None
     """
     after_string = len(string_to_search) + 1
     indices = []
@@ -192,7 +192,7 @@ def get_matching_text_in_strs(
         end_characters: End characters to look for. Defaults to ''.
 
     Returns:
-        List[str]: List of matching blocks of text
+        List of matching blocks of text
     """
     compare = difflib.SequenceMatcher(lambda x: x in ignore)
     compare.set_seqs(a=a, b=b)
@@ -230,7 +230,7 @@ def get_matching_text(
         end_characters: End characters to look for. Defaults to '.\r\n'.
 
     Returns:
-        str: String containing matching blocks of text followed by non-matching
+        String containing matching blocks of text followed by non-matching
     """
     a = string_list[0]
     for i in range(1, len(string_list)):
@@ -264,7 +264,7 @@ def get_matching_then_nonmatching_text(
         end_characters: End characters to look for. Defaults to '.\r\n'.
 
     Returns:
-        str: String containing matching blocks of text followed by non-matching
+        String containing matching blocks of text followed by non-matching
     """
 
     def add_separator_if_needed(text_list):

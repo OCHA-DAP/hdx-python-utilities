@@ -21,7 +21,7 @@ def hash_excel_buffer(buffer: bytes) -> str:
         buffer: Excel XLSX file buffer
 
     Returns:
-        str: MD5 hash of the sheets
+        MD5 hash of the sheets
     """
     file_stream = BytesIO(buffer)
     md5hash = hashlib.md5()
@@ -58,7 +58,7 @@ def hash_excel_fp(fp: IOBase) -> str:
         fp: Excel file pointer
 
     Returns:
-        str: MD5 hash of the sheets
+        MD5 hash of the sheets
     """
     return hash_excel_buffer(fp.read())
 
@@ -70,7 +70,7 @@ def crc_zip_buffer(buffer: bytes) -> str:
          buffer: Zip in buffer
 
     Returns:
-        str: Sum of the CRC32
+        Sum of the CRC32
     """
 
     file_crcs = get_zip_crcs_buffer(buffer)
@@ -84,7 +84,7 @@ def crc_zip_fp(fp: IOBase) -> str:
         fp: Zip file pointer
 
     Returns:
-        str: Sum of the CRC32
+        Sum of the CRC32
     """
     file_crcs = get_zip_crcs_fp(fp)
     return get_crc_sum(file_crcs)
@@ -98,7 +98,7 @@ def get_size_and_hash(filepath: str, file_format: str) -> tuple[int, str]:
         file_format: File format
 
     Returns:
-        Tuple[int, str]: Tuple (size, hash)
+        Tuple (size, hash)
     """
     with open(filepath, "rb") as fp:
         size = fstat(fp.fileno()).st_size

@@ -35,7 +35,7 @@ def load_text(
         default_line_separator: line separator to be replaced if replace_line_separators is not None
 
     Returns:
-        str: String contents of file
+        String contents of file
     """
     if replace_newlines is not None:
         warn(
@@ -69,7 +69,7 @@ def load_yaml(
         loaderror_if_empty: Whether to raise LoadError if file is empty. Default to True.
 
     Returns:
-        Any: The data from the YAML file
+        The data from the YAML file
     """
     with open(path, encoding=encoding) as f:
         data = f.read()
@@ -93,7 +93,7 @@ def load_json(
         loaderror_if_empty: Whether to raise LoadError if file is empty. Default to True.
 
     Returns:
-        Any: The data from the JSON file
+        The data from the JSON file
     """
     with open(path, encoding=encoding) as f:
         data = f.read()
@@ -119,7 +119,7 @@ def load_and_merge_yaml(
         loaderror_if_empty: Whether to raise LoadError if any file is empty. Default to True.
 
     Returns:
-        Mapping: Dictionary of merged YAML files
+        Dictionary of merged YAML files
     """
     configs = [
         load_yaml(path, encoding=encoding, loaderror_if_empty=loaderror_if_empty)
@@ -142,7 +142,7 @@ def load_and_merge_json(
         loaderror_if_empty: Whether to raise LoadError if any file is empty. Default to True.
 
     Returns:
-        Mapping: Dictionary of merged JSON files
+        Dictionary of merged JSON files
     """
     configs = [
         load_json(path, encoding=encoding, loaderror_if_empty=loaderror_if_empty)
@@ -166,7 +166,7 @@ def load_yaml_into_existing_dict(
         loaderror_if_empty: Whether to raise LoadError if file is empty. Default to True.
 
     Returns:
-        Mapping: YAML file merged into dictionary
+        YAML file merged into dictionary
     """
     yamldict = load_yaml(path, encoding=encoding, loaderror_if_empty=loaderror_if_empty)
     return merge_two_dictionaries(data, yamldict)
@@ -187,7 +187,7 @@ def load_json_into_existing_dict(
         loaderror_if_empty: Whether to raise LoadError if file is empty. Default to True.
 
     Returns:
-        Mapping: JSON file merged into dictionary
+        JSON file merged into dictionary
     """
     jsondict = load_json(path, encoding=encoding, loaderror_if_empty=loaderror_if_empty)
     return merge_two_dictionaries(data, jsondict)

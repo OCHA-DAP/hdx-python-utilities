@@ -65,7 +65,7 @@ class ErrorHandler:
             value: The specific missing value
 
         Returns:
-            str: A formatted message stating the missing value and its type
+            A formatted message stating the missing value and its type
         """
         return f"{value_type} {str(value)} not found"
 
@@ -107,7 +107,7 @@ class ErrorHandler:
             values: The list of related values of concern
 
         Returns:
-            Optional[str]: A formatted string in the format defined above
+            A formatted string in the format defined above
         """
         if not values:
             return None
@@ -139,7 +139,7 @@ class ErrorHandler:
             category: Error category. Defaults to "".
             message_type: The type of message (error or warning). Default is "error"
         Returns:
-            bool: True if a message was added, False if not
+            True if a message was added, False if not
         """
         message = self.multi_valued_message(text, values)
         if message is None:

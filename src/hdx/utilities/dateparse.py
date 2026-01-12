@@ -101,7 +101,7 @@ def get_tzinfos(timezone_info: str) -> dict[str, int]:
         timezone_info: Timezones information string
 
     Returns:
-        Dict[str, int]: tzinfos dictionary
+        tzinfos dictionary
     """
     tzinfos = {}
     for tz_descr in map(str.split, timezone_info.split("\n")):
@@ -804,7 +804,7 @@ def now_utc() -> datetime:
     """Return now with UTC timezone.
 
     Returns:
-        datetime: Now with UTC timezone
+        Now with UTC timezone
     """
     return datetime.now(timezone.utc)
 
@@ -813,7 +813,7 @@ def now_utc_notz() -> datetime:
     """Return now in UTC but with timezone removed.
 
     Returns:
-        datetime: Now in UTC but with timezone removed
+        Now in UTC but with timezone removed
     """
     return datetime.now(timezone.utc).replace(tzinfo=None)
 
@@ -872,7 +872,7 @@ def parse_date_range(
         default_timezones: Timezone information. Defaults to None. (Internal default).
 
     Returns:
-        Tuple[datetime,datetime]: Tuple containing start date and end date
+        Tuple containing start date and end date
     """
     if date_format is None or fuzzy is not None:
         if timezone_handling >= 2:
@@ -1040,7 +1040,7 @@ def parse_date(
         default_timezones: Timezone information. Defaults to None. (Internal default).
 
     Returns:
-        datetime: The parsed date
+        The parsed date
     """
     if max_time:
         max_starttime = True
@@ -1073,7 +1073,7 @@ def get_timestamp_from_datetime(date: datetime) -> float:
         date: Date to convert
 
     Returns:
-        float: Timestamp
+        Timestamp
     """
     if date.tzinfo is None:
         return (
@@ -1109,7 +1109,7 @@ def get_datetime_from_timestamp(
         today: Today's date. Defaults to now_utc.
 
     Returns:
-        datetime: Date of timestamp
+        Date of timestamp
     """
     if timestamp > get_timestamp_from_datetime(today):
         timestamp = timestamp / 1000
@@ -1123,7 +1123,7 @@ def iso_string_from_datetime(date: datetime) -> str:
         date: Date to convert to string
 
     Returns:
-        str: ISO formatted date without any time elements
+        ISO formatted date without any time elements
     """
     return date.date().isoformat()
 
@@ -1135,7 +1135,7 @@ def get_quarter(date: datetime) -> int:
         date: Date
 
     Returns:
-        int: Quarter in which the given date is contained
+        Quarter in which the given date is contained
     """
     return (date.month - 1) // 3 + 1
 
@@ -1148,7 +1148,7 @@ def get_quarter_start(year: int, quarter: int) -> datetime:
         quarter: Quarter
 
     Returns:
-        datetime: First day of quarter
+        First day of quarter
     """
     month = 3 * (quarter - 1) + 1
     return datetime(year, month, 1, tzinfo=timezone.utc)
@@ -1166,7 +1166,7 @@ def get_quarter_end(
         include_microseconds: Includes microseconds if True. Defaults to False.
 
     Returns:
-        datetime: First day of quarter
+        First day of quarter
     """
     year = year + 3 * quarter // 12
     month = 3 * quarter % 12 + 1

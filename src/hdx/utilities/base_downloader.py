@@ -17,7 +17,7 @@ class BaseDownload(ABC):
         """Allow usage of with.
 
         Returns:
-            BaseDownload: Download object
+            Download object
         """
         return self
 
@@ -43,7 +43,7 @@ class BaseDownload(ABC):
             **kwargs (Any): Keyword arguments
 
         Returns:
-            str: Path of downloaded file
+            Path of downloaded file
         """
 
     @abstractmethod
@@ -56,7 +56,7 @@ class BaseDownload(ABC):
             **kwargs (Any): Keyword arguments
 
         Returns:
-            str: The text from the file
+            The text from the file
         """
 
     @abstractmethod
@@ -69,7 +69,7 @@ class BaseDownload(ABC):
             **kwargs (Any): Keyword arguments
 
         Returns:
-            Any: The data from the YAML file
+            The data from the YAML file
         """
 
     @abstractmethod
@@ -82,7 +82,7 @@ class BaseDownload(ABC):
             **kwargs (Any): Keyword arguments
 
         Returns:
-            Any: The data from the JSON file
+            The data from the JSON file
         """
 
     @abstractmethod
@@ -116,5 +116,5 @@ class BaseDownload(ABC):
             **kwargs (Any): Keyword arguments
 
         Returns:
-            Tuple[List[str],Iterator[list | dict]]: Tuple (headers, iterator where each row is a list or dictionary)
+            Tuple (headers, iterator where each row is a list or dictionary)
         """

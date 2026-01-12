@@ -11,7 +11,7 @@ def str_to_base64(string: str) -> str:
         string: String to encode
 
     Returns:
-        str: Base 64 encoded string
+        Base 64 encoded string
     """
     return base64.urlsafe_b64encode(string.encode("utf-8")).decode("utf-8")
 
@@ -23,7 +23,7 @@ def base64_to_str(bstring: str) -> str:
         bstring: Base 64 encoded string to encode
 
     Returns:
-        str: Decoded string
+        Decoded string
     """
     return base64.urlsafe_b64decode(bstring.encode("utf-8")).decode("utf-8")
 
@@ -39,7 +39,7 @@ def basicauth_encode(username: str, password: str) -> str:
         password: Password
 
     Returns:
-        str: Basic authentication string
+        Basic authentication string
     """
     if ":" in username:
         raise ValueError
@@ -58,7 +58,7 @@ def basicauth_decode(encoded_string: str) -> tuple[str, str]:
         encoded_string: String to decode
 
     Returns:
-        Tuple[str, str]: Tuple of form (username, password)
+        Tuple of form (username, password)
     """
     split_encoded_string = encoded_string.strip().split(" ")
 

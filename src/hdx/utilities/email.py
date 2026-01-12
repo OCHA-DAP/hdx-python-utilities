@@ -155,7 +155,7 @@ class Email:
             email: Email address to normalise
 
         Returns:
-            str: Normalised email
+            Normalised email
         """
         try:
             v = validate_email(
@@ -176,7 +176,7 @@ class Email:
             emails: Email address or addresses
 
         Returns:
-            List[str]: Normalised emails
+            Normalised emails
         """
         if isinstance(emails, str):
             emails = (emails,)

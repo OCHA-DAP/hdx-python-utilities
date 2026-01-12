@@ -17,7 +17,7 @@ def compare_files(path1: str, path2: str, encoding: str = "utf-8") -> list[str]:
         path2: Path to second file
 
     Returns:
-        List[str]: Delta between the two files
+        Delta between the two files
     """
     diff = ndiff(
         open(path1, encoding=encoding).read().splitlines(),

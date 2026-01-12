@@ -28,7 +28,7 @@ class UserAgent:
             user_agent: User agent string.
 
         Returns:
-            kwargs: Changed keyword arguments
+            Changed keyword arguments
         """
         user_agent = os.getenv("USER_AGENT")
         if user_agent is not None:
@@ -48,7 +48,7 @@ class UserAgent:
             ua: Custom user agent text
 
         Returns:
-            str: Full user agent string
+            Full user agent string
         """
         if not ua:
             raise UserAgentError(
@@ -79,7 +79,7 @@ class UserAgent:
             user_agent_lookup: Lookup key for YAML. Ignored if user_agent supplied.
 
         Returns:
-            str: user agent
+            user agent
         """
         if not user_agent_config_yaml:
             user_agent_config_yaml = cls.default_user_agent_config_yaml
@@ -120,7 +120,7 @@ class UserAgent:
             user_agent_lookup: Lookup key for YAML. Ignored if user_agent supplied.
 
         Returns:
-            str: Full user agent string
+            Full user agent string
         """
         kwargs = UserAgent._environment_variables(**kwargs)
         user_agent = kwargs.pop("user_agent", user_agent)
@@ -181,7 +181,7 @@ class UserAgent:
             user_agent_lookup: Lookup key for YAML. Ignored if user_agent supplied.
 
         Returns:
-            str: Full user agent string
+            Full user agent string
         """
         if (
             user_agent

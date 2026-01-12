@@ -17,7 +17,7 @@ def invert_dictionary(d: MutableMapping) -> dict:
         d: Dictionary
 
     Returns:
-        Dict: Return inverse of dictionary
+        Return inverse of dictionary
     """
     return dict(zip(d.values(), d.keys()))
 
@@ -35,7 +35,7 @@ def merge_two_dictionaries(
         merge_lists: Whether to merge lists (True) or replace lists (False). Default is False.
 
     Returns:
-        MutableMapping: Merged dictionary
+        Merged dictionary
     """
     key = None
     # ## debug output
@@ -88,7 +88,7 @@ def merge_dictionaries(
         merge_lists: Whether to merge lists (True) or replace lists (False). Default is False.
 
     Returns:
-        MutableMapping: Merged dictionary
+        Merged dictionary
     """
     dict1 = dicts[0]
     for other_dict in dicts[1:]:
@@ -107,7 +107,7 @@ def dict_diff(
         no_key: What value to use if key is not found Defaults to '<KEYNOTFOUND>'.
 
     Returns:
-        Dict: Comparison dictionary
+        Comparison dictionary
     """
     d1keys = set(d1.keys())
     d2keys = set(d2.keys())
@@ -181,7 +181,7 @@ def list_distribute_contents_simple(
         function: Return value to use for distributing. Defaults to lambda x: x.
 
     Returns:
-        List: Distributed list
+        Distributed list
     """
     dictionary = {}
     for obj in input_list:
@@ -214,7 +214,7 @@ def list_distribute_contents(
         function: Return value to use for distributing. Defaults to lambda x: x.
 
     Returns:
-        List: Distributed list
+        Distributed list
     """
 
     def riffle_shuffle(piles_list):
@@ -257,7 +257,7 @@ def extract_list_from_list_of_dict(list_of_dict: Sequence[dict], key: Any) -> li
         key: Key to find in each dictionary
 
     Returns:
-        List: List containing values returned from each dictionary
+        List containing values returned from each dictionary
     """
     result = []
     for dictionary in list_of_dict:
@@ -285,7 +285,7 @@ def key_value_convert(
         exception: The exception to expect if keyfn or valuefn fail. Defaults to ValueError.
 
     Returns:
-        Dict: New dictionary with converted keys and/or values
+        New dictionary with converted keys and/or values
     """
     dictout = {}
     for key in dictin:
@@ -314,7 +314,7 @@ def integer_key_convert(dictin: MutableMapping, dropfailedkeys: bool = False) ->
         dropfailedkeys: Whether to drop dictionary entries where key conversion fails. Defaults to False.
 
     Returns:
-        Dict: Dictionary with keys converted to integers
+        Dictionary with keys converted to integers
     """
     return key_value_convert(dictin, keyfn=int, dropfailedkeys=dropfailedkeys)
 
@@ -329,7 +329,7 @@ def integer_value_convert(
         dropfailedvalues: Whether to drop dictionary entries where key conversion fails. Defaults to False.
 
     Returns:
-        Dict: Dictionary with values converted to integers
+        Dictionary with values converted to integers
     """
     return key_value_convert(dictin, valuefn=int, dropfailedvalues=dropfailedvalues)
 
@@ -342,7 +342,7 @@ def float_value_convert(dictin: MutableMapping, dropfailedvalues: bool = False) 
         dropfailedvalues: Whether to drop dictionary entries where key conversion fails. Defaults to False.
 
     Returns:
-        Dict: Dictionary with values converted to floats
+        Dictionary with values converted to floats
     """
     return key_value_convert(dictin, valuefn=float, dropfailedvalues=dropfailedvalues)
 
@@ -358,7 +358,7 @@ def avg_dicts(
         dropmissing: Whether to drop keys missing in one dictionary. Defaults to True.
 
     Returns:
-        Dict: Dictionary with values being average of 2 input dictionaries
+        Dictionary with values being average of 2 input dictionaries
     """
     dictout = {}
     for key in dictin1:
@@ -392,7 +392,7 @@ def read_list_from_csv(
         **kwargs: Other arguments to pass to Tabulator Stream
 
     Returns:
-        List[list | dict]: List of rows in dict or list form
+        List of rows in dict or list form
     """
     if dict_form and headers is None:
         raise ValueError("If dict_form is True, headers must not be None!")
@@ -485,7 +485,7 @@ def args_to_dict(args: str) -> dict:
         args: Command line arguments
 
     Returns:
-        Dict: Dictionary of arguments
+        Dictionary of arguments
     """
     arguments = {}
     for arg in args.split(","):

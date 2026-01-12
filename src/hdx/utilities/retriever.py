@@ -90,7 +90,7 @@ class Retrieve(BaseDownload):
             url: URL to download
 
         Returns:
-            str: Url string to use in logs
+            Url string to use in logs
         """
         if len(url) > 100:
             return f"{url[:100]}..."
@@ -103,7 +103,7 @@ class Retrieve(BaseDownload):
             downloader: Downloader to use
 
         Returns:
-            Retrieve: Cloned retriever
+            Cloned retriever
         """
         return Retrieve(
             downloader,
@@ -134,7 +134,7 @@ class Retrieve(BaseDownload):
             file_type: Given extension to look for in url
 
         Returns:
-            Tuple[str, Any]: Tuple of (filename, kwargs)
+            Tuple of (filename, kwargs)
         """
         prefix = kwargs.pop("file_prefix", self.prefix)
         if prefix:
@@ -196,7 +196,7 @@ class Retrieve(BaseDownload):
             **kwargs: Parameters to pass to download_file call
 
         Returns:
-            str: Path to downloaded file
+            Path to downloaded file
         """
         if log_level is None:
             log_level = self.log_level
@@ -247,7 +247,7 @@ class Retrieve(BaseDownload):
             **kwargs: Parameters to pass to download_text call
 
         Returns:
-            str: The text from the file
+            The text from the file
         """
         if log_level is None:
             log_level = self.log_level
@@ -298,7 +298,7 @@ class Retrieve(BaseDownload):
             **kwargs: Parameters to pass to download_yaml call
 
         Returns:
-            Any: The data from the YAML file
+            The data from the YAML file
         """
         if log_level is None:
             log_level = self.log_level
@@ -349,7 +349,7 @@ class Retrieve(BaseDownload):
             **kwargs: Parameters to pass to download_json call
 
         Returns:
-            Any: The data from the JSON file
+            The data from the JSON file
         """
         if log_level is None:
             log_level = self.log_level
@@ -414,7 +414,7 @@ class Retrieve(BaseDownload):
             **kwargs: Parameters to pass to download_file and get_tabular_rows calls
 
         Returns:
-            Tuple[List[str],Iterator[list | dict]]: Tuple (headers, iterator where each row is a list or dictionary)
+            Tuple (headers, iterator where each row is a list or dictionary)
         """
         if isinstance(url, list):
             is_list = True
@@ -492,6 +492,6 @@ class Retrieve(BaseDownload):
             name: Name of retriever. Defaults to None (get default).
 
         Returns:
-            Retriever: Retriever object
+            Retriever object
         """
         return cls.retrievers.get(name, cls.retrievers["default"])

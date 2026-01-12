@@ -5,7 +5,7 @@ def get_uuid() -> str:
     """Get an UUID.
 
     Returns:
-        str: A UUID
+        A UUID
     """
     return str(uuid4())
 
@@ -18,7 +18,7 @@ def is_valid_uuid(uuid_to_test: str, version: int = 4) -> bool:
         version: UUID version. Defaults to 4.
 
     Returns:
-        str: Current script's directory
+        Current script's directory
     """
     try:
         uuid_obj = UUID(uuid_to_test, version=version)

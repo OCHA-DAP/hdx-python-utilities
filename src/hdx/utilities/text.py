@@ -31,7 +31,7 @@ def normalise(text: str) -> str:
         text: Text to normalise
 
     Returns:
-        str: Normalised text
+        Normalised text
     """
     chars = []
     space = False
@@ -58,7 +58,7 @@ def remove_end_characters(string: str, characters_to_remove: str = punctuation) 
         characters_to_remove: Characters to remove. Defaults to punctuation.
 
     Returns:
-        str: String with any characters at end of string that are in characters_to_remove removed
+        String with any characters at end of string that are in characters_to_remove removed
     """
     while string[-1] in characters_to_remove:
         string = string[:-1]
@@ -80,7 +80,7 @@ def remove_from_end(
         whole_words: Remove parts of or whole words. Defaults to True (whole words only).
 
     Returns:
-        str: String with text removed
+        String with text removed
     """
     for thing in things_to_remove:
         thing_len = len(thing)
@@ -112,7 +112,7 @@ def remove_string(
         end_characters_to_remove: Characters to remove. Defaults to punctuation.
 
     Returns:
-        str: String with other string removed
+        String with other string removed
 
     """
     index = string.find(toremove)
@@ -130,7 +130,7 @@ def get_words_in_sentence(sentence: str) -> list[str]:
         sentence: Sentence
 
     Returns:
-        List[str]: List of words in sentence
+        List of words in sentence
     """
     return re.sub("[" + punctuation.replace("'", "") + "]", " ", sentence).split()
 
@@ -144,7 +144,7 @@ def number_format(val: Any, format: str = "%.4f", trailing_zeros: bool = True) -
         trailing_zeros: Leave trailing zeros. Defaults to True.
 
     Returns:
-        str: Formatted number as string
+        Formatted number as string
     """
     if val == "" or val is None:
         return ""
@@ -170,7 +170,7 @@ def get_fraction_str(
         trailing_zeros: Leave trailing zeros. Defaults to True.
 
     Returns:
-        str: Formatted number as string
+        Formatted number as string
     """
     try:
         numerator = float(numerator)
@@ -194,7 +194,7 @@ def only_allowed_in_str(test_str: str, allowed_chars: set) -> bool:
         allowed_chars: Set of allowed characters
 
     Returns:
-        bool: True if test string contains only allowed characters, False if not
+        True if test string contains only allowed characters, False if not
     """
     return set(test_str) <= allowed_chars
 
@@ -210,7 +210,7 @@ def get_numeric_if_possible(value: Any) -> Any:
         value: Value
 
     Returns:
-        Any: Value
+        Value
     """
 
     def get_int_value(val, denominator):

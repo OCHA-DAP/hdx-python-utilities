@@ -152,7 +152,7 @@ class Download(BaseDownload):
             keep: Whether to keep already downloaded file. Defaults to False.
 
         Returns:
-            str: Path of downloaded file
+            Path of downloaded file
         """
         if path:
             if folder or filename:
@@ -185,7 +185,7 @@ class Download(BaseDownload):
             url: URL for which to get full url
 
         Returns:
-            str: Full url including any additional parameters
+            Full url including any additional parameters
         """
         request = Request("GET", url)
         preparedrequest = self.session.prepare_request(request)
@@ -200,7 +200,7 @@ class Download(BaseDownload):
             parameters: Parameters to pass. Defaults to None.
 
         Returns:
-            str: Full url
+            Full url
         """
         spliturl = urlsplit(url)
         getparams = dict(parse_qsl(spliturl.query))
@@ -221,7 +221,7 @@ class Download(BaseDownload):
             parameters: Parameters to pass. Defaults to None.
 
         Returns:
-            Tuple[str, Dict]: (Full url, parameters)
+            (Full url, parameters)
         """
         spliturl = urlsplit(url)
         getparams = dict(parse_qsl(spliturl.query))
@@ -247,7 +247,7 @@ class Download(BaseDownload):
             dict_form: Return dict or list. Defaults to False (list)
 
         Returns:
-            Union[List[str],Dict[str,str]]: Return either a list or dictionary conating HXL hashtags
+            Return either a list or dictionary conating HXL hashtags
         """
         if dict_form:
             return {header: hxltags.get(header, "") for header in headers}
@@ -277,7 +277,7 @@ class Download(BaseDownload):
             json_string: Whether to post parameters as JSON string. Defaults to False.
 
         Returns:
-            requests.Response: requests.Response object
+            requests.Response object
         """
         self.close_response()
         self.response = None
@@ -345,7 +345,7 @@ class Download(BaseDownload):
             url: URL or path to download
 
         Returns:
-            str: MD5 hash of file
+            MD5 hash of file
         """
         md5hash = hashlib.md5()
         try:
@@ -367,7 +367,7 @@ class Download(BaseDownload):
             errormsg: Error message to display if there is a problem
 
         Returns:
-            str: Path of downloaded file
+            Path of downloaded file
         """
         f = None
         try:
@@ -404,7 +404,7 @@ class Download(BaseDownload):
             keep: Whether to keep already downloaded file. Defaults to False.
 
         Returns:
-            str: Path of downloaded file
+            Path of downloaded file
         """
         path = self.get_path_for_url(url, folder, filename, path, overwrite, keep)
         if keep and exists(path):
@@ -437,7 +437,7 @@ class Download(BaseDownload):
             json_string: Whether to post parameters as JSON string. Defaults to False.
 
         Returns:
-            str: Path of downloaded file
+            Path of downloaded file
         """
         folder = kwargs.get("folder")
         filename = kwargs.get("filename")
@@ -475,7 +475,7 @@ class Download(BaseDownload):
             json_string: Whether to post parameters as JSON string. Defaults to False.
 
         Returns:
-            requests.Response: Response
+            Response
         """
         return self.setup(
             url,
@@ -495,7 +495,7 @@ class Download(BaseDownload):
             header: Header for which to get value
 
         Returns:
-            Any: Response header's value
+            Response header's value
         """
         return self.response.headers.get(header)
 
@@ -503,7 +503,7 @@ class Download(BaseDownload):
         """Get response headers of download.
 
         Returns:
-            Any: Response headers
+            Response headers
         """
         return self.response.headers
 
@@ -511,7 +511,7 @@ class Download(BaseDownload):
         """Get response status code.
 
         Returns:
-            int: Response status code
+            Response status code
         """
         return self.response.status_code
 
@@ -519,7 +519,7 @@ class Download(BaseDownload):
         """Get text content of download.
 
         Returns:
-            str: Text content of download
+            Text content of download
         """
         return self.response.text
 
@@ -527,7 +527,7 @@ class Download(BaseDownload):
         """Get YAML content of download.
 
         Returns:
-            Any: YAML content of download
+            YAML content of download
         """
         with YAML() as yaml:
             return yaml.load(self.response.text)
@@ -536,7 +536,7 @@ class Download(BaseDownload):
         """Get JSON content of download.
 
         Returns:
-            Any: JSON content of download
+            JSON content of download
         """
         return self.response.json()
 
@@ -553,7 +553,7 @@ class Download(BaseDownload):
             encoding: Encoding to use for text response. Defaults to None (best guess).
 
         Returns:
-            str: Text content of download
+            Text content of download
         """
         self.download(url, **kwargs)
         return self.get_text()
@@ -571,7 +571,7 @@ class Download(BaseDownload):
             encoding: Encoding to use for text response. Defaults to None (best guess).
 
         Returns:
-            str: YAML content of download
+            YAML content of download
         """
         self.download(url, **kwargs)
         return self.get_yaml()
@@ -589,7 +589,7 @@ class Download(BaseDownload):
             encoding: Encoding to use for text response. Defaults to None (best guess).
 
         Returns:
-            str: JSON content of download
+            JSON content of download
         """
         self.download(url, **kwargs)
         return self.get_json()
@@ -630,7 +630,7 @@ class Download(BaseDownload):
             schema: This can be set to override the above. See Frictionless docs.
 
         Returns:
-            TableResource: frictionless TableResource object
+            frictionless TableResource object
         """
         self.close_response()
         try:
@@ -699,7 +699,7 @@ class Download(BaseDownload):
             schema: This can be set to override the above. See Frictionless docs.
 
         Returns:
-            Tuple[List[str],Iterator[list | dict]]: Tuple (headers, iterator where each row is a list or dictionary)
+            Tuple (headers, iterator where each row is a list or dictionary)
         """
         if headers is None:
             raise DownloadError("Argument headers cannot be None!")
@@ -814,7 +814,7 @@ class Download(BaseDownload):
             schema: This can be set to override the above. See Frictionless docs.
 
         Returns:
-            Tuple[List[str],Iterator[list | dict]]: Tuple (headers, iterator where each row is a list or dictionary)
+            Tuple (headers, iterator where each row is a list or dictionary)
         """
         if isinstance(url, list):
             is_list = True
@@ -917,7 +917,7 @@ class Download(BaseDownload):
             schema: This can be set to override the above. See Frictionless docs.
 
         Returns:
-            Tuple[List[str],Iterator[List]]: Tuple (headers, iterator where each row is a list)
+            Tuple (headers, iterator where each row is a list)
         """
 
         headers, iterator = self.get_tabular_rows(
@@ -991,7 +991,7 @@ class Download(BaseDownload):
             schema: This can be set to override the above. See Frictionless docs.
 
         Returns:
-            Tuple[List[str], Iterator[Dict]]: Tuple (headers, iterator where each row is a dictionary)
+            Tuple (headers, iterator where each row is a dictionary)
         """
 
         headers, iterator = self.get_tabular_rows(
@@ -1067,7 +1067,7 @@ class Download(BaseDownload):
             schema: This can be set to override the above. See Frictionless docs.
 
         Returns:
-            Dict: Dictionary keys (first column) and values (second column)
+            Dictionary keys (first column) and values (second column)
         """
         output_dict = {}
         _, rows = self.get_tabular_rows_as_list(
@@ -1146,7 +1146,7 @@ class Download(BaseDownload):
             schema: This can be set to override the above. See Frictionless docs.
 
         Returns:
-            Dict[str,Dict]: Dictionary where keys are first column and values are dictionaries with keys from column
+            Dictionary where keys are first column and values are dictionaries with keys from column
             headers and values from columns beneath
         """
         headers, iterator = self.get_tabular_rows_as_dict(
@@ -1229,7 +1229,7 @@ class Download(BaseDownload):
             schema: This can be set to override the above. See Frictionless docs.
 
         Returns:
-            Dict[str,Dict]: Dictionary where keys are header names and values are dictionaries with keys from first column
+            Dictionary where keys are header names and values are dictionaries with keys from first column
             and values from other columns
         """
         headers, iterator = self.get_tabular_rows_as_dict(
@@ -1263,7 +1263,7 @@ class Download(BaseDownload):
             headers: List of headers
 
         Returns:
-            Dict[str,int]: Dictionary where keys are header names and values are header positions
+            Dictionary where keys are header names and values are header positions
         """
         columnpositions = {}
         for i, header in enumerate(headers):
@@ -1338,6 +1338,6 @@ class Download(BaseDownload):
             name: Name of downloader. Defaults to None (get default).
 
         Returns:
-            Download: Downloader object
+            Downloader object
         """
         return cls.downloaders.get(name, cls.downloaders["default"])
