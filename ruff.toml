@@ -7,9 +7,3 @@ extend-select = [
   "I",   # isort
   "UP"   # Upgrade Python
 ]
-ignore = [
-    "E501" # Line too long
-]
-
-[lint.isort]
-known-local-folder = ["hdx"]
