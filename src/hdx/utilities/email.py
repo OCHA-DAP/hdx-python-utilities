@@ -40,9 +40,9 @@ class Email:
 
     Args:
         **kwargs: See below
-        email_config_dict: HDX configuration dictionary OR
-        email_config_json: Path to JSON HDX configuration OR
-        email_config_yaml: Path to YAML HDX configuration. Defaults to ~/hdx_email_configuration.yaml.
+        email_config_dict (dict): HDX configuration dictionary OR
+        email_config_json (str): Path to JSON HDX configuration OR
+        email_config_yaml (str): Path to YAML HDX configuration. Defaults to ~/hdx_email_configuration.yaml.
     """
 
     default_email_config_yaml = join(expanduser("~"), "hdx_email_configuration.yaml")
@@ -211,8 +211,8 @@ class Email:
             cc: Email cc. Defaults to None.
             bcc: Email bcc. Defaults to None.
             **kwargs: See below
-            mail_options: Mail options (see smtplib documentation)
-            rcpt_options: Recipient options (see smtplib documentation)
+            mail_options (list): Mail options (see smtplib documentation)
+            rcpt_options (list): Recipient options (see smtplib documentation)
 
         Returns:
             None

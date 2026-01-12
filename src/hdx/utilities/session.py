@@ -49,19 +49,19 @@ def get_session(
         retry_attempts: Number of retry attempts. Defaults to 5.
         backoff_factor: Backoff factor for retry. Defaults to 1 (0s, 2s, 4s, 8s, 16s, 32s).
         **kwargs: See below
-        auth: Authorisation information in tuple form (user, pass) OR
-        basic_auth: Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
-        basic_auth_file: Path to file containing authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
-        bearer_token: Bearer token string OR
-        bearer_token_file: Path to file containing bearer token string OR
-        extra_params_dict: Extra parameters to put on end of url as a dictionary OR
-        extra_params_json: Path to JSON file containing extra parameters to put on end of url OR
-        extra_params_yaml: Path to YAML file containing extra parameters to put on end of url
-        extra_params_lookup: Lookup key for parameters. If not given assumes parameters are at root of the dict.
-        headers: Additional headers to add to request.
-        use_auth: If more than one auth found, specify which one to use, rather than failing.
-        status_forcelist: HTTP statuses for which to force retry. Defaults to (429, 500, 502, 503, 504).
-        allowed_methods: HTTP methods for which to force retry. Defaults to ("HEAD", "TRACE", "GET", "PUT", "OPTIONS", "DELETE").
+        auth (tuple[str, str]): Authorisation information in tuple form (user, pass) OR
+        basic_auth (str): Authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
+        basic_auth_file (str): Path to file containing authorisation information in basic auth string form (Basic xxxxxxxxxxxxxxxx) OR
+        bearer_token (str): Bearer token string OR
+        bearer_token_file (str): Path to file containing bearer token string OR
+        extra_params_dict (dict): Extra parameters to put on end of url as a dictionary OR
+        extra_params_json (str): Path to JSON file containing extra parameters to put on end of url OR
+        extra_params_yaml (str): Path to YAML file containing extra parameters to put on end of url
+        extra_params_lookup (str): Lookup key for parameters. If not given assumes parameters are at root of the dict.
+        headers (dict): Additional headers to add to request.
+        use_auth (str): If more than one auth found, specify which one to use, rather than failing.
+        status_forcelist (Sequence[int]): HTTP statuses for which to force retry. Defaults to (429, 500, 502, 503, 504).
+        allowed_methods (Sequence[str]): HTTP methods for which to force retry. Defaults to ("HEAD", "TRACE", "GET", "PUT", "OPTIONS", "DELETE").
     """
     s = requests.Session()
     s.verify = verify

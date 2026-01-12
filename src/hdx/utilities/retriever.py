@@ -129,8 +129,8 @@ class Retrieve(BaseDownload):
             filename: Filename to use. Defaults to None (infer from url).
             possible_extensions: Possible extensions to look for in url
             **kwargs: See below
-            format: Given extension to look for in url
-            file_type: Given extension to look for in url
+            format (str): Given extension to look for in url
+            file_type (str): Given extension to look for in url
 
         Returns:
             Tuple of (filename, kwargs)

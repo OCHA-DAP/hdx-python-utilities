@@ -19,17 +19,17 @@ def get_frictionless_control(**kwargs: Any) -> tuple[Control, Any]:
     """Get Frictionless Control.
 
     Args:
-        **kwargs:
-        file_type: Type of file. Defaults to inferring.
-        format: Type of file. Defaults to inferring.
-        delimiter: Delimiter for values in csv rows. Defaults to inferring.
-        skip_initial_space: Ignore whitespace straight after delimiter. Defaults to False.
-        sheet: Sheet in Excel. Defaults to inferring.
-        fill_merged_cells: Whether to fill merged cells. Defaults to True.
-        keyed: Whether JSON is keyed. Defaults to True.
-        keys: JSON keys to get. Defaults to None (all of them).
-        property: Path to table in JSON. Defaults to None.
-        control: This can be set to override the above. See Frictionless docs.
+        **kwargs: See below
+        file_type (str | None): Type of file. Defaults to inferring.
+        format (str | None): Type of file. Defaults to inferring.
+        delimiter (str | None): Delimiter for values in csv rows. Defaults to inferring.
+        skip_initial_space (bool): Ignore whitespace straight after delimiter. Defaults to False.
+        sheet (int | str | None): Sheet in Excel. Defaults to inferring.
+        fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
+        keyed (bool): Whether JSON is keyed. Defaults to True.
+        keys (list[str] | None): JSON keys to get. Defaults to None (all of them).
+        property (str | None): Path to table in JSON. Defaults to None.
+        control (Control): This can be set to override the above. See Frictionless docs.
 
     Returns:
         (frictionless Control object, kwargs)
@@ -74,10 +74,10 @@ def get_frictionless_detector(infer_types: bool, **kwargs: Any) -> tuple[Detecto
     Args:
         infer_types: Whether to infer types. Defaults to False (strings).
         **kwargs:
-        default_type: Default field type if infer_types False. Defaults to any.
-        float_numbers: Use float not Decimal if infer_types True. Defaults to True.
-        null_values: Values that will return None. Defaults to [""].
-        detector: This can be set to override the above. See Frictionless docs.
+        default_type (str | None): Default field type if infer_types False. Defaults to any.
+        float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
+        null_values (list[Any]): Values that will return None. Defaults to [""].
+        detector (Detector): This can be set to override the above. See Frictionless docs.
 
     Returns:
         (frictionless Detector object, kwargs)
@@ -103,9 +103,9 @@ def get_frictionless_dialect(
 
     Args:
         ignore_blank_rows: Whether to ignore blank rows. Defaults to True.
-        **kwargs:
-        columns: Columns to pick. Defaults to all.
-        dialect: This can be set to override the above. See Frictionless docs.
+        **kwargs: See below
+        columns (Sequence[int] | Sequence[str] | None): Columns to pick. Defaults to all.
+        dialect (Dialect): This can be set to override the above. See Frictionless docs.
 
     Returns:
         (frictionless Dialect object, Any)
@@ -134,29 +134,29 @@ def get_frictionless_tableresource(
         infer_types: Whether to infer types. Defaults to False (strings).
         session: Session to use. Defaults to not setting a session.
         data: Data to parse. Defaults to None.
-        **kwargs:
-        has_header: Whether data has a header. Defaults to True.
-        headers: Number of row(s) containing headers or list of headers.  # pylint: disable=line-too-long
-        columns: Columns to pick. Defaults to all.
-        file_type: Type of file. Defaults to inferring.
-        format: Type of file. Defaults to inferring.
-        encoding: Type of encoding. Defaults to inferring.
-        compression: Type of compression. Defaults to inferring.
-        delimiter: Delimiter for values in csv rows. Defaults to inferring.
-        skip_initial_space: Ignore whitespace straight after delimiter. Defaults to False.
-        sheet: Sheet in Excel. Defaults to inferring.
-        fill_merged_cells: Whether to fill merged cells. Defaults to True.
-        keyed: Whether JSON is keyed. Defaults to True.
-        keys: JSON keys to get. Defaults to None (all of them).
-        property: Path to table in JSON. Defaults to None.
-        http_session: Session object to use. Defaults to downloader session.
-        default_type: Default field type if infer_types False. Defaults to any.
-        float_numbers: Use float not Decimal if infer_types True. Defaults to True.
-        null_values: Values that will return None. Defaults to [""].
-        control: This can be set to override the above. See Frictionless docs.
-        detector: This can be set to override the above. See Frictionless docs.
-        dialect: This can be set to override the above. See Frictionless docs.
-        schema: This can be set to override the above. See Frictionless docs.
+        **kwargs: See below
+        has_header (bool): Whether data has a header. Defaults to True.
+        headers (int | Sequence[int] | Sequence[str]): Number of row(s) containing headers or list of headers.  # pylint: disable=line-too-long
+        columns (Sequence[int] | Sequence[str] | None): Columns to pick. Defaults to all.
+        file_type (str | None): Type of file. Defaults to inferring.
+        format (str | None): Type of file. Defaults to inferring.
+        encoding (str | None): Type of encoding. Defaults to inferring.
+        compression (str | None): Type of compression. Defaults to inferring.
+        delimiter (str | None): Delimiter for values in csv rows. Defaults to inferring.
+        skip_initial_space (bool): Ignore whitespace straight after delimiter. Defaults to False.
+        sheet (int | str | None): Sheet in Excel. Defaults to inferring.
+        fill_merged_cells (bool): Whether to fill merged cells. Defaults to True.
+        keyed (bool): Whether JSON is keyed. Defaults to True.
+        keys (list[str] | None): JSON keys to get. Defaults to None (all of them).
+        property (str | None): Path to table in JSON. Defaults to None.
+        http_session (Session): Session object to use. Defaults to downloader session.
+        default_type (str | None): Default field type if infer_types False. Defaults to any.
+        float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
+        null_values (list[Any]): Values that will return None. Defaults to [""].
+        control (Control): This can be set to override the above. See Frictionless docs.
+        detector (Detector): This can be set to override the above. See Frictionless docs.
+        dialect (Dialect): This can be set to override the above. See Frictionless docs.
+        schema (Schema): This can be set to override the above. See Frictionless docs.
 
     Returns:
         frictionless TableResource object
