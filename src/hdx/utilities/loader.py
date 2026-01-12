@@ -1,13 +1,13 @@
 """Loading utilities for YAML, JSON etc."""
 
 import json
-from typing import Any, Sequence, Mapping
+from collections.abc import Mapping, Sequence
+from typing import Any
 from warnings import warn
 
 from ruamel.yaml import YAML
 
 from hdx.utilities.dictandlist import merge_dictionaries, merge_two_dictionaries
-
 
 
 class LoadError(Exception):

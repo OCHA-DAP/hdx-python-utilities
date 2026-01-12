@@ -4,7 +4,7 @@ import contextlib
 import inspect
 import logging
 import sys
-from collections.abc import Iterable
+from collections.abc import Generator, Iterable, Sequence
 from os import getenv, makedirs, remove
 from os.path import (
     abspath,
@@ -17,14 +17,13 @@ from os.path import (
 )
 from shutil import rmtree
 from tempfile import gettempdir
-from typing import Any, Sequence, Generator
+from typing import Any
 from urllib.parse import unquote_plus, urlsplit
 
 from slugify import slugify
 
 from hdx.utilities.loader import load_text
 from hdx.utilities.saver import save_text
-
 from hdx.utilities.uuid import get_uuid
 
 logger = logging.getLogger(__name__)

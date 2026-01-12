@@ -2,10 +2,10 @@
 
 import logging
 import sys
-from typing import Any, Sequence
+from collections.abc import Sequence
+from typing import Any
 
 from hdx.utilities.dictandlist import dict_of_sets_add
-
 
 logger = logging.getLogger(__name__)
 

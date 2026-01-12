@@ -2,11 +2,10 @@
 
 import itertools
 import warnings
-from collections.abc import Callable, MutableMapping
-from typing import Any, Sequence, Mapping
+from collections.abc import Callable, Mapping, MutableMapping, Sequence
+from typing import Any
 
 from hdx.utilities.frictionless_wrapper import get_frictionless_tableresource
-
 
 
 def invert_dictionary(d: MutableMapping) -> dict:

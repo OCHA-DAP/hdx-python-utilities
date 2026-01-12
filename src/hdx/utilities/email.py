@@ -2,13 +2,13 @@
 
 import logging
 import smtplib
+from collections.abc import Sequence
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from os.path import expanduser, join
-from typing import Any, Sequence
+from typing import Any
 
 from hdx.utilities.loader import load_json, load_yaml
-
 
 try:
     from email_validator import EmailNotValidError, validate_email

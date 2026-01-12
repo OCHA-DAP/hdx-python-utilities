@@ -1,10 +1,10 @@
 import logging
-from collections.abc import Iterator
+from collections.abc import Iterator, Sequence
 from copy import deepcopy
 from os import mkdir
 from os.path import join
 from shutil import rmtree
-from typing import Any, Sequence
+from typing import Any
 
 from slugify import slugify
 
@@ -13,7 +13,6 @@ from hdx.utilities.downloader import Download
 from hdx.utilities.loader import load_json, load_text, load_yaml
 from hdx.utilities.path import get_filename_extension_from_url
 from hdx.utilities.saver import save_json, save_text, save_yaml
-
 
 logger = logging.getLogger(__name__)
 

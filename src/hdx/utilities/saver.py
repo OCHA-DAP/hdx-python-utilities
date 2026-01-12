@@ -3,9 +3,9 @@
 import csv
 import json
 from collections import OrderedDict
-from collections.abc import Callable, Iterable
+from collections.abc import Callable, Iterable, Mapping, Sequence
 from os.path import join
-from typing import Any, Sequence, Mapping
+from typing import Any
 
 from ruamel.yaml import (
     YAML,
@@ -16,7 +16,6 @@ from ruamel.yaml import (
 
 from hdx.utilities.frictionless_wrapper import get_frictionless_tableresource
 from hdx.utilities.matching import match_template_variables
-
 
 
 class UnPrettyRTRepresenter(RoundTripRepresenter):

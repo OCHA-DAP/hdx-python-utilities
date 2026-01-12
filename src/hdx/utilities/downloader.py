@@ -2,12 +2,12 @@
 
 import hashlib
 import logging
-from collections.abc import Callable, Iterator
+from collections.abc import Callable, Iterator, Sequence
 from copy import deepcopy
 from os import remove
 from os.path import exists, isfile, join, split, splitext
 from pathlib import Path
-from typing import Any, Sequence
+from typing import Any
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import requests
@@ -23,7 +23,6 @@ from hdx.utilities.base_downloader import BaseDownload, DownloadError
 from hdx.utilities.frictionless_wrapper import get_frictionless_tableresource
 from hdx.utilities.path import get_filename_from_url, get_temp_dir
 from hdx.utilities.session import get_session
-
 
 logger = logging.getLogger(__name__)
 

@@ -1,8 +1,6 @@
 from abc import ABC, abstractmethod
-from collections.abc import Iterator
-from typing import Any, Sequence
-
-
+from collections.abc import Iterator, Sequence
+from typing import Any
 
 
 class DownloadError(Exception):

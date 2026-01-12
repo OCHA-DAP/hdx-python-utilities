@@ -1,12 +1,10 @@
 import difflib
 import re
-from collections.abc import Callable
-from typing import Sequence
+from collections.abc import Callable, Sequence
 
 from pyphonetics import RefinedSoundex
 
 from hdx.utilities.text import normalise
-
 
 TEMPLATE_VARIABLES = re.compile("{{.*?}}")
 
