@@ -32,7 +32,7 @@ class State:
         read_fn: Callable[[str], Any] = lambda x: x,
         write_fn: Callable[[Any], str] = lambda x: x,
     ) -> None:
-        self.path = path
+        self.path = Path(path)
         self.read_fn = read_fn
         self.write_fn = write_fn
         self.state = self.read()
