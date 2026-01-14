@@ -157,7 +157,7 @@ def load_yaml_into_existing_dict(
     path: Path | str,
     encoding: str = "utf-8",
     loaderror_if_empty: bool = True,
-) -> Mapping:
+) -> MutableMapping:
     """Merge YAML file that is in dictionary form into existing dictionary.
 
     Args:
@@ -178,7 +178,7 @@ def load_json_into_existing_dict(
     path: Path | str,
     encoding: str = "utf-8",
     loaderror_if_empty: bool = True,
-) -> Mapping:
+) -> MutableMapping:
     """Merge JSON file that is in dictionary form into existing dictionary.
 
     Args:
