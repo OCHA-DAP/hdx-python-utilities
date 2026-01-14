@@ -359,7 +359,7 @@ class TestDictAndList:
                 {"h1": 4, "h2": 5, "h3": 6, "h4": "b"},
                 {"h1": 7, "h2": 8, "h3": 9, "h4": "c"},
             ]
-            write_list_to_csv(filepath, list_of_dicts, headers=["h1", "h2", "h3", "h4"])
+            write_list_to_csv(str(filepath), list_of_dicts, headers=["h1", "h2", "h3", "h4"])
             newll = read_list_from_csv(filepath)
             remove(filepath)
             assert newll == [
@@ -369,7 +369,7 @@ class TestDictAndList:
                 ["7", "8", "9", "c"],
             ]
             write_list_to_csv(filepath, list_of_dicts)
-            newll = read_list_from_csv(filepath)
+            newll = read_list_from_csv(str(filepath))
             remove(filepath)
             assert newll == [
                 ["h1", "h2", "h3", "h4"],

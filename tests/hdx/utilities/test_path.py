@@ -49,7 +49,7 @@ class TestPath:
             assert tempdir == expected_dir
         assert exists(tempdir) is False
         try:
-            with temp_dir(tempfolder) as tempdir:
+            with temp_dir(Path(tempfolder)) as tempdir:
                 assert tempdir == expected_dir
                 raise ValueError("Fail!")
         except ValueError:

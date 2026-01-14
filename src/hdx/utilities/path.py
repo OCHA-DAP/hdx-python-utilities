@@ -15,7 +15,7 @@ from os.path import (
 from pathlib import Path
 from shutil import rmtree
 from tempfile import gettempdir
-from typing import Any
+from typing import Any, Iterator
 from urllib.parse import unquote_plus, urlsplit
 
 from slugify import slugify
@@ -111,7 +111,7 @@ def temp_dir(
     delete_on_success: bool = True,
     delete_on_failure: bool = True,
     tempdir: Path | str | None = None,
-) -> Generator[Path, Any, None]:
+) -> Iterator[Path]:
     """Get a temporary directory optionally with folder appended (and created
     if it doesn't exist)
 
@@ -167,7 +167,7 @@ def temp_dir_batch(
     delete_on_failure: bool = True,
     batch: str | None = None,
     tempdir: Path | str | None = None,
-) -> Generator[dict, Any, None]:
+) -> Iterator[dict]:
     """Get a temporary directory and batch id. Yields a dictionary with key
     folder which is the temporary directory optionally with folder appended
     (and created if it doesn't exist). In key batch is a batch code to be
@@ -283,7 +283,7 @@ def progress_storing_folder(
 @contextlib.contextmanager
 def wheretostart_tempdir_batch(
     folder: Path | str, batch: str | None = None, tempdir: Path | str | None = None
-) -> Generator[dict, Any, None]:
+) -> Iterator[dict]:
     """Get a temporary directory and batch id. Deletes any existing folder if
     WHERETOSTART environment variable is set to RESET. Yields a dictionary with
     key folder which is the temporary directory optionally with folder appended

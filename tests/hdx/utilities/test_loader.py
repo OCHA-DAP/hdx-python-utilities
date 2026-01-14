@@ -178,7 +178,8 @@ test"""
             save_text(TestLoader.text, text_file)
             result = load_text(text_file)
             assert result == TestLoader.text
-            result = load_text(text_file, strip=True)
+            result = load_text(str(text_file), strip=True)
+            save_text(TestLoader.text, str(text_file))
             assert result == TestLoader.expected_text_strip
             result = load_text(text_file, replace_line_separators=" ")
             assert result == TestLoader.expected_text_newlines_to_spaces

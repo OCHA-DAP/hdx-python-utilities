@@ -443,7 +443,7 @@ class TestDownloader:
             fpath = f.absolute()
             remove(f)
             assert fpath == tmp_path.absolute() / "test_data.csv"
-            f = downloader.download_file(fixtureurl, folder=tmp_path, filename=filename)
+            f = downloader.download_file(fixtureurl, folder=str(tmp_path), filename=filename)
             fpath = f.absolute()
             assert fpath == tmp_path.absolute() / filename
             f = downloader.download_file(
@@ -457,7 +457,7 @@ class TestDownloader:
             fpath = f.absolute()
             assert fpath == tmp_path.absolute() / filename.replace(".txt", "1.txt")
             f = downloader.download_file(
-                fixtureurl, path=tmp_path / filename, keep=True
+                fixtureurl, path=str(tmp_path / filename), keep=True
             )
             fpath = f.absolute()
             remove(f)

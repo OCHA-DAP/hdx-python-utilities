@@ -125,7 +125,7 @@ class TestLoader:
         )
         assert_files_same(ref_path, test_path)
         dct = json.loads(json.dumps(TestLoader.yaml_to_write))
-        save_yaml(dct, test_path, pretty=pretty, sortkeys=sortkeys)
+        save_yaml(dct, str(test_path), pretty=pretty, sortkeys=sortkeys)
         assert_files_same(ref_path, test_path)
 
     @pytest.mark.parametrize(
@@ -142,7 +142,7 @@ class TestLoader:
         ref_path = saverfolder / filename
         save_json(
             TestLoader.json_to_write,
-            test_path,
+            str(test_path),
             pretty=pretty,
             sortkeys=sortkeys,
         )
@@ -214,7 +214,7 @@ class TestLoader:
             rowsdict,
             includes_header=True,
             includes_hxltags=True,
-            output_dir=output_dir,
+            output_dir=str(output_dir),
         )
         filename = "out2.csv"
         assert_files_same(saverfolder / filename, output_dir / filename)
@@ -344,7 +344,7 @@ class TestLoader:
                 ["9", "8", "7", "c"],
             ]
 
-            save_iterable(filepath, list_of_dicts, columns=["h2", "h3", "h1"])
+            save_iterable(str(filepath), list_of_dicts, columns=["h2", "h3", "h1"])
             newll = read_list_from_csv(filepath)
             remove(filepath)
             assert newll == [
@@ -507,7 +507,7 @@ class TestLoader:
                 headers=["h1", "h2", "h3", "h4"],
                 row_function=row_func,
             )
-            newll = read_list_from_csv(filepath)
+            newll = read_list_from_csv(str(filepath))
             remove(filepath)
             assert newll == [
                 ["h1", "h2", "h3", "h4"],

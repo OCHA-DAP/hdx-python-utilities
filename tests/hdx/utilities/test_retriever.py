@@ -389,6 +389,21 @@ class TestRetriever:
                         logstr="test file",
                         fallback=False,
                     )
+            with Retrieve(
+                downloader,
+                str(fallback_dir),
+                str(saved_dir),
+                str(temp_dir),
+                save=True,
+                use_saved=False,
+            ) as retriever:
+                filename = "test.txt"
+                url = retrieverfolder / filename
+                path = retriever.download_file(
+                    url, filename, logstr="test file", fallback=True
+                )
+                assert path == saved_dir / filename
+
 
     def test_download_usesaved(self, dirs, retrieverfolder, fallback_dir):
         _, temp_dir = dirs

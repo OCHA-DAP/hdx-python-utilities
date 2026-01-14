@@ -70,7 +70,7 @@ class TestZipCRC:
         bad_index,
     ):
         assert get_size_and_hash(shpfile, "shp") == (1330530, "31662cb7")
-        assert get_size_and_hash(shpfile, "zip") == (1330530, "31662cb7")
+        assert get_size_and_hash(str(shpfile), "zip") == (1330530, "31662cb7")
         assert get_size_and_hash(shpfile, "xlsx") == (1330530, "31662cb7")
 
         assert get_size_and_hash(xlsxfile, "xlsx") == (
