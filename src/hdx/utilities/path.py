@@ -4,7 +4,7 @@ import contextlib
 import inspect
 import logging
 import sys
-from collections.abc import Generator, Iterable, Sequence
+from collections.abc import Iterable, Iterator, Sequence
 from os import getenv, makedirs, remove
 from os.path import (
     basename,
@@ -15,7 +15,7 @@ from os.path import (
 from pathlib import Path
 from shutil import rmtree
 from tempfile import gettempdir
-from typing import Any, Iterator
+from typing import Any
 from urllib.parse import unquote_plus, urlsplit
 
 from slugify import slugify
@@ -224,7 +224,7 @@ def progress_storing_folder(
     iterator: Iterable[dict],
     key: str,
     wheretostart: str | None = None,
-) -> Generator[tuple[dict, dict], Any, None]:
+) -> Iterator[tuple[dict, dict]]:
     """Store progress in folder in key folder of info dictionary parameter.
     Yields 2 dictionaries. The first is the info dictionary. It contains in key
     folder the folder being used to store progress and in key progress the
@@ -321,7 +321,7 @@ def progress_storing_tempdir(
     key: str,
     batch: str | None = None,
     tempdir: Path | str | None = None,
-) -> Generator[tuple[dict, dict], Any, None]:
+) -> Iterator[tuple[dict, dict]]:
     """Store progress in temporary directory. The folder persists until the
     final iteration allowing which iteration to start at and the batch code to
     be persisted between runs. Yields 2 dictionaries. The first contains key
@@ -353,7 +353,7 @@ def multiple_progress_storing_tempdir(
     iterators: Sequence[Iterable[dict]],
     keys: Sequence[str],
     batch: str | None = None,
-) -> Generator[tuple[int, dict, dict], Any, None]:
+) -> Iterator[tuple[int, dict, dict]]:
     """Store progress in temporary directory. The folder persists until the
     final iteration of the last iterator allowing which iteration to start at
     and the batch code to be persisted between runs. Yields 2 dictionaries. The

@@ -404,7 +404,6 @@ class TestRetriever:
                 )
                 assert path == saved_dir / filename
 
-
     def test_download_usesaved(self, dirs, retrieverfolder, fallback_dir):
         _, temp_dir = dirs
         saved_dir = retrieverfolder

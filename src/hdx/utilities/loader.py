@@ -1,7 +1,7 @@
 """Loading utilities for YAML, JSON etc."""
 
 import json
-from collections.abc import Mapping, Sequence
+from collections.abc import Mapping, MutableMapping, Sequence
 from pathlib import Path
 from typing import Any
 from warnings import warn
@@ -153,7 +153,7 @@ def load_and_merge_json(
 
 
 def load_yaml_into_existing_dict(
-    data: dict,
+    data: MutableMapping,
     path: Path | str,
     encoding: str = "utf-8",
     loaderror_if_empty: bool = True,
@@ -174,7 +174,7 @@ def load_yaml_into_existing_dict(
 
 
 def load_json_into_existing_dict(
-    data: dict,
+    data: MutableMapping,
     path: Path | str,
     encoding: str = "utf-8",
     loaderror_if_empty: bool = True,
