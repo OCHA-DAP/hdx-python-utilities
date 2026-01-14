@@ -49,9 +49,9 @@ class Retrieve(BaseDownload):
         log_level: int = logging.INFO,
     ):
         self.downloader = downloader
-        self.fallback_dir = fallback_dir
-        self.saved_dir = saved_dir
-        self.temp_dir = temp_dir
+        self.fallback_dir = Path(fallback_dir)
+        self.saved_dir = Path(saved_dir)
+        self.temp_dir = Path(temp_dir)
         self.save = save
         self.use_saved = use_saved
         self.prefix = prefix
