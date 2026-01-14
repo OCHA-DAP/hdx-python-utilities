@@ -3,7 +3,6 @@
 import random
 import string
 from os import mkdir
-from os.path import join
 from shutil import rmtree
 
 import pytest
@@ -25,17 +24,16 @@ class TestRetriever:
 
     @pytest.fixture(scope="class")
     def retrieverfolder(self, fixturesfolder):
-        return join(fixturesfolder, self.retrieverfoldername)
+        return fixturesfolder / self.retrieverfoldername
 
     @pytest.fixture(scope="class")
     def fallback_dir(self, retrieverfolder):
-        return join(retrieverfolder, "fallbacks")
+        return retrieverfolder / "fallbacks"
 
     @pytest.fixture(scope="function")
     def dirs(self, tmp_path):
-        tmp_path = str(tmp_path)
-        saved_dir = join(tmp_path, "saved")
-        temp_dir = join(tmp_path, "temp")
+        saved_dir = tmp_path / "saved"
+        temp_dir = tmp_path / "temp"
         rmtree(temp_dir, ignore_errors=True)
         mkdir(temp_dir)
         return saved_dir, temp_dir
@@ -190,15 +188,15 @@ class TestRetriever:
                 use_saved=False,
             ) as retriever:
                 filename = "test.txt"
-                url = join(retrieverfolder, filename)
+                url = retrieverfolder / filename
                 path = retriever.download_file(
                     url, filename, logstr="test file", fallback=True
                 )
-                assert path == join(temp_dir, filename)
+                assert path == temp_dir / filename
                 path = retriever.download_file(
                     "NOTEXIST", filename, logstr="test file", fallback=True
                 )
-                assert path == join(fallback_dir, filename)
+                assert path == fallback_dir / filename
                 with pytest.raises(DownloadError):
                     retriever.download_file("NOTEXIST", filename, fallback=False)
                 with pytest.raises(DownloadError):
@@ -220,7 +218,7 @@ class TestRetriever:
                 with pytest.raises(DownloadError):
                     retriever.download_text("NOTEXIST", filename, fallback=False)
                 filename = "test.yaml"
-                url = join(retrieverfolder, filename)
+                url = retrieverfolder / filename
                 data = retriever.download_yaml(
                     url, filename, logstr="test file", fallback=False
                 )
@@ -232,7 +230,7 @@ class TestRetriever:
                 with pytest.raises(DownloadError):
                     retriever.download_yaml("NOTEXIST", filename, fallback=False)
                 filename = "test.json"
-                url = join(retrieverfolder, filename)
+                url = retrieverfolder / filename
                 data = retriever.download_json(
                     url, filename, logstr="test file", fallback=False
                 )
@@ -244,7 +242,7 @@ class TestRetriever:
                 with pytest.raises(DownloadError):
                     retriever.download_json("NOTEXIST", filename, fallback=False)
                 filename = "test.csv"
-                url = join(retrieverfolder, filename)
+                url = retrieverfolder / filename
                 headers, iterator = retriever.get_tabular_rows(
                     url, logstr="test file", fallback=False
                 )
@@ -281,7 +279,7 @@ class TestRetriever:
                 use_saved=False,
             ) as retriever:
                 filename = "test.csv"
-                url = join(retrieverfolder, filename)
+                url = retrieverfolder / filename
                 headers, iterator = retriever.get_tabular_rows(
                     [url, url], logstr="test file", fallback=False
                 )
@@ -293,7 +291,7 @@ class TestRetriever:
                     ["gas", "2", "6.5", "'n/a'"],
                 ]
                 filename = "test_hxl.csv"
-                url = join(retrieverfolder, filename)
+                url = retrieverfolder / filename
                 headers, iterator = retriever.get_tabular_rows(
                     [url, url],
                     has_hxl=True,
@@ -321,15 +319,15 @@ class TestRetriever:
                 use_saved=False,
             ) as retriever:
                 filename = "test.txt"
-                url = join(retrieverfolder, filename)
+                url = retrieverfolder / filename
                 path = retriever.download_file(
                     url, filename, logstr="test file", fallback=True
                 )
-                assert path == join(saved_dir, filename)
+                assert path == saved_dir / filename
                 path = retriever.download_file(
                     "NOTEXIST", filename, logstr="test file", fallback=True
                 )
-                assert path == join(fallback_dir, filename)
+                assert path == fallback_dir / filename
                 with pytest.raises(DownloadError):
                     retriever.download_file("NOTEXIST", filename, fallback=False)
                 text = retriever.download_text(
@@ -343,7 +341,7 @@ class TestRetriever:
                 with pytest.raises(DownloadError):
                     retriever.download_text("NOTEXIST", filename, fallback=False)
                 filename = "test.yaml"
-                url = join(retrieverfolder, filename)
+                url = retrieverfolder / filename
                 data = retriever.download_yaml(
                     url, filename, logstr="test file", fallback=False
                 )
@@ -355,7 +353,7 @@ class TestRetriever:
                 with pytest.raises(DownloadError):
                     retriever.download_yaml("NOTEXIST", filename, fallback=False)
                 filename = "test.json"
-                url = join(retrieverfolder, filename)
+                url = retrieverfolder / filename
                 data = retriever.download_json(
                     url, filename, logstr="test file", fallback=False
                 )
@@ -367,7 +365,7 @@ class TestRetriever:
                 with pytest.raises(DownloadError):
                     retriever.download_json("NOTEXIST", filename, fallback=False)
                 filename = "test.csv"
-                url = join(retrieverfolder, filename)
+                url = retrieverfolder / filename
                 headers, iterator = retriever.get_tabular_rows(
                     url, logstr="test file", fallback=False
                 )
@@ -405,17 +403,17 @@ class TestRetriever:
                 use_saved=True,
             ) as retriever:
                 filename = "test.txt"
-                url = join(retrieverfolder, filename)
+                url = retrieverfolder / filename
                 path = retriever.download_file(
                     url, filename, logstr="test file", fallback=True
                 )
-                assert path == join(saved_dir, filename)
+                assert path == saved_dir / filename
                 path = retriever.download_file(
                     "NOTEXIST", filename, logstr="test file", fallback=True
                 )
-                assert path == join(saved_dir, filename)
+                assert path == saved_dir / filename
                 path = retriever.download_file("NOTEXIST", filename, fallback=False)
-                assert path == join(saved_dir, filename)
+                assert path == saved_dir / filename
                 text = retriever.download_text(
                     url, filename, logstr="test file", fallback=False
                 )
@@ -427,7 +425,7 @@ class TestRetriever:
                 text = retriever.download_text("NOTEXIST", filename, fallback=False)
                 assert text == "hello"
                 filename = "test.yaml"
-                url = join(retrieverfolder, filename)
+                url = retrieverfolder / filename
                 data = retriever.download_yaml(
                     url, filename, logstr="test file", fallback=False
                 )
@@ -439,7 +437,7 @@ class TestRetriever:
                 data = retriever.download_yaml("NOTEXIST", filename, fallback=False)
                 assert data["param_1"] == "ABC"
                 filename = "test.json"
-                url = join(retrieverfolder, filename)
+                url = retrieverfolder / filename
                 data = retriever.download_json(
                     url, filename, logstr="test file", fallback=False
                 )
@@ -451,7 +449,7 @@ class TestRetriever:
                 data = retriever.download_json("NOTEXIST", filename, fallback=False)
                 assert data["my_param"] == "abc"
                 filename = "test.csv"
-                url = join(retrieverfolder, filename)
+                url = retrieverfolder / filename
                 headers, iterator = retriever.get_tabular_rows(
                     url, logstr="test file", fallback=False
                 )

@@ -1,7 +1,5 @@
 """HTML Tests"""
 
-from os.path import join
-
 import pytest
 
 from hdx.utilities.html import extract_table, get_soup
@@ -13,7 +11,7 @@ class TestHTML:
 
     @pytest.fixture(scope="function")
     def htmltext(self, fixturesfolder):
-        return load_text(join(fixturesfolder, "html", "response.html"))
+        return load_text(fixturesfolder / "html" / "response.html")
 
     @pytest.fixture(scope="function")
     def downloader(self, htmltext):

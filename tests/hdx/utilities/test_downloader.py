@@ -5,7 +5,8 @@ import re
 from collections import OrderedDict
 from contextlib import contextmanager
 from os import remove
-from os.path import abspath, join
+from os.path import join
+from pathlib import Path
 from shutil import copytree, rmtree
 from tempfile import gettempdir
 
@@ -40,11 +41,11 @@ class TestDownloader:
 
     @pytest.fixture(scope="class")
     def downloaderfolder(self, fixturesfolder):
-        return join(fixturesfolder, self.downloaderfoldername)
+        return fixturesfolder / self.downloaderfoldername
 
     @pytest.fixture(scope="class")
     def fixturefile(self, downloaderfolder):
-        return join(downloaderfolder, "extra_params_tree.yaml")
+        return downloaderfolder / "extra_params_tree.yaml"
 
     @pytest.fixture(scope="class")
     def fixtureurl(self):
@@ -89,23 +90,22 @@ class TestDownloader:
     def test_get_path_for_url(
         self, tmp_path, fixtureurl, configfolder, downloaderfolder
     ):
-        tmp_path = str(tmp_path)
         filename = "test_data.csv"
         path = Download.get_path_for_url(fixtureurl, configfolder)
-        assert abspath(path) == abspath(join(configfolder, filename))
+        assert path.absolute() == configfolder.absolute() / filename
         path = Download.get_path_for_url(fixtureurl, downloaderfolder)
-        assert abspath(path) == abspath(join(downloaderfolder, "test_data3.csv"))
-        testfolder = join(tmp_path, self.downloaderfoldername)
+        assert path.absolute() == downloaderfolder.absolute() / "test_data3.csv"
+        testfolder = tmp_path / self.downloaderfoldername
         rmtree(testfolder, ignore_errors=True)
         copytree(downloaderfolder, testfolder)
         path = Download.get_path_for_url(fixtureurl, testfolder, overwrite=True)
-        assert abspath(path) == abspath(join(testfolder, filename))
+        assert path.absolute() == testfolder.absolute() / filename
         rmtree(testfolder)
         filename = "myfilename.txt"
         path = Download.get_path_for_url(fixtureurl, filename=filename)
-        assert abspath(path) == abspath(join(gettempdir(), filename))
+        assert path.absolute() == Path(join(gettempdir(), filename)).absolute()
         path = Download.get_path_for_url(fixtureurl, downloaderfolder, filename)
-        assert abspath(path) == abspath(join(downloaderfolder, filename))
+        assert path.absolute() == downloaderfolder.absolute() / filename
 
     def test_init(self, monkeypatch, downloaderfolder):
         with Download(auth=("u", "p")) as downloader:
@@ -113,7 +113,7 @@ class TestDownloader:
         basicauth = "Basic dXNlcjpwYXNz"
         with Download(basic_auth=basicauth) as downloader:
             assert downloader.session.auth == ("user", "pass")
-        basicauthfile = join(downloaderfolder, "basicauth.txt")
+        basicauthfile = downloaderfolder / "basicauth.txt"
         with Download(basic_auth_file=basicauthfile) as downloader:
             assert downloader.session.auth == ("testuser", "testpass")
         bearertoken = "ABCDE"
@@ -122,14 +122,14 @@ class TestDownloader:
             assert (
                 downloader.session.headers["Authorization"] == f"Bearer {bearertoken}"
             )
-        bearertokenfile = join(downloaderfolder, "bearertoken.txt")
+        bearertokenfile = downloaderfolder / "bearertoken.txt"
         bearertoken = "12345"
         with Download(bearer_token_file=bearertokenfile) as downloader:
             assert downloader.session.headers["Accept"] == "application/json"
             assert (
                 downloader.session.headers["Authorization"] == f"Bearer {bearertoken}"
             )
-        extraparamsyamltree = join(downloaderfolder, "extra_params_tree.yaml")
+        extraparamsyamltree = downloaderfolder / "extra_params_tree.yaml"
         with Download(
             extra_params_yaml=extraparamsyamltree, extra_params_lookup="mykey"
         ) as downloader:
@@ -172,7 +172,7 @@ class TestDownloader:
             )
         with pytest.raises(SessionError):
             Download(auth=("u", "p"), basic_auth="Basic xxxxxxxxxxxxxxxx")
-        extraparamsjson = join(downloaderfolder, "extra_params.json")
+        extraparamsjson = downloaderfolder / "extra_params.json"
         with pytest.raises(SessionError):
             Download(auth=("u", "p"), basic_auth_file=extraparamsjson)
         with pytest.raises(SessionError):
@@ -215,7 +215,7 @@ class TestDownloader:
             Download(basic_auth_file="NOTEXIST")
         with pytest.raises(IOError):
             Download(bearer_token_file="NOTEXIST")
-        extraparamsyaml = join(downloaderfolder, "extra_params.yaml")
+        extraparamsyaml = downloaderfolder / "extra_params.yaml"
         test_url = "http://www.lalala.com/lala"
         with Download(
             basic_auth_file=basicauthfile, extra_params_dict={"key1": "val1"}
@@ -421,7 +421,6 @@ class TestDownloader:
         getfixtureurl,
         postfixtureurl,
     ):
-        tmp_path = str(tmp_path)
         with pytest.raises(DownloadError), Download() as downloader:
             downloader.download_file("NOTEXIST://NOTEXIST.csv", folder=tmp_path)
         with pytest.raises(DownloadError), Download() as downloader:
@@ -429,40 +428,40 @@ class TestDownloader:
         filename = "myfilename.txt"
         with pytest.raises(DownloadError), Download() as downloader:
             downloader.download_file(
-                fixturefile, folder=tmp_path, path=join(tmp_path, filename)
+                fixturefile, folder=tmp_path, path=tmp_path / filename
             )
         with pytest.raises(DownloadError), Download() as downloader:
             downloader.download_file(
-                fixturefile, filename=filename, path=join(tmp_path, filename)
+                fixturefile, filename=filename, path=tmp_path / filename
             )
         with Download() as downloader:
             f = downloader.download_file(fixturefile, folder=tmp_path)
-            fpath = abspath(f)
+            fpath = f.absolute()
             remove(f)
-            assert fpath == abspath(join(tmp_path, "extra_params_tree.yaml"))
+            assert fpath == tmp_path.absolute() / "extra_params_tree.yaml"
             f = downloader.download_file(fixtureurl, folder=tmp_path)
-            fpath = abspath(f)
+            fpath = f.absolute()
             remove(f)
-            assert fpath == abspath(join(tmp_path, "test_data.csv"))
+            assert fpath == tmp_path.absolute() / "test_data.csv"
             f = downloader.download_file(fixtureurl, folder=tmp_path, filename=filename)
-            fpath = abspath(f)
-            assert fpath == abspath(join(tmp_path, filename))
+            fpath = f.absolute()
+            assert fpath == tmp_path.absolute() / filename
             f = downloader.download_file(
-                fixtureurl, path=join(tmp_path, filename), overwrite=True
+                fixtureurl, path=tmp_path / filename, overwrite=True
             )
-            fpath = abspath(f)
-            assert fpath == abspath(join(tmp_path, filename))
+            fpath = f.absolute()
+            assert fpath == tmp_path.absolute() / filename
             f = downloader.download_file(
-                fixtureurl, path=join(tmp_path, filename), overwrite=False
+                fixtureurl, path=tmp_path / filename, overwrite=False
             )
-            fpath = abspath(f)
-            assert fpath == abspath(join(tmp_path, filename.replace(".txt", "1.txt")))
+            fpath = f.absolute()
+            assert fpath == tmp_path.absolute() / filename.replace(".txt", "1.txt")
             f = downloader.download_file(
-                fixtureurl, path=join(tmp_path, filename), keep=True
+                fixtureurl, path=tmp_path / filename, keep=True
             )
-            fpath = abspath(f)
+            fpath = f.absolute()
             remove(f)
-            assert fpath == abspath(join(tmp_path, filename))
+            assert fpath == tmp_path.absolute() / filename
             f = downloader.download_file(
                 f"{getfixtureurl}?id=10&lala=a",
                 post=False,
@@ -470,7 +469,7 @@ class TestDownloader:
                 folder=tmp_path,
                 filename=filename,
             )
-            fpath = abspath(f)
+            fpath = f.absolute()
             with open(fpath, encoding="utf-8") as fi:
                 text = fi.read()
                 assert '"id": "10"' in text
@@ -478,7 +477,7 @@ class TestDownloader:
                 assert '"b": "4"' in text
                 assert '"d": "3"' in text
             remove(f)
-            assert fpath == abspath(join(tmp_path, filename))
+            assert fpath == tmp_path.absolute() / filename
             f = downloader.download_file(
                 f"{postfixtureurl}?id=3&lala=b",
                 post=True,
@@ -486,7 +485,7 @@ class TestDownloader:
                 folder=tmp_path,
                 filename=filename,
             )
-            fpath = abspath(f)
+            fpath = f.absolute()
             with open(fpath, encoding="utf-8") as fi:
                 text = fi.read()
                 assert '"id": "3"' in text
@@ -494,7 +493,7 @@ class TestDownloader:
                 assert '"a": "3"' in text
                 assert '"c": "2"' in text
             remove(f)
-            assert fpath == abspath(join(tmp_path, filename))
+            assert fpath == tmp_path.absolute() / filename
 
     def test_download(
         self,

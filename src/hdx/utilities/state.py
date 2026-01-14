@@ -2,6 +2,7 @@
 
 import logging
 from collections.abc import Callable
+from pathlib import Path
 from typing import Any
 
 from hdx.utilities.dateparse import iso_string_from_datetime, parse_date
@@ -27,7 +28,7 @@ class State:
 
     def __init__(
         self,
-        path: str,
+        path: Path | str,
         read_fn: Callable[[str], Any] = lambda x: x,
         write_fn: Callable[[Any], str] = lambda x: x,
     ) -> None:

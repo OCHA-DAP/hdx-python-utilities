@@ -1,7 +1,7 @@
 """Global fixtures"""
 
 import smtplib
-from os.path import join
+from pathlib import Path
 
 import pytest
 
@@ -10,12 +10,12 @@ from hdx.utilities.downloader import Download
 
 @pytest.fixture(scope="session")
 def fixturesfolder():
-    return join("tests", "fixtures")
+    return Path("tests", "fixtures")
 
 
 @pytest.fixture(scope="session")
 def configfolder(fixturesfolder):
-    return join(fixturesfolder, "config")
+    return Path(fixturesfolder, "config")
 
 
 @pytest.fixture(scope="function")

@@ -1,7 +1,6 @@
 """State Utility Tests"""
 
 from datetime import datetime, timezone
-from os.path import join
 from shutil import copyfile
 
 import pytest
@@ -13,7 +12,7 @@ from hdx.utilities.state import State
 class TestState:
     @pytest.fixture(scope="class")
     def statefolder(self, fixturesfolder):
-        return join(fixturesfolder, "state")
+        return fixturesfolder / "state"
 
     @pytest.fixture(scope="class")
     def statefile(self):
@@ -32,8 +31,8 @@ class TestState:
         return datetime(2022, 5, 12, 10, 15, tzinfo=timezone.utc)
 
     def test_state(self, tmp_path, statefolder, statefile, date1, date2):
-        statepath = join(tmp_path, statefile)
-        copyfile(join(statefolder, statefile), statepath)
+        statepath = tmp_path / statefile
+        copyfile(statefolder / statefile, statepath)
         with State(statepath, parse_date, iso_string_from_datetime) as state:
             assert state.get() == date1
         with State(statepath, parse_date, iso_string_from_datetime) as state:
@@ -45,8 +44,8 @@ class TestState:
     def test_multi_date_state(
         self, tmp_path, statefolder, multidatestatefile, date1, date2
     ):
-        statepath = join(tmp_path, multidatestatefile)
-        copyfile(join(statefolder, multidatestatefile), statepath)
+        statepath = tmp_path / multidatestatefile
+        copyfile(statefolder / multidatestatefile, statepath)
         with State(
             statepath,
             State.dates_str_to_country_date_dict,

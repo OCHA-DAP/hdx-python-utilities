@@ -1,7 +1,8 @@
 """Path Utility Tests"""
 
 import copy
-from os.path import exists, join
+from os.path import exists
+from pathlib import Path
 from shutil import rmtree
 from tempfile import gettempdir
 
@@ -21,27 +22,28 @@ from hdx.utilities.path import (
 class TestPath:
     @pytest.fixture(scope="class")
     def mytestdir(self):
-        return join("haha", "lala")
+        return Path("haha") / "lala"
 
     @pytest.fixture(scope="class")
     def fixtureurl(self):
         return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/test_data.csv"
 
     def test_get_temp_dir(self, monkeypatch, mytestdir):
-        assert get_temp_dir() == gettempdir()
-        assert get_temp_dir("TEST") == join(gettempdir(), "TEST")
-        monkeypatch.setenv("TEMP_DIR", mytestdir)
+        expected_tmpdir = Path(gettempdir())
+        assert get_temp_dir() == expected_tmpdir
+        assert get_temp_dir("TEST") == expected_tmpdir / "TEST"
+        monkeypatch.setenv("TEMP_DIR", str(mytestdir))
         assert get_temp_dir() == mytestdir
         monkeypatch.delenv("TEMP_DIR")
 
     def test_temp_dir(self, monkeypatch, mytestdir):
-        monkeypatch.setenv("TEMP_DIR", mytestdir)
+        monkeypatch.setenv("TEMP_DIR", str(mytestdir))
         with temp_dir() as tempdir:
             assert tempdir == mytestdir
         monkeypatch.delenv("TEMP_DIR")
 
         tempfolder = "papa"
-        expected_dir = join(gettempdir(), tempfolder)
+        expected_dir = Path(gettempdir(), tempfolder)
 
         with temp_dir(tempfolder) as tempdir:
             assert tempdir == expected_dir
@@ -119,7 +121,7 @@ class TestPath:
 
     def test_progress_storing_tempdir(self, monkeypatch):
         tempfolder = "papa"
-        expected_dir = join(gettempdir(), tempfolder)
+        expected_dir = Path(gettempdir(), tempfolder)
         rmtree(expected_dir, ignore_errors=True)
         iterator = [
             {"iso3": "AFG", "name": "Afghanistan"},
@@ -127,7 +129,7 @@ class TestPath:
             {"iso3": "YEM", "name": "Yemen"},
             {"iso3": "ZAM", "name": "Zambia"},
         ]
-        expected_batch_file = join(expected_dir, "batch.txt")
+        expected_batch_file = expected_dir / "batch.txt"
         result = list()
         for info, nextdict in progress_storing_tempdir(tempfolder, iterator, "iso3"):
             assert info["folder"] == expected_dir
@@ -243,7 +245,7 @@ class TestPath:
 
     def test_multiple_progress_storing_tempdir(self, monkeypatch):
         tempfolder = "gaga"
-        expected_dir = join(gettempdir(), tempfolder)
+        expected_dir = Path(gettempdir(), tempfolder)
         rmtree(expected_dir, ignore_errors=True)
         iterator1 = [{"emergency_id": "911"}]
         iterator2 = [
@@ -263,7 +265,7 @@ class TestPath:
             (
                 0,
                 {
-                    "folder": join(expected_dir, "0"),
+                    "folder": expected_dir / "0",
                     "batch": "1234",
                     "progress": "emergency_id=911",
                 },
@@ -272,7 +274,7 @@ class TestPath:
             (
                 1,
                 {
-                    "folder": join(expected_dir, "1"),
+                    "folder": expected_dir / "1",
                     "batch": "1234",
                     "progress": "iso3=AFG",
                 },
@@ -281,7 +283,7 @@ class TestPath:
             (
                 1,
                 {
-                    "folder": join(expected_dir, "1"),
+                    "folder": expected_dir / "1",
                     "batch": "1234",
                     "progress": "iso3=SDN",
                 },
@@ -290,7 +292,7 @@ class TestPath:
             (
                 1,
                 {
-                    "folder": join(expected_dir, "1"),
+                    "folder": expected_dir / "1",
                     "batch": "1234",
                     "progress": "iso3=YEM",
                 },
@@ -299,7 +301,7 @@ class TestPath:
             (
                 1,
                 {
-                    "folder": join(expected_dir, "1"),
+                    "folder": expected_dir / "1",
                     "batch": "1234",
                     "progress": "iso3=ZAM",
                 },
@@ -329,7 +331,7 @@ class TestPath:
             tempfolder, iterators, keys
         ):
             assert exists(info["folder"]) is True
-            assert info["folder"] == join(expected_dir, "1")
+            assert info["folder"] == expected_dir / "1"
             assert info["batch"] == start_batch
             result.append(nextdict)
         assert result == iterator2[2:]
@@ -377,7 +379,7 @@ class TestPath:
             tempfolder, iterators, keys
         ):
             assert exists(info["folder"]) is True
-            assert info["folder"] == join(expected_dir, "1")
+            assert info["folder"] == expected_dir / "1"
             assert info["batch"] == start_batch
             result.append(nextdict)
         assert result == iterator2[1:]

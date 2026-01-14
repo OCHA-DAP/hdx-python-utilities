@@ -2,6 +2,7 @@
 
 import json
 from collections.abc import Mapping, Sequence
+from pathlib import Path
 from typing import Any
 from warnings import warn
 
@@ -15,7 +16,7 @@ class LoadError(Exception):
 
 
 def load_text(
-    path: str,
+    path: Path | str,
     encoding: str = "utf-8",
     strip: bool = False,
     replace_newlines: str | None = None,
@@ -59,7 +60,7 @@ def load_text(
 
 
 def load_yaml(
-    path: str, encoding: str = "utf-8", loaderror_if_empty: bool = True
+    path: Path | str, encoding: str = "utf-8", loaderror_if_empty: bool = True
 ) -> Any:
     """Load YAML file into an ordered dictionary.
 
@@ -83,7 +84,7 @@ def load_yaml(
 
 
 def load_json(
-    path: str, encoding: str = "utf-8", loaderror_if_empty: bool = True
+    path: Path | str, encoding: str = "utf-8", loaderror_if_empty: bool = True
 ) -> Any:
     """Load JSON file into an ordered dictionary (dict for Python 3.7+)
 
@@ -153,7 +154,7 @@ def load_and_merge_json(
 
 def load_yaml_into_existing_dict(
     data: dict,
-    path: str,
+    path: Path | str,
     encoding: str = "utf-8",
     loaderror_if_empty: bool = True,
 ) -> Mapping:
@@ -174,7 +175,7 @@ def load_yaml_into_existing_dict(
 
 def load_json_into_existing_dict(
     data: dict,
-    path: str,
+    path: Path | str,
     encoding: str = "utf-8",
     loaderror_if_empty: bool = True,
 ) -> Mapping:

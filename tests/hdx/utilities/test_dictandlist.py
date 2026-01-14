@@ -1,7 +1,6 @@
 """Dictionary Tests"""
 
 from os import remove
-from os.path import join
 
 import pytest
 
@@ -277,7 +276,7 @@ class TestDictAndList:
             delete_on_failure=False,
         ) as tempdir:
             filename = "test_read_write_list_to_csv.csv"
-            filepath = join(tempdir, filename)
+            filepath = tempdir / filename
             write_list_to_csv(filepath, list_of_lists, headers=["h1", "h2", "h3", "h4"])
             newll = read_list_from_csv(filepath)
             newld = read_list_from_csv(filepath, headers=1, dict_form=True)

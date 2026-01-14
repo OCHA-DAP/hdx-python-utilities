@@ -1,5 +1,3 @@
-from os.path import join
-
 import pytest
 
 from hdx.utilities.zip_crc import (
@@ -26,19 +24,19 @@ class TestZipCRC:
 
     @pytest.fixture
     def zipfolder(self, fixturesfolder):
-        return join(fixturesfolder, "file_hashing")
+        return fixturesfolder / "file_hashing"
 
     @pytest.fixture
     def shpfile(self, zipfolder):
-        return join(zipfolder, "test_shapefile.zip")
+        return zipfolder / "test_shapefile.zip"
 
     @pytest.fixture
     def xlsxfile(self, zipfolder):
-        return join(zipfolder, "test.xlsx")
+        return zipfolder / "test.xlsx"
 
     @pytest.fixture
     def emptyfile(self, zipfolder):
-        return join(zipfolder, "empty.zip")
+        return zipfolder / "empty.zip"
 
     def test_get_zip_tail_header(self):
         assert get_zip_tail_header(65535) == {"Range": "bytes=0-"}

@@ -1,5 +1,3 @@
-from os.path import join
-
 import pytest
 
 from hdx.utilities.file_hashing import (
@@ -23,31 +21,31 @@ class TestZipCRC:
 
     @pytest.fixture
     def zipfolder(self, fixturesfolder):
-        return join(fixturesfolder, "file_hashing")
+        return fixturesfolder / "file_hashing"
 
     @pytest.fixture
     def shpfile(self, zipfolder):
-        return join(zipfolder, "test_shapefile.zip")
+        return zipfolder / "test_shapefile.zip"
 
     @pytest.fixture
     def xlsxfile(self, zipfolder):
-        return join(zipfolder, "test.xlsx")
+        return zipfolder / "test.xlsx"
 
     @pytest.fixture
     def emptyfile(self, zipfolder):
-        return join(zipfolder, "empty.zip")
+        return zipfolder / "empty.zip"
 
     @pytest.fixture
     def badzipheader(self, zipfolder):
-        return join(zipfolder, "bad_header.zip")
+        return zipfolder / "bad_header.zip"
 
     @pytest.fixture
     def valid_sig_invalid_body(self, zipfolder):
-        return join(zipfolder, "valid_sig_invalid_body.zip")
+        return zipfolder / "valid_sig_invalid_body.zip"
 
     @pytest.fixture
     def bad_index(self, zipfolder):
-        return join(zipfolder, "bad_index.xlsx")
+        return zipfolder / "bad_index.xlsx"
 
     def test_hash_excel_fp(self, xlsxfile):
         with open(xlsxfile, "rb") as fp:

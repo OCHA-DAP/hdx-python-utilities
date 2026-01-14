@@ -188,7 +188,7 @@ def get_frictionless_tableresource(
     http_session = kwargs.pop("http_session", session)
     with system.use_context(http_session=http_session):
         if url:
-            resource = TableResource(path=url, **kwargs)
+            resource = TableResource(path=str(url), **kwargs)
         else:
             resource = TableResource(data=data, **kwargs)
         resource.open()
