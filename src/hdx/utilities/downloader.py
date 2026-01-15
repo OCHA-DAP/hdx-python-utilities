@@ -65,7 +65,7 @@ class Download(BaseDownload):
     def __init__(
         self,
         user_agent: str | None = None,
-        user_agent_config_yaml: str | None = None,
+        user_agent_config_yaml: Path | str | None = None,
         user_agent_lookup: str | None = None,
         use_env: bool = True,
         fail_on_missing_file: bool = True,
@@ -1279,7 +1279,7 @@ class Download(BaseDownload):
         cls,
         custom_configs: dict[str, dict],
         user_agent: str | None = None,
-        user_agent_config_yaml: str | None = None,
+        user_agent_config_yaml: Path | str | None = None,
         user_agent_lookup: str | None = None,
         use_env: bool = True,
         fail_on_missing_file: bool = True,

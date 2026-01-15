@@ -2,6 +2,7 @@
 
 import logging
 import os
+from pathlib import Path
 from typing import Any
 
 import requests
@@ -22,7 +23,7 @@ class SessionError(Exception):
 
 def get_session(
     user_agent: str | None = None,
-    user_agent_config_yaml: str | None = None,
+    user_agent_config_yaml: Path | str | None = None,
     user_agent_lookup: str | None = None,
     use_env: bool = True,
     fail_on_missing_file: bool = True,

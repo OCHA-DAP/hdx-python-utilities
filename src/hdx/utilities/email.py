@@ -5,7 +5,8 @@ import smtplib
 from collections.abc import Sequence
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
-from os.path import expanduser, join
+from os.path import expanduser
+from pathlib import Path
 from typing import Any
 
 from hdx.utilities.loader import load_json, load_yaml
@@ -45,7 +46,7 @@ class Email:
         email_config_yaml (str): Path to YAML HDX configuration. Defaults to ~/hdx_email_configuration.yaml.
     """
 
-    default_email_config_yaml = join(expanduser("~"), "hdx_email_configuration.yaml")
+    default_email_config_yaml = Path(expanduser("~")) / "hdx_email_configuration.yaml"
 
     def __init__(self, **kwargs: Any) -> None:
         email_config_found = False

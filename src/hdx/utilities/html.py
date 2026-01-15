@@ -1,6 +1,7 @@
 """HTML parsing utilities."""
 
 import logging
+from pathlib import Path
 from typing import Any
 
 try:
@@ -20,7 +21,7 @@ if BeautifulSoup is not None:
         url: str,
         downloader: Download = None,
         user_agent: str | None = None,
-        user_agent_config_yaml: str | None = None,
+        user_agent_config_yaml: Path | str | None = None,
         user_agent_lookup: str | None = None,
         **kwargs: Any,
     ) -> BeautifulSoup:

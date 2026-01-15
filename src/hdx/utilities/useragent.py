@@ -2,7 +2,8 @@
 
 import logging
 import os
-from os.path import expanduser, isfile, join
+from os.path import expanduser
+from pathlib import Path
 from typing import Any
 
 from hdx.utilities import __version__
@@ -16,7 +17,7 @@ class UserAgentError(Exception):
 
 
 class UserAgent:
-    default_user_agent_config_yaml = join(expanduser("~"), ".useragent.yaml")
+    default_user_agent_config_yaml = Path(expanduser("~")) / ".useragent.yaml"
     user_agent = None
 
     @staticmethod
@@ -68,7 +69,7 @@ class UserAgent:
     def _load(
         cls,
         prefix: str,
-        user_agent_config_yaml: str,
+        user_agent_config_yaml: Path | str,
         user_agent_lookup: str | None = None,
     ) -> str:
         """Load user agent YAML file.
@@ -83,9 +84,9 @@ class UserAgent:
         """
         if not user_agent_config_yaml:
             user_agent_config_yaml = cls.default_user_agent_config_yaml
-            if not isfile(user_agent_config_yaml):
-                user_agent_config_yaml = user_agent_config_yaml.replace(".yaml", ".yml")
-            if isfile(user_agent_config_yaml):
+            if not user_agent_config_yaml.is_file():
+                user_agent_config_yaml = user_agent_config_yaml.with_suffix(".yml")
+            if user_agent_config_yaml.is_file():
                 logger.info(
                     f"No user agent or user agent config file given. Using default user agent config file: {user_agent_config_yaml}."
                 )
@@ -108,7 +109,7 @@ class UserAgent:
     def _create(
         cls,
         user_agent: str | None = None,
-        user_agent_config_yaml: str | None = None,
+        user_agent_config_yaml: Path | str | None = None,
         user_agent_lookup: str | None = None,
         **kwargs: Any,
     ) -> str:
@@ -146,7 +147,7 @@ class UserAgent:
     def set_global(
         cls,
         user_agent: str | None = None,
-        user_agent_config_yaml: str | None = None,
+        user_agent_config_yaml: Path | str | None = None,
         user_agent_lookup: str | None = None,
         **kwargs: Any,
     ) -> None:
@@ -168,7 +169,7 @@ class UserAgent:
     def get(
         cls,
         user_agent: str | None = None,
-        user_agent_config_yaml: str | None = None,
+        user_agent_config_yaml: Path | str | None = None,
         user_agent_lookup: str | None = None,
         **kwargs: Any,
     ) -> str:
