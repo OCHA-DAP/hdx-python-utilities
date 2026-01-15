@@ -83,7 +83,7 @@ class UserAgent:
             user agent
         """
         if not user_agent_config_yaml:
-            user_agent_config_yaml = cls.default_user_agent_config_yaml
+            user_agent_config_yaml = Path(cls.default_user_agent_config_yaml)
             if not user_agent_config_yaml.is_file():
                 user_agent_config_yaml = user_agent_config_yaml.with_suffix(".yml")
             if user_agent_config_yaml.is_file():
