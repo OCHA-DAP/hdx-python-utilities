@@ -1,7 +1,5 @@
 """User Agent Tests"""
 
-from os.path import join
-
 import pytest
 
 from hdx.utilities import __version__
@@ -12,23 +10,23 @@ from hdx.utilities.useragent import UserAgent, UserAgentError
 class TestUserAgent:
     @pytest.fixture(scope="class")
     def user_agent_config_yaml(self, configfolder):
-        return join(configfolder, "user_agent_config.yaml")
+        return configfolder / "user_agent_config.yaml"
 
     @pytest.fixture(scope="class")
     def user_agent_config2_yaml(self, configfolder):
-        return join(configfolder, "user_agent_config2.yaml")
+        return configfolder / "user_agent_config2.yaml"
 
     @pytest.fixture(scope="class")
     def user_agent_config3_yaml(self, configfolder):
-        return join(configfolder, "user_agent_config3.yaml")
+        return configfolder / "user_agent_config3.yaml"
 
     @pytest.fixture(scope="class")
     def empty_yaml(self, configfolder):
-        return join(configfolder, "empty.yaml")
+        return configfolder / "empty.yaml"
 
     @pytest.fixture(scope="class")
     def user_agent_config_wrong_yaml(self, configfolder):
-        return join(configfolder, "user_agent_config_wrong.yaml")
+        return configfolder / "user_agent_config_wrong.yaml"
 
     def test_user_agent(
         self,

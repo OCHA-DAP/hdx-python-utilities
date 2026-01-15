@@ -1,7 +1,6 @@
 """Loader Tests"""
 
 from collections import OrderedDict
-from os.path import join
 
 import pytest
 
@@ -115,19 +114,19 @@ test"""
 
     @pytest.fixture(scope="class")
     def loaderfolder(self, fixturesfolder):
-        return join(fixturesfolder, "loader")
+        return fixturesfolder / "loader"
 
     @pytest.fixture(scope="class")
     def empty_yaml(self, loaderfolder):
-        return join(loaderfolder, "empty.yaml")
+        return loaderfolder / "empty.yaml"
 
     @pytest.fixture(scope="class")
     def empty_json(self, loaderfolder):
-        return join(loaderfolder, "empty.json")
+        return loaderfolder / "empty.json"
 
     @pytest.fixture(scope="class")
     def empty_list(self, loaderfolder):
-        return join(loaderfolder, "empty_list.json")
+        return loaderfolder / "empty_list.json"
 
     def test_load_empty(self, empty_yaml, empty_json, empty_list):
         with pytest.raises(LoadError):
@@ -144,8 +143,8 @@ test"""
     def test_load_and_merge_yaml(self, configfolder):
         result = load_and_merge_yaml(
             [
-                join(configfolder, "hdx_config.yaml"),
-                join(configfolder, "project_configuration.yaml"),
+                configfolder / "hdx_config.yaml",
+                configfolder / "project_configuration.yaml",
             ]
         )
         assert list(result.items()) == list(TestLoader.expected_yaml.items())
@@ -153,35 +152,36 @@ test"""
     def test_load_and_merge_json(self, configfolder):
         result = load_and_merge_json(
             [
-                join(configfolder, "hdx_config.json"),
-                join(configfolder, "project_configuration.json"),
+                configfolder / "hdx_config.json",
+                configfolder / "project_configuration.json",
             ]
         )
         assert list(result.items()) == list(TestLoader.expected_json.items())
 
     def test_load_yaml_into_existing_dict(self, configfolder):
-        existing_dict = load_yaml(join(configfolder, "hdx_config.yaml"))
+        existing_dict = load_yaml(configfolder / "hdx_config.yaml")
         result = load_yaml_into_existing_dict(
-            existing_dict, join(configfolder, "project_configuration.yaml")
+            existing_dict, configfolder / "project_configuration.yaml"
         )
         assert list(result.items()) == list(TestLoader.expected_yaml.items())
 
     def test_load_json_into_existing_dict(self, configfolder):
-        existing_dict = load_json(join(configfolder, "hdx_config.json"))
+        existing_dict = load_json(configfolder / "hdx_config.json")
         result = load_json_into_existing_dict(
-            existing_dict, join(configfolder, "project_configuration.json")
+            existing_dict, configfolder / "project_configuration.json"
         )
         assert list(result.items()) == list(TestLoader.expected_json.items())
 
     def test_load_file_to_str(self):
         with temp_dir(folder="test_text") as tmp_path:
-            text_file = join(tmp_path, "text_file.txt")
+            text_file = tmp_path / "text_file.txt"
             save_text(TestLoader.text, text_file)
             result = load_text(text_file)
             assert result == TestLoader.text
-            result = load_text(text_file, strip=True)
+            result = load_text(str(text_file), strip=True)
+            save_text(TestLoader.text, str(text_file))
             assert result == TestLoader.expected_text_strip
             result = load_text(text_file, replace_line_separators=" ")
             assert result == TestLoader.expected_text_newlines_to_spaces
             with pytest.raises(IOError):
-                load_text(join(tmp_path, "NOTEXIST.txt"))
+                load_text(tmp_path / "NOTEXIST.txt")

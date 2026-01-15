@@ -4,7 +4,7 @@ import csv
 import json
 from collections import OrderedDict
 from collections.abc import Callable, Iterable, Mapping, Sequence
-from os.path import join
+from pathlib import Path
 from typing import Any
 
 from ruamel.yaml import (
@@ -50,7 +50,7 @@ representers = {
 }
 
 
-def save_text(string: str, path: str, encoding: str = "utf-8") -> None:
+def save_text(string: str, path: Path | str, encoding: str = "utf-8") -> None:
     """Save text string to file.
 
     Args:
@@ -67,7 +67,7 @@ def save_text(string: str, path: str, encoding: str = "utf-8") -> None:
 
 def save_yaml(
     object: Any,
-    path: str,
+    path: Path | str,
     encoding: str = "utf-8",
     pretty: bool = False,
     sortkeys: bool = False,
@@ -101,7 +101,7 @@ def save_yaml(
 
 def save_json(
     object: Any,
-    path: str,
+    path: Path | str,
     encoding: str = "utf-8",
     pretty: bool = False,
     sortkeys: bool = False,
@@ -139,7 +139,7 @@ def save_hxlated_output(
     rows: Sequence[Sequence | Mapping],
     includes_header: bool = True,
     includes_hxltags: bool = False,
-    output_dir: str = "",
+    output_dir: Path | str = "",
     **kwargs: Any,
 ) -> None:
     """Save rows with header and HXL hashtags. Currently, JSON and/or csv
@@ -160,6 +160,7 @@ def save_hxlated_output(
     Returns:
         None
     """
+    output_dir = Path(output_dir)
     row0 = rows[0]
     if includes_header:
         if isinstance(row0, dict):
@@ -190,8 +191,7 @@ def save_hxlated_output(
     if csv_configuration:
         csv_hxltags = csv_configuration.get("hxltags", hxltags)
         csv_headers = [hxltag_to_header[hxltag] for hxltag in csv_hxltags]
-        csv_file = open(
-            join(output_dir, csv_configuration["filename"]),
+        csv_file = (output_dir / csv_configuration["filename"]).open(
             "w",
             encoding="utf-8",
             newline="\n",
@@ -221,7 +221,7 @@ def save_hxlated_output(
         else:
             metadata_json = None
 
-        output_json = open(join(output_dir, json_configuration["filename"]), "w")
+        output_json = (output_dir / json_configuration["filename"]).open("w")
 
         if metadata_json:
             metadata_key = metadata_configuration.get("key", "metadata")
@@ -272,7 +272,7 @@ def save_hxlated_output(
 
 
 def save_iterable(
-    filepath: str,
+    filepath: Path | str,
     rows: Iterable[Sequence | Mapping],
     headers: int | Sequence[str] | None = None,
     columns: Sequence[int] | Sequence[str] | None = None,

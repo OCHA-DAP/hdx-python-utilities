@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from collections.abc import Iterator, Sequence
+from pathlib import Path
 from typing import Any
 
 
@@ -32,7 +33,7 @@ class BaseDownload(ABC):
         """
 
     @abstractmethod
-    def download_file(self, url: str, *args: Any, **kwargs: Any) -> str:
+    def download_file(self, url: str, *args: Any, **kwargs: Any) -> Path:
         """Download file from url.
 
         Args:

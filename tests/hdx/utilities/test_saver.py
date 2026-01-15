@@ -4,7 +4,8 @@ import json
 from collections import OrderedDict
 from copy import deepcopy
 from os import remove
-from os.path import exists, join
+from os.path import exists
+from pathlib import Path
 
 import pytest
 
@@ -98,11 +99,11 @@ class TestLoader:
 
     @pytest.fixture(scope="class")
     def saverfolder(self, fixturesfolder):
-        return join(fixturesfolder, "saver")
+        return fixturesfolder / "saver"
 
     @pytest.fixture(scope="class")
     def json_csv_configuration(self, fixturesfolder):
-        return load_yaml(join(fixturesfolder, "config", "json_csv.yaml"))
+        return load_yaml(fixturesfolder / "config" / "json_csv.yaml")
 
     @pytest.mark.parametrize(
         "filename,pretty,sortkeys",
@@ -114,8 +115,8 @@ class TestLoader:
         ],
     )
     def test_save_yaml(self, tmp_path, saverfolder, filename, pretty, sortkeys):
-        test_path = join(str(tmp_path), filename)
-        ref_path = join(saverfolder, filename)
+        test_path = Path(tmp_path, filename)
+        ref_path = saverfolder / filename
         save_yaml(
             TestLoader.yaml_to_write,
             test_path,
@@ -124,7 +125,7 @@ class TestLoader:
         )
         assert_files_same(ref_path, test_path)
         dct = json.loads(json.dumps(TestLoader.yaml_to_write))
-        save_yaml(dct, test_path, pretty=pretty, sortkeys=sortkeys)
+        save_yaml(dct, str(test_path), pretty=pretty, sortkeys=sortkeys)
         assert_files_same(ref_path, test_path)
 
     @pytest.mark.parametrize(
@@ -137,11 +138,11 @@ class TestLoader:
         ],
     )
     def test_save_json(self, tmp_path, saverfolder, filename, pretty, sortkeys):
-        test_path = join(str(tmp_path), filename)
-        ref_path = join(saverfolder, filename)
+        test_path = Path(tmp_path, filename)
+        ref_path = saverfolder / filename
         save_json(
             TestLoader.json_to_write,
-            test_path,
+            str(test_path),
             pretty=pretty,
             sortkeys=sortkeys,
         )
@@ -157,7 +158,7 @@ class TestLoader:
             (1, "2", 3),
             (4, "5", 6),
         )
-        output_dir = str(tmp_path)
+        output_dir = tmp_path
 
         save_hxlated_output(
             json_csv_configuration["test1"],
@@ -167,9 +168,9 @@ class TestLoader:
             output_dir=output_dir,
         )
         filename = "out.csv"
-        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
+        assert_files_same(saverfolder / filename, output_dir / filename)
         filename = "out.json"
-        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
+        assert_files_same(saverfolder / filename, output_dir / filename)
 
         row0 = rows[0]
         rowsdict = []
@@ -186,9 +187,9 @@ class TestLoader:
             output_dir=output_dir,
         )
         filename = "out.csv"
-        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
+        assert_files_same(saverfolder / filename, output_dir / filename)
         filename = "out.json"
-        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
+        assert_files_same(saverfolder / filename, output_dir / filename)
 
         save_hxlated_output(
             json_csv_configuration["test2"],
@@ -198,9 +199,9 @@ class TestLoader:
             output_dir=output_dir,
         )
         filename = "out2.csv"
-        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
+        assert_files_same(saverfolder / filename, output_dir / filename)
         filename = "out2.json"
-        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
+        assert_files_same(saverfolder / filename, output_dir / filename)
 
         rowsdict = []
         for row in rows[1:]:
@@ -213,12 +214,12 @@ class TestLoader:
             rowsdict,
             includes_header=True,
             includes_hxltags=True,
-            output_dir=output_dir,
+            output_dir=str(output_dir),
         )
         filename = "out2.csv"
-        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
+        assert_files_same(saverfolder / filename, output_dir / filename)
         filename = "out2.json"
-        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
+        assert_files_same(saverfolder / filename, output_dir / filename)
 
         save_hxlated_output(
             json_csv_configuration["test3"],
@@ -228,9 +229,9 @@ class TestLoader:
             output_dir=output_dir,
         )
         filename = "out3.csv"
-        assert_files_same(join(saverfolder, "out.csv"), join(output_dir, filename))
+        assert_files_same(saverfolder / "out.csv", output_dir / filename)
         filename = "out3.json"
-        assert exists(join(output_dir, filename)) is False
+        assert exists(output_dir / filename) is False
 
         save_hxlated_output(
             json_csv_configuration["test4"],
@@ -240,9 +241,9 @@ class TestLoader:
             output_dir=output_dir,
         )
         filename = "out4.csv"
-        assert exists(join(output_dir, filename)) is False
+        assert exists(output_dir / filename) is False
         filename = "out4.json"
-        assert_files_same(join(saverfolder, "out2.json"), join(output_dir, filename))
+        assert_files_same(saverfolder / "out2.json", output_dir / filename)
 
         save_hxlated_output(
             json_csv_configuration["test5"],
@@ -252,9 +253,9 @@ class TestLoader:
             output_dir=output_dir,
         )
         filename = "out5.csv"
-        assert_files_same(join(saverfolder, "out2.csv"), join(output_dir, filename))
+        assert_files_same(saverfolder / "out2.csv", output_dir / filename)
         filename = "out5.json"
-        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
+        assert_files_same(saverfolder / filename, output_dir / filename)
 
         save_hxlated_output(
             json_csv_configuration["test6"],
@@ -265,9 +266,9 @@ class TestLoader:
             today="today!",
         )
         filename = "out6.csv"
-        assert_files_same(join(saverfolder, "out2.csv"), join(output_dir, filename))
+        assert_files_same(saverfolder / "out2.csv", output_dir / filename)
         filename = "out6.json"
-        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
+        assert_files_same(saverfolder / filename, output_dir / filename)
 
         save_hxlated_output(
             json_csv_configuration["test7"],
@@ -278,9 +279,9 @@ class TestLoader:
             today="today!",
         )
         filename = "out7.csv"
-        assert_files_same(join(saverfolder, "out2.csv"), join(output_dir, filename))
+        assert_files_same(saverfolder / "out2.csv", output_dir / filename)
         filename = "out7.json"
-        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
+        assert_files_same(saverfolder / filename, output_dir / filename)
 
         save_hxlated_output(
             json_csv_configuration["test8"],
@@ -291,9 +292,9 @@ class TestLoader:
             today="today!",
         )
         filename = "out8.csv"
-        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
+        assert_files_same(saverfolder / filename, output_dir / filename)
         filename = "out8.json"
-        assert_files_same(join(saverfolder, filename), join(output_dir, filename))
+        assert_files_same(saverfolder / filename, output_dir / filename)
 
     def test_save_iterable(self):
         list_of_tuples = [(1, 2, 3, "a"), (4, 5, 6, "b"), (7, 8, 9, "c")]
@@ -310,7 +311,7 @@ class TestLoader:
             delete_on_failure=False,
         ) as tempdir:
             filename = "test_save_iterable_to_csv.csv"
-            filepath = join(tempdir, filename)
+            filepath = tempdir / filename
             rows = save_iterable(
                 filepath, list_of_lists, headers=["h1", "h2", "h3", "h4"]
             )
@@ -343,7 +344,7 @@ class TestLoader:
                 ["9", "8", "7", "c"],
             ]
 
-            save_iterable(filepath, list_of_dicts, columns=["h2", "h3", "h1"])
+            save_iterable(str(filepath), list_of_dicts, columns=["h2", "h3", "h1"])
             newll = read_list_from_csv(filepath)
             remove(filepath)
             assert newll == [
@@ -353,7 +354,7 @@ class TestLoader:
                 ["8", "9", "7"],
             ]
 
-            xlfilepath = filepath.replace("csv", "xlsx")
+            xlfilepath = filepath.with_suffix(".xlsx")
             rows = save_iterable(
                 xlfilepath,
                 list_of_lists,
@@ -506,7 +507,7 @@ class TestLoader:
                 headers=["h1", "h2", "h3", "h4"],
                 row_function=row_func,
             )
-            newll = read_list_from_csv(filepath)
+            newll = read_list_from_csv(str(filepath))
             remove(filepath)
             assert newll == [
                 ["h1", "h2", "h3", "h4"],

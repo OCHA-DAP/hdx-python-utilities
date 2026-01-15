@@ -3,6 +3,7 @@
 import itertools
 import warnings
 from collections.abc import Callable, Mapping, MutableMapping, Sequence
+from pathlib import Path
 from typing import Any
 
 from hdx.utilities.frictionless_wrapper import get_frictionless_tableresource
@@ -410,7 +411,7 @@ def read_list_from_csv(
 
 
 def write_list_to_csv(
-    filepath: str,
+    filepath: Path | str,
     rows: list[Sequence | Mapping],
     headers: int | Sequence[str] | None = None,
     columns: Sequence[int] | Sequence[str] | None = None,

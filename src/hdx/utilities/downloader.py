@@ -5,7 +5,7 @@ import logging
 from collections.abc import Callable, Iterator, Sequence
 from copy import deepcopy
 from os import remove
-from os.path import exists, isfile, join, split, splitext
+from os.path import exists, isfile, split, splitext
 from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
@@ -133,12 +133,12 @@ class Download(BaseDownload):
     @staticmethod
     def get_path_for_url(
         url: str,
-        folder: str | None = None,
+        folder: Path | str | None = None,
         filename: str | None = None,
-        path: str | None = None,
+        path: Path | str | None = None,
         overwrite: bool = False,
         keep: bool = False,
-    ) -> str:
+    ) -> Path:
         """Get filename from url and join to provided folder or temporary
         folder if no folder supplied, ensuring uniqueness.
 
@@ -164,7 +164,8 @@ class Download(BaseDownload):
         filename, extension = splitext(filename)
         if not folder:
             folder = get_temp_dir()
-        path = join(folder, f"{filename}{extension}")
+        folder = Path(folder)
+        path = folder / f"{filename}{extension}"
         if overwrite:
             try:
                 remove(path)
@@ -174,7 +175,7 @@ class Download(BaseDownload):
             count = 0
             while exists(path):
                 count += 1
-                path = join(folder, f"{filename}{count}{extension}")
+                path = folder / f"{filename}{count}{extension}"
         return path
 
     def get_full_url(self, url: str) -> str:
@@ -254,7 +255,7 @@ class Download(BaseDownload):
 
     def normal_setup(
         self,
-        url: str,
+        url: Path | str,
         stream: bool = True,
         post: bool = False,
         parameters: dict | None = None,
@@ -281,6 +282,7 @@ class Download(BaseDownload):
         self.close_response()
         self.response = None
         try:
+            url = str(url)
             spliturl = urlsplit(url)
             if not spliturl.scheme:
                 if isfile(url):
@@ -336,7 +338,7 @@ class Download(BaseDownload):
             }
         )
 
-    def hash_stream(self, url: str) -> str:
+    def hash_stream(self, url: Path | str) -> str:
         """Stream file from url and hash it using MD5. Must call setup method
         first.
 
@@ -357,7 +359,7 @@ class Download(BaseDownload):
                 f"Download of {url} failed in retrieval of stream!" % url
             )
 
-    def stream_path(self, path: str, errormsg: str):
+    def stream_path(self, path: Path | str, errormsg: str) -> Path:
         """Stream file from url and store in provided path. Must call setup
         method first.
 
@@ -370,12 +372,13 @@ class Download(BaseDownload):
         """
         f = None
         try:
-            f = open(path, "wb")
+            path = Path(path)
+            f = path.open("wb")
             for chunk in self.response.iter_content(chunk_size=10240):
                 if chunk:  # filter out keep-alive new chunks
                     f.write(chunk)
                     f.flush()
-            return f.name
+            return path
         except Exception as e:
             raise DownloadError(errormsg) from e
         finally:
@@ -384,10 +387,10 @@ class Download(BaseDownload):
 
     def stream_file(
         self,
-        url: str,
-        folder: str | None = None,
+        url: Path | str,
+        folder: Path | str | None = None,
         filename: str | None = None,
-        path: str | None = None,
+        path: Path | str | None = None,
         overwrite: bool = False,
         keep: bool = False,
     ) -> str:
@@ -414,9 +417,9 @@ class Download(BaseDownload):
 
     def download_file(
         self,
-        url: str,
+        url: Path | str,
         **kwargs: Any,
-    ) -> str:
+    ) -> Path:
         """Download file from url and store in provided folder or temporary
         folder if no folder supplied.
 
@@ -460,7 +463,7 @@ class Download(BaseDownload):
             path, f"Download of {url} failed in retrieval of stream!"
         )
 
-    def download(self, url: str, **kwargs: Any) -> requests.Response:
+    def download(self, url: Path | str, **kwargs: Any) -> requests.Response:
         """Download url.
 
         Args:
@@ -539,7 +542,7 @@ class Download(BaseDownload):
         """
         return self.response.json()
 
-    def download_text(self, url: str, **kwargs: Any) -> str:
+    def download_text(self, url: Path | str, **kwargs: Any) -> str:
         """Download url as text.
 
         Args:
@@ -557,7 +560,7 @@ class Download(BaseDownload):
         self.download(url, **kwargs)
         return self.get_text()
 
-    def download_yaml(self, url: str, **kwargs: Any) -> Any:
+    def download_yaml(self, url: Path | str, **kwargs: Any) -> Any:
         """Download url as YAML.
 
         Args:
@@ -575,7 +578,7 @@ class Download(BaseDownload):
         self.download(url, **kwargs)
         return self.get_yaml()
 
-    def download_json(self, url: str, **kwargs: Any) -> Any:
+    def download_json(self, url: Path | str, **kwargs: Any) -> Any:
         """Download url as JSON.
 
         Args:
@@ -595,7 +598,7 @@ class Download(BaseDownload):
 
     def get_frictionless_tableresource(
         self,
-        url: str,
+        url: Path | str,
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
         **kwargs: Any,
@@ -641,7 +644,7 @@ class Download(BaseDownload):
 
     def _get_tabular_rows(
         self,
-        url: str,
+        url: Path | str,
         headers: int | Sequence[int] | Sequence[str] = 1,
         dict_form: bool = False,
         include_headers: bool = False,
@@ -704,7 +707,7 @@ class Download(BaseDownload):
         xlsx2csv = kwargs.pop("xlsx2csv", False)
         if xlsx2csv:
             path = self.download_file(url)
-            outpath = path.replace(".xlsx", ".csv")
+            outpath = path.with_suffix(".csv")
             sheet = kwargs.pop("sheet", 1)
             if isinstance(sheet, int):
                 sheet_args = {"sheetid": sheet}

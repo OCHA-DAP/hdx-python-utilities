@@ -1,7 +1,5 @@
 """Email Tests"""
 
-from os.path import join
-
 import pytest
 
 from hdx.utilities.email import Email, EmailConfigurationError
@@ -10,11 +8,11 @@ from hdx.utilities.email import Email, EmailConfigurationError
 class TestEmail:
     @pytest.fixture(scope="class")
     def email_json(self, configfolder):
-        return join(configfolder, "hdx_email_configuration.json")
+        return configfolder / "hdx_email_configuration.json"
 
     @pytest.fixture(scope="class")
     def email_yaml(self, configfolder):
-        return join(configfolder, "hdx_email_configuration.yaml")
+        return configfolder / "hdx_email_configuration.yaml"
 
     def test_mail(self, mocksmtp):
         smtp_initargs = {
