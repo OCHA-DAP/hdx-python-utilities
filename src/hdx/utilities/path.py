@@ -95,7 +95,7 @@ def get_temp_dir(
     tempdir = Path(tempdir)
     if folder:
         tempdir = tempdir / folder
-        if exists(tempdir):
+        if tempdir.exists():
             if delete_if_exists:
                 rmtree(tempdir)
                 makedirs(tempdir)
