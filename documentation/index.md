@@ -33,7 +33,7 @@ The code for the library is [here](https://github.com/OCHA-DAP/hdx-python-utilit
 The library has detailed API documentation which can be found in the menu at the top.
 
 ## Breaking Changes
-From 4.0.1, Library is Path aware. The following methods return Path not str: 
+From 4.0.1, Library is Path aware. The following methods return Path not str:
 download_file, get_path_for_url, stream_path, get_temp_dir, script_dir_plus_file,
 script_dir. The context managers in hdx.utilities.path where they yield a path
 do so as a Path object not a str.
