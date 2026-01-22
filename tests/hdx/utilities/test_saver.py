@@ -521,3 +521,12 @@ class TestLoader:
 
             rows = save_iterable(filepath, [], headers=["h1", "h3", "h4"])
             assert rows == []
+
+            rows = save_iterable(
+                filepath, [], headers=["h1", "h3", "h4"], no_empty=False
+            )
+            assert rows == [["h1", "h3", "h4"]]
+
+            newll = read_list_from_csv(str(filepath))
+            remove(filepath)
+            assert newll == [["h1", "h3", "h4"]]
