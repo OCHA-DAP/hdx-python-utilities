@@ -279,6 +279,7 @@ def save_iterable(
     format: str = "csv",
     encoding: str | None = None,
     row_function: Callable[[dict], dict | None] | None = None,
+    no_empty: bool = True,
 ) -> list:
     """Save an iterable of rows in dict or list form to a csv. (The headers
     argument is either a row number (rows start counting at 1), or the actual
@@ -293,6 +294,7 @@ def save_iterable(
         format: Format to write. Defaults to csv.
         encoding: Encoding to use. Defaults to None (infer encoding).
         row_function: Row function to call for each row. Defaults to None.
+        no_empty: Don't save file if there are no data rows. Defaults to True.
 
     Returns:
         List of rows written to file
@@ -302,12 +304,26 @@ def save_iterable(
         def row_function(row):
             return row
 
+    def write_rows(newrows, has_header, headers) -> None:
+        resource = get_frictionless_tableresource(
+            data=newrows,
+            has_header=has_header,
+            headers=headers,
+            encoding=encoding,
+        )
+        resource.write(filepath, format=format, encoding=encoding)
+        resource.close()
+
     newrows = []
     rows = iter(rows)
     try:
         row = next(rows)
     except StopIteration:
+        if not no_empty and headers:
+            newrows = [headers]
+            write_rows(newrows, None, None)
         return newrows
+
     if isinstance(row, dict):
         has_header = True
         row = row_function(row)
@@ -371,12 +387,5 @@ def save_iterable(
                 if row is None:
                     continue
                 newrows.append(row)
-    resource = get_frictionless_tableresource(
-        data=newrows,
-        has_header=has_header,
-        headers=headers,
-        encoding=encoding,
-    )
-    resource.write(filepath, format=format, encoding=encoding)
-    resource.close()
+    write_rows(newrows, has_header, headers)
     return newrows
