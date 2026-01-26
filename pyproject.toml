@@ -7,7 +7,7 @@ requires = ["hatchling", "hatch-vcs"]
 build-backend = "hatchling.build"
 
 [project]
-name = "hdx-scraper-utilities"
+name = "hdx-python-utilities"
 description = "HDX Python Utilities for streaming tabular data, date and time handling and other helpful functions"
 authors = [{name = "Michael Rans", email = "rans@email.com"}]
 license = {text = "MIT"}
