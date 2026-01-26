@@ -21,7 +21,7 @@ from xlsx2csv import Xlsx2csv
 from hdx.utilities.base_downloader import BaseDownload, DownloadError
 from hdx.utilities.frictionless_wrapper import get_frictionless_tableresource
 from hdx.utilities.session import get_session
-from hdx.utilities.url import get_url_params_for_post, get_url_for_get, get_path_for_url
+from hdx.utilities.url import get_path_for_url, get_url_for_get, get_url_params_for_post
 
 logger = logging.getLogger(__name__)
 

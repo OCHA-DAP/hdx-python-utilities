@@ -10,6 +10,7 @@ from slugify import slugify
 
 from hdx.utilities.path import get_temp_dir
 
+
 def get_filename_extension_from_url(
     url: Path | str, second_last: bool = False, use_query: bool = False
 ) -> tuple[str, str]:

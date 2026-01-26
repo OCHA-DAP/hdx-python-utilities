@@ -18,6 +18,7 @@ Note that these are not specific to HDX.
 1. Easy logging setup and error logging
 1. State utility
 1. Path utilities
+1. URL utilities
 1. Text processing
 1. Stable file hashing
 1. Matching utilities

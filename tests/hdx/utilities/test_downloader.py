@@ -11,13 +11,12 @@ from shutil import copytree, rmtree
 from tempfile import gettempdir
 
 import pytest
-
-from hdx.utilities.url import get_path_for_url
 from utils import assert_downloaders
 
 from hdx.utilities.base_downloader import DownloadError
 from hdx.utilities.downloader import Download
 from hdx.utilities.session import SessionError
+from hdx.utilities.url import get_path_for_url
 from hdx.utilities.useragent import UserAgent
 
 
