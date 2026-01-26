@@ -34,7 +34,7 @@ classifiers = [
 ]
 readme = "README.md"
 dynamic = ["version"]
-requires-python = ">=3.13"
+requires-python = ">=3.10"
 
 # Extras for frictionless[excel,json] added explicitly
 # for conda-forge compatibility
