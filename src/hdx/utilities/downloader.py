@@ -4,11 +4,10 @@ import hashlib
 import logging
 from collections.abc import Callable, Iterator, Sequence
 from copy import deepcopy
-from os import remove
-from os.path import exists, isfile, split, splitext
+from os.path import exists, isfile
 from pathlib import Path
 from typing import Any
-from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
+from urllib.parse import urlsplit, urlunsplit
 
 import requests
 from frictionless import FrictionlessException
@@ -21,8 +20,8 @@ from xlsx2csv import Xlsx2csv
 
 from hdx.utilities.base_downloader import BaseDownload, DownloadError
 from hdx.utilities.frictionless_wrapper import get_frictionless_tableresource
-from hdx.utilities.path import get_filename_from_url, get_temp_dir
 from hdx.utilities.session import get_session
+from hdx.utilities.url import get_path_for_url, get_url_for_get, get_url_params_for_post
 
 logger = logging.getLogger(__name__)
 
@@ -130,56 +129,8 @@ class Download(BaseDownload):
         """
         self.close()
 
-    @staticmethod
-    def get_path_for_url(
-        url: str,
-        folder: Path | str | None = None,
-        filename: str | None = None,
-        path: Path | str | None = None,
-        overwrite: bool = False,
-        keep: bool = False,
-    ) -> Path:
-        """Get filename from url and join to provided folder or temporary
-        folder if no folder supplied, ensuring uniqueness.
-
-        Args:
-            url: URL to download
-            folder: Folder to download it to. Defaults to None (temporary folder).
-            filename: Filename to use for downloaded file. Defaults to None (derive from the url).
-            path: Full path to use for downloaded file. Defaults to None (use folder and filename).
-            overwrite: Whether to overwrite existing file. Defaults to False.
-            keep: Whether to keep already downloaded file. Defaults to False.
-
-        Returns:
-            Path of downloaded file
-        """
-        if path:
-            if folder or filename:
-                raise DownloadError(
-                    "Cannot use folder or filename and path arguments together!"
-                )
-            folder, filename = split(path)
-        if not filename:
-            filename = get_filename_from_url(url)
-        filename, extension = splitext(filename)
-        if not folder:
-            folder = get_temp_dir()
-        folder = Path(folder)
-        path = folder / f"{filename}{extension}"
-        if overwrite:
-            try:
-                remove(path)
-            except OSError:
-                pass
-        elif not keep:
-            count = 0
-            while exists(path):
-                count += 1
-                path = folder / f"{filename}{count}{extension}"
-        return path
-
     def get_full_url(self, url: str) -> str:
-        """Get full url including any additional parameters.
+        """Get full url including any additional parameters added to the session.
 
         Args:
             url: URL for which to get full url
@@ -190,46 +141,6 @@ class Download(BaseDownload):
         request = Request("GET", url)
         preparedrequest = self.session.prepare_request(request)
         return preparedrequest.url
-
-    @staticmethod
-    def get_url_for_get(url: str, parameters: dict | None = None) -> str:
-        """Get full url for GET request including parameters.
-
-        Args:
-            url: URL to download
-            parameters: Parameters to pass. Defaults to None.
-
-        Returns:
-            Full url
-        """
-        spliturl = urlsplit(url)
-        getparams = dict(parse_qsl(spliturl.query))
-        if parameters is not None:
-            getparams.update(parameters)
-        spliturl = spliturl._replace(query=urlencode(getparams))
-        return urlunsplit(spliturl)
-
-    @staticmethod
-    def get_url_params_for_post(
-        url: str, parameters: dict | None = None
-    ) -> tuple[str, dict]:
-        """Get full url for POST request and all parameters including any in
-        the url.
-
-        Args:
-            url: URL to download
-            parameters: Parameters to pass. Defaults to None.
-
-        Returns:
-            (Full url, parameters)
-        """
-        spliturl = urlsplit(url)
-        getparams = dict(parse_qsl(spliturl.query))
-        if parameters is not None:
-            getparams.update(parameters)
-        spliturl = spliturl._replace(query="")
-        full_url = urlunsplit(spliturl)
-        return full_url, getparams
 
     @staticmethod
     def hxl_row(
@@ -291,7 +202,7 @@ class Download(BaseDownload):
                     spliturl = spliturl._replace(scheme="https")
                     url = urlunsplit(spliturl)
             if post:
-                full_url, parameters = self.get_url_params_for_post(url, parameters)
+                full_url, parameters = get_url_params_for_post(url, parameters)
                 if json_string:
                     self.response = self.session.post(
                         full_url,
@@ -310,7 +221,7 @@ class Download(BaseDownload):
                     )
             else:
                 self.response = self.session.get(
-                    self.get_url_for_get(url, parameters),
+                    get_url_for_get(url, parameters),
                     stream=stream,
                     timeout=timeout,
                     headers=headers,
@@ -408,7 +319,10 @@ class Download(BaseDownload):
         Returns:
             Path of downloaded file
         """
-        path = self.get_path_for_url(url, folder, filename, path, overwrite, keep)
+        try:
+            path = get_path_for_url(url, folder, filename, path, overwrite, keep)
+        except ValueError as ex:
+            raise DownloadError(ex) from ex
         if keep and exists(path):
             return path
         return self.stream_path(
@@ -446,7 +360,10 @@ class Download(BaseDownload):
         path = kwargs.get("path")
         overwrite = kwargs.get("overwrite", False)
         keep = kwargs.get("keep", False)
-        path = self.get_path_for_url(url, folder, filename, path, overwrite, keep)
+        try:
+            path = get_path_for_url(url, folder, filename, path, overwrite, keep)
+        except ValueError as ex:
+            raise DownloadError(ex) from ex
         if keep and exists(path):
             return path
         self.setup(

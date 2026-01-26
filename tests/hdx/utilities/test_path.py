@@ -10,8 +10,6 @@ import pytest
 
 from hdx.utilities.loader import load_text
 from hdx.utilities.path import (
-    get_filename_extension_from_url,
-    get_filename_from_url,
     get_temp_dir,
     multiple_progress_storing_tempdir,
     progress_storing_tempdir,
@@ -23,10 +21,6 @@ class TestPath:
     @pytest.fixture(scope="class")
     def mytestdir(self):
         return Path("haha") / "lala"
-
-    @pytest.fixture(scope="class")
-    def fixtureurl(self):
-        return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/test_data.csv"
 
     def test_get_temp_dir(self, monkeypatch, mytestdir):
         expected_tmpdir = Path(gettempdir())
@@ -386,26 +380,3 @@ class TestPath:
         assert exists(expected_dir) is False
         monkeypatch.delenv("WHERETOSTART")
         rmtree(expected_dir, ignore_errors=True)
-
-    def test_get_filename_extension_from_url(self, fixtureurl):
-        filename = get_filename_from_url("http://test.com/test.csv", second_last=True)
-        assert filename == "test.csv"
-        filename = get_filename_from_url("http://test.com/test/test.csv", True)
-        assert filename == "test_test.csv"
-        filename = get_filename_from_url(
-            "https://globalhealth5050.org/?_covid-data=dataset-fullvars&_extype=csv",
-            second_last=True,
-        )
-        assert filename == "covid-data-dataset-fullvars-extype-csv"
-        filename = get_filename_from_url(fixtureurl)
-        assert filename == "test_data.csv"
-        filename = get_filename_from_url(fixtureurl, second_last=True)
-        assert filename == "fixtures_test_data.csv"
-        filename, extension = get_filename_extension_from_url(fixtureurl)
-        assert filename == "test_data"
-        assert extension == ".csv"
-        filename, extension = get_filename_extension_from_url(
-            fixtureurl, second_last=True
-        )
-        assert filename == "fixtures_test_data"
-        assert extension == ".csv"

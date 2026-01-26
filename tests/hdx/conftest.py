@@ -18,6 +18,11 @@ def configfolder(fixturesfolder):
     return Path(fixturesfolder, "config")
 
 
+@pytest.fixture(scope="session")
+def fixtureurl():
+    return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/test_data.csv"
+
+
 @pytest.fixture(scope="function")
 def mocksmtp(monkeypatch):
     class MockSMTPBase:

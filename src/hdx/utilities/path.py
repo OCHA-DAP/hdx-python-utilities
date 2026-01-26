@@ -7,18 +7,12 @@ import sys
 from collections.abc import Iterable, Iterator, Sequence
 from os import getenv, makedirs, remove
 from os.path import (
-    basename,
-    dirname,
     exists,
-    splitext,
 )
 from pathlib import Path
 from shutil import rmtree
 from tempfile import gettempdir
 from typing import Any
-from urllib.parse import unquote_plus, urlsplit
-
-from slugify import slugify
 
 from hdx.utilities.loader import load_text
 from hdx.utilities.saver import save_text
@@ -418,53 +412,3 @@ def multiple_progress_storing_tempdir(
                     yield i, info, nextdict
                 if exists(progress_file):
                     remove(progress_file)
-
-
-def get_filename_extension_from_url(
-    url: Path | str, second_last: bool = False, use_query: bool = False
-) -> tuple[str, str]:
-    """Get separately filename and extension from url.
-
-    Args:
-        url: URL or path to download
-        second_last: Get second last segment of url as well. Defaults to False.
-        use_query: Include query parameters as well. Defaults to False.
-
-    Returns:
-        Tuple of (filename, extension)
-    """
-    url = str(url)
-    split_url = urlsplit(unquote_plus(url))
-    urlpath = split_url.path
-    last_part = basename(urlpath)
-    second_last_part = basename(dirname(urlpath))
-    query_part = slugify(split_url.query)
-    filename, extension = splitext(last_part)
-    if query_part:
-        if not filename:
-            filename = query_part
-        elif use_query:
-            filename = f"{filename}_{query_part}"
-    if second_last_part:
-        if not filename:
-            filename = second_last_part
-        elif second_last:
-            filename = f"{second_last_part}_{filename}"
-    return filename, extension
-
-
-def get_filename_from_url(
-    url: Path | str, second_last: bool = False, use_query: bool = False
-) -> str:
-    """Get filename including extension from url.
-
-    Args:
-        url: URL or path
-        second_last: Get second last segment of url as well. Defaults to False.
-        use_query: Include query parameters as well. Defaults to False.
-
-    Returns:
-        filename
-    """
-    filename, extension = get_filename_extension_from_url(url, second_last, use_query)
-    return f"{filename}{extension}"
