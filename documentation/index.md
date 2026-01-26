@@ -17,6 +17,7 @@ Python developers. Note that these are not specific to HDX.
 1. [Easy logging setup and error logging](#logging)
 1. [State utility](#state-utility)
 1. [Path utilities](#path-utilities)
+1. [URL utilities](#path-utilities)
 1. [Text processing](#text-processing)
 1. [Stable file hashing](#stable-file-hashing)
 1. [Matching utilities](#matching-utilities)
@@ -33,6 +34,9 @@ The code for the library is [here](https://github.com/OCHA-DAP/hdx-python-utilit
 The library has detailed API documentation which can be found in the menu at the top.
 
 ## Breaking Changes
+From 4.0.4, get_filename_from_url, get_filename_extension_from_url, get_path_for_url,
+get_url_for_get, get_url_params_for_post moved to module url
+
 From 4.0.1, Library is Path aware. The following methods return Path not str:
 download_file, get_path_for_url, stream_path, get_temp_dir, script_dir_plus_file,
 script_dir. The context managers in hdx.utilities.path where they yield a path
@@ -829,15 +833,6 @@ Get current directory of script with filename appended
 
     path = script_dir_plus_file("myfile.txt", ANY_PYTHON_OBJECT_IN_SCRIPT)
 
-Get filename or (filename, extension) from url
-
-    url = "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/test_data.csv"
-    filename = get_filename_from_url(fixtureurl)
-    assert filename == "test_data.csv"
-    filename, extension = get_filename_extension_from_url(fixtureurl)
-    assert filename == "test_data"
-    assert extension == ".csv"
-
 Gets temporary directory from environment variable `TEMP_DIR` and falls back to
 the temporary folder created by the os function `gettempdir`.
 
@@ -889,6 +884,34 @@ parts of the code outside of the iterator. This can be achieved as follows:
 The batch code can be passed into `wheretostart_tempdir_batch` in the `batch`
 parameter. If not given, the batch code is generated. The folder to use will be
 a generated temporary folder unless `tempdir` is given.
+
+## URL utilities
+
+Examples:
+
+Get filename or (filename, extension) or path from url
+
+    url = "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/test_data.csv"
+    filename = get_filename_from_url(fixtureurl)
+    assert filename == "test_data.csv"
+    filename, extension = get_filename_extension_from_url(fixtureurl)
+    assert filename == "test_data"
+    assert extension == ".csv"
+    # Get unique filename from url and join to provided folder or temporary folder
+    # if no folder supplied
+    path = get_path_for_url(url, folder)
+
+Conversion between POST dictionary and GET parameters and the reverse:
+
+    # Build get url from url and dictionary of parameters
+    get_url_for_get("http://www.lala.com/hdfa?a=3&b=4",
+                             OrderedDict([("c", "e"), ("d", "f")]))
+    # == "http://www.lala.com/hdfa?a=3&b=4&c=e&d=f"
+
+    # Extract url and dictionary of parameters from get url
+    get_url_params_for_post("http://www.lala.com/hdfa?a=3&b=4",
+                                     OrderedDict([("c", "e"), ("d", "f")]))
+
 
 ## Text processing
 

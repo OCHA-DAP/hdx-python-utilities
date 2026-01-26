@@ -3,6 +3,8 @@ from collections.abc import Iterator, Sequence
 from pathlib import Path
 from typing import Any
 
+from typing_extensions import Self
+
 
 class DownloadError(Exception):
     pass
@@ -12,7 +14,7 @@ class BaseDownload(ABC):
     """Base download class with various download operations that subclasses
     should implement."""
 
-    def __enter__(self) -> "BaseDownload":
+    def __enter__(self) -> Self:
         """Allow usage of with.
 
         Returns:

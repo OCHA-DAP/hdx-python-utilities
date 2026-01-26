@@ -11,6 +11,8 @@ from shutil import copytree, rmtree
 from tempfile import gettempdir
 
 import pytest
+
+from hdx.utilities.url import get_path_for_url
 from utils import assert_downloaders
 
 from hdx.utilities.base_downloader import DownloadError
@@ -46,10 +48,6 @@ class TestDownloader:
     @pytest.fixture(scope="class")
     def fixturefile(self, downloaderfolder):
         return downloaderfolder / "extra_params_tree.yaml"
-
-    @pytest.fixture(scope="class")
-    def fixtureurl(self):
-        return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/main/tests/fixtures/test_data.csv"
 
     @pytest.fixture(scope="class")
     def fixtureurlexcel(self):
@@ -91,20 +89,20 @@ class TestDownloader:
         self, tmp_path, fixtureurl, configfolder, downloaderfolder
     ):
         filename = "test_data.csv"
-        path = Download.get_path_for_url(fixtureurl, configfolder)
+        path = get_path_for_url(fixtureurl, configfolder)
         assert path.absolute() == configfolder.absolute() / filename
-        path = Download.get_path_for_url(fixtureurl, downloaderfolder)
+        path = get_path_for_url(fixtureurl, downloaderfolder)
         assert path.absolute() == downloaderfolder.absolute() / "test_data3.csv"
         testfolder = tmp_path / self.downloaderfoldername
         rmtree(testfolder, ignore_errors=True)
         copytree(downloaderfolder, testfolder)
-        path = Download.get_path_for_url(fixtureurl, testfolder, overwrite=True)
+        path = get_path_for_url(fixtureurl, testfolder, overwrite=True)
         assert path.absolute() == testfolder.absolute() / filename
         rmtree(testfolder)
         filename = "myfilename.txt"
-        path = Download.get_path_for_url(fixtureurl, filename=filename)
+        path = get_path_for_url(fixtureurl, filename=filename)
         assert path.absolute() == Path(join(gettempdir(), filename)).absolute()
-        path = Download.get_path_for_url(fixtureurl, downloaderfolder, filename)
+        path = get_path_for_url(fixtureurl, downloaderfolder, filename)
         assert path.absolute() == downloaderfolder.absolute() / filename
 
     def test_init(self, monkeypatch, downloaderfolder):
@@ -312,38 +310,6 @@ class TestDownloader:
             Download(extra_params_json="NOTEXIST", fail_on_missing_file=False)
             Download(extra_params_yaml="NOTEXIST", fail_on_missing_file=False)
             Download(basic_auth_file="NOTEXIST", fail_on_missing_file=False)
-
-    def test_get_url_for_get(self):
-        assert (
-            Download.get_url_for_get(
-                "http://www.lala.com/hdfa?a=3&b=4",
-                OrderedDict([("c", "e"), ("d", "f")]),
-            )
-            == "http://www.lala.com/hdfa?a=3&b=4&c=e&d=f"
-        )
-        assert (
-            Download.get_url_for_get(
-                "http://www.lala.com/hdfa?a=3&b=4", {"c": "e", "d": "f"}
-            )
-            == "http://www.lala.com/hdfa?a=3&b=4&c=e&d=f"
-        )
-
-    def test_get_url_params_for_post(self):
-        result = Download.get_url_params_for_post(
-            "http://www.lala.com/hdfa?a=3&b=4",
-            OrderedDict([("c", "e"), ("d", "f")]),
-        )
-        assert result[0] == "http://www.lala.com/hdfa"
-        assert list(result[1].items()) == list(
-            OrderedDict([("a", "3"), ("b", "4"), ("c", "e"), ("d", "f")]).items()
-        )
-        result = Download.get_url_params_for_post(
-            "http://www.lala.com/hdfa?a=3&b=4", {"c": "e", "d": "f"}
-        )
-        assert result[0] == "http://www.lala.com/hdfa"
-        assert list(result[1].items()) == list(
-            OrderedDict([("a", "3"), ("b", "4"), ("c", "e"), ("d", "f")]).items()
-        )
 
     def test_hxl_row(self):
         headers = ["a", "b", "c"]

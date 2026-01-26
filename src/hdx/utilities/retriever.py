@@ -11,7 +11,7 @@ from slugify import slugify
 from hdx.utilities.base_downloader import BaseDownload, DownloadError
 from hdx.utilities.downloader import Download
 from hdx.utilities.loader import load_json, load_text, load_yaml
-from hdx.utilities.path import get_filename_extension_from_url
+from hdx.utilities.url import get_filename_extension_from_url
 from hdx.utilities.saver import save_json, save_text, save_yaml
 
 logger = logging.getLogger(__name__)
