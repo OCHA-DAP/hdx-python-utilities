@@ -49,6 +49,10 @@ class TestDownloader:
         return downloaderfolder / "extra_params_tree.yaml"
 
     @pytest.fixture(scope="class")
+    def fixturepath(self, downloaderfolder):
+        return downloaderfolder / "test_csv_processing.csv"
+
+    @pytest.fixture(scope="class")
     def fixtureurlexcel(self):
         return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/main/tests/fixtures/downloader/test_data.xlsx"
 
@@ -595,7 +599,9 @@ class TestDownloader:
                 {"la1": "gas", "ha1": "2", "ba1": "6.5", "ma1": "'n/a'"},
             ]
 
-    def test_get_tabular_rows(self, fixtureprocessurl, fixtureprocessurlblank):
+    def test_get_tabular_rows(
+        self, fixturepath, fixtureprocessurl, fixtureprocessurlblank
+    ):
         with Download() as downloader:
             expected = [
                 ["la1", "ha1", "ba1", "ma1"],
@@ -604,6 +610,9 @@ class TestDownloader:
                 ["gas", "2", "6.5", "'n/a'"],
             ]
             expected_headers = expected[0]
+            headers, iterator = downloader.get_tabular_rows(fixturepath)
+            assert headers == expected_headers
+            assert list(iterator) == expected[1:]
             headers, iterator = downloader.get_tabular_rows(fixtureprocessurl)
             assert headers == expected_headers
             assert list(iterator) == expected[1:]
@@ -1271,11 +1280,9 @@ class TestDownloader:
                 ["AFG", "Afghanistan", 38041754],
             ]
 
-    def test_download_tabular_rows_as_dicts(self, fixtureprocessurl):
+    def test_download_tabular_rows_as_dicts(self, fixturepath, fixtureprocessurl):
         with Download() as downloader:
-            result = downloader.download_tabular_rows_as_dicts(
-                fixtureprocessurl, headers=2
-            )
+            result = downloader.download_tabular_rows_as_dicts(fixturepath, headers=2)
             assert result == {
                 "coal": {
                     "header2": "3",

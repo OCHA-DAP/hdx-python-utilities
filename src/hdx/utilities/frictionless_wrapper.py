@@ -1,5 +1,6 @@
 """Frictionless wrapper"""
 
+from pathlib import Path
 from typing import Any
 
 import requests
@@ -119,7 +120,7 @@ def get_frictionless_dialect(
 
 
 def get_frictionless_tableresource(
-    url: str | None = None,
+    url: Path | str | None = None,
     ignore_blank_rows: bool = True,
     infer_types: bool = False,
     session: requests.Session | None = None,

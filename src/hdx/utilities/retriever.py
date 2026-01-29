@@ -120,7 +120,7 @@ class Retrieve(BaseDownload):
 
     def get_filename(
         self,
-        url: str,
+        url: Path | str,
         filename: str | None = None,
         possible_extensions: tuple[str, ...] = tuple(),
         **kwargs: Any,
@@ -180,7 +180,7 @@ class Retrieve(BaseDownload):
 
     def download_file(
         self,
-        url: str,
+        url: Path | str,
         filename: str | None = None,
         logstr: str | None = None,
         fallback: bool = False,
@@ -231,7 +231,7 @@ class Retrieve(BaseDownload):
 
     def download_text(
         self,
-        url: str,
+        url: Path | str,
         filename: str | None = None,
         logstr: str | None = None,
         fallback: bool = False,
@@ -282,7 +282,7 @@ class Retrieve(BaseDownload):
 
     def download_yaml(
         self,
-        url: str,
+        url: Path | str,
         filename: str | None = None,
         logstr: str | None = None,
         fallback: bool = False,
@@ -333,7 +333,7 @@ class Retrieve(BaseDownload):
 
     def download_json(
         self,
-        url: str,
+        url: Path | str,
         filename: str | None = None,
         logstr: str | None = None,
         fallback: bool = False,
@@ -384,7 +384,7 @@ class Retrieve(BaseDownload):
 
     def get_tabular_rows(
         self,
-        url: str | Sequence[str],
+        url: Path | str | Sequence[str],
         has_hxl: bool = False,
         headers: int | Sequence[int] | Sequence[str] = 1,
         dict_form: bool = False,

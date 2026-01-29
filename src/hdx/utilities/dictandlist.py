@@ -374,7 +374,7 @@ def avg_dicts(
 
 
 def read_list_from_csv(
-    url: str,
+    url: Path | str,
     headers: int | Sequence[int] | Sequence[str] | None = None,
     dict_form: bool = False,
     **kwargs: Any,

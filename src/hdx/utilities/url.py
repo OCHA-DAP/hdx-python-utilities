@@ -62,7 +62,7 @@ def get_filename_from_url(
 
 
 def get_path_for_url(
-    url: str,
+    url: Path | str,
     folder: Path | str | None = None,
     filename: str | None = None,
     path: Path | str | None = None,

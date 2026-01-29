@@ -35,7 +35,7 @@ class BaseDownload(ABC):
         """
 
     @abstractmethod
-    def download_file(self, url: str, *args: Any, **kwargs: Any) -> Path:
+    def download_file(self, url: Path | str, *args: Any, **kwargs: Any) -> Path:
         """Download file from url.
 
         Args:
@@ -48,7 +48,7 @@ class BaseDownload(ABC):
         """
 
     @abstractmethod
-    def download_text(self, url: str, *args: Any, **kwargs: Any) -> str:
+    def download_text(self, url: Path | str, *args: Any, **kwargs: Any) -> str:
         """Download text from url.
 
         Args:
@@ -61,7 +61,7 @@ class BaseDownload(ABC):
         """
 
     @abstractmethod
-    def download_yaml(self, url: str, *args: Any, **kwargs: Any) -> Any:
+    def download_yaml(self, url: Path | str, *args: Any, **kwargs: Any) -> Any:
         """Download YAML from url.
 
         Args:
@@ -74,7 +74,7 @@ class BaseDownload(ABC):
         """
 
     @abstractmethod
-    def download_json(self, url: str, *args: Any, **kwargs: Any) -> Any:
+    def download_json(self, url: Path | str, *args: Any, **kwargs: Any) -> Any:
         """Download JSON from url.
 
         Args:
@@ -89,7 +89,7 @@ class BaseDownload(ABC):
     @abstractmethod
     def get_tabular_rows(
         self,
-        url: str | Sequence[str],
+        url: Path | str | Sequence[str],
         has_hxl: bool = False,
         headers: int | Sequence[int] | Sequence[str] = 1,
         dict_form: bool = False,

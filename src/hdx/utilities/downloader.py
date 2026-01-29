@@ -129,7 +129,7 @@ class Download(BaseDownload):
         """
         self.close()
 
-    def get_full_url(self, url: str) -> str:
+    def get_full_url(self, url: Path | str) -> str:
         """Get full url including any additional parameters added to the session.
 
         Args:
@@ -193,14 +193,16 @@ class Download(BaseDownload):
         self.close_response()
         self.response = None
         try:
-            url = str(url)
-            spliturl = urlsplit(url)
-            if not spliturl.scheme:
-                if isfile(url):
-                    url = Path(url).resolve().as_uri()
-                else:
-                    spliturl = spliturl._replace(scheme="https")
-                    url = urlunsplit(spliturl)
+            if isinstance(url, Path):
+                url = url.resolve().as_uri()
+            else:
+                spliturl = urlsplit(url)
+                if not spliturl.scheme:
+                    if isfile(url):
+                        url = Path(url).resolve().as_uri()
+                    else:
+                        spliturl = spliturl._replace(scheme="https")
+                        url = urlunsplit(spliturl)
             if post:
                 full_url, parameters = get_url_params_for_post(url, parameters)
                 if json_string:
@@ -671,7 +673,7 @@ class Download(BaseDownload):
 
     def get_tabular_rows(
         self,
-        url: str | Sequence[str],
+        url: Path | str | Sequence[str],
         has_hxl: bool = False,
         headers: int | Sequence[int] | Sequence[str] = 1,
         dict_form: bool = False,
@@ -778,7 +780,7 @@ class Download(BaseDownload):
 
     def get_tabular_rows_as_list(
         self,
-        url: str | Sequence[str],
+        url: Path | str | Sequence[str],
         has_hxl: bool = False,
         headers: int | Sequence[int] | Sequence[str] = 1,
         include_headers: bool = True,
@@ -854,7 +856,7 @@ class Download(BaseDownload):
 
     def get_tabular_rows_as_dict(
         self,
-        url: str | Sequence[str],
+        url: Path | str | Sequence[str],
         has_hxl: bool = False,
         headers: int | Sequence[int] | Sequence[str] = 1,
         ignore_blank_rows: bool = True,
@@ -928,7 +930,7 @@ class Download(BaseDownload):
 
     def download_tabular_key_value(
         self,
-        url: str | Sequence[str],
+        url: Path | str | Sequence[str],
         has_hxl: bool = False,
         headers: int | Sequence[int] | Sequence[str] = 1,
         include_headers: bool = True,
@@ -1008,7 +1010,7 @@ class Download(BaseDownload):
 
     def download_tabular_rows_as_dicts(
         self,
-        url: str | Sequence[str],
+        url: Path | str | Sequence[str],
         has_hxl: bool = False,
         headers: int | Sequence[int] | Sequence[str] = 1,
         keycolumn: int = 1,
@@ -1092,7 +1094,7 @@ class Download(BaseDownload):
 
     def download_tabular_cols_as_dicts(
         self,
-        url: str | Sequence[str],
+        url: Path | str | Sequence[str],
         has_hxl: bool = False,
         headers: int | Sequence[int] | Sequence[str] = 1,
         keycolumn: int = 1,
