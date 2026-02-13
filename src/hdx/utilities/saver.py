@@ -281,10 +281,13 @@ def save_iterable(
     row_function: Callable[[dict], dict | None] | None = None,
     no_empty: bool = True,
 ) -> list:
-    """Save an iterable of rows in dict or list form to a csv. (The headers
+    """Save an iterable of rows in dict or list form to a csv. The headers
     argument is either a row number (rows start counting at 1), or the actual
-    headers defined as a list of strings. If not set, all rows will be treated
-    as containing values.)
+    headers defined as a list of strings, the order of which defines the column order.
+    Columns not named in that list of strings will be dropped. If headers is not set,
+    all rows will be treated as containing values. The columns argument defines which
+    columns will be output. It can be used in conjunction with an integer headers with
+    columns selecting the columns and hedders selecting the starting row.
 
     Args:
         filepath: Path to write to
@@ -327,32 +330,23 @@ def save_iterable(
     if isinstance(row, dict):
         has_header = True
         row = row_function(row)
+        while row is None:
+            row = next(rows)
+            row = row_function(row)
         if columns:
-            if row is not None:
-                newrow = {}
-                for column in columns:
-                    if column in row:
-                        newrow[column] = row[column]
-                newrows.append(newrow)
-            for row in rows:
-                row = row_function(row)
-                if row is None:
-                    continue
-                newrow = {}
-                for column in columns:
-                    if column in row:
-                        newrow[column] = row[column]
-                newrows.append(newrow)
+            row = {k: row[k] for k in columns if k in row}
+            newrows.append(row)
             if headers is None:
                 headers = columns
         else:
-            if row is not None:
-                newrows.append(row)
-            for row in rows:
-                row = row_function(row)
-                if row is None:
-                    continue
-                newrows.append(row)
+            if headers and isinstance(headers, list):
+                row = {k: row[k] for k in headers if k in row}
+            newrows.append(row)
+        for row in rows:
+            row = row_function(row)
+            if row is None:
+                continue
+            newrows.append(row)
     else:
         if headers is None:
             headers = 1

@@ -353,6 +353,12 @@ class TestLoader:
                 ["5", "6", "4"],
                 ["8", "9", "7"],
             ]
+            save_iterable(
+                str(filepath), list_of_dicts, headers=2, columns=["h2", "h3", "h1"]
+            )
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [["2", "3", "1"], ["5", "6", "4"], ["8", "9", "7"]]
 
             xlfilepath = filepath.with_suffix(".xlsx")
             rows = save_iterable(
@@ -464,6 +470,24 @@ class TestLoader:
                 ["1", "2", "3", "a"],
                 ["4", "5", "6", "b"],
                 ["7", "8", "9", "c"],
+            ]
+            save_iterable(filepath, list_of_dicts, headers=["h2", "h1", "h4", "h3"])
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [
+                ["h2", "h1", "h4", "h3"],
+                ["2", "1", "a", "3"],
+                ["5", "4", "b", "6"],
+                ["8", "7", "c", "9"],
+            ]
+            save_iterable(filepath, list_of_dicts, headers=["h2", "h1", "h4"])
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [
+                ["h2", "h1", "h4"],
+                ["2", "1", "a"],
+                ["5", "4", "b"],
+                ["8", "7", "c"],
             ]
             save_iterable(filepath, list_of_dicts)
             newll = read_list_from_csv(filepath)
