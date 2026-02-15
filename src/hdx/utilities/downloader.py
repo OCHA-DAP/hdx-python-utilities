@@ -632,7 +632,7 @@ class Download(BaseDownload):
                 sheet_args = {"sheetid": sheet}
             else:
                 sheet_args = {"sheetname": sheet}
-            Xlsx2csv(path).convert(outpath, **sheet_args)
+            Xlsx2csv(path, ignore_percentage=True).convert(outpath, **sheet_args)
             url = outpath
             kwargs["format"] = "csv"  # format takes precedence over file_type
             kwargs.pop("fill_merged_cells", None)
