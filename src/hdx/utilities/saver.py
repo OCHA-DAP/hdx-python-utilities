@@ -340,7 +340,7 @@ def save_iterable(
                 headers = columns
         else:
             if headers and isinstance(headers, list):
-                row = {k: row[k] for k in headers if k in row}
+                row = {k: row.get(k) for k in headers}
             newrows.append(row)
         for row in rows:
             row = row_function(row)
