@@ -941,6 +941,9 @@ Examples:
     result = get_words_in_sentence("Korea (Democratic People's Republic of)")
     assert result == ["Korea", "Democratic", "People's", "Republic", "of"]
 
+    # Split wall of text into paragraphs in a smart and efficient way
+    result = smart_split("MY WALL OF TEXT")
+
 ## Stable file hashing
 
 Efficient Hashing of files that produces a stable hash even for zip and xlsx files eg.

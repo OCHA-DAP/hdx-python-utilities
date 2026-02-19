@@ -261,3 +261,65 @@ def get_numeric_if_possible(value: Any) -> Any:
                         val = val.replace(",", ".")
                     return float(val) / denominator
     return value
+
+
+def smart_split(text: str, target_length: int = 400) -> str:
+    """
+    Splits text into paragraphs based on sentence length and structure.
+
+    Args:
+        text: The input text.
+        target_length: Approximate characters per paragraph. Defaults to 400.
+
+    Returns:
+        The output text
+    """
+
+    # 1. Clean up and split into sentences
+    # Look for (.!?) followed by a space and a capital letter
+    sentences = re.split(r"(?<=[.!?])\s+(?=[A-Z])", text.strip())
+
+    paragraphs = []
+    current_para = []
+    current_length = 0
+
+    for i, sentence in enumerate(sentences):
+        sentence = sentence.strip()
+
+        # 2. Analyze the sentence start
+        first_word = sentence.split()[0].replace(",", "")
+
+        # Score: How likely is this a new paragraph starter?
+        score = 0
+
+        # Rule A: Proper Nouns/Acronyms often start new topics
+        # (e.g., "The WDPCA", "UNEP-WCMC", "Data")
+        if first_word[0].isupper() and len(first_word) > 1:
+            score += 1
+
+        # Rule B: Weak Starters (Conjunctions) -> Force stay
+        if first_word.lower() in ["and", "but", "or", "so", "because"]:
+            score -= 5
+
+        # Rule C: Length Pressure
+        # If we are way over the target length, force a split on any decent sentence
+        if current_length > target_length:
+            score += 3
+        elif current_length < (target_length / 2):
+            score -= 5  # Too short to split yet
+
+        # 3. Decision Time
+        # If score is high enough (and we aren't at the very first sentence)
+        if score >= 2 and current_para:
+            paragraphs.append(" ".join(current_para))
+            current_para = [sentence]
+            current_length = len(sentence)
+        else:
+            current_para.append(sentence)
+            current_length += len(sentence)
+
+    # Append whatever is left
+    if current_para:
+        paragraphs.append(" ".join(current_para))
+
+    return "\n\n".join(paragraphs)
