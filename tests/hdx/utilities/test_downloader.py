@@ -17,7 +17,6 @@ from hdx.utilities.base_downloader import DownloadError
 from hdx.utilities.downloader import Download
 from hdx.utilities.session import SessionError
 from hdx.utilities.url import get_path_for_url
-from hdx.utilities.useragent import UserAgent
 
 
 @contextmanager
@@ -33,12 +32,6 @@ def not_raises(ExpectedException):
 
 class TestDownloader:
     downloaderfoldername = "downloader"
-
-    @pytest.fixture(scope="class", autouse=True)
-    def useragent(self):
-        UserAgent.set_global("test")
-        yield
-        UserAgent.clear_global()
 
     @pytest.fixture(scope="class")
     def downloaderfolder(self, fixturesfolder):

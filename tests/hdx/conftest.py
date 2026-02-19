@@ -6,6 +6,7 @@ from pathlib import Path
 import pytest
 
 from hdx.utilities.downloader import Download
+from hdx.utilities.useragent import UserAgent
 
 
 @pytest.fixture(scope="session")
@@ -21,6 +22,13 @@ def configfolder(fixturesfolder):
 @pytest.fixture(scope="session")
 def fixtureurl():
     return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/master/tests/fixtures/test_data.csv"
+
+
+@pytest.fixture(scope="session", autouse=True)
+def useragent():
+    UserAgent.set_global("test")
+    yield
+    UserAgent.clear_global()
 
 
 @pytest.fixture(scope="function")
