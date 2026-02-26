@@ -296,7 +296,7 @@ class TestLoader:
         filename = "out8.json"
         assert_files_same(saverfolder / filename, output_dir / filename)
 
-    def test_save_iterable(self):
+    def test_save_iterable_lists(self):
         list_of_tuples = [(1, 2, 3, "a"), (4, 5, 6, "b"), (7, 8, 9, "c")]
         list_of_lists = [[1, 2, 3, "a"], [4, 5, 6, "b"], [7, 8, 9, "c"]]
         list_of_dicts = [
@@ -457,6 +457,15 @@ class TestLoader:
                 ["7", "8", "9", "c"],
             ]
 
+    def test_save_iterable_dicts(self):
+        with temp_dir(
+            "TestSaveIterable",
+            delete_on_success=True,
+            delete_on_failure=False,
+        ) as tempdir:
+            filename = "test_save_iterable_to_csv.csv"
+            filepath = tempdir / filename
+
             list_of_dicts = [
                 {"h1": 1, "h2": 2, "h3": 3, "h4": "a"},
                 {"h1": 4, "h2": 5, "h3": 6, "h4": "b"},
@@ -554,3 +563,47 @@ class TestLoader:
             newll = read_list_from_csv(str(filepath))
             remove(filepath)
             assert newll == [["h1", "h3", "h4"]]
+
+            def process_row(row):
+                return None
+
+            rows = save_iterable(
+                filepath,
+                list_of_dicts,
+                headers=["h1", "h2", "h3", "h4"],
+                row_function=process_row,
+            )
+            assert rows == []
+
+            rows = save_iterable(
+                filepath,
+                list_of_dicts,
+                headers=["h1", "h2", "h3", "h4"],
+                row_function=process_row,
+                no_empty=False,
+            )
+            assert rows == [["h1", "h2", "h3", "h4"]]
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [
+                ["h1", "h2", "h3", "h4"],
+            ]
+
+            def process_row(row):
+                if 5 in row.values():
+                    return None
+                return row
+
+            save_iterable(
+                filepath,
+                list_of_dicts,
+                headers=["h1", "h2", "h3", "h4"],
+                row_function=process_row,
+            )
+            newll = read_list_from_csv(filepath)
+            remove(filepath)
+            assert newll == [
+                ["h1", "h2", "h3", "h4"],
+                ["1", "2", "4", "a"],
+                ["7", "8", "10", "c"],
+            ]

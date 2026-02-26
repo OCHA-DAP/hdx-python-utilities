@@ -330,9 +330,15 @@ def save_iterable(
     if isinstance(row, dict):
         has_header = True
         row = row_function(row)
-        while row is None:
-            row = next(rows)
-            row = row_function(row)
+        try:
+            while row is None:
+                row = next(rows)
+                row = row_function(row)
+        except StopIteration:
+            if not no_empty and headers:
+                newrows = [headers]
+                write_rows(newrows, None, None)
+            return newrows
         if columns:
             row = {k: row[k] for k in columns if k in row}
             newrows.append(row)
