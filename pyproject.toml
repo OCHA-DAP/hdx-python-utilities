@@ -39,14 +39,14 @@ requires-python = ">=3.10"
 # Extras for frictionless[excel,json] added explicitly
 # for conda-forge compatibility
 dependencies = [
-    "frictionless>=5.18.0",
+    "frictionless>=5.19.0",
     # frictionless[excel]
     "openpyxl>=3.1.2",
     "tableschema-to-template>=0.0.13",
     "xlrd>=2.0.1",
     "xlwt>=1.3.0",
     # frictionless[json]
-    "ijson>=3.2.3",
+    "ijson>=3.5.0",
     "jsonlines>=4.0.0",
     # /end frictionless extras
     "typing_extensions",
@@ -56,7 +56,7 @@ dependencies = [
     "ratelimit",
     "requests-file",
     "ruamel.yaml",
-    "xlsx2csv",
+    "xlsx2csv==0.8.4",
 ]
 
 [project.optional-dependencies]

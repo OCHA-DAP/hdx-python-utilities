@@ -11,9 +11,8 @@ import pytest
 
 from hdx.utilities.compare import assert_files_same
 from hdx.utilities.dictandlist import read_list_from_csv
-from hdx.utilities.loader import load_yaml
 from hdx.utilities.path import temp_dir
-from hdx.utilities.saver import save_hxlated_output, save_iterable, save_json, save_yaml
+from hdx.utilities.saver import save_iterable, save_json, save_yaml
 
 
 class TestLoader:
@@ -101,10 +100,6 @@ class TestLoader:
     def saverfolder(self, fixturesfolder):
         return fixturesfolder / "saver"
 
-    @pytest.fixture(scope="class")
-    def json_csv_configuration(self, fixturesfolder):
-        return load_yaml(fixturesfolder / "config" / "json_csv.yaml")
-
     @pytest.mark.parametrize(
         "filename,pretty,sortkeys",
         [
@@ -150,151 +145,6 @@ class TestLoader:
         dct = json.loads(json.dumps(TestLoader.json_to_write))
         save_json(dct, test_path, pretty=pretty, sortkeys=sortkeys)
         assert_files_same(ref_path, test_path)
-
-    def test_save_hxlated_output(self, tmp_path, saverfolder, json_csv_configuration):
-        rows = (
-            ("Col1", "Col2", "Col3"),
-            ("#tag1", "#tag2", "#tag3"),
-            (1, "2", 3),
-            (4, "5", 6),
-        )
-        output_dir = tmp_path
-
-        save_hxlated_output(
-            json_csv_configuration["test1"],
-            rows[2:],
-            includes_header=False,
-            includes_hxltags=False,
-            output_dir=output_dir,
-        )
-        filename = "out.csv"
-        assert_files_same(saverfolder / filename, output_dir / filename)
-        filename = "out.json"
-        assert_files_same(saverfolder / filename, output_dir / filename)
-
-        row0 = rows[0]
-        rowsdict = []
-        for row in rows[2:]:
-            newrow = {}
-            for i, key in enumerate(row0):
-                newrow[key] = row[i]
-            rowsdict.append(newrow)
-        save_hxlated_output(
-            json_csv_configuration["test1"],
-            rowsdict,
-            includes_header=False,
-            includes_hxltags=False,
-            output_dir=output_dir,
-        )
-        filename = "out.csv"
-        assert_files_same(saverfolder / filename, output_dir / filename)
-        filename = "out.json"
-        assert_files_same(saverfolder / filename, output_dir / filename)
-
-        save_hxlated_output(
-            json_csv_configuration["test2"],
-            rows,
-            includes_header=True,
-            includes_hxltags=True,
-            output_dir=output_dir,
-        )
-        filename = "out2.csv"
-        assert_files_same(saverfolder / filename, output_dir / filename)
-        filename = "out2.json"
-        assert_files_same(saverfolder / filename, output_dir / filename)
-
-        rowsdict = []
-        for row in rows[1:]:
-            newrow = {}
-            for i, key in enumerate(row0):
-                newrow[key] = row[i]
-            rowsdict.append(newrow)
-        save_hxlated_output(
-            json_csv_configuration["test2"],
-            rowsdict,
-            includes_header=True,
-            includes_hxltags=True,
-            output_dir=str(output_dir),
-        )
-        filename = "out2.csv"
-        assert_files_same(saverfolder / filename, output_dir / filename)
-        filename = "out2.json"
-        assert_files_same(saverfolder / filename, output_dir / filename)
-
-        save_hxlated_output(
-            json_csv_configuration["test3"],
-            rows,
-            includes_header=True,
-            includes_hxltags=True,
-            output_dir=output_dir,
-        )
-        filename = "out3.csv"
-        assert_files_same(saverfolder / "out.csv", output_dir / filename)
-        filename = "out3.json"
-        assert exists(output_dir / filename) is False
-
-        save_hxlated_output(
-            json_csv_configuration["test4"],
-            rows,
-            includes_header=True,
-            includes_hxltags=True,
-            output_dir=output_dir,
-        )
-        filename = "out4.csv"
-        assert exists(output_dir / filename) is False
-        filename = "out4.json"
-        assert_files_same(saverfolder / "out2.json", output_dir / filename)
-
-        save_hxlated_output(
-            json_csv_configuration["test5"],
-            rowsdict,
-            includes_header=True,
-            includes_hxltags=True,
-            output_dir=output_dir,
-        )
-        filename = "out5.csv"
-        assert_files_same(saverfolder / "out2.csv", output_dir / filename)
-        filename = "out5.json"
-        assert_files_same(saverfolder / filename, output_dir / filename)
-
-        save_hxlated_output(
-            json_csv_configuration["test6"],
-            rowsdict,
-            includes_header=True,
-            includes_hxltags=True,
-            output_dir=output_dir,
-            today="today!",
-        )
-        filename = "out6.csv"
-        assert_files_same(saverfolder / "out2.csv", output_dir / filename)
-        filename = "out6.json"
-        assert_files_same(saverfolder / filename, output_dir / filename)
-
-        save_hxlated_output(
-            json_csv_configuration["test7"],
-            rowsdict,
-            includes_header=True,
-            includes_hxltags=True,
-            output_dir=output_dir,
-            today="today!",
-        )
-        filename = "out7.csv"
-        assert_files_same(saverfolder / "out2.csv", output_dir / filename)
-        filename = "out7.json"
-        assert_files_same(saverfolder / filename, output_dir / filename)
-
-        save_hxlated_output(
-            json_csv_configuration["test8"],
-            rowsdict,
-            includes_header=True,
-            includes_hxltags=True,
-            output_dir=output_dir,
-            today="today!",
-        )
-        filename = "out8.csv"
-        assert_files_same(saverfolder / filename, output_dir / filename)
-        filename = "out8.json"
-        assert_files_same(saverfolder / filename, output_dir / filename)
 
     def test_save_iterable_lists(self):
         list_of_tuples = [(1, 2, 3, "a"), (4, 5, 6, "b"), (7, 8, 9, "c")]

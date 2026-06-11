@@ -385,7 +385,6 @@ class Retrieve(BaseDownload):
     def get_tabular_rows(
         self,
         url: Path | str | Sequence[str],
-        has_hxl: bool = False,
         headers: int | Sequence[int] | Sequence[str] = 1,
         dict_form: bool = False,
         filename: str | None = None,
@@ -397,8 +396,6 @@ class Retrieve(BaseDownload):
         where each row is returned as a list or dictionary depending on the
         dict_rows argument.
 
-        When a list of urls is supplied (in url), then the has_hxl flag indicates if the
-        files are HXLated so that the HXL row is only included from the first file.
         The headers argument is either a row number or list of row numbers (in case of
         multi-line headers) to be considered as headers (rows start counting at 1), or
         the actual headers defined as a list of strings. It defaults to 1.
@@ -407,7 +404,6 @@ class Retrieve(BaseDownload):
 
         Args:
             url: A single or list of URLs or paths to read from
-            has_hxl: Whether files have HXL hashtags. Defaults to False.
             headers: Number of row(s) containing headers or list of headers. Defaults to 1.
             dict_form: Return dict or list for each row. Defaults to False (list)
             filename: Filename of saved file. Defaults to getting from url.
@@ -434,9 +430,7 @@ class Retrieve(BaseDownload):
                 path.append(pth)
 
         kwargs.pop("file_prefix", None)
-        return self.downloader.get_tabular_rows(
-            path, has_hxl, headers, dict_form, **kwargs
-        )
+        return self.downloader.get_tabular_rows(path, headers, dict_form, **kwargs)
 
     @classmethod
     def generate_retrievers(

@@ -148,7 +148,7 @@ class TestText:
             "and information on the world's protected and conserved areas compiled in the "
             "WDPCA is used for reporting on progress towards reaching Target 3 of the "
             "Kunming-Montreal Global Biodiversity Framework, which calls for 30% of the "
-            "worldâ€™s land and waters to be effectively conserved by 2030.\n"
+            "world’s land and waters to be effectively conserved by 2030.\n"
             "\n"
             "Additionally, the WDPCA is used for reporting to the UN to track progress "
             "towards the 2030 Sustainable Development Goals, tracking of core indicators "

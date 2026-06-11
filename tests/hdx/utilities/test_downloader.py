@@ -307,18 +307,6 @@ class TestDownloader:
             Download(extra_params_yaml="NOTEXIST", fail_on_missing_file=False)
             Download(basic_auth_file="NOTEXIST", fail_on_missing_file=False)
 
-    def test_hxl_row(self):
-        headers = ["a", "b", "c"]
-        hxltags = {"b": "#b", "c": "#c"}
-        assert Download.hxl_row(headers, hxltags) == ["", "#b", "#c"]
-        assert Download.hxl_row(headers, hxltags, dict_form=True) == {
-            "a": "",
-            "b": "#b",
-            "c": "#c",
-        }
-        assert Download.hxl_row(headers, dict()) == ["", "", ""]
-        assert Download.hxl_row([], hxltags) == list()
-
     def test_setup_stream(
         self, fixtureurl, fixturenotexistsurl, getfixtureurl, postfixtureurl
     ):

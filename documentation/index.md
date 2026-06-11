@@ -9,7 +9,6 @@ Python developers. Note that these are not specific to HDX.
 1. [Retrieval of data from url with saving to file or from data previously saved](#retrieving-files)
 1. [Date utilities](#date-utilities)
 1. [Loading and saving JSON and YAML (maintaining order)](#loading-and-saving-json-and-yaml)
-1. [Loading and saving HXLated csv and/or JSON](#loading-and-saving-hxlated-csv-andor-json)
 1. [Dictionary and list utilities](#dictionary-and-list-utilities)
 1. [HTML utilities (inc. BeautifulSoup helper)](#html-utilities)
 1. [Compare files (eg. for testing)](#comparing-files)
@@ -34,6 +33,9 @@ The code for the library is [here](https://github.com/OCHA-DAP/hdx-python-utilit
 The library has detailed API documentation which can be found in the menu at the top.
 
 ## Breaking Changes
+From 4.1.0, save_hxlated_output and Download.hxl_row removed. Parameter use_hxl removed
+from all calls in Download and Retrieve.
+
 From 4.0.4, get_filename_from_url, get_filename_extension_from_url, get_path_for_url,
 get_url_for_get, get_url_params_for_post moved to module url
 
@@ -185,9 +187,6 @@ Other useful functions:
     headers, iterator = downloader.get_tabular_rows_as_list(url)
     for row in iterator:
         ...
-    # Get hxl row
-    assert Download.hxl_row(["a", "b", "c"], {"b": "#b", "c": "#c"}, dict_form=True)
-    # == {"a": "", "b": "#b", "c": "#c"}
     # Build get url from url and dictionary of parameters
     Download.get_url_for_get("http://www.lala.com/hdfa?a=3&b=4",
                              OrderedDict([("c", "e"), ("d", "f")]))
@@ -460,93 +459,6 @@ as a csv or Excel.
     ]
 
     save_iterable(xlfilepath, list_of_lists, headers=["h1", "h2", "h3", "h4"], format="xlsx")
-
-## Loading and saving HXLated csv and/or JSON
-
-`save_hxlated_output` is a utility to save HXLated output (currently JSON and/or csv are
-supported) based on a given configuration. Here is an example YAML configuration:
-
-    input:
-      headers:
-        - "Col1"
-        - "Col2"
-        - "Col3"
-      hxltags:
-        - "#tag1"
-        - "#tag2"
-        - "#tag3"
-    process:
-      - header: "tag4"
-        hxltag: "#tag4"
-        expression: "#tag1 * 10"
-    output:
-      csv:
-        filename: "out.csv"
-        hxltags:
-          - "#tag2"
-          - "#tag3"
-      json:
-        filename: "out.json"
-        data: "results"
-        metadata:
-          "#date": "{{today}}"
-          "#mytag": 123
-        hxltags:
-          - "#tag1"
-          - "#tag2"
-
-The `input` section is needed if the rows of data that are passed in are missing either
-headers or HXL hashtags. The `output` section defines what files will be created. If
-`hxltags` are specified, then only those columns are output. CSV output would look like
-this:
-
-    Col2,Col3,tag4
-    #tag2,#tag3,#tag4
-    2,3,10
-    5,6,40
-
-
-For JSON output, if no `metadata` or `data` is specified, the output will look like
-this:
-
-    [
-    {"#tag1":1,"#tag2":"2","#tag4":10},
-    {"#tag1":4,"#tag2":"5","#tag4":40}
-    ]
-
-If only `metadata` was specified, not `data`, then output is like this:
-
-    {"metadata":{"#date":"today!","#mytag":123},"data":[
-    {"#tag1":1,"#tag2":"2","#tag4":10},
-    {"#tag1":4,"#tag2":"5","#tag4":40}
-    ]}
-
-Otherwise, the result is like this:
-
-    {"metadata":{"#date":"today!","#mytag":123},"results":[
-    {"#tag1":1,"#tag2":"2","#tag4":10},
-    {"#tag1":4,"#tag2":"5","#tag4":40}
-    ]}
-
-The utility is called as follows:
-
-    save_hxlated_output(
-        configuration,
-        rows,
-        includes_header=True,
-        includes_hxltags=True,
-        output_dir=output_dir,
-        today="today!",
-    )
-
-The first parameter is the configuration which can come from a YAML file for example.
-The second parameter, `rows` is the data. That data can be a list of lists, tuples or
-dictionaries. If `includes_header` is `True`, headers are taken from `rows`, otherwise
-they must be given by the configuration. If `includes_hxltags` is `True`, HXL hashtags
-are taken from `rows`, otherwise they must be given by the configuration. `output_dir`
-specifies where the output should go and defaults to "". Any other parameters (such as
-`today` in the example above) are used to populate template variables given in the
-configuration for the metadata.
 
 ## Dictionary and list utilities
 
