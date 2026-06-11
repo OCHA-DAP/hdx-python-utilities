@@ -142,28 +142,6 @@ class Download(BaseDownload):
         preparedrequest = self.session.prepare_request(request)
         return preparedrequest.url
 
-    @staticmethod
-    def hxl_row(
-        headers: Sequence[str],
-        hxltags: dict[str, str],
-        dict_form: bool = False,
-    ) -> list[str] | dict[str, str]:
-        """Return HXL tag row for header row given list of headers and
-        dictionary with header to HXL hashtag mappings. Return list or
-        dictionary depending upon the dict_form argument.
-
-        Args:
-            headers: Headers for which to get HXL hashtags
-            hxltags: Header to HXL hashtag mapping
-            dict_form: Return dict or list. Defaults to False (list)
-
-        Returns:
-            Return either a list or dictionary conating HXL hashtags
-        """
-        if dict_form:
-            return {header: hxltags.get(header, "") for header in headers}
-        return [hxltags.get(header, "") for header in headers]
-
     def normal_setup(
         self,
         url: Path | str,
@@ -674,7 +652,6 @@ class Download(BaseDownload):
     def get_tabular_rows(
         self,
         url: Path | str | Sequence[str],
-        has_hxl: bool = False,
         headers: int | Sequence[int] | Sequence[str] = 1,
         dict_form: bool = False,
         include_headers: bool = False,
@@ -688,8 +665,6 @@ class Download(BaseDownload):
         where each row is returned as a list or dictionary depending on the
         dict_rows argument.
 
-        When a list of urls is supplied (in url), then the has_hxl flag indicates if the
-        files are HXLated so that the HXL row is only included from the first file.
         The headers argument is either a row number or list of row numbers (in case of
         multi-line headers) to be considered as headers (rows start counting at 1), or
         the actual headers defined as a list of strings. It defaults to 1. The dict_form
@@ -705,7 +680,6 @@ class Download(BaseDownload):
 
         Args:
             url: A single or list of URLs or paths to read from
-            has_hxl: Whether files have HXL hashtags. Ignored for single url. Defaults to False.
             headers: Number of row(s) containing headers or list of headers. Defaults to 1.
             dict_form: Return dict or list for each row. Defaults to False (list)
             include_headers: Whether to include headers in iterator. Defaults to False.
@@ -772,8 +746,6 @@ class Download(BaseDownload):
                     row_function,
                     **temp_kwargs,
                 )
-                if has_hxl:
-                    next(iterator)
                 yield from iterator
 
         return outheaders, make_iterator()
@@ -781,7 +753,6 @@ class Download(BaseDownload):
     def get_tabular_rows_as_list(
         self,
         url: Path | str | Sequence[str],
-        has_hxl: bool = False,
         headers: int | Sequence[int] | Sequence[str] = 1,
         include_headers: bool = True,
         ignore_blank_rows: bool = True,
@@ -793,8 +764,6 @@ class Download(BaseDownload):
         """Returns headers and an iterator where each row is returned as a
         list.
 
-        When a list of urls is supplied (in url), then the has_hxl flag indicates if the
-        files are HXLated so that the HXL row is only included from the first file.
         The headers argument is either a row number or list of row numbers (in case of
         multi-line headers) to be considered as headers (rows start counting at 1), or
         the actual headers defined as a list of strings. It defaults to 1 and cannot be
@@ -809,7 +778,6 @@ class Download(BaseDownload):
 
         Args:
             url: A single or list of URLs or paths to read from
-            has_hxl: Whether files have HXL hashtags. Ignored for single url. Defaults to False.
             headers: Number of row(s) containing headers or list of headers. Defaults to 1.
             include_headers: Whether to include headers in iterator. Defaults to True.
             ignore_blank_rows: Whether to ignore blank rows. Defaults to True.
@@ -842,7 +810,6 @@ class Download(BaseDownload):
 
         headers, iterator = self.get_tabular_rows(
             url,
-            has_hxl,
             headers,
             False,
             include_headers,
@@ -857,7 +824,6 @@ class Download(BaseDownload):
     def get_tabular_rows_as_dict(
         self,
         url: Path | str | Sequence[str],
-        has_hxl: bool = False,
         headers: int | Sequence[int] | Sequence[str] = 1,
         ignore_blank_rows: bool = True,
         infer_types: bool = False,
@@ -868,8 +834,6 @@ class Download(BaseDownload):
         """Returns headers and an iterator where each row is returned as a
         dictionary.
 
-        When a list of urls is supplied (in url), then the has_hxl flag indicates if the
-        files are HXLated so that the HXL row is only included from the first file.
         The headers argument is either a row number or list of row numbers (in case of
         multi-line headers) to be considered as headers (rows start counting at 1), or
         the actual headers defined as a list of strings. It defaults to 1 and cannot be
@@ -884,7 +848,6 @@ class Download(BaseDownload):
 
         Args:
             url: A single or list of URLs or paths to read from
-            has_hxl: Whether files have HXL hashtags. Ignored for single url. Defaults to False.
             headers: Number of row(s) containing headers or list of headers. Defaults to 1.
             ignore_blank_rows: Whether to ignore blank rows. Defaults to True.
             infer_types: Whether to infer types. Defaults to False (strings).
@@ -916,7 +879,6 @@ class Download(BaseDownload):
 
         headers, iterator = self.get_tabular_rows(
             url,
-            has_hxl,
             headers,
             True,
             False,
@@ -931,7 +893,6 @@ class Download(BaseDownload):
     def download_tabular_key_value(
         self,
         url: Path | str | Sequence[str],
-        has_hxl: bool = False,
         headers: int | Sequence[int] | Sequence[str] = 1,
         include_headers: bool = True,
         ignore_blank_rows: bool = True,
@@ -943,8 +904,6 @@ class Download(BaseDownload):
         """Download 2 column csv from url and return a dictionary of keys
         (first column) and values (second column).
 
-        When a list of urls is supplied (in url), then the has_hxl flag indicates if the
-        files are HXLated so that the HXL row is only included from the first file.
         The headers argument is either a row number or list of row numbers (in case of
         multi-line headers) to be considered as headers (rows start counting at 1), or
         the actual headers defined as a list of strings. It defaults to 1 and cannot be
@@ -957,10 +916,8 @@ class Download(BaseDownload):
         and row (which will be in dict or list form depending upon the dict_rows
         argument) and outputs a modified row or None to ignore the row.
 
-
         Args:
             url: A single or list of URLs or paths to read from
-            has_hxl: Whether files have HXL hashtags. Ignored for single url. Defaults to False.
             headers: Number of row(s) containing headers or list of headers. Defaults to 1.
             include_headers: Whether to include headers in iterator. Defaults to True.
             ignore_blank_rows: Whether to ignore blank rows. Defaults to True.
@@ -993,7 +950,6 @@ class Download(BaseDownload):
         output_dict = {}
         _, rows = self.get_tabular_rows_as_list(
             url,
-            has_hxl,
             headers,
             include_headers,
             ignore_blank_rows,
@@ -1011,7 +967,6 @@ class Download(BaseDownload):
     def download_tabular_rows_as_dicts(
         self,
         url: Path | str | Sequence[str],
-        has_hxl: bool = False,
         headers: int | Sequence[int] | Sequence[str] = 1,
         keycolumn: int = 1,
         ignore_blank_rows: bool = True,
@@ -1024,8 +979,6 @@ class Download(BaseDownload):
         are first column and values are dictionaries with keys from column
         headers and values from columns beneath.
 
-        When a list of urls is supplied (in url), then the has_hxl flag indicates if the
-        files are HXLated so that the HXL row is only included from the first file.
         The headers argument is either a row number or list of row numbers (in case of
         multi-line headers) to be considered as headers (rows start counting at 1), or
         the actual headers defined as a list of strings. It defaults to 1 and cannot be
@@ -1040,7 +993,6 @@ class Download(BaseDownload):
 
         Args:
             url: A single or list of URLs or paths to read from
-            has_hxl: Whether files have HXL hashtags. Ignored for single url. Defaults to False.
             headers: Number of row(s) containing headers or list of headers. Defaults to 1.
             keycolumn: Number of column to be used for key. Defaults to 1.
             ignore_blank_rows: Whether to ignore blank rows. Defaults to True.
@@ -1073,7 +1025,6 @@ class Download(BaseDownload):
         """
         headers, iterator = self.get_tabular_rows_as_dict(
             url,
-            has_hxl,
             headers,
             ignore_blank_rows,
             infer_types,
@@ -1095,7 +1046,6 @@ class Download(BaseDownload):
     def download_tabular_cols_as_dicts(
         self,
         url: Path | str | Sequence[str],
-        has_hxl: bool = False,
         headers: int | Sequence[int] | Sequence[str] = 1,
         keycolumn: int = 1,
         ignore_blank_rows: bool = True,
@@ -1108,8 +1058,6 @@ class Download(BaseDownload):
         are header names and values are dictionaries with keys from first
         column and values from other columns.
 
-        When a list of urls is supplied (in url), then the has_hxl flag indicates if the
-        files are HXLated so that the HXL row is only included from the first file.
         The headers argument is either a row number or list of row numbers (in case of
         multi-line headers) to be considered as headers (rows start counting at 1), or
         the actual headers defined as a list of strings. It defaults to 1 and cannot be
@@ -1124,7 +1072,6 @@ class Download(BaseDownload):
 
         Args:
             url: A single or list of URLs or paths to read from
-            has_hxl: Whether files have HXL hashtags. Ignored for single url. Defaults to False.
             headers: Number of row(s) containing headers or list of headers. Defaults to 1.
             keycolumn: Number of column to be used for key. Defaults to 1.
             ignore_blank_rows: Whether to ignore blank rows. Defaults to True.
@@ -1157,7 +1104,6 @@ class Download(BaseDownload):
         """
         headers, iterator = self.get_tabular_rows_as_dict(
             url,
-            has_hxl,
             headers,
             ignore_blank_rows,
             infer_types,

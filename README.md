@@ -10,7 +10,6 @@ Note that these are not specific to HDX.
 1. Retrieval of data from url with saving to file or from data previously saved
 1. Date utilities
 1. Loading and saving JSON and YAML (maintaining order)
-1. Loading and saving HXLated csv and/or JSON
 1. Dictionary and list utilities
 1. HTML utilities (inc. BeautifulSoup helper)
 1. Compare files (eg. for testing)

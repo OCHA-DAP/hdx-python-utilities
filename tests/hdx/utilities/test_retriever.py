@@ -283,22 +283,6 @@ class TestRetriever:
                     ["coal", "3", "7.4", "'needed'"],
                     ["gas", "2", "6.5", "'n/a'"],
                 ]
-                filename = "test_hxl.csv"
-                url = retrieverfolder / filename
-                headers, iterator = retriever.get_tabular_rows(
-                    [url, url],
-                    has_hxl=True,
-                    logstr="test file",
-                    fallback=False,
-                )
-                assert headers == ["header1", "header2", "header3", "header4"]
-                assert list(iterator) == [
-                    ["#h1", "#h2", "#h3", "#h4"],
-                    ["coal", "3", "7.4", "'needed'"],
-                    ["gas", "2", "6.5", "'n/a'"],
-                    ["coal", "3", "7.4", "'needed'"],
-                    ["gas", "2", "6.5", "'n/a'"],
-                ]
 
     def test_download_save(self, dirs, retrieverfolder, fallback_dir):
         saved_dir, temp_dir = dirs

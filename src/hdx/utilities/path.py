@@ -1,7 +1,6 @@
 """Directory Path Utilities."""
 
 import contextlib
-import inspect
 import logging
 import sys
 from collections.abc import Iterable, Iterator, Sequence
@@ -12,7 +11,6 @@ from os.path import (
 from pathlib import Path
 from shutil import rmtree
 from tempfile import gettempdir
-from typing import Any
 
 from hdx.utilities.loader import load_text
 from hdx.utilities.saver import save_text
@@ -25,45 +23,34 @@ class NotFoundError(Exception):
     pass
 
 
-def script_dir(pyobject: Any, follow_symlinks: bool = True) -> Path:
+def script_dir(*args, **kwargs) -> Path:
     """Get current script's directory.
-
-    Args:
-        pyobject: Any Python object in the script
-        follow_symlinks: Follow symlinks or not. Defaults to True.
 
     Returns:
         Current script's directory
     """
     if getattr(sys, "frozen", False):
-        # Frozen (PyInstaller, etc.): Use the executable path
-        path = Path(sys.executable)  # pragma: no cover
+        # PyInstaller bundle
+        app_path = Path(sys.executable)
     else:
-        # Standard: Use the object's file path
-        path = Path(inspect.getfile(pyobject))
+        # Standard Python script
+        app_path = Path(__file__)
 
-    # Resolve symlinks if requested, otherwise just make absolute
-    path = path.resolve() if follow_symlinks else path.absolute()
+    # .resolve() ensures we follow symlinks to the real folder,
+    # and makes the path absolute so CWD doesn't matter.
+    return app_path.resolve().parent
 
-    return path.parent
 
-
-def script_dir_plus_file(
-    filename: str, pyobject: Any, follow_symlinks: bool = True
-) -> Path:
+def script_dir_plus_file(filename: str, *args, **kwargs) -> Path:
     """Get current script's directory and then append a filename.
 
     Args:
         filename: Filename to append to directory path
-        pyobject: Any Python object in the script
-        return_path: Whether to return a Path object. Defaults to returning str.
-
-        follow_symlinks: Follow symlinks or not. Defaults to True.
 
     Returns:
         Current script's directory and with filename appended
     """
-    return script_dir(pyobject, follow_symlinks) / filename
+    return script_dir() / filename
 
 
 def get_temp_dir(
