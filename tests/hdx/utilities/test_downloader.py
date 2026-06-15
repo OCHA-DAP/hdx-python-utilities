@@ -1314,3 +1314,85 @@ class TestDownloader:
         downloader1 = Download.get_downloader()
         downloader2 = Download.get_downloader("test")
         assert_downloaders(downloader1, downloader2, downloaders)
+
+
+class TestResumableDownload:
+    url = "https://example.com/testfile.bin"
+
+    def _make_response(self, mocker, status_code, content=b""):
+        import requests
+
+        mock_resp = mocker.MagicMock()
+        mock_resp.status_code = status_code
+        if status_code >= 400:
+            mock_resp.raise_for_status.side_effect = requests.exceptions.HTTPError(
+                response=mock_resp
+            )
+        else:
+            mock_resp.raise_for_status.return_value = None
+        mock_resp.iter_content.return_value = iter([content] if content else [])
+        return mock_resp
+
+    def test_resume_206_appends(self, tmp_path, mocker):
+        partial = tmp_path / "file.bin"
+        partial.write_bytes(b"hello ")
+        mock_resp = self._make_response(mocker, 206, b"world")
+        with Download(user_agent="test") as downloader:
+            mocker.patch.object(downloader.session, "get", return_value=mock_resp)
+            result = downloader.download_file(self.url, path=partial, resume=True)
+        assert result == partial
+        assert partial.read_bytes() == b"hello world"
+        sent_headers = downloader.session.get.call_args.kwargs["headers"]
+        assert sent_headers["Range"] == "bytes=6-"
+
+    def test_resume_200_overwrites(self, tmp_path, mocker):
+        partial = tmp_path / "file.bin"
+        partial.write_bytes(b"partial")
+        mock_resp = self._make_response(mocker, 200, b"fullcontent")
+        with Download(user_agent="test") as downloader:
+            mocker.patch.object(downloader.session, "get", return_value=mock_resp)
+            downloader.download_file(self.url, path=partial, resume=True)
+        assert partial.read_bytes() == b"fullcontent"
+
+    def test_resume_416_returns_existing(self, tmp_path, mocker):
+        partial = tmp_path / "file.bin"
+        partial.write_bytes(b"complete")
+        mock_resp = self._make_response(mocker, 416)
+        with Download(user_agent="test") as downloader:
+            mocker.patch.object(downloader.session, "get", return_value=mock_resp)
+            result = downloader.download_file(self.url, path=partial, resume=True)
+        assert result == partial
+        assert partial.read_bytes() == b"complete"
+
+    def test_resume_no_partial_file_does_full_download(self, tmp_path, mocker):
+        path = tmp_path / "newfile.bin"
+        mock_resp = self._make_response(mocker, 200, b"fullcontent")
+        with Download(user_agent="test") as downloader:
+            mocker.patch.object(downloader.session, "get", return_value=mock_resp)
+            downloader.download_file(self.url, path=path, resume=True)
+        assert path.read_bytes() == b"fullcontent"
+        sent_headers = downloader.session.get.call_args.kwargs.get("headers")
+        assert sent_headers is None or "Range" not in sent_headers
+
+    def test_no_resume_overwrites_partial(self, tmp_path, mocker):
+        partial = tmp_path / "file.bin"
+        partial.write_bytes(b"staledata")
+        mock_resp = self._make_response(mocker, 200, b"freshcontent")
+        with Download(user_agent="test") as downloader:
+            mocker.patch.object(downloader.session, "get", return_value=mock_resp)
+            downloader.download_file(self.url, path=partial, overwrite=True)
+        assert partial.read_bytes() == b"freshcontent"
+        sent_headers = downloader.session.get.call_args.kwargs.get("headers")
+        assert sent_headers is None or "Range" not in sent_headers
+
+    def test_resume_real_file(self, tmp_path, fixturesfolder):
+        fixture = fixturesfolder / "downloader" / "resume_test.dat"
+        expected = fixture.read_bytes()
+        split_at = 40
+        partial = tmp_path / "resume_test.dat"
+        partial.write_bytes(expected[:split_at])
+        url = "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/main/tests/fixtures/downloader/resume_test.dat"
+        with Download(user_agent="test") as downloader:
+            result = downloader.download_file(url, path=partial, resume=True)
+        assert result == partial
+        assert partial.read_bytes() == expected
