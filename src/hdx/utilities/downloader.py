@@ -329,6 +329,7 @@ class Download(BaseDownload):
             overwrite (bool): Whether to overwrite existing file. Defaults to False.
             keep (bool): Whether to keep already downloaded file. Defaults to False.
             resume (bool): Whether to resume a partial download using Range requests where the server supports it. Defaults to False.
+            retries (int): Number of times to retry a mid-stream failure. Only effective when resume=True so that each retry can continue from the partial file. Defaults to 0.
             post (bool): Whether to use POST instead of GET. Defaults to False.
             parameters (dict): Parameters to pass. Defaults to None.
             timeout (float): Timeout for connecting to URL. Defaults to None (no timeout).
@@ -345,6 +346,7 @@ class Download(BaseDownload):
         overwrite = kwargs.get("overwrite", False)
         keep = kwargs.get("keep", False)
         resume = kwargs.get("resume", False)
+        retries = kwargs.get("retries", 0)
         try:
             # When resuming, skip uniqueness renaming so we get back the exact target path
             path = get_path_for_url(
@@ -389,7 +391,38 @@ class Download(BaseDownload):
                 encoding=kwargs.get("encoding"),
                 json_string=kwargs.get("json_string", False),
             )
-        return self.stream_path(path, errormsg, append=append)
+        attempts_remaining = retries
+        while True:
+            try:
+                return self.stream_path(path, errormsg, append=append)
+            except DownloadError:
+                if not resume or attempts_remaining == 0:
+                    raise
+                attempts_remaining -= 1
+                logger.warning(
+                    "Download of %s interrupted, retrying (attempt %d of %d)...",
+                    url,
+                    retries - attempts_remaining,
+                    retries,
+                )
+                setup_headers["Range"] = f"bytes={path.stat().st_size}-"
+                setup_headers.setdefault("Accept-Encoding", "identity")
+                try:
+                    self.setup(
+                        url,
+                        stream=True,
+                        post=kwargs.get("post", False),
+                        parameters=kwargs.get("parameters"),
+                        timeout=kwargs.get("timeout"),
+                        headers=setup_headers,
+                        encoding=kwargs.get("encoding"),
+                        json_string=kwargs.get("json_string", False),
+                    )
+                except DownloadError:
+                    if self.response is not None and self.response.status_code == 416:
+                        return path
+                    raise
+                append = self.response.status_code == 206
 
     def download(self, url: Path | str, **kwargs: Any) -> requests.Response:
         """Download url.

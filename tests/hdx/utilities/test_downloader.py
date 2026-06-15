@@ -1396,3 +1396,77 @@ class TestResumableDownload:
             result = downloader.download_file(url, path=partial, resume=True)
         assert result == partial
         assert partial.read_bytes() == expected
+
+    def test_retry_succeeds_on_second_attempt(self, tmp_path, mocker):
+        partial = tmp_path / "file.bin"
+        partial.write_bytes(b"hello ")
+        first_resp = self._make_response(mocker, 206, b"wo")
+        first_resp.iter_content.side_effect = Exception("connection reset")
+        second_resp = self._make_response(mocker, 206, b"world")
+        with Download(user_agent="test") as downloader:
+            mocker.patch.object(
+                downloader.session, "get", side_effect=[first_resp, second_resp]
+            )
+            result = downloader.download_file(
+                self.url, path=partial, resume=True, retries=1
+            )
+        assert result == partial
+        assert partial.read_bytes() == b"hello world"
+        second_call_headers = downloader.session.get.call_args_list[1].kwargs["headers"]
+        assert second_call_headers["Range"] == "bytes=6-"
+
+    def test_retry_exhausted_raises(self, tmp_path, mocker):
+        partial = tmp_path / "file.bin"
+        partial.write_bytes(b"hello ")
+        failing_resp = self._make_response(mocker, 206, b"world")
+        failing_resp.iter_content.side_effect = Exception("connection reset")
+        with Download(user_agent="test") as downloader:
+            mocker.patch.object(
+                downloader.session,
+                "get",
+                return_value=failing_resp,
+            )
+            with pytest.raises(DownloadError):
+                downloader.download_file(self.url, path=partial, resume=True, retries=2)
+        assert downloader.session.get.call_count == 3
+
+    def test_retry_not_attempted_without_resume(self, tmp_path, mocker):
+        path = tmp_path / "file.bin"
+        failing_resp = self._make_response(mocker, 200, b"content")
+        failing_resp.iter_content.side_effect = Exception("connection reset")
+        with Download(user_agent="test") as downloader:
+            mocker.patch.object(downloader.session, "get", return_value=failing_resp)
+            with pytest.raises(DownloadError):
+                downloader.download_file(self.url, path=path, retries=3)
+        assert downloader.session.get.call_count == 1
+
+    def test_retry_updates_range_from_partial_bytes(self, tmp_path, mocker):
+        partial = tmp_path / "file.bin"
+        partial.write_bytes(b"hello ")
+
+        def make_partial_resp(content, fail_after):
+            resp = self._make_response(mocker, 206, b"")
+            chunks = [content[i : i + 1] for i in range(len(content))]
+
+            def iter_content_side_effect(chunk_size=1):
+                for i, chunk in enumerate(chunks):
+                    if i == fail_after:
+                        raise Exception("connection reset")
+                    yield chunk
+
+            resp.iter_content.side_effect = iter_content_side_effect
+            return resp
+
+        first_resp = make_partial_resp(b"wor", fail_after=2)
+        second_resp = self._make_response(mocker, 206, b"rld")
+        with Download(user_agent="test") as downloader:
+            mocker.patch.object(
+                downloader.session, "get", side_effect=[first_resp, second_resp]
+            )
+            result = downloader.download_file(
+                self.url, path=partial, resume=True, retries=1
+            )
+        assert result == partial
+        assert partial.read_bytes() == b"hello world"
+        second_call_headers = downloader.session.get.call_args_list[1].kwargs["headers"]
+        assert second_call_headers["Range"] == "bytes=8-"

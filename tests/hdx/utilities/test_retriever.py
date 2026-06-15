@@ -480,7 +480,7 @@ class TestRetriever:
             path = retriever.download_file(url, filename, resume=True)
             assert path == expected_path
             downloader.download_file.assert_called_once_with(
-                url, path=expected_path, resume=True
+                url, path=expected_path, resume=True, retries=0
             )
 
     def test_generate_retrievers(self, downloaders, dirs, fallback_dir):
