@@ -462,6 +462,27 @@ class TestRetriever:
                 # Uses saved file
                 assert headers == ["header1", "header2", "header3", "header4"]
 
+    def test_resume_forwarded_to_downloader(self, dirs, fallback_dir, mocker):
+        saved_dir, temp_dir = dirs
+        downloader = mocker.MagicMock(spec=Download)
+        filename = "test.txt"
+        expected_path = temp_dir / filename
+        downloader.download_file.return_value = expected_path
+        with Retrieve(
+            downloader,
+            fallback_dir,
+            saved_dir,
+            temp_dir,
+            save=False,
+            use_saved=False,
+        ) as retriever:
+            url = "http://example.com/test.txt"
+            path = retriever.download_file(url, filename, resume=True)
+            assert path == expected_path
+            downloader.download_file.assert_called_once_with(
+                url, path=expected_path, resume=True, retries=0
+            )
+
     def test_generate_retrievers(self, downloaders, dirs, fallback_dir):
         saved_dir, temp_dir = dirs
         Retrieve.generate_retrievers(

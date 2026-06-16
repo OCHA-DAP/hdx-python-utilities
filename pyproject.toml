@@ -70,6 +70,7 @@ dev = [
     "pytest",
     "pytest-cov",
     "pytest-loguru",
+    "pytest-mock",
     "pre-commit",
     "ruff==0.14.13",
 ]

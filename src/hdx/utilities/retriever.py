@@ -184,6 +184,8 @@ class Retrieve(BaseDownload):
         filename: str | None = None,
         logstr: str | None = None,
         fallback: bool = False,
+        resume: bool = False,
+        retries: int = 0,
         log_level: int = None,
         **kwargs: Any,
     ) -> Path:
@@ -194,6 +196,8 @@ class Retrieve(BaseDownload):
             filename: Filename of saved file. Defaults to getting from url.
             logstr: Text to use in log string to describe download. Defaults to filename.
             fallback: Whether to use static fallback if download fails. Defaults to False.
+            resume: Whether to resume a partial download using Range requests where the server supports it. Defaults to False.
+            retries: Number of times to retry a mid-stream failure. Only effective when resume=True. Defaults to 0.
             log_level: Level at which to log messages. Overrides level from constructor.
             **kwargs: Parameters to pass to download_file call
 
@@ -219,7 +223,9 @@ class Retrieve(BaseDownload):
                 log_level,
                 f"Downloading {logstr} from {self.get_url_logstr(url)} into {output_path}",
             )
-            return self.downloader.download_file(url, path=output_path, **kwargs)
+            return self.downloader.download_file(
+                url, path=output_path, resume=resume, retries=retries, **kwargs
+            )
         except DownloadError:
             if not fallback:
                 raise

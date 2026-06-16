@@ -205,7 +205,15 @@ Other useful functions:
     # if no folder supplied
     # path = Download.get_path_for_url(url, folder)
 
-For more detail and additional functions, check the API documentation.
+### Resumable downloads
+
+Pass `resume=True` and a fixed `path` to continue an interrupted download using
+HTTP Range requests. If the server returns 200 instead of 206, the file is
+downloaded from scratch. Add `retries` to automatically retry mid-stream
+failures; each retry continues from the current end of the partial file.
+`retries` has no effect without `resume=True`.
+
+    path = downloader.download_file(url, path=mypath, resume=True, retries=3)
 
 ## Retrieving files
 
@@ -260,6 +268,8 @@ Examples:
         # Uses previously downloaded JSON file in saved_dir returning the JSON data (with no fallback)
         retriever = Retrieve(downloader, fallback_dir, saved_dir, temp_dir, save=False, use_saved=True)
         data = retriever.download_json(url, filename, logstr="test json", fallback=False, log_level=logging.DEBUG)
+
+`Retrieve.download_file` also accepts `resume=True` and `retries=N` — see [Resumable downloads](#resumable-downloads).
 
 ## Date utilities
 

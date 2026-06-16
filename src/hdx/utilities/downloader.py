@@ -250,13 +250,16 @@ class Download(BaseDownload):
                 f"Download of {url} failed in retrieval of stream!" % url
             )
 
-    def stream_path(self, path: Path | str, errormsg: str) -> Path:
+    def stream_path(
+        self, path: Path | str, errormsg: str, append: bool = False
+    ) -> Path:
         """Stream file from url and store in provided path. Must call setup
         method first.
 
         Args:
             path: Path for downloaded file
             errormsg: Error message to display if there is a problem
+            append: Whether to append to an existing file. Defaults to False.
 
         Returns:
             Path of downloaded file
@@ -264,7 +267,7 @@ class Download(BaseDownload):
         f = None
         try:
             path = Path(path)
-            f = path.open("wb")
+            f = path.open("ab" if append else "wb")
             for chunk in self.response.iter_content(chunk_size=10240):
                 if chunk:  # filter out keep-alive new chunks
                     f.write(chunk)
@@ -325,6 +328,8 @@ class Download(BaseDownload):
             path (str): Full path to use for downloaded file instead of folder and filename.
             overwrite (bool): Whether to overwrite existing file. Defaults to False.
             keep (bool): Whether to keep already downloaded file. Defaults to False.
+            resume (bool): Whether to resume a partial download using Range requests where the server supports it. Defaults to False.
+            retries (int): Number of times to retry a mid-stream failure. Only effective when resume=True so that each retry can continue from the partial file. Defaults to 0.
             post (bool): Whether to use POST instead of GET. Defaults to False.
             parameters (dict): Parameters to pass. Defaults to None.
             timeout (float): Timeout for connecting to URL. Defaults to None (no timeout).
@@ -340,25 +345,84 @@ class Download(BaseDownload):
         path = kwargs.get("path")
         overwrite = kwargs.get("overwrite", False)
         keep = kwargs.get("keep", False)
+        resume = kwargs.get("resume", False)
+        retries = kwargs.get("retries", 0)
         try:
-            path = get_path_for_url(url, folder, filename, path, overwrite, keep)
+            # When resuming, skip uniqueness renaming so we get back the exact target path
+            path = get_path_for_url(
+                url, folder, filename, path, overwrite, keep or resume
+            )
         except ValueError as ex:
             raise DownloadError(ex) from ex
-        if keep and exists(path):
+        if keep and not resume and exists(path):
             return path
-        self.setup(
-            url,
-            stream=True,
-            post=kwargs.get("post", False),
-            parameters=kwargs.get("parameters"),
-            timeout=kwargs.get("timeout"),
-            headers=kwargs.get("headers"),
-            encoding=kwargs.get("encoding"),
-            json_string=kwargs.get("json_string", False),
-        )
-        return self.stream_path(
-            path, f"Download of {url} failed in retrieval of stream!"
-        )
+        errormsg = f"Download of {url} failed in retrieval of stream!"
+        setup_headers = dict(kwargs.get("headers") or {})
+        append = False
+        if resume and path.exists() and path.stat().st_size > 0:
+            setup_headers["Range"] = f"bytes={path.stat().st_size}-"
+            # Range bytes must come from the raw stream: partial gzip streams
+            # lack the header and cannot be decoded, so request uncompressed.
+            setup_headers.setdefault("Accept-Encoding", "identity")
+            try:
+                self.setup(
+                    url,
+                    stream=True,
+                    post=kwargs.get("post", False),
+                    parameters=kwargs.get("parameters"),
+                    timeout=kwargs.get("timeout"),
+                    headers=setup_headers,
+                    encoding=kwargs.get("encoding"),
+                    json_string=kwargs.get("json_string", False),
+                )
+            except DownloadError:
+                if self.response is not None and self.response.status_code == 416:
+                    return path
+                raise
+            append = self.response.status_code == 206
+        else:
+            self.setup(
+                url,
+                stream=True,
+                post=kwargs.get("post", False),
+                parameters=kwargs.get("parameters"),
+                timeout=kwargs.get("timeout"),
+                headers=setup_headers or None,
+                encoding=kwargs.get("encoding"),
+                json_string=kwargs.get("json_string", False),
+            )
+        attempts_remaining = retries
+        while True:
+            try:
+                return self.stream_path(path, errormsg, append=append)
+            except DownloadError:
+                if not resume or attempts_remaining == 0:
+                    raise
+                attempts_remaining -= 1
+                logger.warning(
+                    "Download of %s interrupted, retrying (attempt %d of %d)...",
+                    url,
+                    retries - attempts_remaining,
+                    retries,
+                )
+                setup_headers["Range"] = f"bytes={path.stat().st_size}-"
+                setup_headers.setdefault("Accept-Encoding", "identity")
+                try:
+                    self.setup(
+                        url,
+                        stream=True,
+                        post=kwargs.get("post", False),
+                        parameters=kwargs.get("parameters"),
+                        timeout=kwargs.get("timeout"),
+                        headers=setup_headers,
+                        encoding=kwargs.get("encoding"),
+                        json_string=kwargs.get("json_string", False),
+                    )
+                except DownloadError:
+                    if self.response is not None and self.response.status_code == 416:
+                        return path
+                    raise
+                append = self.response.status_code == 206
 
     def download(self, url: Path | str, **kwargs: Any) -> requests.Response:
         """Download url.
