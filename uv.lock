@@ -589,7 +589,7 @@ requires-dist = [
     { name = "tableschema-to-template", specifier = ">=0.0.13" },
     { name = "typing-extensions" },
     { name = "xlrd", specifier = ">=2.0.1" },
-    { name = "xlsx2csv", specifier = "==0.8.4" },
+    { name = "xlsx2csv", specifier = ">=0.8.4" },
     { name = "xlwt", specifier = ">=1.3.0" },
 ]
 provides-extras = ["diff", "docs", "email", "html"]
