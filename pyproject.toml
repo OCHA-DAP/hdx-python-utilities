@@ -56,7 +56,7 @@ dependencies = [
     "ratelimit",
     "requests-file",
     "ruamel.yaml",
-    "xlsx2csv==0.8.4",
+    "xlsx2csv>=0.8.4",
 ]
 
 [project.optional-dependencies]
