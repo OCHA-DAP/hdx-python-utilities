@@ -3,10 +3,14 @@ import re
 from collections.abc import Callable, Sequence
 
 from pyphonetics import RefinedSoundex
+from rapidfuzz import fuzz as rapidfuzz_fuzz
 
 from hdx.utilities.text import normalise
 
 TEMPLATE_VARIABLES = re.compile("{{.*?}}")
+NON_WORD_CHARACTERS = re.compile(r"[\W_]+")
+LIST_SEPARATORS = re.compile(r"\s*(?:[,;/:&\n]|\s(?:and|et)\s)\s*", re.IGNORECASE)
+HYPHEN = re.compile(r"\s*-\s*")
 
 
 class Phonetics(RefinedSoundex):
@@ -58,15 +62,212 @@ class Phonetics(RefinedSoundex):
         return matching_index
 
 
+class RapidFuzzMatcher:
+    """
+    Default matcher for names, using rapidfuzz edit-distance scoring instead
+    of phonetic (Soundex-family) encoding as Phonetics does. Phonetic algorithms
+    encode English pronunciation rules, so they are a poor fit for matching
+    multilingual or transliterated names (eg. "Sana'a" vs "Sanaa") that are
+    spelling variants rather than being phonetically similar in English
+    terms. Edit distance on normalised strings tends to place such variants
+    closer together.
+
+    Args:
+        scorer: Function taking two strings and returning a similarity score
+            from 0-100. Defaults to default_scorer. Use place_name_scorer for
+            place names. Ties are broken by rapidfuzz.fuzz.ratio over the
+            whole strings.
+
+    Caveat: "<name> city" scores ~100 against "<name>", as for any name whose
+    words are a subset of the other's. So withholding a text replacement that
+    strips " city" does not stop "Kenge city" matching "Kenge".
+    """
+
+    def __init__(self, scorer: Callable[[str, str], float] | None = None) -> None:
+        self.scorer = scorer or self.default_scorer
+
+    @staticmethod
+    def default_scorer(name: str, possible_name: str) -> float:
+        """
+        Score two strings with token_set_ratio, or with ratio on the strings
+        with spaces and punctuation removed if that is at least 90 and higher.
+
+        Args:
+            name: Name to match
+            possible_name: Possible name
+
+        Returns:
+            Similarity score from 0-100
+        """
+        score = rapidfuzz_fuzz.token_set_ratio(name, possible_name)
+        joined_score = rapidfuzz_fuzz.ratio(
+            NON_WORD_CHARACTERS.sub("", name),
+            NON_WORD_CHARACTERS.sub("", possible_name),
+        )
+        if joined_score >= 90:
+            return max(score, joined_score)
+        return score
+
+    @staticmethod
+    def place_name_scorer(name: str, possible_name: str) -> float:
+        """
+        Score two strings with default_scorer, but score 0 if they share a
+        word, each has other words of 3+ characters, and one of the words on
+        the side with fewer has ratio < 60 to all those on the other side (eg.
+        "central kalimantan" vs "kalimantan utara", but not "central west" vs
+        "centre west"). Suits place names, where the differing word usually
+        distinguishes places, but not names like sectors, where extra words
+        are often descriptive (eg. "food security and livelihood").
+
+        Args:
+            name: Name to match
+            possible_name: Possible name
+
+        Returns:
+            Similarity score from 0-100
+        """
+        words = set(name.split())
+        possible_words = set(possible_name.split())
+
+        def long_words(words: set[str]) -> set[str]:
+            return {word for word in words if len(word) > 2}
+
+        extra_words = long_words(words - possible_words)
+        possible_extra_words = long_words(possible_words - words)
+        if words & possible_words and extra_words and possible_extra_words:
+            fewer, more = sorted((extra_words, possible_extra_words), key=len)
+            for word in fewer:
+                if max(rapidfuzz_fuzz.ratio(word, other) for other in more) < 60:
+                    return 0.0
+        return RapidFuzzMatcher.default_scorer(name, possible_name)
+
+    def match(
+        self,
+        possible_names: Sequence,
+        name: str,
+        alternative_name: str | None = None,
+        transform_possible_names: Sequence[Callable] = [],
+        threshold: float = 65.0,
+    ) -> int | None:
+        """
+        Match name to one of the given possible names. Returns None if no
+        match or the index of the matching name.
+
+        Args:
+            possible_names: Possible names
+            name: Name to match
+            alternative_name: Alternative name to match. Defaults to None.
+            transform_possible_names: Functions to transform possible names.
+            threshold: Minimum similarity score, 0-100. Defaults to 65.0.
+
+        Returns:
+            Index of matching name from possible names or None
+        """
+        maxscore = None
+        matching_index = None
+        names = [name.lower()]
+        if alternative_name:
+            names.append(alternative_name.lower())
+        all_transforms = (lambda x: x, *transform_possible_names)
+        for i, possible_name in enumerate(possible_names):
+            for transform_possible_name in all_transforms:
+                transformed_possible_name = transform_possible_name(possible_name)
+                if not transformed_possible_name:
+                    continue
+                transformed_possible_name = transformed_possible_name.lower()
+                for query in names:
+                    score = (
+                        self.scorer(query, transformed_possible_name),
+                        rapidfuzz_fuzz.ratio(query, transformed_possible_name),
+                    )
+                    if maxscore is None or score > maxscore:
+                        maxscore = score
+                        matching_index = i
+        if maxscore is None or maxscore[0] < threshold:
+            return None
+        return matching_index
+
+
+def split_name(name: str, separators: re.Pattern) -> list[str]:
+    """
+    Split name on separators, dropping parts that are empty once normalised.
+
+    Args:
+        name: Name to split
+        separators: Compiled regular expression matching separators
+
+    Returns:
+        List of parts
+    """
+    parts = [part.strip() for part in separators.split(name)]
+    return [part for part in parts if normalise(part)]
+
+
+def resolve_name_parts(
+    name: str, name_to_code: dict[str, str], ignore: str | None = None
+) -> tuple[str | None, bool]:
+    """
+    Resolve a name made of parts split by separators (",", ";", "/", ":", "&",
+    newline, "and", "et") or, if there are none, by a hyphen. Parts are looked
+    up in name_to_code. A name with two parts gives a code if:
+    - one part's normalised form equals ignore and the other part has a code
+      (eg. "Falcón, Acosta" with the parent admin name "falcon")
+    - one part's code followed by "-" starts the other's (eg. "Protection -
+      GBV" gives PRO-GBV)
+    - both parts have the same code.
+    It is a list of names (eg. "Wash & Protection") if it has more than two
+    parts, or two parts with different codes (eg. "Guba-Khachmaz").
+
+    Args:
+        name: Name to resolve
+        name_to_code: Mapping from names (raw or normalised) to codes
+        ignore: Normalised name of a part that qualifies the other part.
+            Defaults to None.
+
+    Returns:
+        Tuple of code (or None) and whether name is a list of names
+    """
+    parts = split_name(name, LIST_SEPARATORS)
+    if len(parts) > 2:
+        return None, True
+    if len(parts) < 2:
+        parts = split_name(name, HYPHEN)
+        if len(parts) != 2:
+            return None, False
+    normalised_parts = [normalise(part) for part in parts]
+    if ignore in normalised_parts:
+        index = 1 - normalised_parts.index(ignore)
+        parts = [parts[index]]
+        normalised_parts = [normalised_parts[index]]
+    codes = []
+    for part, normalised_part in zip(parts, normalised_parts):
+        code = name_to_code.get(part, name_to_code.get(normalised_part))
+        if not code:
+            return None, False
+        codes.append(code)
+    code = codes[0]
+    if len(codes) == 1:
+        return code, False
+    other_code = codes[1]
+    if code == other_code or other_code.startswith(f"{code}-"):
+        return other_code, False
+    if code.startswith(f"{other_code}-"):
+        return code, False
+    return None, True
+
+
 def get_code_from_name(
     name: str,
     code_lookup: dict[str, str],
     unmatched: list[str],
     fuzzy_match: bool = True,
     match_threshold: int = 5,
+    matcher: Phonetics | RapidFuzzMatcher | None = None,
 ) -> str | None:
     """
-    Given a name (org type, sector, etc), return the corresponding code.
+    Given a name (org type, sector, etc), return the corresponding code. A
+    name made of parts is resolved by resolve_name_parts, and is not fuzzy
+    matched if it is a list of names.
 
     Args:
         name: Name to match
@@ -74,6 +275,7 @@ def get_code_from_name(
         unmatched: List of unmatched names
         fuzzy_match: Allow fuzzy matching or not
         match_threshold: Match threshold
+        matcher: Fuzzy matcher to use. Defaults to None (RapidFuzzMatcher).
 
     Returns:
         Matching code
@@ -91,11 +293,17 @@ def get_code_from_name(
     if len(name) <= match_threshold:
         unmatched.append(name)
         return None
-    if not fuzzy_match:
+    code, is_list = resolve_name_parts(name, code_lookup)
+    if code:
+        code_lookup[name] = code
+        return code
+    if not fuzzy_match or is_list:
         unmatched.append(name)
         return None
     names = [x for x in code_lookup.keys() if len(x) > match_threshold]
-    name_index = Phonetics().match(
+    if matcher is None:
+        matcher = RapidFuzzMatcher()
+    name_index = matcher.match(
         possible_names=names,
         name=name,
         alternative_name=name_clean,

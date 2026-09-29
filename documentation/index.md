@@ -33,6 +33,11 @@ The code for the library is [here](https://github.com/OCHA-DAP/hdx-python-utilit
 The library has detailed API documentation which can be found in the menu at the top.
 
 ## Breaking Changes
+From 4.2.0, get_code_from_name fuzzy matches using RapidFuzzMatcher rather than
+Phonetics by default. Pass matcher=Phonetics() for the previous behaviour. A name
+made of parts (eg. "Protection - GBV") is resolved from its parts, and a list of
+names (eg. "Wash & Protection") is not fuzzy matched.
+
 From 4.1.0, save_hxlated_output and Download.hxl_row removed. Parameter use_hxl removed
 from all calls in Download and Retrieve.
 
@@ -877,7 +882,19 @@ Efficient Hashing of files that produces a stable hash even for zip and xlsx fil
 
 Examples:
 
+    # Fuzzy match a name to one of a list of names using rapidfuzz scoring
     possible_names = ["Al Maharah", "Ad Dali", "Dhamar"]
+    matcher = RapidFuzzMatcher()
+    assert matcher.match(possible_names, "al dali") == 1
+
+    # place_name_scorer does not match place names that share a word but differ
+    # in another that distinguishes places
+    kalimantan = ["kalimantan utara", "kalimantan tengah"]
+    assert matcher.match(kalimantan, "central kalimantan") == 0
+    matcher = RapidFuzzMatcher(RapidFuzzMatcher.place_name_scorer)
+    assert matcher.match(kalimantan, "central kalimantan") is None
+
+    # Phonetics is an alternative matcher using Refined Soundex
     phonetics = Phonetics()
     assert phonetics.match(possible_names, "al dali") == 1
 
@@ -886,6 +903,22 @@ Examples:
         normalise(k): v for k, v in org_type_lookup.items()
     }
     assert get_code_from_name("NATIONAL_NGO", lookup, [], fuzzy_match=False) == "441"
+
+    # get_code_from_name fuzzy matches with RapidFuzzMatcher unless given
+    # another matcher. It resolves names made of parts and does not fuzzy
+    # match lists of names.
+    sector_lookup = {"food security": "FSC", "protection": "PRO", "gbv": "PRO-GBV", "wash": "WSH"}
+    assert get_code_from_name("Food Securty", sector_lookup, []) == "FSC"
+    assert get_code_from_name("Food Securty", sector_lookup, [], matcher=Phonetics()) == "FSC"
+    assert get_code_from_name("Protection - GBV", sector_lookup, []) == "PRO-GBV"
+    assert get_code_from_name("Wash & Protection", sector_lookup, []) is None
+
+    # Resolve a name made of parts, returning the code and whether it is a
+    # list of names. The third parameter is a part that qualifies the other,
+    # eg. a parent admin name.
+    admin_lookup = {"acosta": "VE1101", "falcon": "VE1109"}
+    assert resolve_name_parts("Falcón, Acosta", admin_lookup) == (None, True)
+    assert resolve_name_parts("Falcón, Acosta", admin_lookup, "falcon") == ("VE1101", False)
 
     a = "The quick brown fox jumped over the lazy dog. It was so fast!"
 
