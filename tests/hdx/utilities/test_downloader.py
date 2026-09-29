@@ -462,7 +462,7 @@ class TestDownloader:
         with Download() as downloader:
             text = downloader.download_text(fixtureurl)
             assert downloader.get_status() == 200
-            assert len(downloader.get_headers()) in (24, 25)
+            assert len(downloader.get_headers()) == 26
             assert (
                 bool(re.match(r"7\d\d", downloader.get_header("Content-Length")))
                 is True
