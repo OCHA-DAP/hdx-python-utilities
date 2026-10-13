@@ -13,6 +13,50 @@ LIST_SEPARATORS = re.compile(r"\s*(?:[,;/:&\n]|\s(?:and|et)\s)\s*", re.IGNORECAS
 HYPHEN = re.compile(r"\s*-\s*")
 
 
+def expand_initials(words: list[str], other_words: list[str]) -> list[str] | None:
+    """Check single letters at the start or end of words against
+    other_words. A leading letter is an initial and is replaced by an unused
+    word in other_words that is not in words and starts with it ("e shewa"
+    -> "east shewa", "b gumuz" -> "benishangul gumuz"). A trailing letter
+    distinguishes places ("region iv b") so must be in other_words. Single
+    letters between other words are left alone as they are often conjunctions
+    (eg. Spanish "y").
+
+    Args:
+        words: Words that may contain single letters
+        other_words: Words to expand single letters to
+
+    Returns:
+        Expanded words or None if a single letter has no counterpart
+    """
+    leading = []
+    for word in words:
+        if len(word) != 1:
+            break
+        leading.append(word)
+    trailing = []
+    for word in reversed(words[len(leading) :]):
+        if len(word) != 1:
+            break
+        trailing.append(word)
+    for letter in trailing:
+        if letter.isalpha() and letter not in other_words:
+            return None
+    unmatched = [word for word in other_words if word not in words and len(word) > 1]
+    expanded = list(words)
+    for i, letter in enumerate(leading):
+        if not letter.isalpha() or letter in other_words:
+            continue
+        for other in unmatched:
+            if other[0] == letter:
+                unmatched.remove(other)
+                expanded[i] = other
+                break
+        else:
+            return None
+    return expanded
+
+
 class Phonetics(RefinedSoundex):
     def match(
         self,
@@ -119,6 +163,11 @@ class RapidFuzzMatcher:
         distinguishes places, but not names like sectors, where extra words
         are often descriptive (eg. "food security and livelihood").
 
+        Single letters at the start or end of name are checked first with
+        expand_initials ("e shewa" scores 0 against "west shewa" but matches
+        "east shewa"), unless the names differ only in spaces and punctuation
+        (eg. "sana a" vs "sanaa").
+
         Args:
             name: Name to match
             possible_name: Possible name
@@ -126,6 +175,15 @@ class RapidFuzzMatcher:
         Returns:
             Similarity score from 0-100
         """
+        joined_score = rapidfuzz_fuzz.ratio(
+            NON_WORD_CHARACTERS.sub("", name),
+            NON_WORD_CHARACTERS.sub("", possible_name),
+        )
+        if joined_score < 90:
+            name_words = expand_initials(name.split(), possible_name.split())
+            if name_words is None:
+                return 0.0
+            name = " ".join(name_words)
         words = set(name.split())
         possible_words = set(possible_name.split())
 

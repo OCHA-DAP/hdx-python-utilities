@@ -1,0 +1,5489 @@
+{
+ "description": "RapidFuzzMatcher.match calls made by hdx-python-country 4.2.2 AdminLevel.fuzzy_pcode for the hdx-scraper-wfp-foodprices admin matching fixture (prod vs stage world runs, 2026-10-12/13). AdminLevel also passes transform_possible_names: swap leading 'al '/'ad ' and strip leading 'al '/'ad '. Expected names are the candidates whose p-code is acceptable; none_acceptable means returning None is correct.",
+ "candidate_sets": {
+  "AFG|adm2|AF17": [
+   "fayzabad",
+   "argo",
+   "arghanj khwah",
+   "yaftal e sufla",
+   "khash",
+   "baharak",
+   "darayem",
+   "kohistan",
+   "yawan",
+   "jorm",
+   "teshkan",
+   "shuhada",
+   "shahr e buzorg",
+   "raghestan",
+   "keshem",
+   "warduj",
+   "tagab",
+   "yamgan",
+   "shighnan",
+   "khwahan",
+   "kofab",
+   "darwaz e payin",
+   "eshkashem",
+   "shaki",
+   "zebak",
+   "koran wa monjan",
+   "darwaz e balla",
+   "wakhan"
+  ],
+  "AFG|adm2|AF03": [
+   "charikar",
+   "bagram",
+   "shinwari",
+   "sayed khel",
+   "jabal saraj",
+   "salang",
+   "ghorband",
+   "koh e safi",
+   "surkh e parsa",
+   "shekh ali"
+  ],
+  "BDI|adm1|BDI": [
+   "buhumuza",
+   "bujumbura",
+   "burunga",
+   "butanyerera",
+   "gitega"
+  ],
+  "BDI|adm2|BDI": [
+   "butaganzwa",
+   "butihinda",
+   "cankuzo",
+   "gisagara",
+   "gisuru",
+   "muyinga",
+   "ruyigi",
+   "bubanza",
+   "bukinanyana",
+   "cibitoke",
+   "isare",
+   "mpanda",
+   "mugere",
+   "mugina",
+   "muhuta",
+   "mukaza",
+   "ntahangwa",
+   "rwibaga",
+   "bururi",
+   "makamba",
+   "matana",
+   "musongati",
+   "nyanza",
+   "rumonge",
+   "rutana",
+   "busoni",
+   "kayanza",
+   "kiremba",
+   "kirundo",
+   "matongo",
+   "muhanga",
+   "ngozi",
+   "tangara",
+   "bugendana",
+   "gishubi",
+   "gitega",
+   "karusi",
+   "kiganda",
+   "muramvya",
+   "mwaro",
+   "nyabihanga",
+   "shombo"
+  ],
+  "BDI|adm2|BI2": [
+   "bubanza",
+   "bukinanyana",
+   "cibitoke",
+   "isare",
+   "mpanda",
+   "mugere",
+   "mugina",
+   "muhuta",
+   "mukaza",
+   "ntahangwa",
+   "rwibaga"
+  ],
+  "BDI|adm2|BI5": [
+   "bugendana",
+   "gishubi",
+   "gitega",
+   "karusi",
+   "kiganda",
+   "muramvya",
+   "mwaro",
+   "nyabihanga",
+   "shombo"
+  ],
+  "BEN|adm2|BJ06": [
+   "aplahoue",
+   "djakotomey",
+   "dogbo",
+   "klouekanme",
+   "lalo",
+   "toviklin"
+  ],
+  "BFA|adm1|BFA": [
+   "kadiogo",
+   "tannounyan",
+   "nakambe",
+   "koulse",
+   "nando",
+   "nazinon",
+   "guiriko",
+   "yaadga",
+   "oubri",
+   "djoro",
+   "sirba",
+   "soum",
+   "tapoa",
+   "sourou",
+   "bankui",
+   "goulmou",
+   "liptako"
+  ],
+  "BFA|adm2|BFA": [
+   "kadiogo",
+   "comoe",
+   "leraba",
+   "boulgou",
+   "koulpelogo",
+   "kourittenga",
+   "bam",
+   "namentenga",
+   "sandbondtenga",
+   "boulkiemde",
+   "sanguie",
+   "sissili",
+   "ziro",
+   "bazega",
+   "nahouri",
+   "zoundweogo",
+   "houet",
+   "kenedougou",
+   "tuy",
+   "loroum",
+   "passore",
+   "yatenga",
+   "zondoma",
+   "ganzourgou",
+   "kourweogo",
+   "bassitenga",
+   "bougouriba",
+   "ioba",
+   "noumbiel",
+   "poni",
+   "gnagna",
+   "komandjari",
+   "djelgodji",
+   "karo peli",
+   "dyamongou",
+   "gobnangou",
+   "kossin",
+   "nayala",
+   "sourou",
+   "bale",
+   "banwa",
+   "mouhoun",
+   "gourma",
+   "kompienga",
+   "oudalan",
+   "seno",
+   "yagha"
+  ],
+  "BGD|adm1|BGD": [
+   "barishal",
+   "chattogram",
+   "dhaka",
+   "khulna",
+   "mymensingh",
+   "rajshahi",
+   "rangpur",
+   "sylhet"
+  ],
+  "BGD|adm2|BD20": [
+   "bandarban",
+   "brahmanbaria",
+   "chandpur",
+   "chattogram",
+   "cumilla",
+   "coxs bazar",
+   "feni",
+   "khagrachhari",
+   "lakshmipur",
+   "noakhali",
+   "rangamati"
+  ],
+  "BGD|adm2|BD50": [
+   "bogura",
+   "joypurhat",
+   "naogaon",
+   "natore",
+   "chapainababganj",
+   "pabna",
+   "rajshahi",
+   "sirajganj"
+  ],
+  "CAF|adm2|CF11": [
+   "damara",
+   "bogangolo",
+   "boali",
+   "bossembele",
+   "yaloke"
+  ],
+  "CAF|adm2|CF31": [
+   "bozoum",
+   "bocaranga",
+   "koui",
+   "bossemptele"
+  ],
+  "CMR|adm1|CMR": [
+   "adamawa",
+   "centre",
+   "east",
+   "far north",
+   "littoral",
+   "north",
+   "north west",
+   "west",
+   "south",
+   "south west"
+  ],
+  "COD|adm2|CD52": [
+   "buta",
+   "aketi",
+   "bondo",
+   "ango",
+   "poko",
+   "bambesa"
+  ],
+  "COD|adm2|CD73": [
+   "kamina",
+   "kaniama",
+   "kabongo",
+   "malemba nkulu",
+   "bukama"
+  ],
+  "COD|adm2|CD54": [
+   "irumu",
+   "mambasa",
+   "djugu",
+   "mahagi",
+   "aru"
+  ],
+  "COD|adm2|CD92": [
+   "kamonia",
+   "luebo",
+   "ilebo",
+   "mweka",
+   "dekese"
+  ],
+  "COD|adm2|CD82": [
+   "mbuji mayi",
+   "tshilenge",
+   "miabi",
+   "kabeya kamwanga",
+   "lupatapata",
+   "katanda"
+  ],
+  "COD|adm2|CD20": [
+   "matadi",
+   "boma",
+   "moanda",
+   "lukula",
+   "tshela",
+   "seke banza",
+   "luozi",
+   "songololo",
+   "mbanza ngungu",
+   "kasangulu",
+   "madimba",
+   "kimvula"
+  ],
+  "COD|adm2|CD31": [
+   "kenge",
+   "feshi",
+   "kahemba",
+   "kasongo lunda",
+   "popokabaka"
+  ],
+  "COD|adm2|CD32": [
+   "bandundu",
+   "bagata",
+   "kikwit",
+   "bulungu",
+   "idiofa",
+   "gungu",
+   "masi manimba"
+  ],
+  "COD|adm2|CD81": [
+   "kabinda",
+   "mwene ditu",
+   "luilu",
+   "kamiji",
+   "ngandajika",
+   "lubao"
+  ],
+  "COD|adm2|CD63": [
+   "kindu",
+   "kailo",
+   "punia",
+   "lubutu",
+   "pangi",
+   "kabambare",
+   "kasongo",
+   "kibombo"
+  ],
+  "COD|adm2|CD61": [
+   "goma",
+   "nyiragongo",
+   "masisi",
+   "walikale",
+   "lubero",
+   "oicha",
+   "beni",
+   "butembo",
+   "rutshuru"
+  ],
+  "COD|adm2|CD43": [
+   "gbadolite",
+   "mobayi mbongo",
+   "yakoma",
+   "businga",
+   "bosobolo"
+  ],
+  "COD|adm2|CD62": [
+   "bukavu",
+   "kabare",
+   "shabunda",
+   "kalehe",
+   "idjwi",
+   "walungu",
+   "uvira",
+   "fizi",
+   "mwenga"
+  ],
+  "COD|adm2|CD42": [
+   "gemena",
+   "budjala",
+   "kungu",
+   "libenge",
+   "zongo"
+  ],
+  "COD|adm2|CD74": [
+   "kalemie",
+   "moba",
+   "manono",
+   "kabalo",
+   "kongolo",
+   "nyunzu"
+  ],
+  "COD|adm2|CD51": [
+   "kisangani",
+   "ubundu",
+   "opala",
+   "isangi",
+   "yahuma",
+   "basoko",
+   "banalia",
+   "bafwasende"
+  ],
+  "COL|adm2|CO08": [
+   "barranquilla",
+   "baranoa",
+   "campo de la cruz",
+   "candelaria",
+   "galapa",
+   "juan de acosta",
+   "luruaco",
+   "malambo",
+   "manati",
+   "palmar de varela",
+   "piojo",
+   "polonuevo",
+   "ponedera",
+   "puerto colombia",
+   "repelon",
+   "sabanagrande",
+   "sabanalarga",
+   "santa lucia",
+   "santo tomas",
+   "soledad",
+   "suan",
+   "tubara",
+   "usiacuri"
+  ],
+  "EGY|adm1|EGY": [
+   "cairo",
+   "alexandria",
+   "port said",
+   "suez",
+   "damietta",
+   "dakahlia",
+   "sharkia",
+   "kalyoubia",
+   "kafr el shikh",
+   "gharbia",
+   "menoufia",
+   "behera",
+   "ismailia",
+   "giza",
+   "beni suef",
+   "fayoum",
+   "menia",
+   "assiut",
+   "suhag",
+   "qena",
+   "aswan",
+   "luxor",
+   "red sea",
+   "new valley",
+   "matrouh",
+   "north sinai",
+   "south sinai"
+  ],
+  "ETH|adm2|ET03": [
+   "north gondar",
+   "south gondar",
+   "north wello",
+   "south wello",
+   "north shewa am",
+   "east gojam",
+   "west gojam",
+   "wag hamra",
+   "awi",
+   "oromo nationality administration",
+   "central gondar",
+   "west gondar",
+   "north gojam",
+   "bahir dar town admin"
+  ],
+  "ETH|adm1|ETH": [
+   "tigray",
+   "afar",
+   "amhara",
+   "oromia",
+   "somali",
+   "benishangul gumuz",
+   "central ethiopia",
+   "south ethiopia",
+   "south west ethiopia",
+   "gambela",
+   "harari",
+   "addis ababa",
+   "dire dawa",
+   "sidama",
+   "contested"
+  ],
+  "ETH|adm2|ET06": [
+   "metekel",
+   "assosa",
+   "kamashi",
+   "mao komo special"
+  ],
+  "ETH|adm2|ET04": [
+   "west wellega",
+   "east wellega",
+   "ilu aba bora",
+   "jimma",
+   "west shewa",
+   "north shewa or",
+   "east shewa",
+   "arsi",
+   "west hararge",
+   "east hararge",
+   "bale",
+   "borena",
+   "south west shewa",
+   "guji",
+   "west guji",
+   "buno bedele",
+   "west arsi",
+   "kelem wellega",
+   "horo gudru wellega",
+   "shager city",
+   "east bale",
+   "east borena"
+  ],
+  "ETH|adm2|ETH": [
+   "north western",
+   "central",
+   "eastern",
+   "southern",
+   "south eastern",
+   "mekelle",
+   "awsi zone 1",
+   "kilbati zone 2",
+   "gabi zone 3",
+   "fanti zone 4",
+   "hari zone 5",
+   "mahi zone 6",
+   "north gondar",
+   "south gondar",
+   "north wello",
+   "south wello",
+   "north shewa am",
+   "east gojam",
+   "west gojam",
+   "wag hamra",
+   "awi",
+   "oromo nationality administration",
+   "central gondar",
+   "west gondar",
+   "north gojam",
+   "bahir dar town admin",
+   "west wellega",
+   "east wellega",
+   "ilu aba bora",
+   "jimma",
+   "west shewa",
+   "north shewa or",
+   "east shewa",
+   "arsi",
+   "west hararge",
+   "east hararge",
+   "bale",
+   "borena",
+   "south west shewa",
+   "guji",
+   "west guji",
+   "buno bedele",
+   "west arsi",
+   "kelem wellega",
+   "horo gudru wellega",
+   "shager city",
+   "east bale",
+   "east borena",
+   "siti",
+   "fafan",
+   "jarar",
+   "erer",
+   "korahe",
+   "shabelle",
+   "doolo",
+   "afder",
+   "liban",
+   "nogob",
+   "daawa",
+   "metekel",
+   "assosa",
+   "kamashi",
+   "mao komo special",
+   "kebena special",
+   "guraghe",
+   "hadiya",
+   "kembata",
+   "east guraghe",
+   "halaba",
+   "siltie",
+   "yem",
+   "mareko special",
+   "tembaro special",
+   "wolayita",
+   "gamo",
+   "gofa",
+   "basketo",
+   "ari",
+   "alle special",
+   "derashe",
+   "kore",
+   "konso",
+   "burji",
+   "gedeo",
+   "south omo",
+   "sheka",
+   "kefa",
+   "bench sheko",
+   "dawuro",
+   "west omo",
+   "konta",
+   "nuwer",
+   "agnewak",
+   "majang",
+   "itang special",
+   "harari",
+   "region 14",
+   "dire dawa urban",
+   "dire dawa rural",
+   "hawassa town admin",
+   "northern",
+   "area 1",
+   "area 2",
+   "area 3"
+  ],
+  "ETH|adm2|ET05": [
+   "siti",
+   "fafan",
+   "jarar",
+   "erer",
+   "korahe",
+   "shabelle",
+   "doolo",
+   "afder",
+   "liban",
+   "nogob",
+   "daawa"
+  ],
+  "GHA|adm1|GHA": [
+   "ahafo",
+   "ashanti",
+   "bono",
+   "bono east",
+   "central",
+   "eastern",
+   "greater accra",
+   "northern",
+   "northern east",
+   "oti",
+   "savannah",
+   "upper east",
+   "upper west",
+   "volta",
+   "western",
+   "western north"
+  ],
+  "GHA|adm2|GH07": [
+   "ablekuma central municipal",
+   "ablekuma north municipal",
+   "ablekuma west municipal",
+   "accra metropolis",
+   "ada east",
+   "ada west",
+   "adenta municipal",
+   "ashaiman municipal",
+   "ayawaso central municipal",
+   "ayawaso east municipal",
+   "ayawaso north municipal",
+   "ayawaso west",
+   "ga central municipal",
+   "ga east",
+   "ga north municipal",
+   "ga south municipal",
+   "ga west municipal",
+   "korle klottey municipal",
+   "kpone katamanso",
+   "krowor municipal",
+   "la dade kotopon",
+   "la nkwantanang madina",
+   "ledzokuku municipal",
+   "ningo prampram",
+   "okaikwei north municipal",
+   "shai osudoku",
+   "tema metropolitan",
+   "tema west municipal",
+   "weija gbawe municipal"
+  ],
+  "GHA|adm2|GH08": [
+   "gushegu",
+   "karaga",
+   "kpandai",
+   "kumbungu",
+   "mion",
+   "nanton",
+   "nanumba north",
+   "nanumba south",
+   "saboba",
+   "sagnerigu",
+   "savelugu",
+   "tamale metropolitan",
+   "tatale sanguli",
+   "tolon",
+   "yendi municipal",
+   "zabzugu"
+  ],
+  "GHA|adm2|GH14": [
+   "adaklu",
+   "afadzato south",
+   "agotime ziope",
+   "akatsi north",
+   "akatsi south",
+   "anloga",
+   "central tongu",
+   "ho municipal",
+   "ho west",
+   "hohoe municipal",
+   "keta municipal",
+   "ketu north",
+   "ketu south",
+   "kpando municipal",
+   "north dayi",
+   "north tongu",
+   "south dayi",
+   "south tongu"
+  ],
+  "GNB|adm1|GNB": [
+   "bafata",
+   "biombo",
+   "bolama bijagos",
+   "cacheu",
+   "gabu",
+   "oio",
+   "quinara",
+   "bissau",
+   "tombali"
+  ],
+  "GTM|adm2|GT13": [
+   "huehuetenango",
+   "chiantla",
+   "malacatancito",
+   "cuilco",
+   "nenton",
+   "san pedro necta",
+   "jacaltenango",
+   "soloma",
+   "ixtahuacan",
+   "santa barbara",
+   "la libertad",
+   "la democracia",
+   "san miguel acatan",
+   "san rafael la independencia",
+   "todos santos cuchumatan",
+   "san juan atitan",
+   "santa eulalia",
+   "san mateo ixtatan",
+   "colotenango",
+   "san sebastian huehuetenango",
+   "tectitan",
+   "concepcion huista",
+   "san juan ixcoy",
+   "san antonio huista",
+   "san sebastian coatan",
+   "barillas",
+   "aguacatan",
+   "san rafael petzal",
+   "san gaspar ixchil",
+   "santiago chimaltenango",
+   "santa ana huista",
+   "union cantinil",
+   "petatan"
+  ],
+  "IRQ|adm2|IQG01": [
+   "al falluja",
+   "al kaim",
+   "al ramadi",
+   "al rutba",
+   "ana",
+   "haditha",
+   "heet"
+  ],
+  "IRQ|adm1|IRQ": [
+   "al anbar",
+   "al basrah",
+   "al muthanna",
+   "al najaf",
+   "al qadissiya",
+   "al sulaymaniyah",
+   "babil",
+   "baghdad",
+   "duhok",
+   "diyala",
+   "erbil",
+   "kerbala",
+   "kirkuk",
+   "maysan",
+   "ninewa",
+   "salah al din",
+   "thi qar",
+   "wassit"
+  ],
+  "IRQ|adm2|IQG09": [
+   "al amadiya",
+   "duhok",
+   "sumail",
+   "zakho"
+  ],
+  "IRQ|adm2|IQG13": [
+   "al hawiga",
+   "daquq",
+   "dibis",
+   "kirkuk"
+  ],
+  "IRQ|adm2|IQG15": [
+   "aqra",
+   "al baaj",
+   "al hamdaniya",
+   "al hatra",
+   "al mosul",
+   "al shikhan",
+   "sinjar",
+   "telafar",
+   "tilkaef"
+  ],
+  "IRQ|adm2|IQG16": [
+   "al daur",
+   "al shirqat",
+   "beygee",
+   "balad",
+   "samarra",
+   "tikrit",
+   "tooz khurmato"
+  ],
+  "KEN|adm1|KEN": [
+   "mombasa",
+   "kwale",
+   "kilifi",
+   "tana river",
+   "lamu",
+   "taita taveta",
+   "garissa",
+   "wajir",
+   "mandera",
+   "marsabit",
+   "isiolo",
+   "meru",
+   "tharaka nithi",
+   "embu",
+   "kitui",
+   "machakos",
+   "makueni",
+   "nyandarua",
+   "nyeri",
+   "kirinyaga",
+   "muranga",
+   "kiambu",
+   "turkana",
+   "west pokot",
+   "samburu",
+   "trans nzoia",
+   "uasin gishu",
+   "elgeyo marakwet",
+   "nandi",
+   "baringo",
+   "laikipia",
+   "nakuru",
+   "narok",
+   "kajiado",
+   "kericho",
+   "bomet",
+   "kakamega",
+   "vihiga",
+   "bungoma",
+   "busia",
+   "siaya",
+   "kisumu",
+   "homa bay",
+   "migori",
+   "kisii",
+   "nyamira",
+   "nairobi"
+  ],
+  "MDG|adm1|MDG": [
+   "analamanga",
+   "vakinankaratra",
+   "itasy",
+   "bongolava",
+   "haute matsiatra",
+   "amoron i mania",
+   "ihorombe",
+   "atsimo atsinanana",
+   "vatovavy",
+   "fitovinany",
+   "atsinanana",
+   "analanjirofo",
+   "alaotra mangoro",
+   "ambatosoa",
+   "boeny",
+   "sofia",
+   "betsiboka",
+   "melaky",
+   "atsimo andrefana",
+   "androy",
+   "anosy",
+   "menabe",
+   "diana",
+   "sava"
+  ],
+  "MLI|adm2|ML01": [
+   "kayes",
+   "bafoulebe",
+   "yelimane",
+   "kenieba",
+   "ambididi",
+   "aourou",
+   "diamou",
+   "oussoubidiagna",
+   "segala",
+   "sadiola"
+  ],
+  "MLI|adm2|ML05": [
+   "mopti",
+   "djenne",
+   "tenenkou",
+   "youwarou",
+   "konna",
+   "korientze",
+   "sofara",
+   "toguere coumbe"
+  ],
+  "MLI|adm2|ML03": [
+   "sikasso",
+   "kadiolo",
+   "danderesso",
+   "kignan",
+   "klela",
+   "lobougoula",
+   "loulouni",
+   "niena"
+  ],
+  "MLI|adm1|MLI": [
+   "kayes",
+   "koulikoro",
+   "sikasso",
+   "segou",
+   "mopti",
+   "timbuktu",
+   "gao",
+   "kidal",
+   "taoudenni",
+   "menaka",
+   "nioro",
+   "kita",
+   "dioila",
+   "nara",
+   "bougouni",
+   "koutiala",
+   "san",
+   "douentza",
+   "bandiagara",
+   "bamako"
+  ],
+  "MLI|adm2|ML06": [
+   "timbuktu",
+   "goundam",
+   "dire",
+   "soumpi",
+   "rharous",
+   "bintagoungou",
+   "sarafere",
+   "bambara maoude",
+   "lere",
+   "gossi",
+   "tonka",
+   "ber",
+   "gargando"
+  ],
+  "MMR|adm2|MMR015": [
+   "lashio",
+   "muse",
+   "kyaukme",
+   "hopang",
+   "matman",
+   "mongmit",
+   "pa laung self administered zone",
+   "kokang self administered zone"
+  ],
+  "MOZ|adm2|MZ09": [
+   "xai xai",
+   "bilene",
+   "chibuto",
+   "chicualacuala",
+   "chigubo",
+   "chokwe",
+   "guija",
+   "mabalane",
+   "mandlakazi",
+   "massangena",
+   "massingir",
+   "limpopo",
+   "chongoene",
+   "mapai"
+  ],
+  "MOZ|adm1|MOZ": [
+   "niassa",
+   "cabo delgado",
+   "nampula",
+   "zambezia",
+   "tete",
+   "manica",
+   "sofala",
+   "inhambane",
+   "gaza",
+   "maputo",
+   "cidade de maputo"
+  ],
+  "MOZ|adm2|MZ11": [
+   "kampfumo",
+   "nhlamankulo",
+   "kamaxaqueni",
+   "kamavota",
+   "kamubukwana",
+   "katembe",
+   "kanyaka"
+  ],
+  "MOZ|adm2|MZ04": [
+   "quelimane",
+   "alto molocue",
+   "chinde",
+   "gile",
+   "gurue",
+   "ile",
+   "inhassunge",
+   "lugela",
+   "maganja da costa",
+   "milange",
+   "mocuba",
+   "mopeia",
+   "morrumbala",
+   "namacurra",
+   "namarroi",
+   "nicoadala",
+   "pebane",
+   "derre",
+   "luabo",
+   "mocubela",
+   "molumbo",
+   "mulevala"
+  ],
+  "MWI|adm1|MWI": [
+   "northern",
+   "central",
+   "southern"
+  ],
+  "MWI|adm2|MW1": [
+   "chitipa",
+   "karonga",
+   "nkhatabay",
+   "rumphi",
+   "mzimba",
+   "likoma",
+   "mzuzu city"
+  ],
+  "NGA|adm2|NG001": [
+   "aba north",
+   "aba south",
+   "arochukwu",
+   "bende",
+   "ikwuano",
+   "isiala ngwa north",
+   "isiala ngwa south",
+   "isiukwuato",
+   "obi ngwa",
+   "ohafia",
+   "osisioma ngwa",
+   "ugwunagbo",
+   "ukwa east",
+   "ukwa west",
+   "umuahia north",
+   "umuahia south",
+   "umu nneochi"
+  ],
+  "NIC|adm2|NI05": [
+   "jalapa",
+   "murra",
+   "jicaro",
+   "san fernando",
+   "mozonte",
+   "dipilto",
+   "macuelizo",
+   "santa maria",
+   "ocotal",
+   "ciudad antigua",
+   "quilali",
+   "wiwili de nueva segovia"
+  ],
+  "PAK|adm2|PK2": [
+   "awaran",
+   "barkhan",
+   "chagai",
+   "dera bugti",
+   "gwadar",
+   "harnai",
+   "jaffarabad",
+   "jhal magsi",
+   "kachhi",
+   "kalat",
+   "kech",
+   "kharan",
+   "khuzdar",
+   "killa abdullah",
+   "killa saifullah",
+   "kohlu",
+   "lasbela",
+   "lehri",
+   "loralai",
+   "mastung",
+   "musakhel",
+   "nasirabad",
+   "nushki",
+   "panjgur",
+   "pishin",
+   "quetta",
+   "sherani",
+   "sibi",
+   "sohbatpur",
+   "washuk",
+   "zhob",
+   "ziarat",
+   "shaheed sikandarabad",
+   "duki",
+   "chaman"
+  ],
+  "PAK|adm1|PAK": [
+   "azad kashmir",
+   "balochistan",
+   "gilgit baltistan",
+   "islamabad",
+   "khyber pakhtunkhwa",
+   "punjab",
+   "sindh"
+  ],
+  "PAK|adm2|PAK": [
+   "bagh",
+   "bhimber",
+   "jhelum valley",
+   "haveli",
+   "kotli",
+   "mirpur",
+   "muzaffarabad",
+   "neelum",
+   "poonch",
+   "sudhnoti",
+   "awaran",
+   "barkhan",
+   "chagai",
+   "dera bugti",
+   "gwadar",
+   "harnai",
+   "jaffarabad",
+   "jhal magsi",
+   "kachhi",
+   "kalat",
+   "kech",
+   "kharan",
+   "khuzdar",
+   "killa abdullah",
+   "killa saifullah",
+   "kohlu",
+   "lasbela",
+   "lehri",
+   "loralai",
+   "mastung",
+   "musakhel",
+   "nasirabad",
+   "nushki",
+   "panjgur",
+   "pishin",
+   "quetta",
+   "sherani",
+   "sibi",
+   "sohbatpur",
+   "washuk",
+   "zhob",
+   "ziarat",
+   "shaheed sikandarabad",
+   "duki",
+   "chaman",
+   "astore",
+   "diamir",
+   "ghanche",
+   "ghizer",
+   "gilgit",
+   "hunza",
+   "skardu",
+   "nagar",
+   "kharmang",
+   "shigar",
+   "darel",
+   "tangir",
+   "gupis yasin",
+   "rondu",
+   "islamabad",
+   "abbottabad",
+   "bajaur",
+   "bannu",
+   "batagram",
+   "buner",
+   "charsadda",
+   "chitral lower",
+   "chitral upper",
+   "d i khan",
+   "hangu",
+   "haripur",
+   "karak",
+   "khyber",
+   "kohat",
+   "kohistan lower",
+   "kohistan upper",
+   "kolai palas kohistan",
+   "kurram",
+   "lakki marwat",
+   "lower dir",
+   "malakand",
+   "mansehra",
+   "mardan",
+   "mohmand",
+   "north waziristan",
+   "nowshera",
+   "orakzai",
+   "peshawar",
+   "shangla",
+   "south waziristan",
+   "swabi",
+   "swat",
+   "tank",
+   "tor ghar",
+   "upper dir",
+   "attock",
+   "bahawalnagar",
+   "bahawalpur",
+   "bhakkar",
+   "chakwal",
+   "chiniot",
+   "dera ghazi khan",
+   "faisalabad",
+   "gujranwala",
+   "gujrat",
+   "hafizabad",
+   "jhang",
+   "jhelum",
+   "kasur",
+   "khanewal",
+   "khushab",
+   "lahore",
+   "leiah",
+   "lodhran",
+   "mandi bahauddin",
+   "mianwali",
+   "multan",
+   "muzaffargarh",
+   "nankana sahib",
+   "narowal",
+   "okara",
+   "pakpattan",
+   "rahim yar khan",
+   "rajanpur",
+   "rawalpindi",
+   "sahiwal",
+   "sargodha",
+   "sheikhupura",
+   "sialkot",
+   "toba tek singh",
+   "vehari",
+   "badin",
+   "central karachi",
+   "dadu",
+   "east karachi",
+   "ghotki",
+   "hyderabad",
+   "jacobabad",
+   "jamshoro",
+   "kambar shahdad kot",
+   "kashmore",
+   "khairpur",
+   "korangi karachi",
+   "larkana",
+   "malir karachi",
+   "matiari",
+   "mirpur khas",
+   "naushahro feroze",
+   "sanghar",
+   "shaheed benazir abad",
+   "shikarpur",
+   "south karachi",
+   "sujawal",
+   "sukkur",
+   "tando allahyar",
+   "tando muhammad khan",
+   "tharparkar",
+   "thatta",
+   "umer kot",
+   "west karachi"
+  ],
+  "PHL|adm1|PHL": [
+   "region i ilocos region",
+   "region ii cagayan valley",
+   "region iii central luzon",
+   "region iv a calabarzon",
+   "region v bicol region",
+   "region vi western visayas",
+   "region vii central visayas",
+   "region viii eastern visayas",
+   "region ix zamboanga peninsula",
+   "region x northern mindanao",
+   "region xi davao region",
+   "region xii soccsksargen",
+   "national capital region ncr",
+   "cordillera administrative region car",
+   "region xiii caraga",
+   "mimaropa region",
+   "bangsamoro autonomous region in muslim mindanao barmm"
+  ],
+  "PSE|adm2|PS01": [
+   "jenin",
+   "tubas",
+   "tulkarm",
+   "nablus",
+   "qalqilya",
+   "salfit",
+   "ramallah",
+   "jericho",
+   "jerusalem",
+   "bethlehem",
+   "hebron"
+  ],
+  "SDN|adm1|SDN": [
+   "khartoum",
+   "north darfur",
+   "south darfur",
+   "west darfur",
+   "east darfur",
+   "central darfur",
+   "south kordofan",
+   "blue nile",
+   "white nile",
+   "red sea",
+   "kassala",
+   "gedaref",
+   "north kordofan",
+   "sennar",
+   "aj jazirah",
+   "river nile",
+   "northern",
+   "west kordofan",
+   "abyei pca"
+  ],
+  "SDN|adm2|SD15": [
+   "medani al kubra",
+   "janub al jazirah",
+   "um algura",
+   "sharg al jazirah",
+   "al hasahisa",
+   "al kamlin",
+   "al manaqil",
+   "al qurashi"
+  ],
+  "SDN|adm2|SD08": [
+   "baw",
+   "ed damazine",
+   "al kurmuk",
+   "ar rusayris",
+   "at tadamon bn",
+   "geisan",
+   "wad al mahi"
+  ],
+  "SDN|adm2|SD05": [
+   "adila",
+   "abu jabrah",
+   "ad duayn",
+   "shiaria",
+   "al firdous",
+   "abu karinka",
+   "bahr al arab",
+   "assalaya",
+   "yassin"
+  ],
+  "SDN|adm2|SD11": [
+   "halfa aj jadeedah",
+   "madeinat kassala",
+   "reifi gharb kassala",
+   "reifi aroma",
+   "reifi kassla",
+   "reifi shamal ad delta",
+   "reifi hamashkureib",
+   "reifi telkok",
+   "reifi khashm elgirba",
+   "reifi wad elhilaiw",
+   "reifi nahr atbara"
+  ],
+  "SDN|adm2|SD17": [
+   "halfa",
+   "delgo",
+   "al burgaig",
+   "dongola",
+   "al golid",
+   "ad dabbah",
+   "merwoe"
+  ],
+  "SDN|adm2|SD07": [
+   "abu jubayhah",
+   "talawdi",
+   "abassiya",
+   "um durein",
+   "ar rashad",
+   "al quoz",
+   "dilling",
+   "heiban",
+   "ar reif ash shargi",
+   "kadugli",
+   "al buram",
+   "habila sk",
+   "abu kershola",
+   "al leri",
+   "at tadamon sk",
+   "delami",
+   "ghadeer"
+  ],
+  "SDN|adm2|SD18": [
+   "ghubaish",
+   "an nuhud",
+   "abu zabad",
+   "wad bandah",
+   "keilak",
+   "as salam wk",
+   "abyei",
+   "as sunut",
+   "babanusa",
+   "al lagowa",
+   "al dibab",
+   "al idia",
+   "al khiwai",
+   "al meiram"
+  ],
+  "SDN|adm2|SD09": [
+   "ad diwaim",
+   "um rimta",
+   "rabak",
+   "kosti",
+   "tendalti",
+   "as salam ar rawat",
+   "al gitaina",
+   "aj jabalain",
+   "guli"
+  ],
+  "SLE|adm1|SLE": [
+   "eastern",
+   "northern",
+   "southern",
+   "western",
+   "north western"
+  ],
+  "SLE|adm2|SL04": [
+   "western area rural",
+   "western area urban"
+  ],
+  "SOM|adm2|SO22": [
+   "bondhere",
+   "cabdulasis",
+   "daynile",
+   "dharkenley",
+   "hamar jabjab",
+   "hamar weyne",
+   "hawl wadaag",
+   "heliwa",
+   "hodan",
+   "kahda",
+   "karaan",
+   "shangaani",
+   "shibis",
+   "waaberi",
+   "wadajir medina",
+   "wardhigley",
+   "yaaqshid"
+  ],
+  "TCD|adm2|TCD09": [
+   "la pende",
+   "kouh est",
+   "kouh ouest",
+   "la nya",
+   "la nya pende",
+   "monts de lam"
+  ],
+  "TCD|adm2|TCD11": [
+   "mayo boneye",
+   "la kabbia",
+   "mayo lemye",
+   "mont illi"
+  ],
+  "TCD|adm2|TCD12": [
+   "mayo dallah",
+   "lac lere",
+   "mayo binder"
+  ],
+  "TCD|adm2|TCD13": [
+   "bahr koh",
+   "grande sido",
+   "lac iro"
+  ],
+  "TCD|adm2|TCD22": [
+   "tibesti est",
+   "tibesti ouest"
+  ],
+  "TLS|adm2|TL13": [
+   "uatucarbau",
+   "ossu",
+   "uato lari",
+   "viqueque",
+   "lacluta"
+  ],
+  "UKR|adm2|UA12": [
+   "dniprovskyi",
+   "kamianskyi",
+   "kryvorizkyi",
+   "nikopolskyi",
+   "samarivskyi",
+   "pavlohradskyi",
+   "synelnykivskyi"
+  ],
+  "UKR|adm2|UA14": [
+   "bakhmutskyi",
+   "volnovaskyi",
+   "horlivskyi",
+   "donetskyi",
+   "kalmiuskyi",
+   "kramatorskyi",
+   "mariupolskyi",
+   "pokrovskyi"
+  ],
+  "UKR|adm2|UA63": [
+   "bohodukhivskyi",
+   "iziumskyi",
+   "berestynskyi",
+   "kupianskyi",
+   "lozivskyi",
+   "kharkivskyi",
+   "chuhuivskyi"
+  ],
+  "UKR|adm2|UA65": [
+   "beryslavskyi",
+   "henicheskyi",
+   "kakhovskyi",
+   "skadovskyi",
+   "khersonskyi"
+  ],
+  "UKR|adm2|UA35": [
+   "holovanivskyi",
+   "kropyvnytskyi",
+   "novoukrainskyi",
+   "oleksandriiskyi"
+  ],
+  "UKR|adm2|UA44": [
+   "alchevskyi",
+   "dovzhanskyi",
+   "luhanskyi",
+   "rovenkivskyi",
+   "svativskyi",
+   "siverskodonetskyi",
+   "starobilskyi",
+   "shchastynskyi"
+  ],
+  "UKR|adm2|UA48": [
+   "bashtanskyi",
+   "voznesenskyi",
+   "mykolaivskyi",
+   "pervomaiskyi"
+  ],
+  "UKR|adm2|UA59": [
+   "konotopskyi",
+   "okhtyrskyi",
+   "romenskyi",
+   "sumskyi",
+   "shostkynskyi"
+  ],
+  "UKR|adm2|UA23": [
+   "berdianskyi",
+   "vasylivskyi",
+   "zaporizkyi",
+   "melitopolskyi",
+   "polohivskyi"
+  ],
+  "VEN|adm1|VEN": [
+   "distrito capital",
+   "amazonas",
+   "anzoategui",
+   "apure",
+   "aragua",
+   "barinas",
+   "bolivar",
+   "carabobo",
+   "cojedes",
+   "delta amacuro",
+   "falcon",
+   "guarico",
+   "lara",
+   "merida",
+   "miranda",
+   "monagas",
+   "nueva esparta",
+   "portuguesa",
+   "sucre",
+   "tachira",
+   "trujillo",
+   "yaracuy",
+   "zulia",
+   "la guaira",
+   "dependencias federales"
+  ],
+  "VNM|adm1|VNM": [
+   "ha noi",
+   "cao bang",
+   "tuyen quang",
+   "dien bien",
+   "lai chau",
+   "son la",
+   "lao cai",
+   "thai nguyen",
+   "lang son",
+   "quang ninh",
+   "bac ninh",
+   "phu tho",
+   "hai phong city",
+   "hung yen",
+   "ninh binh",
+   "thanh hoa",
+   "nghe an",
+   "ha tinh",
+   "quang tri",
+   "hue",
+   "da nang city",
+   "quang ngai",
+   "gia lai",
+   "khanh hoa",
+   "dak lak",
+   "lam dong",
+   "dong nai",
+   "ho chi minh city",
+   "tay ninh",
+   "dong thap",
+   "vinh long",
+   "an giang",
+   "can tho city",
+   "ca mau"
+  ],
+  "YEM|adm2|YE14": [
+   "numan",
+   "nati",
+   "maswarah",
+   "as sawmaah",
+   "az zahir",
+   "dhi naim",
+   "at taffah",
+   "mukayras",
+   "al bayda city",
+   "al bayda",
+   "as sawadiyah",
+   "radman",
+   "rada",
+   "al quraishyah",
+   "wald rabi",
+   "al arsh",
+   "sabah",
+   "ar ryashyyah",
+   "ash sharyah",
+   "al malajim"
+  ],
+  "YEM|adm1|YEM": [
+   "ibb",
+   "abyan",
+   "sanaa city",
+   "al bayda",
+   "taiz",
+   "al jawf",
+   "hajjah",
+   "al hodeidah",
+   "hadramawt",
+   "dhamar",
+   "shabwah",
+   "sadah",
+   "sanaa",
+   "aden",
+   "lahj",
+   "marib",
+   "al mahwit",
+   "al maharah",
+   "amran",
+   "ad dali",
+   "raymah",
+   "socotra"
+  ],
+  "YEM|adm2|YE30": [
+   "juban",
+   "damt",
+   "qatabah",
+   "ash shuayb",
+   "al hasayn",
+   "ad dali",
+   "jahaf",
+   "al azariq",
+   "al husha"
+  ],
+  "YEM|adm2|YE18": [
+   "az zuhrah",
+   "alluhayah",
+   "kamaran",
+   "as salif",
+   "al munirah",
+   "al qanawis",
+   "az zaydiah",
+   "al mighlaf",
+   "ad dohi",
+   "bajil",
+   "al hujjaylah",
+   "bura",
+   "al marawiah",
+   "ad durayhimi",
+   "as sukhnah",
+   "al mansuriyah",
+   "bayt al faqih",
+   "jabal ras",
+   "hays",
+   "al khukhah",
+   "al hawak",
+   "al mina",
+   "al hali",
+   "zabid",
+   "al jarrahi",
+   "at tuhayta"
+  ],
+  "YEM|adm2|YE22": [
+   "baqim",
+   "qatabir",
+   "monabbih",
+   "ghamr",
+   "razih",
+   "shadaa",
+   "adh dhahir",
+   "haydan",
+   "saqin",
+   "majz",
+   "sahar",
+   "as safra",
+   "al hashwah",
+   "kitaf wa al boqa",
+   "sadah"
+  ],
+  "YEM|adm2|YE32": [
+   "hadibu",
+   "qalansiyah wa abd al kuri"
+  ],
+  "ZAF|adm2|ZA7": [
+   "sedibeng",
+   "west rand",
+   "ekurhuleni",
+   "city of johannesburg",
+   "city of tshwane"
+  ],
+  "ZMB|adm2|ZM105": [
+   "chilanga",
+   "chirundu",
+   "chongwe",
+   "kafue",
+   "luangwa",
+   "lusaka",
+   "rufunsa"
+  ],
+  "AFG|adm2|AF12": [
+   "sharan",
+   "mata khan",
+   "yosuf khel",
+   "yahya khel",
+   "sar rawzah",
+   "omna",
+   "zarghun shahr",
+   "gomal",
+   "jani khel",
+   "surobi",
+   "urgun",
+   "ziruk",
+   "nika",
+   "barmal",
+   "giyan",
+   "dila",
+   "wazakhah",
+   "wormamay",
+   "turwo"
+  ],
+  "AFG|adm2|AF16": [
+   "parun",
+   "waygal",
+   "wama",
+   "nurgaram",
+   "duab",
+   "kamdesh",
+   "mandol",
+   "barg e matal"
+  ],
+  "BEN|adm1|BEN": [
+   "alibori",
+   "atacora",
+   "atlantique",
+   "borgou",
+   "collines",
+   "couffo",
+   "donga",
+   "littoral",
+   "mono",
+   "oueme",
+   "plateau",
+   "zou"
+  ],
+  "BEN|adm2|BJ02": [
+   "boukombe",
+   "kerou",
+   "kobli",
+   "kouande",
+   "materi",
+   "natitingou",
+   "pehunco",
+   "tanguieta",
+   "toucountouna"
+  ],
+  "BGD|adm2|BD40": [
+   "bagerhat",
+   "chuadanga",
+   "jashore",
+   "jhenaidah",
+   "khulna",
+   "kushtia",
+   "magura",
+   "meherpur",
+   "narail",
+   "satkhira"
+  ],
+  "IRQ|adm2|IQG06": [
+   "al sulaymaniyah",
+   "chamchamal",
+   "derbendikhan",
+   "dokan",
+   "halabcha",
+   "kalar",
+   "panjwin",
+   "pshdar",
+   "rania",
+   "sharbazher"
+  ],
+  "LBN|adm2|LB3": [
+   "aley",
+   "baabda",
+   "chouf",
+   "jbeil",
+   "kesrwane",
+   "el meten"
+  ],
+  "LBN|adm2|LB4": [
+   "bent jbeil",
+   "hasbaya",
+   "marjaayoun",
+   "el nabatieh"
+  ],
+  "NGA|adm1|NGA": [
+   "abia",
+   "adamawa",
+   "akwa ibom",
+   "anambra",
+   "bauchi",
+   "bayelsa",
+   "benue",
+   "borno",
+   "cross river",
+   "delta",
+   "ebonyi",
+   "edo",
+   "ekiti",
+   "enugu",
+   "federal capital territory",
+   "gombe",
+   "imo",
+   "jigawa",
+   "kaduna",
+   "kano",
+   "katsina",
+   "kebbi",
+   "kogi",
+   "kwara",
+   "lagos",
+   "nasarawa",
+   "niger",
+   "ogun",
+   "ondo",
+   "osun",
+   "oyo",
+   "plateau",
+   "rivers",
+   "sokoto",
+   "taraba",
+   "yobe",
+   "zamfara"
+  ],
+  "SDN|adm2|SD01": [
+   "jebel awlia",
+   "um bada",
+   "bahri",
+   "sharg an neel",
+   "karrari",
+   "um durman",
+   "khartoum"
+  ],
+  "SDN|adm2|SD02": [
+   "dar as salam",
+   "al fasher",
+   "al koma",
+   "al malha",
+   "as serief",
+   "at tawisha",
+   "um baru",
+   "kebkabiya",
+   "kelemando",
+   "kutum",
+   "melit",
+   "saraf omra",
+   "um kadadah",
+   "kernoi",
+   "al lait",
+   "tawila",
+   "at tina"
+  ],
+  "SDN|adm2|SD10": [
+   "dordieb",
+   "port sudan",
+   "tawkar",
+   "halaib",
+   "jubayt elmaaadin",
+   "sawakin",
+   "al ganab",
+   "haya",
+   "sinkat",
+   "agig"
+  ],
+  "SDN|adm2|SD14": [
+   "abu hujar",
+   "sennar",
+   "ad dali",
+   "ad dinder",
+   "as suki",
+   "sharg sennar",
+   "sinja"
+  ],
+  "SLE|adm2|SL02": [
+   "bombali",
+   "koinadugu",
+   "tonkolili",
+   "fabala"
+  ],
+  "UKR|adm2|UA07": [
+   "volodymyrskyi",
+   "kamin kashyrskyi",
+   "kovelskyi",
+   "lutskyi"
+  ],
+  "UKR|adm2|UA51": [
+   "berezivskyi",
+   "bilhorod dnistrovskyi",
+   "bolhradskyi",
+   "izmailskyi",
+   "odeskyi",
+   "podilskyi",
+   "rozdilnianskyi"
+  ],
+  "UKR|adm2|UA80": [
+   "kyiv"
+  ],
+  "YEM|adm2|YE19": [
+   "rumah",
+   "thamud",
+   "al qaff",
+   "zamakh wa manwokh",
+   "hajar as sayar",
+   "al abr",
+   "al qatn",
+   "shibam",
+   "sah",
+   "sayun",
+   "tarim",
+   "as sawm",
+   "ar raydah wa qussayar",
+   "ad dis",
+   "ash shihr",
+   "ghayl bin yamin",
+   "ghayl bawazir",
+   "dawan",
+   "wadi al ayn",
+   "rakhyah",
+   "amd",
+   "ad dulayah",
+   "yabuth",
+   "hajar",
+   "brum mayfah",
+   "al mukalla",
+   "al mukalla city",
+   "haridah"
+  ],
+  "YEM|adm2|YE21": [
+   "dahr",
+   "at talh",
+   "jardan",
+   "armaa",
+   "osaylan",
+   "ayn",
+   "bayhan",
+   "markhah al olya",
+   "markhah as sufla",
+   "nisab",
+   "hatib",
+   "as said",
+   "ataq",
+   "habban",
+   "ar rawdah",
+   "mayfaah",
+   "radum"
+  ],
+  "YEM|adm2|YE25": [
+   "al had",
+   "yafi",
+   "al maflahi",
+   "yahr",
+   "habil jabr",
+   "halmin",
+   "radfan",
+   "al malah",
+   "al musaymir",
+   "al qubaytah",
+   "tur al bahah",
+   "al maqatirah",
+   "al madaribah wa al aarah",
+   "al hawtah",
+   "tuban"
+  ],
+  "YEM|adm2|YE28": [
+   "shahin",
+   "hat",
+   "hawf",
+   "al ghaydhah",
+   "manar",
+   "al masilah",
+   "sayhut",
+   "qishn",
+   "haswin"
+  ]
+ },
+ "calls": [
+  {
+   "countryiso3": "AFG",
+   "admin_level": 2,
+   "name": "faiz abad",
+   "alternative_name": "faiz abad",
+   "candidate_set": "AFG|adm2|AF17",
+   "expected_names": [
+    "fayzabad"
+   ],
+   "none_acceptable": false,
+   "note": "prod correct"
+  },
+  {
+   "countryiso3": "AFG",
+   "admin_level": 2,
+   "name": "syah gerd",
+   "alternative_name": "syah gerd",
+   "candidate_set": "AFG|adm2|AF03",
+   "expected_names": [
+    "shinwari"
+   ],
+   "none_acceptable": false,
+   "note": "prod correct"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 1,
+   "name": "bubanza",
+   "alternative_name": "bubanza",
+   "candidate_set": "BDI|adm1|BDI",
+   "expected_names": [
+    "bujumbura"
+   ],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "musigati",
+   "alternative_name": "musigati",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "rugazi",
+   "alternative_name": "rugazi",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 1,
+   "name": "bujumbura mairie",
+   "alternative_name": "bujumbura mairie",
+   "candidate_set": "BDI|adm1|BDI",
+   "expected_names": [
+    "bujumbura"
+   ],
+   "none_acceptable": false,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "muha",
+   "alternative_name": "muha",
+   "candidate_set": "BDI|adm2|BI2",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 1,
+   "name": "bujumbura rural",
+   "alternative_name": "bujumbura rural",
+   "candidate_set": "BDI|adm1|BDI",
+   "expected_names": [
+    "bujumbura"
+   ],
+   "none_acceptable": false,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "bugarama",
+   "alternative_name": "bugarama",
+   "candidate_set": "BDI|adm2|BI2",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "isale",
+   "alternative_name": "isale",
+   "candidate_set": "BDI|adm2|BI2",
+   "expected_names": [
+    "isare"
+   ],
+   "none_acceptable": false,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "kabezi",
+   "alternative_name": "kabezi",
+   "candidate_set": "BDI|adm2|BI2",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "kanyosha1",
+   "alternative_name": "kanyosha1",
+   "candidate_set": "BDI|adm2|BI2",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "mubimbi",
+   "alternative_name": "mubimbi",
+   "candidate_set": "BDI|adm2|BI2",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "mugongomanga",
+   "alternative_name": "mugongomanga",
+   "candidate_set": "BDI|adm2|BI2",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "mukike",
+   "alternative_name": "mukike",
+   "candidate_set": "BDI|adm2|BI2",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "mutambu",
+   "alternative_name": "mutambu",
+   "candidate_set": "BDI|adm2|BI2",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "mutimbuzi",
+   "alternative_name": "mutimbuzi",
+   "candidate_set": "BDI|adm2|BI2",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "nyabiraba",
+   "alternative_name": "nyabiraba",
+   "candidate_set": "BDI|adm2|BI2",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 1,
+   "name": "bururi",
+   "alternative_name": "bururi",
+   "candidate_set": "BDI|adm1|BDI",
+   "expected_names": [
+    "burunga"
+   ],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "mugamba",
+   "alternative_name": "mugamba",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "rutovu",
+   "alternative_name": "rutovu",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "vyanda",
+   "alternative_name": "vyanda",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 1,
+   "name": "cankuzo",
+   "alternative_name": "cankuzo",
+   "candidate_set": "BDI|adm1|BDI",
+   "expected_names": [
+    "buhumuza"
+   ],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "kigamba",
+   "alternative_name": "kigamba",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "mishiha",
+   "alternative_name": "mishiha",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 1,
+   "name": "cibitoke",
+   "alternative_name": "cibitoke",
+   "candidate_set": "BDI|adm1|BDI",
+   "expected_names": [
+    "bujumbura"
+   ],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "buganda",
+   "alternative_name": "buganda",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "mabayi",
+   "alternative_name": "mabayi",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "murwi",
+   "alternative_name": "murwi",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "rugombo",
+   "alternative_name": "rugombo",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "mutaho",
+   "alternative_name": "mutaho",
+   "candidate_set": "BDI|adm2|BI5",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 1,
+   "name": "karuzi",
+   "alternative_name": "karuzi",
+   "candidate_set": "BDI|adm1|BDI",
+   "expected_names": [
+    "gitega"
+   ],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "bugenyuzi",
+   "alternative_name": "bugenyuzi",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "buhiga",
+   "alternative_name": "buhiga",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "gihogazi",
+   "alternative_name": "gihogazi",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "mutumba",
+   "alternative_name": "mutumba",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 1,
+   "name": "kayanza",
+   "alternative_name": "kayanza",
+   "candidate_set": "BDI|adm1|BDI",
+   "expected_names": [
+    "butanyerera"
+   ],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "gahombo",
+   "alternative_name": "gahombo",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "gatara",
+   "alternative_name": "gatara",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "muruta",
+   "alternative_name": "muruta",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "rango",
+   "alternative_name": "rango",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 1,
+   "name": "kirundo",
+   "alternative_name": "kirundo",
+   "candidate_set": "BDI|adm1|BDI",
+   "expected_names": [
+    "butanyerera"
+   ],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "gitobe",
+   "alternative_name": "gitobe",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "ntega",
+   "alternative_name": "ntega",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "vumbi",
+   "alternative_name": "vumbi",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 1,
+   "name": "makamba",
+   "alternative_name": "makamba",
+   "candidate_set": "BDI|adm1|BDI",
+   "expected_names": [
+    "burunga"
+   ],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "kayogoro",
+   "alternative_name": "kayogoro",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "kibago",
+   "alternative_name": "kibago",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "nyanza lac",
+   "alternative_name": "nyanza lac",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [
+    "nyanza"
+   ],
+   "none_acceptable": false,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 1,
+   "name": "muramvya",
+   "alternative_name": "muramvya",
+   "candidate_set": "BDI|adm1|BDI",
+   "expected_names": [
+    "gitega"
+   ],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "bukeye",
+   "alternative_name": "bukeye",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "mbuye",
+   "alternative_name": "mbuye",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 1,
+   "name": "muyinga",
+   "alternative_name": "muyinga",
+   "candidate_set": "BDI|adm1|BDI",
+   "expected_names": [
+    "buhumuza"
+   ],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "buhinyuza",
+   "alternative_name": "buhinyuza",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "gashoho",
+   "alternative_name": "gashoho",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "gasorwe",
+   "alternative_name": "gasorwe",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "giteranyi",
+   "alternative_name": "giteranyi",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "mwakiro",
+   "alternative_name": "mwakiro",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 1,
+   "name": "mwaro",
+   "alternative_name": "mwaro",
+   "candidate_set": "BDI|adm1|BDI",
+   "expected_names": [
+    "gitega"
+   ],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "bisoro",
+   "alternative_name": "bisoro",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "gisozi",
+   "alternative_name": "gisozi",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "kayokwe",
+   "alternative_name": "kayokwe",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "ndava",
+   "alternative_name": "ndava",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "rusaka",
+   "alternative_name": "rusaka",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 1,
+   "name": "ngozi",
+   "alternative_name": "ngozi",
+   "candidate_set": "BDI|adm1|BDI",
+   "expected_names": [
+    "butanyerera"
+   ],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "gashikanwa",
+   "alternative_name": "gashikanwa",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "marangara",
+   "alternative_name": "marangara",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "mwumba",
+   "alternative_name": "mwumba",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "nyamurenza",
+   "alternative_name": "nyamurenza",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "ruhororo",
+   "alternative_name": "ruhororo",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 1,
+   "name": "rumonge",
+   "alternative_name": "rumonge",
+   "candidate_set": "BDI|adm1|BDI",
+   "expected_names": [
+    "burunga"
+   ],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "burambi",
+   "alternative_name": "burambi",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "buyengero",
+   "alternative_name": "buyengero",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 1,
+   "name": "rutana",
+   "alternative_name": "rutana",
+   "candidate_set": "BDI|adm1|BDI",
+   "expected_names": [
+    "burunga"
+   ],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "bukemba",
+   "alternative_name": "bukemba",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "giharo",
+   "alternative_name": "giharo",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 1,
+   "name": "ruyigi",
+   "alternative_name": "ruyigi",
+   "candidate_set": "BDI|adm1|BDI",
+   "expected_names": [
+    "buhumuza"
+   ],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "butezi",
+   "alternative_name": "butezi",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "bweru",
+   "alternative_name": "bweru",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "kinyinya",
+   "alternative_name": "kinyinya",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "nyabitsinda",
+   "alternative_name": "nyabitsinda",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "2025 provinces/communes; old commune without same-name successor -> no match"
+  },
+  {
+   "countryiso3": "BEN",
+   "admin_level": 2,
+   "name": "dogbo tota",
+   "alternative_name": "dogbo tota",
+   "candidate_set": "BEN|adm2|BJ06",
+   "expected_names": [
+    "dogbo"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "BFA",
+   "admin_level": 1,
+   "name": "centre nord",
+   "alternative_name": "centre nord",
+   "candidate_set": "BFA|adm1|BFA",
+   "expected_names": [
+    "koulse"
+   ],
+   "none_acceptable": true,
+   "note": "2025 regions; renamed Sandbondtenga"
+  },
+  {
+   "countryiso3": "BFA",
+   "admin_level": 2,
+   "name": "sanmatenga",
+   "alternative_name": "sanmatenga",
+   "candidate_set": "BFA|adm2|BFA",
+   "expected_names": [
+    "sandbondtenga"
+   ],
+   "none_acceptable": true,
+   "note": "2025 regions; renamed Sandbondtenga"
+  },
+  {
+   "countryiso3": "BFA",
+   "admin_level": 1,
+   "name": "nord",
+   "alternative_name": "nord",
+   "candidate_set": "BFA|adm1|BFA",
+   "expected_names": [
+    "yaadga"
+   ],
+   "none_acceptable": true,
+   "note": "2025 regions"
+  },
+  {
+   "countryiso3": "BFA",
+   "admin_level": 1,
+   "name": "plateau central",
+   "alternative_name": "plateau central",
+   "candidate_set": "BFA|adm1|BFA",
+   "expected_names": [
+    "oubri"
+   ],
+   "none_acceptable": true,
+   "note": "2025 regions; renamed Bassitenga"
+  },
+  {
+   "countryiso3": "BFA",
+   "admin_level": 2,
+   "name": "oubritenga",
+   "alternative_name": "oubritenga",
+   "candidate_set": "BFA|adm2|BFA",
+   "expected_names": [
+    "bassitenga"
+   ],
+   "none_acceptable": true,
+   "note": "2025 regions; renamed Bassitenga"
+  },
+  {
+   "countryiso3": "BFA",
+   "admin_level": 1,
+   "name": "sahel",
+   "alternative_name": "sahel",
+   "candidate_set": "BFA|adm1|BFA",
+   "expected_names": [
+    "liptako"
+   ],
+   "none_acceptable": true,
+   "note": "2025 regions"
+  },
+  {
+   "countryiso3": "BFA",
+   "admin_level": 1,
+   "name": "sahel",
+   "alternative_name": "sahel",
+   "candidate_set": "BFA|adm1|BFA",
+   "expected_names": [
+    "soum"
+   ],
+   "none_acceptable": true,
+   "note": "2025 regions; Soum province is now a region"
+  },
+  {
+   "countryiso3": "BGD",
+   "admin_level": 1,
+   "name": "chittagong",
+   "alternative_name": "chittagong",
+   "candidate_set": "BGD|adm1|BGD",
+   "expected_names": [
+    "chattogram"
+   ],
+   "none_acceptable": false,
+   "note": "Chittagong = Chattogram"
+  },
+  {
+   "countryiso3": "BGD",
+   "admin_level": 2,
+   "name": "brahamanbaria",
+   "alternative_name": "brahamanbaria",
+   "candidate_set": "BGD|adm2|BD20",
+   "expected_names": [
+    "brahmanbaria"
+   ],
+   "none_acceptable": false,
+   "note": "Chittagong = Chattogram"
+  },
+  {
+   "countryiso3": "BGD",
+   "admin_level": 2,
+   "name": "chittagong",
+   "alternative_name": "chittagong",
+   "candidate_set": "BGD|adm2|BD20",
+   "expected_names": [
+    "chattogram"
+   ],
+   "none_acceptable": false,
+   "note": "Chittagong = Chattogram"
+  },
+  {
+   "countryiso3": "BGD",
+   "admin_level": 2,
+   "name": "comilla",
+   "alternative_name": "comilla",
+   "candidate_set": "BGD|adm2|BD20",
+   "expected_names": [
+    "cumilla"
+   ],
+   "none_acceptable": false,
+   "note": "Chittagong = Chattogram"
+  },
+  {
+   "countryiso3": "BGD",
+   "admin_level": 2,
+   "name": "nawabganj",
+   "alternative_name": "nawabganj",
+   "candidate_set": "BGD|adm2|BD50",
+   "expected_names": [
+    "chapainababganj"
+   ],
+   "none_acceptable": false,
+   "note": "Nawabganj = Chapainawabganj"
+  },
+  {
+   "countryiso3": "CAF",
+   "admin_level": 2,
+   "name": "bimbo",
+   "alternative_name": "bimbo",
+   "candidate_set": "CAF|adm2|CF11",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "Bimbo not in COD under CF11; Paoua now in Lim-Pende"
+  },
+  {
+   "countryiso3": "CAF",
+   "admin_level": 2,
+   "name": "paoua",
+   "alternative_name": "paoua",
+   "candidate_set": "CAF|adm2|CF31",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "Bimbo not in COD under CF11; Paoua now in Lim-Pende"
+  },
+  {
+   "countryiso3": "CMR",
+   "admin_level": 1,
+   "name": "sud ouest",
+   "alternative_name": "sud ouest",
+   "candidate_set": "CMR|adm1|CMR",
+   "expected_names": [
+    "south west"
+   ],
+   "none_acceptable": false,
+   "note": "Sud-Ouest = South-West"
+  },
+  {
+   "countryiso3": "COD",
+   "admin_level": 2,
+   "name": "buta city",
+   "alternative_name": "buta city",
+   "candidate_set": "COD|adm2|CD52",
+   "expected_names": [
+    "buta"
+   ],
+   "none_acceptable": false,
+   "note": "'X city' is in territory X"
+  },
+  {
+   "countryiso3": "COD",
+   "admin_level": 2,
+   "name": "kamina city",
+   "alternative_name": "kamina city",
+   "candidate_set": "COD|adm2|CD73",
+   "expected_names": [
+    "kamina"
+   ],
+   "none_acceptable": false,
+   "note": "'X city' is in territory X"
+  },
+  {
+   "countryiso3": "COD",
+   "admin_level": 2,
+   "name": "aru city",
+   "alternative_name": "aru city",
+   "candidate_set": "COD|adm2|CD54",
+   "expected_names": [
+    "aru"
+   ],
+   "none_acceptable": false,
+   "note": "'X city' is in territory X"
+  },
+  {
+   "countryiso3": "COD",
+   "admin_level": 2,
+   "name": "mahagi city",
+   "alternative_name": "mahagi city",
+   "candidate_set": "COD|adm2|CD54",
+   "expected_names": [
+    "mahagi"
+   ],
+   "none_acceptable": false,
+   "note": "'X city' is in territory X"
+  },
+  {
+   "countryiso3": "COD",
+   "admin_level": 2,
+   "name": "luebo city",
+   "alternative_name": "luebo city",
+   "candidate_set": "COD|adm2|CD92",
+   "expected_names": [
+    "luebo"
+   ],
+   "none_acceptable": false,
+   "note": "'X city' is in territory X"
+  },
+  {
+   "countryiso3": "COD",
+   "admin_level": 2,
+   "name": "tshilenge city",
+   "alternative_name": "tshilenge city",
+   "candidate_set": "COD|adm2|CD82",
+   "expected_names": [
+    "tshilenge"
+   ],
+   "none_acceptable": false,
+   "note": "'X city' is in territory X"
+  },
+  {
+   "countryiso3": "COD",
+   "admin_level": 2,
+   "name": "mbanza ngungu city",
+   "alternative_name": "mbanza ngungu city",
+   "candidate_set": "COD|adm2|CD20",
+   "expected_names": [
+    "mbanza ngungu"
+   ],
+   "none_acceptable": false,
+   "note": "'X city' is in territory X"
+  },
+  {
+   "countryiso3": "COD",
+   "admin_level": 2,
+   "name": "kasongo lunda city",
+   "alternative_name": "kasongo lunda city",
+   "candidate_set": "COD|adm2|CD31",
+   "expected_names": [
+    "kasongo lunda"
+   ],
+   "none_acceptable": false,
+   "note": "'X city' is in territory X"
+  },
+  {
+   "countryiso3": "COD",
+   "admin_level": 2,
+   "name": "kenge city",
+   "alternative_name": "kenge city",
+   "candidate_set": "COD|adm2|CD31",
+   "expected_names": [
+    "kenge"
+   ],
+   "none_acceptable": false,
+   "note": "'X city' is in territory X"
+  },
+  {
+   "countryiso3": "COD",
+   "admin_level": 2,
+   "name": "masi manimba city",
+   "alternative_name": "masi manimba city",
+   "candidate_set": "COD|adm2|CD32",
+   "expected_names": [
+    "masi manimba"
+   ],
+   "none_acceptable": false,
+   "note": "'X city' is in territory X"
+  },
+  {
+   "countryiso3": "COD",
+   "admin_level": 2,
+   "name": "kabinda city",
+   "alternative_name": "kabinda city",
+   "candidate_set": "COD|adm2|CD81",
+   "expected_names": [
+    "kabinda"
+   ],
+   "none_acceptable": false,
+   "note": "'X city' is in territory X"
+  },
+  {
+   "countryiso3": "COD",
+   "admin_level": 2,
+   "name": "kasongo city",
+   "alternative_name": "kasongo city",
+   "candidate_set": "COD|adm2|CD63",
+   "expected_names": [
+    "kasongo"
+   ],
+   "none_acceptable": false,
+   "note": "'X city' is in territory X"
+  },
+  {
+   "countryiso3": "COD",
+   "admin_level": 2,
+   "name": "oicha city",
+   "alternative_name": "oicha city",
+   "candidate_set": "COD|adm2|CD61",
+   "expected_names": [
+    "oicha"
+   ],
+   "none_acceptable": false,
+   "note": "'X city' is in territory X"
+  },
+  {
+   "countryiso3": "COD",
+   "admin_level": 2,
+   "name": "rutshuru city",
+   "alternative_name": "rutshuru city",
+   "candidate_set": "COD|adm2|CD61",
+   "expected_names": [
+    "rutshuru"
+   ],
+   "none_acceptable": false,
+   "note": "'X city' is in territory X"
+  },
+  {
+   "countryiso3": "COD",
+   "admin_level": 2,
+   "name": "mobayi mbongo city",
+   "alternative_name": "mobayi mbongo city",
+   "candidate_set": "COD|adm2|CD43",
+   "expected_names": [
+    "mobayi mbongo"
+   ],
+   "none_acceptable": false,
+   "note": "'X city' is in territory X"
+  },
+  {
+   "countryiso3": "COD",
+   "admin_level": 2,
+   "name": "shabunda city",
+   "alternative_name": "shabunda city",
+   "candidate_set": "COD|adm2|CD62",
+   "expected_names": [
+    "shabunda"
+   ],
+   "none_acceptable": false,
+   "note": "'X city' is in territory X"
+  },
+  {
+   "countryiso3": "COD",
+   "admin_level": 2,
+   "name": "uvira city",
+   "alternative_name": "uvira city",
+   "candidate_set": "COD|adm2|CD62",
+   "expected_names": [
+    "uvira"
+   ],
+   "none_acceptable": false,
+   "note": "'X city' is in territory X"
+  },
+  {
+   "countryiso3": "COD",
+   "admin_level": 2,
+   "name": "gemena city",
+   "alternative_name": "gemena city",
+   "candidate_set": "COD|adm2|CD42",
+   "expected_names": [
+    "gemena"
+   ],
+   "none_acceptable": false,
+   "note": "'X city' is in territory X"
+  },
+  {
+   "countryiso3": "COD",
+   "admin_level": 2,
+   "name": "kongolo city",
+   "alternative_name": "kongolo city",
+   "candidate_set": "COD|adm2|CD74",
+   "expected_names": [
+    "kongolo"
+   ],
+   "none_acceptable": false,
+   "note": "'X city' is in territory X"
+  },
+  {
+   "countryiso3": "COD",
+   "admin_level": 2,
+   "name": "basoko city",
+   "alternative_name": "basoko city",
+   "candidate_set": "COD|adm2|CD51",
+   "expected_names": [
+    "basoko"
+   ],
+   "none_acceptable": false,
+   "note": "'X city' is in territory X"
+  },
+  {
+   "countryiso3": "COL",
+   "admin_level": 2,
+   "name": "distrito especial industrial y portuario de barranquilla",
+   "alternative_name": "distrito especial industrial y portuario de barranquilla",
+   "candidate_set": "COL|adm2|CO08",
+   "expected_names": [
+    "barranquilla"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "EGY",
+   "admin_level": 1,
+   "name": "minya",
+   "alternative_name": "minya",
+   "candidate_set": "EGY|adm1|EGY",
+   "expected_names": [
+    "menia"
+   ],
+   "none_acceptable": false,
+   "note": "Minya = Menia"
+  },
+  {
+   "countryiso3": "ETH",
+   "admin_level": 2,
+   "name": "n gonder",
+   "alternative_name": "n gonder",
+   "candidate_set": "ETH|adm2|ET03",
+   "expected_names": [
+    "north gondar"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "ETH",
+   "admin_level": 2,
+   "name": "n shewa r3",
+   "alternative_name": "n shewa r3",
+   "candidate_set": "ETH|adm2|ET03",
+   "expected_names": [
+    "north shewa am"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "ETH",
+   "admin_level": 2,
+   "name": "n wello",
+   "alternative_name": "n wello",
+   "candidate_set": "ETH|adm2|ET03",
+   "expected_names": [
+    "north wello"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "ETH",
+   "admin_level": 2,
+   "name": "s gonder",
+   "alternative_name": "s gonder",
+   "candidate_set": "ETH|adm2|ET03",
+   "expected_names": [
+    "south gondar"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "ETH",
+   "admin_level": 2,
+   "name": "w gojam",
+   "alternative_name": "w gojam",
+   "candidate_set": "ETH|adm2|ET03",
+   "expected_names": [
+    "west gojam"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "ETH",
+   "admin_level": 1,
+   "name": "b gumuz",
+   "alternative_name": "b gumuz",
+   "candidate_set": "ETH|adm1|ETH",
+   "expected_names": [
+    "benishangul gumuz"
+   ],
+   "none_acceptable": false,
+   "note": "B. Gumuz = Benishangul-Gumuz"
+  },
+  {
+   "countryiso3": "ETH",
+   "admin_level": 2,
+   "name": "asosa",
+   "alternative_name": "asosa",
+   "candidate_set": "ETH|adm2|ET06",
+   "expected_names": [
+    "assosa"
+   ],
+   "none_acceptable": false,
+   "note": "B. Gumuz = Benishangul-Gumuz"
+  },
+  {
+   "countryiso3": "ETH",
+   "admin_level": 2,
+   "name": "e harerge",
+   "alternative_name": "e harerge",
+   "candidate_set": "ETH|adm2|ET04",
+   "expected_names": [
+    "east hararge"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "ETH",
+   "admin_level": 2,
+   "name": "e shewa",
+   "alternative_name": "e shewa",
+   "candidate_set": "ETH|adm2|ET04",
+   "expected_names": [
+    "east shewa"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "ETH",
+   "admin_level": 2,
+   "name": "e wellega",
+   "alternative_name": "e wellega",
+   "candidate_set": "ETH|adm2|ET04",
+   "expected_names": [
+    "east wellega"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "ETH",
+   "admin_level": 2,
+   "name": "illubabor",
+   "alternative_name": "illubabor",
+   "candidate_set": "ETH|adm2|ET04",
+   "expected_names": [
+    "ilu aba bora"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "ETH",
+   "admin_level": 2,
+   "name": "n shewa r4",
+   "alternative_name": "n shewa r4",
+   "candidate_set": "ETH|adm2|ET04",
+   "expected_names": [
+    "north shewa or"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "ETH",
+   "admin_level": 2,
+   "name": "s w shewa",
+   "alternative_name": "s w shewa",
+   "candidate_set": "ETH|adm2|ET04",
+   "expected_names": [
+    "south west shewa"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "ETH",
+   "admin_level": 2,
+   "name": "w harerge",
+   "alternative_name": "w harerge",
+   "candidate_set": "ETH|adm2|ET04",
+   "expected_names": [
+    "west hararge"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "ETH",
+   "admin_level": 2,
+   "name": "w wellega",
+   "alternative_name": "w wellega",
+   "candidate_set": "ETH|adm2|ET04",
+   "expected_names": [
+    "west wellega"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "ETH",
+   "admin_level": 1,
+   "name": "snnpr",
+   "alternative_name": "snnpr",
+   "candidate_set": "ETH|adm1|ETH",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "SNNPR dissolved; Gamo Gofa split into Gamo/Gofa"
+  },
+  {
+   "countryiso3": "ETH",
+   "admin_level": 2,
+   "name": "sidama",
+   "alternative_name": "sidama",
+   "candidate_set": "ETH|adm2|ETH",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "Sidama is now a region"
+  },
+  {
+   "countryiso3": "ETH",
+   "admin_level": 2,
+   "name": "gode",
+   "alternative_name": "gode",
+   "candidate_set": "ETH|adm2|ET05",
+   "expected_names": [
+    "shabelle"
+   ],
+   "none_acceptable": true,
+   "note": "Gode is in Shabelle zone"
+  },
+  {
+   "countryiso3": "ETH",
+   "admin_level": 2,
+   "name": "shinile",
+   "alternative_name": "shinile",
+   "candidate_set": "ETH|adm2|ET05",
+   "expected_names": [
+    "siti"
+   ],
+   "none_acceptable": true,
+   "note": "Shinile zone renamed Siti"
+  },
+  {
+   "countryiso3": "ETH",
+   "admin_level": 2,
+   "name": "warder",
+   "alternative_name": "warder",
+   "candidate_set": "ETH|adm2|ET05",
+   "expected_names": [
+    "doolo"
+   ],
+   "none_acceptable": true,
+   "note": "Warder is in Doolo zone"
+  },
+  {
+   "countryiso3": "GHA",
+   "admin_level": 1,
+   "name": "brong ahafo",
+   "alternative_name": "brong ahafo",
+   "candidate_set": "GHA|adm1|GHA",
+   "expected_names": [
+    "ahafo"
+   ],
+   "none_acceptable": true,
+   "note": "Brong Ahafo split into Ahafo/Bono/Bono East"
+  },
+  {
+   "countryiso3": "GHA",
+   "admin_level": 1,
+   "name": "brong ahafo",
+   "alternative_name": "brong ahafo",
+   "candidate_set": "GHA|adm1|GHA",
+   "expected_names": [
+    "bono"
+   ],
+   "none_acceptable": true,
+   "note": "Brong Ahafo split into Ahafo/Bono/Bono East"
+  },
+  {
+   "countryiso3": "GHA",
+   "admin_level": 1,
+   "name": "brong ahafo",
+   "alternative_name": "brong ahafo",
+   "candidate_set": "GHA|adm1|GHA",
+   "expected_names": [
+    "bono east"
+   ],
+   "none_acceptable": true,
+   "note": "Brong Ahafo split into Ahafo/Bono/Bono East"
+  },
+  {
+   "countryiso3": "GHA",
+   "admin_level": 2,
+   "name": "tema metropolis",
+   "alternative_name": "tema metropolis",
+   "candidate_set": "GHA|adm2|GH07",
+   "expected_names": [
+    "tema metropolitan"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "GHA",
+   "admin_level": 2,
+   "name": "savelugu nanton",
+   "alternative_name": "savelugu nanton",
+   "candidate_set": "GHA|adm2|GH08",
+   "expected_names": [
+    "savelugu"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "GHA",
+   "admin_level": 2,
+   "name": "krachi west",
+   "alternative_name": "krachi west",
+   "candidate_set": "GHA|adm2|GH14",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "Krachi West is now in Oti"
+  },
+  {
+   "countryiso3": "GNB",
+   "admin_level": 1,
+   "name": "sector autonomo de bissau",
+   "alternative_name": "sector autonomo de bissau",
+   "candidate_set": "GNB|adm1|GNB",
+   "expected_names": [
+    "bissau"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "GTM",
+   "admin_level": 2,
+   "name": "san idelfonso ixtahuacan",
+   "alternative_name": "san idelfonso ixtahuacan",
+   "candidate_set": "GTM|adm2|GT13",
+   "expected_names": [
+    "ixtahuacan"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "IRQ",
+   "admin_level": 2,
+   "name": "raua",
+   "alternative_name": "raua",
+   "candidate_set": "IRQ|adm2|IQG01",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "Rawa not in COD"
+  },
+  {
+   "countryiso3": "IRQ",
+   "admin_level": 1,
+   "name": "dahuk",
+   "alternative_name": "dahuk",
+   "candidate_set": "IRQ|adm1|IRQ",
+   "expected_names": [
+    "duhok"
+   ],
+   "none_acceptable": false,
+   "note": "Dahuk = Duhok"
+  },
+  {
+   "countryiso3": "IRQ",
+   "admin_level": 2,
+   "name": "amedi",
+   "alternative_name": "amedi",
+   "candidate_set": "IRQ|adm2|IQG09",
+   "expected_names": [
+    "al amadiya"
+   ],
+   "none_acceptable": false,
+   "note": "Dahuk = Duhok"
+  },
+  {
+   "countryiso3": "IRQ",
+   "admin_level": 2,
+   "name": "dahuk",
+   "alternative_name": "dahuk",
+   "candidate_set": "IRQ|adm2|IQG09",
+   "expected_names": [
+    "duhok"
+   ],
+   "none_acceptable": false,
+   "note": "Dahuk = Duhok"
+  },
+  {
+   "countryiso3": "IRQ",
+   "admin_level": 2,
+   "name": "sumel",
+   "alternative_name": "sumel",
+   "candidate_set": "IRQ|adm2|IQG09",
+   "expected_names": [
+    "sumail"
+   ],
+   "none_acceptable": false,
+   "note": "Dahuk = Duhok"
+  },
+  {
+   "countryiso3": "IRQ",
+   "admin_level": 2,
+   "name": "dabes",
+   "alternative_name": "dabes",
+   "candidate_set": "IRQ|adm2|IQG13",
+   "expected_names": [
+    "dibis"
+   ],
+   "none_acceptable": false,
+   "note": "transliterations"
+  },
+  {
+   "countryiso3": "IRQ",
+   "admin_level": 2,
+   "name": "akre",
+   "alternative_name": "akre",
+   "candidate_set": "IRQ|adm2|IQG15",
+   "expected_names": [
+    "aqra"
+   ],
+   "none_acceptable": false,
+   "note": "transliterations"
+  },
+  {
+   "countryiso3": "IRQ",
+   "admin_level": 2,
+   "name": "baiji",
+   "alternative_name": "baiji",
+   "candidate_set": "IRQ|adm2|IQG16",
+   "expected_names": [
+    "beygee"
+   ],
+   "none_acceptable": false,
+   "note": "transliterations"
+  },
+  {
+   "countryiso3": "KEN",
+   "admin_level": 1,
+   "name": "meru north",
+   "alternative_name": "meru north",
+   "candidate_set": "KEN|adm1|KEN",
+   "expected_names": [
+    "meru"
+   ],
+   "none_acceptable": false,
+   "note": "KEN uses admin2 name as admin1"
+  },
+  {
+   "countryiso3": "KEN",
+   "admin_level": 1,
+   "name": "meru south",
+   "alternative_name": "meru south",
+   "candidate_set": "KEN|adm1|KEN",
+   "expected_names": [
+    "tharaka nithi"
+   ],
+   "none_acceptable": true,
+   "note": "Meru South is in Tharaka-Nithi"
+  },
+  {
+   "countryiso3": "KEN",
+   "admin_level": 1,
+   "name": "moyale",
+   "alternative_name": "moyale",
+   "candidate_set": "KEN|adm1|KEN",
+   "expected_names": [
+    "marsabit"
+   ],
+   "none_acceptable": true,
+   "note": "Moyale is in Marsabit"
+  },
+  {
+   "countryiso3": "KEN",
+   "admin_level": 1,
+   "name": "ijara",
+   "alternative_name": "ijara",
+   "candidate_set": "KEN|adm1|KEN",
+   "expected_names": [
+    "garissa"
+   ],
+   "none_acceptable": true,
+   "note": "Ijara is in Garissa"
+  },
+  {
+   "countryiso3": "MDG",
+   "admin_level": 1,
+   "name": "vatovavy fitovinany",
+   "alternative_name": "vatovavy fitovinany",
+   "candidate_set": "MDG|adm1|MDG",
+   "expected_names": [
+    "vatovavy"
+   ],
+   "none_acceptable": true,
+   "note": "Vatovavy Fitovinany split into Vatovavy/Fitovinany"
+  },
+  {
+   "countryiso3": "MDG",
+   "admin_level": 1,
+   "name": "vatovavy fitovinany",
+   "alternative_name": "vatovavy fitovinany",
+   "candidate_set": "MDG|adm1|MDG",
+   "expected_names": [
+    "fitovinany"
+   ],
+   "none_acceptable": true,
+   "note": "Vatovavy Fitovinany split into Vatovavy/Fitovinany"
+  },
+  {
+   "countryiso3": "MLI",
+   "admin_level": 2,
+   "name": "diema",
+   "alternative_name": "diema",
+   "candidate_set": "MLI|adm2|ML01",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "cercle is now an admin1 (2023 regions)"
+  },
+  {
+   "countryiso3": "MLI",
+   "admin_level": 2,
+   "name": "kita",
+   "alternative_name": "kita",
+   "candidate_set": "MLI|adm2|ML01",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "cercle is now an admin1 (2023 regions)"
+  },
+  {
+   "countryiso3": "MLI",
+   "admin_level": 2,
+   "name": "nioro",
+   "alternative_name": "nioro",
+   "candidate_set": "MLI|adm2|ML01",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "cercle is now an admin1 (2023 regions)"
+  },
+  {
+   "countryiso3": "MLI",
+   "admin_level": 2,
+   "name": "koro",
+   "alternative_name": "koro",
+   "candidate_set": "MLI|adm2|ML05",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "cercle is now an admin1 (2023 regions)"
+  },
+  {
+   "countryiso3": "MLI",
+   "admin_level": 2,
+   "name": "bougouni",
+   "alternative_name": "bougouni",
+   "candidate_set": "MLI|adm2|ML03",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "cercle is now an admin1 (2023 regions)"
+  },
+  {
+   "countryiso3": "MLI",
+   "admin_level": 2,
+   "name": "koutiala",
+   "alternative_name": "koutiala",
+   "candidate_set": "MLI|adm2|ML03",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "cercle is now an admin1 (2023 regions)"
+  },
+  {
+   "countryiso3": "MLI",
+   "admin_level": 1,
+   "name": "tombouctou",
+   "alternative_name": "tombouctou",
+   "candidate_set": "MLI|adm1|MLI",
+   "expected_names": [
+    "timbuktu"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "MLI",
+   "admin_level": 2,
+   "name": "gourma rharous",
+   "alternative_name": "gourma rharous",
+   "candidate_set": "MLI|adm2|ML06",
+   "expected_names": [
+    "rharous"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "MMR",
+   "admin_level": 2,
+   "name": "laukkaing",
+   "alternative_name": "laukkaing",
+   "candidate_set": "MMR|adm2|MMR015",
+   "expected_names": [
+    "kokang self administered zone"
+   ],
+   "none_acceptable": true,
+   "note": "Laukkaing is in Kokang SAZ"
+  },
+  {
+   "countryiso3": "MOZ",
+   "admin_level": 2,
+   "name": "cidade de xai xai",
+   "alternative_name": "cidade de xai xai",
+   "candidate_set": "MOZ|adm2|MZ09",
+   "expected_names": [
+    "xai xai"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "MOZ",
+   "admin_level": 1,
+   "name": "maputo city",
+   "alternative_name": "maputo city",
+   "candidate_set": "MOZ|adm1|MOZ",
+   "expected_names": [
+    "cidade de maputo"
+   ],
+   "none_acceptable": false,
+   "note": "Maputo City = Cidade de Maputo; no single district"
+  },
+  {
+   "countryiso3": "MOZ",
+   "admin_level": 2,
+   "name": "cidade de maputo",
+   "alternative_name": "cidade de maputo",
+   "candidate_set": "MOZ|adm2|MZ11",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "Maputo City = Cidade de Maputo; no single district"
+  },
+  {
+   "countryiso3": "MOZ",
+   "admin_level": 2,
+   "name": "cidade de quelimane",
+   "alternative_name": "cidade de quelimane",
+   "candidate_set": "MOZ|adm2|MZ04",
+   "expected_names": [
+    "quelimane"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "MWI",
+   "admin_level": 1,
+   "name": "central region",
+   "alternative_name": "central region",
+   "candidate_set": "MWI|adm1|MWI",
+   "expected_names": [
+    "central"
+   ],
+   "none_acceptable": false,
+   "note": "X Region = X"
+  },
+  {
+   "countryiso3": "MWI",
+   "admin_level": 1,
+   "name": "northern region",
+   "alternative_name": "northern region",
+   "candidate_set": "MWI|adm1|MWI",
+   "expected_names": [
+    "northern"
+   ],
+   "none_acceptable": false,
+   "note": "X Region = X"
+  },
+  {
+   "countryiso3": "MWI",
+   "admin_level": 2,
+   "name": "nkhata bay",
+   "alternative_name": "nkhata bay",
+   "candidate_set": "MWI|adm2|MW1",
+   "expected_names": [
+    "nkhatabay"
+   ],
+   "none_acceptable": false,
+   "note": "X Region = X"
+  },
+  {
+   "countryiso3": "MWI",
+   "admin_level": 1,
+   "name": "southern region",
+   "alternative_name": "southern region",
+   "candidate_set": "MWI|adm1|MWI",
+   "expected_names": [
+    "southern"
+   ],
+   "none_acceptable": false,
+   "note": "X Region = X"
+  },
+  {
+   "countryiso3": "NGA",
+   "admin_level": 2,
+   "name": "oboma ngwa",
+   "alternative_name": "oboma ngwa",
+   "candidate_set": "NGA|adm2|NG001",
+   "expected_names": [
+    "obi ngwa"
+   ],
+   "none_acceptable": false,
+   "note": "Oboma Ngwa = Obingwa"
+  },
+  {
+   "countryiso3": "NIC",
+   "admin_level": 2,
+   "name": "el jicaro",
+   "alternative_name": "el jicaro",
+   "candidate_set": "NIC|adm2|NI05",
+   "expected_names": [
+    "jicaro"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "PAK",
+   "admin_level": 2,
+   "name": "mekran",
+   "alternative_name": "mekran",
+   "candidate_set": "PAK|adm2|PK2",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "Makran is a division, not a district"
+  },
+  {
+   "countryiso3": "PAK",
+   "admin_level": 1,
+   "name": "fata",
+   "alternative_name": "fata",
+   "candidate_set": "PAK|adm1|PAK",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "FATA merged into KP"
+  },
+  {
+   "countryiso3": "PAK",
+   "admin_level": 2,
+   "name": "fata",
+   "alternative_name": "fata",
+   "candidate_set": "PAK|adm2|PAK",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "FATA merged into KP"
+  },
+  {
+   "countryiso3": "PHL",
+   "admin_level": 1,
+   "name": "region iv b",
+   "alternative_name": "region iv b",
+   "candidate_set": "PHL|adm1|PHL",
+   "expected_names": [
+    "mimaropa region"
+   ],
+   "none_acceptable": true,
+   "note": "Region IV-B = Mimaropa"
+  },
+  {
+   "countryiso3": "PSE",
+   "admin_level": 2,
+   "name": "ramallah and albireh",
+   "alternative_name": "ramallah and albireh",
+   "candidate_set": "PSE|adm2|PS01",
+   "expected_names": [
+    "ramallah"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 1,
+   "name": "al gezira",
+   "alternative_name": "al gezira",
+   "candidate_set": "SDN|adm1|SDN",
+   "expected_names": [
+    "aj jazirah"
+   ],
+   "none_acceptable": false,
+   "note": "Al Gezira = Aj Jazirah"
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 2,
+   "name": "el hasaheesa",
+   "alternative_name": "el hasaheesa",
+   "candidate_set": "SDN|adm2|SD15",
+   "expected_names": [
+    "al hasahisa"
+   ],
+   "none_acceptable": false,
+   "note": "Al Gezira = Aj Jazirah"
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 2,
+   "name": "el manageel",
+   "alternative_name": "el manageel",
+   "candidate_set": "SDN|adm2|SD15",
+   "expected_names": [
+    "al manaqil"
+   ],
+   "none_acceptable": false,
+   "note": "Al Gezira = Aj Jazirah"
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 2,
+   "name": "wad madani el kobra",
+   "alternative_name": "wad madani el kobra",
+   "candidate_set": "SDN|adm2|SD15",
+   "expected_names": [
+    "medani al kubra"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 2,
+   "name": "el roseires",
+   "alternative_name": "el roseires",
+   "candidate_set": "SDN|adm2|SD08",
+   "expected_names": [
+    "ar rusayris"
+   ],
+   "none_acceptable": false,
+   "note": "transliterations"
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 1,
+   "name": "eastern darfur",
+   "alternative_name": "eastern darfur",
+   "candidate_set": "SDN|adm1|SDN",
+   "expected_names": [
+    "east darfur"
+   ],
+   "none_acceptable": false,
+   "note": "Eastern Darfur = East Darfur"
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 2,
+   "name": "ed daein",
+   "alternative_name": "ed daein",
+   "candidate_set": "SDN|adm2|SD05",
+   "expected_names": [
+    "ad duayn"
+   ],
+   "none_acceptable": false,
+   "note": "Eastern Darfur = East Darfur"
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 2,
+   "name": "el ferdous",
+   "alternative_name": "el ferdous",
+   "candidate_set": "SDN|adm2|SD05",
+   "expected_names": [
+    "al firdous"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 2,
+   "name": "halfa el gedid",
+   "alternative_name": "halfa el gedid",
+   "candidate_set": "SDN|adm2|SD11",
+   "expected_names": [
+    "halfa aj jadeedah"
+   ],
+   "none_acceptable": false,
+   "note": "transliterations"
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 2,
+   "name": "khashm ghirba",
+   "alternative_name": "khashm ghirba",
+   "candidate_set": "SDN|adm2|SD11",
+   "expected_names": [
+    "reifi khashm elgirba"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 2,
+   "name": "marawai",
+   "alternative_name": "marawai",
+   "candidate_set": "SDN|adm2|SD17",
+   "expected_names": [
+    "merwoe"
+   ],
+   "none_acceptable": false,
+   "note": "transliterations"
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 2,
+   "name": "abu jibaih",
+   "alternative_name": "abu jibaih",
+   "candidate_set": "SDN|adm2|SD07",
+   "expected_names": [
+    "abu jubayhah"
+   ],
+   "none_acceptable": false,
+   "note": "transliterations"
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 2,
+   "name": "el abassiya",
+   "alternative_name": "el abassiya",
+   "candidate_set": "SDN|adm2|SD07",
+   "expected_names": [
+    "abassiya"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 2,
+   "name": "el nehoud",
+   "alternative_name": "el nehoud",
+   "candidate_set": "SDN|adm2|SD18",
+   "expected_names": [
+    "an nuhud"
+   ],
+   "none_acceptable": false,
+   "note": "transliterations"
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 2,
+   "name": "el salam",
+   "alternative_name": "el salam",
+   "candidate_set": "SDN|adm2|SD18",
+   "expected_names": [
+    "as salam wk"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 2,
+   "name": "qebaesh",
+   "alternative_name": "qebaesh",
+   "candidate_set": "SDN|adm2|SD18",
+   "expected_names": [
+    "ghubaish"
+   ],
+   "none_acceptable": false,
+   "note": "transliterations"
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 2,
+   "name": "el dwaeem",
+   "alternative_name": "el dwaeem",
+   "candidate_set": "SDN|adm2|SD09",
+   "expected_names": [
+    "ad diwaim"
+   ],
+   "none_acceptable": false,
+   "note": "transliterations"
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 2,
+   "name": "el jabaleen",
+   "alternative_name": "el jabaleen",
+   "candidate_set": "SDN|adm2|SD09",
+   "expected_names": [
+    "aj jabalain"
+   ],
+   "none_acceptable": false,
+   "note": "transliterations"
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 2,
+   "name": "el salam",
+   "alternative_name": "el salam",
+   "candidate_set": "SDN|adm2|SD09",
+   "expected_names": [
+    "as salam ar rawat"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "SLE",
+   "admin_level": 1,
+   "name": "western area",
+   "alternative_name": "western area",
+   "candidate_set": "SLE|adm1|SLE",
+   "expected_names": [
+    "western"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "SLE",
+   "admin_level": 2,
+   "name": "western rural",
+   "alternative_name": "western rural",
+   "candidate_set": "SLE|adm2|SL04",
+   "expected_names": [
+    "western area rural"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "SLE",
+   "admin_level": 2,
+   "name": "western urban",
+   "alternative_name": "western urban",
+   "candidate_set": "SLE|adm2|SL04",
+   "expected_names": [
+    "western area urban"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "SOM",
+   "admin_level": 2,
+   "name": "banadir",
+   "alternative_name": "banadir",
+   "candidate_set": "SOM|adm2|SO22",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "Banadir is the region, not a district"
+  },
+  {
+   "countryiso3": "TCD",
+   "admin_level": 2,
+   "name": "la nya pendm",
+   "alternative_name": "la nya pendm",
+   "candidate_set": "TCD|adm2|TCD09",
+   "expected_names": [
+    "la nya pende"
+   ],
+   "none_acceptable": false,
+   "note": "mangled names"
+  },
+  {
+   "countryiso3": "TCD",
+   "admin_level": 2,
+   "name": "kabia",
+   "alternative_name": "kabia",
+   "candidate_set": "TCD|adm2|TCD11",
+   "expected_names": [
+    "la kabbia"
+   ],
+   "none_acceptable": false,
+   "note": "Kabia = La Kabbia"
+  },
+  {
+   "countryiso3": "TCD",
+   "admin_level": 2,
+   "name": "lac lbrn",
+   "alternative_name": "lac lbrn",
+   "candidate_set": "TCD|adm2|TCD12",
+   "expected_names": [
+    "lac lere"
+   ],
+   "none_acceptable": false,
+   "note": "mangled names"
+  },
+  {
+   "countryiso3": "TCD",
+   "admin_level": 2,
+   "name": "barh k h",
+   "alternative_name": "barh k h",
+   "candidate_set": "TCD|adm2|TCD13",
+   "expected_names": [
+    "bahr koh"
+   ],
+   "none_acceptable": false,
+   "note": "mangled names"
+  },
+  {
+   "countryiso3": "TCD",
+   "admin_level": 2,
+   "name": "tibest ouest",
+   "alternative_name": "tibest ouest",
+   "candidate_set": "TCD|adm2|TCD22",
+   "expected_names": [
+    "tibesti ouest"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "TLS",
+   "admin_level": 2,
+   "name": "watulari",
+   "alternative_name": "watulari",
+   "candidate_set": "TLS|adm2|TL13",
+   "expected_names": [
+    "uato lari"
+   ],
+   "none_acceptable": false,
+   "note": "Watulari = Uato-Lari"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "mezhivskyi",
+   "alternative_name": "mezhivskyi",
+   "candidate_set": "UKR|adm2|UA12",
+   "expected_names": [
+    "synelnykivskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "pokrovskyi",
+   "alternative_name": "pokrovskyi",
+   "candidate_set": "UKR|adm2|UA12",
+   "expected_names": [
+    "synelnykivskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "sofiivskyi",
+   "alternative_name": "sofiivskyi",
+   "candidate_set": "UKR|adm2|UA12",
+   "expected_names": [
+    "kryvorizkyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "tomakivskyi",
+   "alternative_name": "tomakivskyi",
+   "candidate_set": "UKR|adm2|UA12",
+   "expected_names": [
+    "nikopolskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "kirovska",
+   "alternative_name": "kirovska",
+   "candidate_set": "UKR|adm2|UA14",
+   "expected_names": [
+    "horlivskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "marinskyi",
+   "alternative_name": "marinskyi",
+   "candidate_set": "UKR|adm2|UA14",
+   "expected_names": [
+    "pokrovskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "novoazovskyi",
+   "alternative_name": "novoazovskyi",
+   "candidate_set": "UKR|adm2|UA14",
+   "expected_names": [
+    "kalmiuskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "shakhtarskyi",
+   "alternative_name": "shakhtarskyi",
+   "candidate_set": "UKR|adm2|UA14",
+   "expected_names": [
+    "horlivskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "toretska",
+   "alternative_name": "toretska",
+   "candidate_set": "UKR|adm2|UA14",
+   "expected_names": [
+    "bakhmutskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "blyzniukivskyi",
+   "alternative_name": "blyzniukivskyi",
+   "candidate_set": "UKR|adm2|UA63",
+   "expected_names": [
+    "lozivskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "borivskyi",
+   "alternative_name": "borivskyi",
+   "candidate_set": "UKR|adm2|UA63",
+   "expected_names": [
+    "iziumskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "derhachivskyi",
+   "alternative_name": "derhachivskyi",
+   "candidate_set": "UKR|adm2|UA63",
+   "expected_names": [
+    "kharkivskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "zolochivskyi",
+   "alternative_name": "zolochivskyi",
+   "candidate_set": "UKR|adm2|UA63",
+   "expected_names": [
+    "bohodukhivskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "novokakhovska",
+   "alternative_name": "novokakhovska",
+   "candidate_set": "UKR|adm2|UA65",
+   "expected_names": [
+    "kakhovskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "malovyskivskyi",
+   "alternative_name": "malovyskivskyi",
+   "candidate_set": "UKR|adm2|UA35",
+   "expected_names": [
+    "novoukrainskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "troitskyi",
+   "alternative_name": "troitskyi",
+   "candidate_set": "UKR|adm2|UA44",
+   "expected_names": [
+    "svativskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "kazankivskyi",
+   "alternative_name": "kazankivskyi",
+   "candidate_set": "UKR|adm2|UA48",
+   "expected_names": [
+    "bashtanskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "veselynivskyi",
+   "alternative_name": "veselynivskyi",
+   "candidate_set": "UKR|adm2|UA48",
+   "expected_names": [
+    "voznesenskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "burynskyi",
+   "alternative_name": "burynskyi",
+   "candidate_set": "UKR|adm2|UA59",
+   "expected_names": [
+    "konotopskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "krasnopilskyi",
+   "alternative_name": "krasnopilskyi",
+   "candidate_set": "UKR|adm2|UA59",
+   "expected_names": [
+    "sumskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "krolevetskyi",
+   "alternative_name": "krolevetskyi",
+   "candidate_set": "UKR|adm2|UA59",
+   "expected_names": [
+    "konotopskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "bilmatskyi",
+   "alternative_name": "bilmatskyi",
+   "candidate_set": "UKR|adm2|UA23",
+   "expected_names": [
+    "polohivskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "novomykolaivskyi",
+   "alternative_name": "novomykolaivskyi",
+   "candidate_set": "UKR|adm2|UA23",
+   "expected_names": [
+    "zaporizkyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "orikhivskyi",
+   "alternative_name": "orikhivskyi",
+   "candidate_set": "UKR|adm2|UA23",
+   "expected_names": [
+    "polohivskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "pryazovskyi",
+   "alternative_name": "pryazovskyi",
+   "candidate_set": "UKR|adm2|UA23",
+   "expected_names": [
+    "melitopolskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "rozivskyi",
+   "alternative_name": "rozivskyi",
+   "candidate_set": "UKR|adm2|UA23",
+   "expected_names": [
+    "polohivskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "yakymivskyi",
+   "alternative_name": "yakymivskyi",
+   "candidate_set": "UKR|adm2|UA23",
+   "expected_names": [
+    "melitopolskyi"
+   ],
+   "none_acceptable": true,
+   "note": "pre-2020 raion merged into new raion"
+  },
+  {
+   "countryiso3": "VEN",
+   "admin_level": 1,
+   "name": "vargas",
+   "alternative_name": "vargas",
+   "candidate_set": "VEN|adm1|VEN",
+   "expected_names": [
+    "la guaira"
+   ],
+   "none_acceptable": true,
+   "note": "Vargas state renamed La Guaira"
+  },
+  {
+   "countryiso3": "VNM",
+   "admin_level": 1,
+   "name": "bac lieu",
+   "alternative_name": "bac lieu",
+   "candidate_set": "VNM|adm1|VNM",
+   "expected_names": [
+    "ca mau"
+   ],
+   "none_acceptable": true,
+   "note": "Bac Lieu merged into Ca Mau 2025"
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 2,
+   "name": "radman al awad",
+   "alternative_name": "radman al awad",
+   "candidate_set": "YEM|adm2|YE14",
+   "expected_names": [
+    "radman"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 1,
+   "name": "al dhalee",
+   "alternative_name": "al dhalee",
+   "candidate_set": "YEM|adm1|YEM",
+   "expected_names": [
+    "ad dali"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 2,
+   "name": "al hussein",
+   "alternative_name": "al hussein",
+   "candidate_set": "YEM|adm2|YE30",
+   "expected_names": [
+    "al hasayn"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 1,
+   "name": "al hudaydah",
+   "alternative_name": "al hudaydah",
+   "candidate_set": "YEM|adm1|YEM",
+   "expected_names": [
+    "al hodeidah"
+   ],
+   "none_acceptable": false,
+   "note": "Al Hudaydah = Al Hodeidah"
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 2,
+   "name": "ad dahi",
+   "alternative_name": "ad dahi",
+   "candidate_set": "YEM|adm2|YE18",
+   "expected_names": [
+    "ad dohi"
+   ],
+   "none_acceptable": false,
+   "note": "Al Hudaydah = Al Hodeidah"
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 2,
+   "name": "al garrahi",
+   "alternative_name": "al garrahi",
+   "candidate_set": "YEM|adm2|YE18",
+   "expected_names": [
+    "al jarrahi"
+   ],
+   "none_acceptable": false,
+   "note": "Al Hudaydah = Al Hodeidah"
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 2,
+   "name": "al hajjaylah",
+   "alternative_name": "al hajjaylah",
+   "candidate_set": "YEM|adm2|YE18",
+   "expected_names": [
+    "al hujjaylah"
+   ],
+   "none_acceptable": false,
+   "note": "Al Hudaydah = Al Hodeidah"
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 2,
+   "name": "al khawkhah",
+   "alternative_name": "al khawkhah",
+   "candidate_set": "YEM|adm2|YE18",
+   "expected_names": [
+    "al khukhah"
+   ],
+   "none_acceptable": false,
+   "note": "Al Hudaydah = Al Hodeidah"
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 2,
+   "name": "alluheyah",
+   "alternative_name": "alluheyah",
+   "candidate_set": "YEM|adm2|YE18",
+   "expected_names": [
+    "alluhayah"
+   ],
+   "none_acceptable": false,
+   "note": "Al Hudaydah = Al Hodeidah"
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 2,
+   "name": "at tuhayat",
+   "alternative_name": "at tuhayat",
+   "candidate_set": "YEM|adm2|YE18",
+   "expected_names": [
+    "at tuhayta"
+   ],
+   "none_acceptable": false,
+   "note": "At Tuhayat = At Tuhayta"
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 2,
+   "name": "az zaydiyah",
+   "alternative_name": "az zaydiyah",
+   "candidate_set": "YEM|adm2|YE18",
+   "expected_names": [
+    "az zaydiah"
+   ],
+   "none_acceptable": false,
+   "note": "Al Hudaydah = Al Hodeidah"
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 2,
+   "name": "bayt al faqiah",
+   "alternative_name": "bayt al faqiah",
+   "candidate_set": "YEM|adm2|YE18",
+   "expected_names": [
+    "bayt al faqih"
+   ],
+   "none_acceptable": false,
+   "note": "Al Hudaydah = Al Hodeidah"
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 1,
+   "name": "saada",
+   "alternative_name": "saada",
+   "candidate_set": "YEM|adm1|YEM",
+   "expected_names": [
+    "sadah"
+   ],
+   "none_acceptable": false,
+   "note": "Sa'adah = Sa'dah"
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 2,
+   "name": "saadah",
+   "alternative_name": "saadah",
+   "candidate_set": "YEM|adm2|YE22",
+   "expected_names": [
+    "sadah"
+   ],
+   "none_acceptable": false,
+   "note": "Sa'adah = Sa'dah"
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 2,
+   "name": "hidaybu",
+   "alternative_name": "hidaybu",
+   "candidate_set": "YEM|adm2|YE32",
+   "expected_names": [
+    "hadibu"
+   ],
+   "none_acceptable": false,
+   "note": "Hidaybu = Hadibu"
+  },
+  {
+   "countryiso3": "ZAF",
+   "admin_level": 2,
+   "name": "west rand district municipality",
+   "alternative_name": "west rand district municipality",
+   "candidate_set": "ZAF|adm2|ZA7",
+   "expected_names": [
+    "west rand"
+   ],
+   "none_acceptable": false,
+   "note": ""
+  },
+  {
+   "countryiso3": "ZMB",
+   "admin_level": 2,
+   "name": "shibuyunji",
+   "alternative_name": "shibuyunji",
+   "candidate_set": "ZMB|adm2|ZM105",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "Shibuyunji is ZM101012 under Central, not Lusaka"
+  },
+  {
+   "countryiso3": "AFG",
+   "admin_level": 2,
+   "name": "bermel",
+   "alternative_name": "bermel",
+   "candidate_set": "AFG|adm2|AF12",
+   "expected_names": [
+    "barmal"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "AFG",
+   "admin_level": 2,
+   "name": "poruns",
+   "alternative_name": "poruns",
+   "candidate_set": "AFG|adm2|AF16",
+   "expected_names": [
+    "parun"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "mabanda",
+   "alternative_name": "mabanda",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "control: old commune; Mpanda is in Bujumbura"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "rutegama",
+   "alternative_name": "rutegama",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "control: old commune; Rutana is in Burunga"
+  },
+  {
+   "countryiso3": "BDI",
+   "admin_level": 2,
+   "name": "gitanga",
+   "alternative_name": "gitanga",
+   "candidate_set": "BDI|adm2|BDI",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "control: old commune; Gitega is in Gitega"
+  },
+  {
+   "countryiso3": "BEN",
+   "admin_level": 1,
+   "name": "atakora",
+   "alternative_name": "atakora",
+   "candidate_set": "BEN|adm1|BEN",
+   "expected_names": [
+    "atacora"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "BEN",
+   "admin_level": 2,
+   "name": "pehonko",
+   "alternative_name": "pehonko",
+   "candidate_set": "BEN|adm2|BJ02",
+   "expected_names": [
+    "pehunco"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "BGD",
+   "admin_level": 2,
+   "name": "jessore",
+   "alternative_name": "jessore",
+   "candidate_set": "BGD|adm2|BD40",
+   "expected_names": [
+    "jashore"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "CMR",
+   "admin_level": 1,
+   "name": "ouest",
+   "alternative_name": "ouest",
+   "candidate_set": "CMR|adm1|CMR",
+   "expected_names": [
+    "west"
+   ],
+   "none_acceptable": false,
+   "note": "control: Ouest = West; prod and stage both give East"
+  },
+  {
+   "countryiso3": "CMR",
+   "admin_level": 1,
+   "name": "nord",
+   "alternative_name": "nord",
+   "candidate_set": "CMR|adm1|CMR",
+   "expected_names": [
+    "north"
+   ],
+   "none_acceptable": false,
+   "note": "control: Nord = North"
+  },
+  {
+   "countryiso3": "CMR",
+   "admin_level": 1,
+   "name": "nord ouest",
+   "alternative_name": "nord ouest",
+   "candidate_set": "CMR|adm1|CMR",
+   "expected_names": [
+    "north west"
+   ],
+   "none_acceptable": false,
+   "note": "control: Nord-Ouest = North-West"
+  },
+  {
+   "countryiso3": "ETH",
+   "admin_level": 2,
+   "name": "alaba sw",
+   "alternative_name": "alaba sw",
+   "candidate_set": "ETH|adm2|ETH",
+   "expected_names": [
+    "halaba"
+   ],
+   "none_acceptable": false,
+   "note": "control: SNNPR dissolved"
+  },
+  {
+   "countryiso3": "ETH",
+   "admin_level": 2,
+   "name": "selti",
+   "alternative_name": "selti",
+   "candidate_set": "ETH|adm2|ETH",
+   "expected_names": [
+    "siltie"
+   ],
+   "none_acceptable": false,
+   "note": "control: SNNPR dissolved"
+  },
+  {
+   "countryiso3": "IRQ",
+   "admin_level": 2,
+   "name": "darbandihkan",
+   "alternative_name": "darbandihkan",
+   "candidate_set": "IRQ|adm2|IQG06",
+   "expected_names": [
+    "derbendikhan"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "IRQ",
+   "admin_level": 1,
+   "name": "missan",
+   "alternative_name": "missan",
+   "candidate_set": "IRQ|adm1|IRQ",
+   "expected_names": [
+    "maysan"
+   ],
+   "none_acceptable": false,
+   "note": "control: Missan = Maysan"
+  },
+  {
+   "countryiso3": "LBN",
+   "admin_level": 2,
+   "name": "kasrouane",
+   "alternative_name": "kasrouane",
+   "candidate_set": "LBN|adm2|LB3",
+   "expected_names": [
+    "kesrwane"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "LBN",
+   "admin_level": 2,
+   "name": "bint jubail",
+   "alternative_name": "bint jubail",
+   "candidate_set": "LBN|adm2|LB4",
+   "expected_names": [
+    "bent jbeil"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "MLI",
+   "admin_level": 2,
+   "name": "niafunke",
+   "alternative_name": "niafunke",
+   "candidate_set": "MLI|adm2|ML06",
+   "expected_names": [],
+   "none_acceptable": true,
+   "note": "control: Tombouctou = Timbuktu"
+  },
+  {
+   "countryiso3": "MLI",
+   "admin_level": 2,
+   "name": "tombouctou",
+   "alternative_name": "tombouctou",
+   "candidate_set": "MLI|adm2|ML06",
+   "expected_names": [
+    "timbuktu"
+   ],
+   "none_acceptable": false,
+   "note": "control: Tombouctou = Timbuktu"
+  },
+  {
+   "countryiso3": "NGA",
+   "admin_level": 1,
+   "name": "abuja",
+   "alternative_name": "abuja",
+   "candidate_set": "NGA|adm1|NGA",
+   "expected_names": [
+    "federal capital territory"
+   ],
+   "none_acceptable": false,
+   "note": "control: prod and stage both give Abia"
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 2,
+   "name": "jebal aulya",
+   "alternative_name": "jebal aulya",
+   "candidate_set": "SDN|adm2|SD01",
+   "expected_names": [
+    "jebel awlia"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 2,
+   "name": "ailliet",
+   "alternative_name": "ailliet",
+   "candidate_set": "SDN|adm2|SD02",
+   "expected_names": [
+    "al lait"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 2,
+   "name": "talodi",
+   "alternative_name": "talodi",
+   "candidate_set": "SDN|adm2|SD07",
+   "expected_names": [
+    "talawdi"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 2,
+   "name": "tokar",
+   "alternative_name": "tokar",
+   "candidate_set": "SDN|adm2|SD10",
+   "expected_names": [
+    "tawkar"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "SDN",
+   "admin_level": 2,
+   "name": "el dindir",
+   "alternative_name": "el dindir",
+   "candidate_set": "SDN|adm2|SD14",
+   "expected_names": [
+    "ad dinder"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "SLE",
+   "admin_level": 2,
+   "name": "falaba",
+   "alternative_name": "falaba",
+   "candidate_set": "SLE|adm2|SL02",
+   "expected_names": [
+    "fabala"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "lutska",
+   "alternative_name": "lutska",
+   "candidate_set": "UKR|adm2|UA07",
+   "expected_names": [
+    "lutskyi"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "mykhailivskyi",
+   "alternative_name": "mykhailivskyi",
+   "candidate_set": "UKR|adm2|UA23",
+   "expected_names": [
+    "vasylivskyi"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "odeska",
+   "alternative_name": "odeska",
+   "candidate_set": "UKR|adm2|UA51",
+   "expected_names": [
+    "odeskyi"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "sumska",
+   "alternative_name": "sumska",
+   "candidate_set": "UKR|adm2|UA59",
+   "expected_names": [
+    "sumskyi"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "UKR",
+   "admin_level": 2,
+   "name": "kyivska",
+   "alternative_name": "kyivska",
+   "candidate_set": "UKR|adm2|UA80",
+   "expected_names": [
+    "kyiv"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 1,
+   "name": "hadramaut",
+   "alternative_name": "hadramaut",
+   "candidate_set": "YEM|adm1|YEM",
+   "expected_names": [
+    "hadramawt"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 2,
+   "name": "adh dhliaah",
+   "alternative_name": "adh dhliaah",
+   "candidate_set": "YEM|adm2|YE19",
+   "expected_names": [
+    "ad dulayah"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 2,
+   "name": "huraidhah",
+   "alternative_name": "huraidhah",
+   "candidate_set": "YEM|adm2|YE19",
+   "expected_names": [
+    "haridah"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 2,
+   "name": "dhar",
+   "alternative_name": "dhar",
+   "candidate_set": "YEM|adm2|YE21",
+   "expected_names": [
+    "dahr"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 2,
+   "name": "yafaa",
+   "alternative_name": "yafaa",
+   "candidate_set": "YEM|adm2|YE25",
+   "expected_names": [
+    "yafi"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 2,
+   "name": "halimayn",
+   "alternative_name": "halimayn",
+   "candidate_set": "YEM|adm2|YE25",
+   "expected_names": [
+    "halmin"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 2,
+   "name": "huswain",
+   "alternative_name": "huswain",
+   "candidate_set": "YEM|adm2|YE28",
+   "expected_names": [
+    "haswin"
+   ],
+   "none_acceptable": false,
+   "note": "control: control"
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 2,
+   "name": "qaatabah",
+   "alternative_name": "qaatabah",
+   "candidate_set": "YEM|adm2|YE30",
+   "expected_names": [
+    "qatabah"
+   ],
+   "none_acceptable": false,
+   "note": "control: Al Dhale'e = Ad Dali'"
+  },
+  {
+   "countryiso3": "YEM",
+   "admin_level": 2,
+   "name": "ad dhalee",
+   "alternative_name": "ad dhalee",
+   "candidate_set": "YEM|adm2|YE30",
+   "expected_names": [
+    "ad dali"
+   ],
+   "none_acceptable": false,
+   "note": "control: Al Dhale'e = Ad Dali'"
+  }
+ ]
+}
