@@ -155,6 +155,32 @@ class TestMatching:
         ):
             assert rapidfuzz_matcher.match(possible_names, query) == expected
 
+    def test_rapidfuzz_matcher_initials(self):
+        # A leading single letter must be the initial of a word in the
+        # possible name. token_set_ratio ignores it so "e shewa" ties with all
+        # Oromia "* shewa" zones and fuzz.ratio picks "west shewa".
+        rapidfuzz_matcher = RapidFuzzMatcher(RapidFuzzMatcher.place_name_scorer)
+        shewa = ["west shewa", "north shewa or", "east shewa", "south west shewa"]
+        for possible_names, query, expected in (
+            (shewa, "e shewa", 2),
+            (shewa, "s w shewa", 3),
+            (shewa, "n shewa", 1),
+            (["west gondar", "north gondar", "south gondar"], "s gonder", 2),
+            (["benishangul gumuz", "gambela"], "b gumuz", 0),
+            (["cidade de tete", "moatize"], "c tete", 0),
+            # A trailing letter must be in the possible name
+            (["region iv a calabarzon", "mimaropa region"], "region iv b", None),
+            # Single letters between words are left alone (Spanish "y")
+            (
+                ["barranquilla", "soledad"],
+                "distrito especial industrial y portuario de barranquilla",
+                0,
+            ),
+            # Names differing only in spaces and punctuation are not checked
+            (["sanaa", "aden"], "sana a", 0),
+        ):
+            assert rapidfuzz_matcher.match(possible_names, query) == expected
+
     def test_rapidfuzz_matcher_subset_tie_break(self):
         # Haiti has both "West" and "North West" departments. For the
         # translated alternative "north west", token_set_ratio scores "west",

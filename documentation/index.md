@@ -894,6 +894,12 @@ Examples:
     matcher = RapidFuzzMatcher(RapidFuzzMatcher.place_name_scorer)
     assert matcher.match(kalimantan, "central kalimantan") is None
 
+    # place_name_scorer also expands a leading initial to a word starting
+    # with it and requires a trailing single letter in the possible name
+    shewa = ["west shewa", "east shewa"]
+    assert matcher.match(shewa, "e shewa") == 1
+    assert matcher.match(["region iv a calabarzon"], "region iv b") is None
+
     # Phonetics is an alternative matcher using Refined Soundex
     phonetics = Phonetics()
     assert phonetics.match(possible_names, "al dali") == 1
