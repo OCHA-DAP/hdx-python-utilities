@@ -176,7 +176,7 @@ def get_frictionless_tableresource(
         if isinstance(headers[0], int):
             dialect.header_rows = headers
         else:
-            detector.field_names = headers
+            detector.field_names = list(headers)
             if has_header is None:
                 has_header = False
     if has_header is None:
