@@ -47,7 +47,7 @@ Key modules:
 - `path.py` — `script_dir()`, temp dir helpers, `NotFoundError`
 - `error_handler.py` / `errors_onexit.py` — structured error accumulation and on-exit reporting
 - `text.py` — text processing including `smart_split`
-- `matching.py` — fuzzy/phonetic matching utilities
+- `matching.py` — fuzzy matching utilities (rapidfuzz)
 - `state.py` — lightweight on-disk state persistence
 - `useragent.py` — user-agent string construction (reads `~/.useragent.yaml` by default)
 

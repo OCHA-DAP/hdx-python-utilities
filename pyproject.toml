@@ -51,7 +51,6 @@ dependencies = [
     # /end frictionless extras
     "typing_extensions",
     "loguru",
-    "pyphonetics",
     "rapidfuzz",
     "python-dateutil>=2.9.0, <2.9.1",
     "ratelimit",

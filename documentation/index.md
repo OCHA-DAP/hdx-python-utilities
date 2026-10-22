@@ -33,6 +33,8 @@ The code for the library is [here](https://github.com/OCHA-DAP/hdx-python-utilit
 The library has detailed API documentation which can be found in the menu at the top.
 
 ## Breaking Changes
+From 4.2.2, Phonetics and the pyphonetics dependency are removed
+
 From 4.2.0, get_code_from_name fuzzy matches using RapidFuzzMatcher rather than
 Phonetics by default. Pass matcher=Phonetics() for the previous behaviour. A name
 made of parts (eg. "Protection - GBV") is resolved from its parts, and a list of
@@ -900,22 +902,16 @@ Examples:
     assert matcher.match(shewa, "e shewa") == 1
     assert matcher.match(["region iv a calabarzon"], "region iv b") is None
 
-    # Phonetics is an alternative matcher using Refined Soundex
-    phonetics = Phonetics()
-    assert phonetics.match(possible_names, "al dali") == 1
-
     org_type_lookup = {"Donor": "433", "National NGO": "441", "Other": "443"}
     lookup = {
         normalise(k): v for k, v in org_type_lookup.items()
     }
     assert get_code_from_name("NATIONAL_NGO", lookup, [], fuzzy_match=False) == "441"
 
-    # get_code_from_name fuzzy matches with RapidFuzzMatcher unless given
-    # another matcher. It resolves names made of parts and does not fuzzy
-    # match lists of names.
+    # get_code_from_name fuzzy matches with RapidFuzzMatcher. It resolves
+    # names made of parts and does not fuzzy match lists of names.
     sector_lookup = {"food security": "FSC", "protection": "PRO", "gbv": "PRO-GBV", "wash": "WSH"}
     assert get_code_from_name("Food Securty", sector_lookup, []) == "FSC"
-    assert get_code_from_name("Food Securty", sector_lookup, [], matcher=Phonetics()) == "FSC"
     assert get_code_from_name("Protection - GBV", sector_lookup, []) == "PRO-GBV"
     assert get_code_from_name("Wash & Protection", sector_lookup, []) is None
 
