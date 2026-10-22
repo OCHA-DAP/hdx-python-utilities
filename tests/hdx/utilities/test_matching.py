@@ -1,7 +1,6 @@
 """Matching Tests"""
 
 from hdx.utilities.matching import (
-    Phonetics,
     RapidFuzzMatcher,
     earliest_index,
     get_code_from_name,
@@ -20,17 +19,6 @@ class TestMatching:
     b = "The quicker brown fox leapt over the slower fox. It was so fast!"
     c = "The quick brown fox climbed over the lazy dog. It was so fast!"
 
-    def test_phonetics(self):
-        possible_names = ["Al Maharah", "Ad Dali", "Dhamar"]
-        phonetics = Phonetics()
-        assert phonetics.match(possible_names, "al dali") == 1
-        assert phonetics.match(possible_names, "xxx", "Damar") == 2
-        transform_possible_names = [lambda x: None]
-        assert (
-            phonetics.match(possible_names, "xxx", "yyy", transform_possible_names)
-            is None
-        )
-
     def test_rapidfuzz_matcher(self):
         possible_names = ["Al Maharah", "Ad Dali", "Dhamar"]
         matcher = RapidFuzzMatcher()
@@ -43,7 +31,7 @@ class TestMatching:
         )
 
     def test_rapidfuzz_matcher_transliteration(self):
-        # UKR admin_name_mappings entries that Phonetics cannot match
+        # UKR admin_name_mappings entries that are transliteration variants
         possible_names = [
             "Avtonomna Respublika Krym",
             "Vinnytska",
@@ -82,7 +70,6 @@ class TestMatching:
             )
             return possible_names[index] if index is not None else None
 
-        phonetics = Phonetics()
         rapidfuzz_matcher = RapidFuzzMatcher()
         for query, expected in (
             ("Chernіvеtskaja Oblast", "Chernivetska"),
@@ -91,16 +78,13 @@ class TestMatching:
             ("Sevastopol City", "Sevastopol"),
             ("Zapоrіzskaja Oblast", "Zaporizka"),
         ):
-            assert resolve(phonetics, query) is None
             assert resolve(rapidfuzz_matcher, query) == expected
 
         # A naming-scheme difference, not a spelling variant
-        assert resolve(phonetics, "Chernigovskaja Oblast") is None
         assert resolve(rapidfuzz_matcher, "Chernigovskaja Oblast") != "Chernihivska"
 
     def test_rapidfuzz_matcher_naming_scheme_mismatch(self):
         # Unrelated names that only admin_name_mappings can resolve
-        phonetics = Phonetics()
         rapidfuzz_matcher = RapidFuzzMatcher()
         cases = (
             (["Federal Capital Territory"], "Abuja"),  # NGA: informal vs formal name
@@ -108,16 +92,13 @@ class TestMatching:
             (["Avtonomna Respublika Krym"], "Crimea"),  # UKR: colloquial vs formal
         )
         for possible_names, query in cases:
-            assert phonetics.match(possible_names, normalise(query)) is None
             assert rapidfuzz_matcher.match(possible_names, normalise(query)) is None
 
     def test_rapidfuzz_matcher_extra_word_caveat(self):
-        # Phonetics rejects both; RapidFuzzMatcher accepts both
-        phonetics = Phonetics()
+        # "<name> city" matches "<name>"
         rapidfuzz_matcher = RapidFuzzMatcher()
         for query in ("sevastopol city", "kenge city"):
             name = query.split(" ")[0].capitalize()
-            assert phonetics.match([name], query) is None
             assert rapidfuzz_matcher.match([name], query) == 0
 
     def test_rapidfuzz_matcher_word_split(self):
@@ -411,7 +392,6 @@ class TestMatching:
         }
         actual_sector_lookup = {normalise(k): v for k, v in sector_lookup.items()}
         actual_sector_lookup.update(sector_lookup)
-        matcher = RapidFuzzMatcher()
         for name, code in (
             ("Protection - GBV", "PRO-GBV"),
             ("GBV - Protection", "PRO-GBV"),
@@ -420,10 +400,7 @@ class TestMatching:
             ("Food Security and Livelihood", "FSC"),
             ("Emergency Shelter and NFI", "SHL"),
         ):
-            assert (
-                get_code_from_name(name, actual_sector_lookup, [], matcher=matcher)
-                == code
-            )
+            assert get_code_from_name(name, actual_sector_lookup, []) == code
 
     def test_get_code_from_name_rapidfuzz_matcher(self):
         sector_lookup = {
@@ -439,14 +416,13 @@ class TestMatching:
             "United Nations": "447",
         }
         actual_org_type_lookup = {normalise(k): v for k, v in org_type_lookup.items()}
-        matcher = RapidFuzzMatcher()
         for name, lookup, expected in (
             ("Educaton", actual_sector_lookup, "EDU"),
             ("Healht", actual_sector_lookup, "HEA"),
             # WRatio matches this to "International NGO"
             ("COOPÉRATION_INTERNATIONALE", actual_org_type_lookup, None),
         ):
-            assert get_code_from_name(name, lookup, [], matcher=matcher) == expected
+            assert get_code_from_name(name, lookup, []) == expected
 
     def test_multiple_replace(self):
         result = multiple_replace(

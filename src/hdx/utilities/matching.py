@@ -2,7 +2,6 @@ import difflib
 import re
 from collections.abc import Callable, Sequence
 
-from pyphonetics import RefinedSoundex
 from rapidfuzz import fuzz as rapidfuzz_fuzz
 
 from hdx.utilities.text import normalise
@@ -57,64 +56,10 @@ def expand_initials(words: list[str], other_words: list[str]) -> list[str] | Non
     return expanded
 
 
-class Phonetics(RefinedSoundex):
-    def match(
-        self,
-        possible_names: Sequence,
-        name: str,
-        alternative_name: str | None = None,
-        transform_possible_names: Sequence[Callable] = [],
-        threshold: int = 2,
-    ) -> int | None:
-        """
-        Match name to one of the given possible names. Returns None if no match
-        or the index of the matching name
-
-        Args:
-            possible_names: Possible names
-            name: Name to match
-            alternative_name: Alternative name to match. Defaults to None.
-            transform_possible_names: Functions to transform possible names.
-            threshold: Match threshold. Defaults to 2.
-
-        Returns:
-            Index of matching name from possible names or None
-        """
-        mindistance = None
-        matching_index = None
-
-        transform_possible_names.insert(0, lambda x: x)
-
-        def check_name(name, possible_name):
-            nonlocal mindistance, matching_index  # noqa: E999
-
-            distance = self.distance(name, possible_name)
-            if mindistance is None or distance < mindistance:
-                mindistance = distance
-                matching_index = i
-
-        for i, possible_name in enumerate(possible_names):
-            for transform_possible_name in transform_possible_names:
-                transformed_possible_name = transform_possible_name(possible_name)
-                if not transformed_possible_name:
-                    continue
-                check_name(name, transformed_possible_name)
-                if alternative_name:
-                    check_name(alternative_name, transformed_possible_name)
-        if mindistance is None or mindistance > threshold:
-            return None
-        return matching_index
-
-
 class RapidFuzzMatcher:
     """
-    Default matcher for names, using rapidfuzz edit-distance scoring instead
-    of phonetic (Soundex-family) encoding as Phonetics does. Phonetic algorithms
-    encode English pronunciation rules, so they are a poor fit for matching
-    multilingual or transliterated names (eg. "Sana'a" vs "Sanaa") that are
-    spelling variants rather than being phonetically similar in English
-    terms. Edit distance on normalised strings tends to place such variants
-    closer together.
+    Matcher for names using rapidfuzz edit-distance scoring, which suits
+    multilingual or transliterated spelling variants (eg. "Sana'a" vs "Sanaa").
 
     Args:
         scorer: Function taking two strings and returning a similarity score
@@ -320,7 +265,6 @@ def get_code_from_name(
     unmatched: list[str],
     fuzzy_match: bool = True,
     match_threshold: int = 5,
-    matcher: Phonetics | RapidFuzzMatcher | None = None,
 ) -> str | None:
     """
     Given a name (org type, sector, etc), return the corresponding code. A
@@ -333,7 +277,6 @@ def get_code_from_name(
         unmatched: List of unmatched names
         fuzzy_match: Allow fuzzy matching or not
         match_threshold: Match threshold
-        matcher: Fuzzy matcher to use. Defaults to None (RapidFuzzMatcher).
 
     Returns:
         Matching code
@@ -359,9 +302,7 @@ def get_code_from_name(
         unmatched.append(name)
         return None
     names = [x for x in code_lookup.keys() if len(x) > match_threshold]
-    if matcher is None:
-        matcher = RapidFuzzMatcher()
-    name_index = matcher.match(
+    name_index = RapidFuzzMatcher().match(
         possible_names=names,
         name=name,
         alternative_name=name_clean,
