@@ -8,7 +8,6 @@ from io import StringIO
 
 import dateutil
 from dateutil.parser import ParserError, parserinfo
-from six import text_type
 
 default_sd_year = 1
 default_date_notz = datetime(
@@ -124,7 +123,7 @@ class _timelex:
         if isinstance(instream, (bytes, bytearray)):
             instream = instream.decode()
 
-        if isinstance(instream, text_type):
+        if isinstance(instream, str):
             instream = StringIO(instream)
         elif getattr(instream, "read", None) is None:
             raise TypeError(
