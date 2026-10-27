@@ -19,7 +19,6 @@ classifiers = [
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
@@ -34,7 +33,7 @@ classifiers = [
 ]
 readme = "README.md"
 dynamic = ["version"]
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 
 # Extras for frictionless[excel,json] added explicitly
 # for conda-forge compatibility
@@ -49,7 +48,6 @@ dependencies = [
     "ijson>=3.5.0",
     "jsonlines>=4.0.0",
     # /end frictionless extras
-    "typing_extensions",
     "loguru",
     "rapidfuzz",
     "python-dateutil>=2.9.0, <3.1",
@@ -103,7 +101,7 @@ allow-direct-references = true
 # ----------------------------------------------------------------------------
 
 [tool.ruff]
-target-version = "py310"
+target-version = "py311"
 src = ["src"]
 exclude = ["_version.py"]
 

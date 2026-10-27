@@ -3,7 +3,7 @@
 import re
 import time
 from calendar import monthrange
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 from io import StringIO
 
 import dateutil
@@ -27,7 +27,7 @@ default_date = datetime(
     minute=0,
     second=0,
     microsecond=0,
-    tzinfo=timezone.utc,
+    tzinfo=UTC,
 )
 default_ed_year = 9990
 default_enddate_notz = datetime(
@@ -47,7 +47,7 @@ default_enddate = datetime(
     minute=0,
     second=0,
     microsecond=0,
-    tzinfo=timezone.utc,
+    tzinfo=UTC,
 )
 
 # Used https://stackoverflow.com/questions/1703546/parsing-date-time-string-with-timezone-abbreviated-name-in-python/4766400#4766400
@@ -805,7 +805,7 @@ def now_utc() -> datetime:
     Returns:
         Now with UTC timezone
     """
-    return datetime.now(timezone.utc)
+    return datetime.now(UTC)
 
 
 def now_utc_notz() -> datetime:
@@ -814,7 +814,7 @@ def now_utc_notz() -> datetime:
     Returns:
         Now in UTC but with timezone removed
     """
-    return datetime.now(timezone.utc).replace(tzinfo=None)
+    return datetime.now(UTC).replace(tzinfo=None)
 
 
 def parse_date_range(
@@ -959,25 +959,25 @@ def parse_date_range(
     if max_endtime:
         enddate = enddate.replace(hour=23, minute=59, second=59, microsecond=999999)
     if timezone_handling == 0:
-        startdate = startdate.replace(tzinfo=timezone.utc)
-        enddate = enddate.replace(tzinfo=timezone.utc)
+        startdate = startdate.replace(tzinfo=UTC)
+        enddate = enddate.replace(tzinfo=UTC)
     elif timezone_handling == 3:
         if startdate.tzinfo is None:
-            startdate = startdate.replace(tzinfo=timezone.utc)
+            startdate = startdate.replace(tzinfo=UTC)
         if enddate.tzinfo is None:
-            enddate = enddate.replace(tzinfo=timezone.utc)
+            enddate = enddate.replace(tzinfo=UTC)
     elif timezone_handling == 4:
-        startdate = startdate.astimezone(timezone.utc)
-        enddate = enddate.astimezone(timezone.utc)
+        startdate = startdate.astimezone(UTC)
+        enddate = enddate.astimezone(UTC)
     elif timezone_handling == 5:
         if startdate.tzinfo is None:
-            startdate = startdate.replace(tzinfo=timezone.utc)
+            startdate = startdate.replace(tzinfo=UTC)
         else:
-            startdate = startdate.astimezone(timezone.utc)
+            startdate = startdate.astimezone(UTC)
         if enddate.tzinfo is None:
-            enddate = enddate.replace(tzinfo=timezone.utc)
+            enddate = enddate.replace(tzinfo=UTC)
         else:
-            enddate = enddate.astimezone(timezone.utc)
+            enddate = enddate.astimezone(UTC)
     if not include_microseconds:
         startdate = startdate.replace(microsecond=0)
         enddate = enddate.replace(microsecond=0)
@@ -1092,12 +1092,12 @@ def get_timestamp_from_datetime(date: datetime) -> float:
             + date.microsecond / 1e6
         )
     else:
-        return (date - datetime(1970, 1, 1, tzinfo=timezone.utc)).total_seconds()
+        return (date - datetime(1970, 1, 1, tzinfo=UTC)).total_seconds()
 
 
 def get_datetime_from_timestamp(
     timestamp: float,
-    timezone: datetime.tzinfo = timezone.utc,
+    timezone: datetime.tzinfo = UTC,
     today: datetime = now_utc(),
 ) -> datetime:
     """Convert timestamp to datetime.
@@ -1150,7 +1150,7 @@ def get_quarter_start(year: int, quarter: int) -> datetime:
         First day of quarter
     """
     month = 3 * (quarter - 1) + 1
-    return datetime(year, month, 1, tzinfo=timezone.utc)
+    return datetime(year, month, 1, tzinfo=UTC)
 
 
 def get_quarter_end(
@@ -1183,5 +1183,5 @@ def get_quarter_end(
         seconds = 0
         microseconds = 0
     return datetime(
-        year, month, 1, hours, minutes, seconds, microseconds, tzinfo=timezone.utc
+        year, month, 1, hours, minutes, seconds, microseconds, tzinfo=UTC
     ) + timedelta(days=-1)
