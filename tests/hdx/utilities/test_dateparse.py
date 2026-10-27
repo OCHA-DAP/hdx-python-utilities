@@ -1,6 +1,6 @@
 """Date Parse Utility Tests"""
 
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta, timezone
 
 import pytest
 from dateutil.parser import ParserError
@@ -21,35 +21,35 @@ from hdx.utilities.dateparse import (
 
 class TestDateParse:
     def test_now_utc(self):
-        assert now_utc().replace(second=0, microsecond=0) == datetime.now(
-            timezone.utc
-        ).replace(second=0, microsecond=0, tzinfo=timezone.utc)
+        assert now_utc().replace(second=0, microsecond=0) == datetime.now(UTC).replace(
+            second=0, microsecond=0, tzinfo=UTC
+        )
         assert now_utc_notz().replace(second=0, microsecond=0) == datetime.now(
-            timezone.utc
+            UTC
         ).replace(second=0, microsecond=0, tzinfo=None)
 
     def test_parse_date_range(self):
         result = (
-            datetime(2013, 2, 10, 0, 0, tzinfo=timezone.utc),
-            datetime(2013, 2, 10, 0, 0, tzinfo=timezone.utc),
+            datetime(2013, 2, 10, 0, 0, tzinfo=UTC),
+            datetime(2013, 2, 10, 0, 0, tzinfo=UTC),
         )
         assert parse_date_range("10/02/2013") == result
         assert parse_date_range("2013/02/10") == result
         result = (
-            datetime(2013, 2, 20, 10, 0, tzinfo=timezone.utc),
-            datetime(2013, 2, 20, 10, 0, tzinfo=timezone.utc),
+            datetime(2013, 2, 20, 10, 0, tzinfo=UTC),
+            datetime(2013, 2, 20, 10, 0, tzinfo=UTC),
         )
         assert parse_date_range("20/02/2013 10:00:00") == result
         assert parse_date_range("20/02/2013 10:00:00", "%d/%m/%Y %H:%M:%S") == result
         result = (
-            datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc),
-            datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc),
+            datetime(2013, 2, 20, 0, 0, tzinfo=UTC),
+            datetime(2013, 2, 20, 0, 0, tzinfo=UTC),
         )
         assert parse_date_range("20/02/2013") == result
         assert parse_date_range("20/02/2013 10:00:00", zero_time=True) == result
         result2 = (
-            datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc),
-            datetime(2013, 2, 20, 23, 59, 59, tzinfo=timezone.utc),
+            datetime(2013, 2, 20, 0, 0, tzinfo=UTC),
+            datetime(2013, 2, 20, 23, 59, 59, tzinfo=UTC),
         )
         assert (
             parse_date_range(
@@ -60,8 +60,8 @@ class TestDateParse:
             == result2
         )
         result2 = (
-            datetime(2013, 2, 20, 23, 59, 59, 999999, tzinfo=timezone.utc),
-            datetime(2013, 2, 20, 23, 59, 59, 999999, tzinfo=timezone.utc),
+            datetime(2013, 2, 20, 23, 59, 59, 999999, tzinfo=UTC),
+            datetime(2013, 2, 20, 23, 59, 59, 999999, tzinfo=UTC),
         )
         assert (
             parse_date_range(
@@ -82,8 +82,8 @@ class TestDateParse:
             parse_date_range("date is 20/02/2013 for this test", fuzzy=fuzzy) == result
         )
         fuzzyresult = {
-            "startdate": datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc),
-            "enddate": datetime(2013, 2, 20, 0, 0, tzinfo=timezone.utc),
+            "startdate": datetime(2013, 2, 20, 0, 0, tzinfo=UTC),
+            "enddate": datetime(2013, 2, 20, 0, 0, tzinfo=UTC),
             "nondate": ("date is ", " for this test"),
             "date": ("20/02/2013",),
         }
@@ -106,27 +106,27 @@ class TestDateParse:
         fuzzyresult["nondate"] = None
         assert fuzzy == fuzzyresult
         result = (
-            datetime(2013, 2, 1, 0, 0, tzinfo=timezone.utc),
-            datetime(2013, 2, 28, 0, 0, tzinfo=timezone.utc),
+            datetime(2013, 2, 1, 0, 0, tzinfo=UTC),
+            datetime(2013, 2, 28, 0, 0, tzinfo=UTC),
         )
         assert parse_date_range("02/2013") == result
         assert parse_date_range("02/2013", "%m/%Y") == result
         fuzzy = {}
         assert parse_date_range("date is 02/2013 for this test", fuzzy=fuzzy) == result
         assert fuzzy == {
-            "startdate": datetime(2013, 2, 1, 0, 0, tzinfo=timezone.utc),
-            "enddate": datetime(2013, 2, 28, 0, 0, tzinfo=timezone.utc),
+            "startdate": datetime(2013, 2, 1, 0, 0, tzinfo=UTC),
+            "enddate": datetime(2013, 2, 28, 0, 0, tzinfo=UTC),
             "nondate": ("date is ", " for this test"),
             "date": ("02/2013",),
         }
         result = (
-            datetime(2013, 1, 1, 0, 0, tzinfo=timezone.utc),
-            datetime(2013, 12, 31, 0, 0, tzinfo=timezone.utc),
+            datetime(2013, 1, 1, 0, 0, tzinfo=UTC),
+            datetime(2013, 12, 31, 0, 0, tzinfo=UTC),
         )
         assert parse_date_range("2013") == result
         assert parse_date_range("2013", "%Y") == result
         fuzzy = {}
-        date = datetime(2001, 12, 10, 0, 0, tzinfo=timezone.utc)
+        date = datetime(2001, 12, 10, 0, 0, tzinfo=UTC)
         result = date, date
         assert (
             parse_date_range(
@@ -155,14 +155,12 @@ class TestDateParse:
             parse_date_range("20/02", "%d/%m")
 
     def test_parse_date(self):
-        assert parse_date("20/02/2013") == datetime(
-            2013, 2, 20, 0, 0, tzinfo=timezone.utc
-        )
+        assert parse_date("20/02/2013") == datetime(2013, 2, 20, 0, 0, tzinfo=UTC)
         assert parse_date("20/02/2013", "%d/%m/%Y") == datetime(
-            2013, 2, 20, 0, 0, tzinfo=timezone.utc
+            2013, 2, 20, 0, 0, tzinfo=UTC
         )
         assert parse_date("20/02/2013 01:30:20") == datetime(
-            2013, 2, 20, 1, 30, 20, tzinfo=timezone.utc
+            2013, 2, 20, 1, 30, 20, tzinfo=UTC
         )
         assert parse_date("20/02/2013 01:30:20 IST") == datetime(
             2013,
@@ -171,7 +169,7 @@ class TestDateParse:
             1,
             30,
             20,
-            tzinfo=timezone.utc,
+            tzinfo=UTC,
         )
         assert parse_date("20/02/2013 01:30:20 IST", timezone_handling=1) == datetime(
             2013,
@@ -212,7 +210,7 @@ class TestDateParse:
             20,
             00,
             20,
-            tzinfo=timezone.utc,
+            tzinfo=UTC,
         )
         assert parse_date("20/02/2013 01:30:20 IST", zero_time=True) == datetime(
             2013,
@@ -221,7 +219,7 @@ class TestDateParse:
             0,
             0,
             0,
-            tzinfo=timezone.utc,
+            tzinfo=UTC,
         )
         assert parse_date("20/02/2013 01:30:20 IST", max_time=True) == datetime(
             2013,
@@ -230,7 +228,7 @@ class TestDateParse:
             23,
             59,
             59,
-            tzinfo=timezone.utc,
+            tzinfo=UTC,
         )
         assert parse_date(
             "20/02/2013 01:30:20 NUT",
@@ -268,7 +266,7 @@ class TestDateParse:
             1,
             30,
             20,
-            tzinfo=timezone.utc,
+            tzinfo=UTC,
         )
         assert parse_date(
             "20/02/2013 01:30:20 IST",
@@ -281,7 +279,7 @@ class TestDateParse:
             1,
             30,
             20,
-            tzinfo=timezone.utc,
+            tzinfo=UTC,
         )
         with pytest.raises(ParserError):
             parse_date("02/2013")
@@ -290,161 +288,149 @@ class TestDateParse:
 
     def test_get_datetime_from_timestamp(self):
         expected_timestamp = 1596180834.0
-        expected_date = datetime(2020, 7, 31, 7, 33, 54, tzinfo=timezone.utc)
+        expected_date = datetime(2020, 7, 31, 7, 33, 54, tzinfo=UTC)
         timestamp = get_timestamp_from_datetime(expected_date)
         assert timestamp == expected_timestamp
-        date = get_datetime_from_timestamp(expected_timestamp, timezone=timezone.utc)
+        date = get_datetime_from_timestamp(expected_timestamp, timezone=UTC)
         assert date == expected_date
-        date = get_datetime_from_timestamp(
-            expected_timestamp * 1000, timezone=timezone.utc
-        )
+        date = get_datetime_from_timestamp(expected_timestamp * 1000, timezone=UTC)
         assert date == expected_date
 
     def test_iso_string_from_datetime(self):
-        date = datetime(2020, 7, 31, 7, 33, 54, tzinfo=timezone.utc)
+        date = datetime(2020, 7, 31, 7, 33, 54, tzinfo=UTC)
         string = iso_string_from_datetime(date)
         assert string == "2020-07-31"
 
     def test_get_quarter(self):
-        date = datetime(2020, 7, 31, 7, 33, 54, tzinfo=timezone.utc)
+        date = datetime(2020, 7, 31, 7, 33, 54, tzinfo=UTC)
         assert get_quarter(date) == 3
-        assert (
-            get_quarter(datetime(year=2021, month=10, day=5, tzinfo=timezone.utc)) == 4
-        )
-        assert (
-            get_quarter(datetime(year=2020, month=9, day=25, tzinfo=timezone.utc)) == 3
-        )
-        assert (
-            get_quarter(datetime(year=2020, month=12, day=11, tzinfo=timezone.utc)) == 4
-        )
-        assert (
-            get_quarter(datetime(year=2020, month=1, day=2, tzinfo=timezone.utc)) == 1
-        )
+        assert get_quarter(datetime(year=2021, month=10, day=5, tzinfo=UTC)) == 4
+        assert get_quarter(datetime(year=2020, month=9, day=25, tzinfo=UTC)) == 3
+        assert get_quarter(datetime(year=2020, month=12, day=11, tzinfo=UTC)) == 4
+        assert get_quarter(datetime(year=2020, month=1, day=2, tzinfo=UTC)) == 1
 
     def test_get_quarter_start_end(self):
         year = 2022
         quarter = 3
-        assert get_quarter_start(year, quarter) == datetime(
-            2022, 7, 1, tzinfo=timezone.utc
-        )
+        assert get_quarter_start(year, quarter) == datetime(2022, 7, 1, tzinfo=UTC)
         assert get_quarter_end(year, quarter) == datetime(
-            2022, 9, 30, 23, 59, 59, tzinfo=timezone.utc
+            2022, 9, 30, 23, 59, 59, tzinfo=UTC
         )
         assert get_quarter_end(year, quarter, max_time=False) == datetime(
-            2022, 9, 30, tzinfo=timezone.utc
+            2022, 9, 30, tzinfo=UTC
         )
         assert get_quarter_end(year, quarter, include_microseconds=True) == datetime(
-            2022, 9, 30, 23, 59, 59, 999999, tzinfo=timezone.utc
+            2022, 9, 30, 23, 59, 59, 999999, tzinfo=UTC
         )
 
-        date = datetime(2020, 10, 5, tzinfo=timezone.utc)
+        date = datetime(2020, 10, 5, tzinfo=UTC)
         assert get_quarter_start(date.year, get_quarter(date)) == datetime(
-            2020, 10, 1, tzinfo=timezone.utc
+            2020, 10, 1, tzinfo=UTC
         )
         assert get_quarter_end(
             date.year, get_quarter(date), max_time=False
-        ) == datetime(2020, 12, 31, tzinfo=timezone.utc)
+        ) == datetime(2020, 12, 31, tzinfo=UTC)
 
-        date = datetime(2020, 9, 25, tzinfo=timezone.utc)
+        date = datetime(2020, 9, 25, tzinfo=UTC)
         assert get_quarter_start(date.year, get_quarter(date)) == datetime(
-            2020, 7, 1, tzinfo=timezone.utc
+            2020, 7, 1, tzinfo=UTC
         )
         assert get_quarter_end(
             date.year, get_quarter(date), max_time=False
-        ) == datetime(2020, 9, 30, tzinfo=timezone.utc)
+        ) == datetime(2020, 9, 30, tzinfo=UTC)
 
-        date = datetime(2020, 7, 1, tzinfo=timezone.utc)
+        date = datetime(2020, 7, 1, tzinfo=UTC)
         assert get_quarter_start(date.year, get_quarter(date)) == datetime(
-            2020, 7, 1, tzinfo=timezone.utc
+            2020, 7, 1, tzinfo=UTC
         )
         assert get_quarter_end(
             date.year, get_quarter(date), max_time=False
-        ) == datetime(2020, 9, 30, tzinfo=timezone.utc)
+        ) == datetime(2020, 9, 30, tzinfo=UTC)
 
-        date = datetime(2020, 9, 30, tzinfo=timezone.utc)
+        date = datetime(2020, 9, 30, tzinfo=UTC)
         assert get_quarter_start(date.year, get_quarter(date)) == datetime(
-            2020, 7, 1, tzinfo=timezone.utc
+            2020, 7, 1, tzinfo=UTC
         )
         assert get_quarter_end(
             date.year, get_quarter(date), max_time=False
-        ) == datetime(2020, 9, 30, tzinfo=timezone.utc)
+        ) == datetime(2020, 9, 30, tzinfo=UTC)
 
-        date = datetime(2020, 12, 11, tzinfo=timezone.utc)
+        date = datetime(2020, 12, 11, tzinfo=UTC)
         assert get_quarter_start(date.year, get_quarter(date)) == datetime(
-            2020, 10, 1, tzinfo=timezone.utc
+            2020, 10, 1, tzinfo=UTC
         )
         assert get_quarter_end(
             date.year, get_quarter(date), max_time=False
-        ) == datetime(2020, 12, 31, tzinfo=timezone.utc)
+        ) == datetime(2020, 12, 31, tzinfo=UTC)
 
-        date = datetime(2020, 10, 1, tzinfo=timezone.utc)
+        date = datetime(2020, 10, 1, tzinfo=UTC)
         assert get_quarter_start(date.year, get_quarter(date)) == datetime(
-            2020, 10, 1, tzinfo=timezone.utc
+            2020, 10, 1, tzinfo=UTC
         )
         assert get_quarter_end(
             date.year, get_quarter(date), max_time=False
-        ) == datetime(2020, 12, 31, tzinfo=timezone.utc)
+        ) == datetime(2020, 12, 31, tzinfo=UTC)
 
-        date = datetime(2020, 12, 31, tzinfo=timezone.utc)
+        date = datetime(2020, 12, 31, tzinfo=UTC)
         assert get_quarter_start(date.year, get_quarter(date)) == datetime(
-            2020, 10, 1, tzinfo=timezone.utc
+            2020, 10, 1, tzinfo=UTC
         )
         assert get_quarter_end(
             date.year, get_quarter(date), max_time=False
-        ) == datetime(2020, 12, 31, tzinfo=timezone.utc)
+        ) == datetime(2020, 12, 31, tzinfo=UTC)
 
-        date = datetime(2020, 1, 2, tzinfo=timezone.utc)
+        date = datetime(2020, 1, 2, tzinfo=UTC)
         assert get_quarter_start(date.year, get_quarter(date)) == datetime(
-            2020, 1, 1, tzinfo=timezone.utc
+            2020, 1, 1, tzinfo=UTC
         )
         assert get_quarter_end(
             date.year, get_quarter(date), max_time=False
-        ) == datetime(2020, 3, 31, tzinfo=timezone.utc)
+        ) == datetime(2020, 3, 31, tzinfo=UTC)
 
-        date = datetime(2020, 1, 1, tzinfo=timezone.utc)
+        date = datetime(2020, 1, 1, tzinfo=UTC)
         assert get_quarter_start(date.year, get_quarter(date)) == datetime(
-            2020, 1, 1, tzinfo=timezone.utc
+            2020, 1, 1, tzinfo=UTC
         )
         assert get_quarter_end(
             date.year, get_quarter(date), max_time=False
-        ) == datetime(2020, 3, 31, tzinfo=timezone.utc)
+        ) == datetime(2020, 3, 31, tzinfo=UTC)
 
-        date = datetime(2020, 3, 31, tzinfo=timezone.utc)
+        date = datetime(2020, 3, 31, tzinfo=UTC)
         assert get_quarter_start(date.year, get_quarter(date)) == datetime(
-            2020, 1, 1, tzinfo=timezone.utc
+            2020, 1, 1, tzinfo=UTC
         )
         assert get_quarter_end(
             date.year, get_quarter(date), max_time=False
-        ) == datetime(2020, 3, 31, tzinfo=timezone.utc)
+        ) == datetime(2020, 3, 31, tzinfo=UTC)
 
-        date = datetime(2020, 2, 29, tzinfo=timezone.utc)
+        date = datetime(2020, 2, 29, tzinfo=UTC)
         assert get_quarter_start(date.year, get_quarter(date)) == datetime(
-            2020, 1, 1, tzinfo=timezone.utc
+            2020, 1, 1, tzinfo=UTC
         )
         assert get_quarter_end(
             date.year, get_quarter(date), max_time=False
-        ) == datetime(2020, 3, 31, tzinfo=timezone.utc)
+        ) == datetime(2020, 3, 31, tzinfo=UTC)
 
-        date = datetime(2020, 5, 6, tzinfo=timezone.utc)
+        date = datetime(2020, 5, 6, tzinfo=UTC)
         assert get_quarter_start(date.year, get_quarter(date)) == datetime(
-            2020, 4, 1, tzinfo=timezone.utc
+            2020, 4, 1, tzinfo=UTC
         )
         assert get_quarter_end(
             date.year, get_quarter(date), max_time=False
-        ) == datetime(2020, 6, 30, tzinfo=timezone.utc)
+        ) == datetime(2020, 6, 30, tzinfo=UTC)
 
-        date = datetime(2020, 4, 1, tzinfo=timezone.utc)
+        date = datetime(2020, 4, 1, tzinfo=UTC)
         assert get_quarter_start(date.year, get_quarter(date)) == datetime(
-            2020, 4, 1, tzinfo=timezone.utc
+            2020, 4, 1, tzinfo=UTC
         )
         assert get_quarter_end(
             date.year, get_quarter(date), max_time=False
-        ) == datetime(2020, 6, 30, tzinfo=timezone.utc)
+        ) == datetime(2020, 6, 30, tzinfo=UTC)
 
-        date = datetime(2020, 6, 30, tzinfo=timezone.utc)
+        date = datetime(2020, 6, 30, tzinfo=UTC)
         assert get_quarter_start(date.year, get_quarter(date)) == datetime(
-            2020, 4, 1, tzinfo=timezone.utc
+            2020, 4, 1, tzinfo=UTC
         )
         assert get_quarter_end(
             date.year, get_quarter(date), max_time=False
-        ) == datetime(2020, 6, 30, tzinfo=timezone.utc)
+        ) == datetime(2020, 6, 30, tzinfo=UTC)

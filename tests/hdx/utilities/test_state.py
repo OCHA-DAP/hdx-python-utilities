@@ -1,6 +1,6 @@
 """State Utility Tests"""
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from shutil import copyfile
 
 import pytest
@@ -24,11 +24,11 @@ class TestState:
 
     @pytest.fixture(scope="class")
     def date1(self):
-        return datetime(2020, 9, 23, 0, 0, tzinfo=timezone.utc)
+        return datetime(2020, 9, 23, 0, 0, tzinfo=UTC)
 
     @pytest.fixture(scope="class")
     def date2(self):
-        return datetime(2022, 5, 12, 10, 15, tzinfo=timezone.utc)
+        return datetime(2022, 5, 12, 10, 15, tzinfo=UTC)
 
     def test_state(self, tmp_path, statefolder, statefile, date1, date2):
         statepath = tmp_path / statefile

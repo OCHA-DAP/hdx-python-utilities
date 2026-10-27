@@ -65,7 +65,7 @@ Key modules:
 
 ## Code Style
 
-- Python ≥ 3.10; type hints throughout using `X | Y` union syntax (PEP 604)
+- Python ≥ 3.11; type hints throughout using `X | Y` union syntax (PEP 604)
 - Google-style docstrings with `Args:` and `Returns:` sections
 - Formatted and linted with `ruff` (rules: E, F, I, UP; E501 ignored)
 - No inline comments unless the *why* is non-obvious

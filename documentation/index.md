@@ -33,6 +33,8 @@ The code for the library is [here](https://github.com/OCHA-DAP/hdx-python-utilit
 The library has detailed API documentation which can be found in the menu at the top.
 
 ## Breaking Changes
+From 4.3.0, Python 3.11 or later is required
+
 From 4.2.2, Phonetics and the pyphonetics dependency are removed
 
 From 4.2.0, get_code_from_name fuzzy matches using RapidFuzzMatcher rather than
