@@ -33,7 +33,7 @@ The code for the library is [here](https://github.com/OCHA-DAP/hdx-python-utilit
 The library has detailed API documentation which can be found in the menu at the top.
 
 ## Breaking Changes
-From 4.2.3, Python 3.11 or later is required
+From 4.2.5, Python 3.11 or later is required
 
 From 4.2.2, Phonetics and the pyphonetics dependency are removed
 
