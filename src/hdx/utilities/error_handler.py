@@ -3,7 +3,8 @@
 import logging
 import sys
 from collections.abc import Sequence
-from typing import Any
+from types import TracebackType
+from typing import Any, Self
 
 from hdx.utilities.dictandlist import dict_of_sets_add
 
@@ -67,7 +68,7 @@ class ErrorHandler:
         Returns:
             A formatted message stating the missing value and its type
         """
-        return f"{value_type} {str(value)} not found"
+        return f"{value_type} {value!s} not found"
 
     def add_missing_value(
         self,
@@ -155,11 +156,11 @@ class ErrorHandler:
             None
         """
 
-        for _, warnings in self.shared_errors["warning"].items():
+        for warnings in self.shared_errors["warning"].values():
             warnings = sorted(warnings)
             for warning in warnings:
                 logger.warning(warning)
-        for _, errors in self.shared_errors["error"].items():
+        for errors in self.shared_errors["error"].values():
             errors = sorted(errors)
             for error in errors:
                 logger.error(error)
@@ -174,10 +175,15 @@ class ErrorHandler:
         if self.should_exit_on_error and self.shared_errors["error"]:
             sys.exit(1)
 
-    def __enter__(self) -> "ErrorHandler":
+    def __enter__(self) -> Self:
         return self
 
-    def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: TracebackType | None,
+    ) -> None:
         self.log()
         if exc_type is None:
             self.exit_on_error()

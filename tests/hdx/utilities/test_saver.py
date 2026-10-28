@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 """Saver Tests"""
 
 import json
@@ -16,7 +18,7 @@ from hdx.utilities.saver import save_iterable, save_json, save_yaml
 
 
 class TestLoader:
-    yaml_to_write = OrderedDict(
+    yaml_to_write: ClassVar[OrderedDict] = OrderedDict(
         [
             (
                 "hdx_prod_site",
@@ -61,7 +63,7 @@ class TestLoader:
         ]
     )
 
-    json_to_write = OrderedDict(
+    json_to_write: ClassVar[OrderedDict] = OrderedDict(
         [
             (
                 "hdx_prod_site",

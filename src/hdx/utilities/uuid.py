@@ -22,6 +22,6 @@ def is_valid_uuid(uuid_to_test: str, version: int = 4) -> bool:
     """
     try:
         uuid_obj = UUID(uuid_to_test, version=version)
-    except Exception:
+    except Exception:  # noqa: BLE001
         return False
     return str(uuid_obj) == uuid_to_test

@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 from collections.abc import Iterator, Sequence
 from pathlib import Path
+from types import TracebackType
 from typing import Any, Self
 
 
@@ -20,7 +21,12 @@ class BaseDownload(ABC):
         """
         return self
 
-    def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: TracebackType | None,
+    ) -> None:
         """Subclasses should define this to allow with usage.
 
         Args:

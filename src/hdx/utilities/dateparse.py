@@ -517,7 +517,7 @@ class DateParser(dateutil.parser.parser):  # pragma: no cover
             yearfirst = info.yearfirst
 
         res = self._result()
-        l = _timelex.split(timestr)  # noqa: E741
+        l = _timelex.split(timestr)
 
         skipped_idxs = []
 
@@ -944,7 +944,7 @@ def parse_date_range(
                     endday -= 1
                     if endday == 0:
                         raise ParserError(
-                            f"No end day of month found for {str(enddate)}!"
+                            f"No end day of month found for {enddate!s}!"
                         ) from e
         if not any(str in date_format for str in ["%b", "%B", "%m", "%j"]):
             startdate = startdate.replace(month=default_date.month)
@@ -1098,18 +1098,20 @@ def get_timestamp_from_datetime(date: datetime) -> float:
 def get_datetime_from_timestamp(
     timestamp: float,
     timezone: datetime.tzinfo = UTC,
-    today: datetime = now_utc(),
+    today: datetime | None = None,
 ) -> datetime:
     """Convert timestamp to datetime.
 
     Args:
         timestamp: Timestamp to convert
         timezone: Timezone to use
-        today: Today's date. Defaults to now_utc.
+        today: Today's date. Defaults to now_utc().
 
     Returns:
         Date of timestamp
     """
+    if today is None:
+        today = now_utc()
     if timestamp > get_timestamp_from_datetime(today):
         timestamp = timestamp / 1000
     return datetime.fromtimestamp(timestamp, tz=timezone)

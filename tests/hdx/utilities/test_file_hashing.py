@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 import pytest
 
 from hdx.utilities.file_hashing import (
@@ -9,7 +11,7 @@ from hdx.utilities.file_hashing import (
 
 
 class TestZipCRC:
-    expected_crcs = {
+    expected_crcs: ClassVar[dict[str, int]] = {
         "GHSL2_0_MWD_L1_tile_schema_land.cpg": 243350608,
         "GHSL2_0_MWD_L1_tile_schema_land.dbf": 3146933286,
         "GHSL2_0_MWD_L1_tile_schema_land.prj": 3172151860,

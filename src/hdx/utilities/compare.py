@@ -23,8 +23,8 @@ def compare_files(
         Delta between the two files
     """
     diff = ndiff(
-        open(path1, encoding=encoding).read().splitlines(),
-        open(path2, encoding=encoding).read().splitlines(),
+        Path(path1).read_text(encoding=encoding).splitlines(),
+        Path(path2).read_text(encoding=encoding).splitlines(),
     )
     return [x for x in diff if x[0] in ["-", "+", "?"]]
 

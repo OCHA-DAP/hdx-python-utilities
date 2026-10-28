@@ -34,7 +34,7 @@ class TestText:
 
     def test_normalise(self):
         assert (
-            normalise("£^*& ()+-[]<>?|\ Al DhaleZ'eÉ / الضالع,,..1234''#~~### ")
+            normalise(r"£^*& ()+-[]<>?|\ Al DhaleZ'eÉ / الضالع,,..1234''#~~### ")
             == "al dhalezee 1234"
         )
 
