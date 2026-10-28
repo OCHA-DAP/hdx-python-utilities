@@ -27,7 +27,7 @@ def not_raises(ExpectedException):
         raise pytest.fail(f"Raised exception {error} when it should not!")
 
     except Exception as error:
-        raise pytest.fail(f"An unexpected exception {error} raised.")
+        raise pytest.fail(f"An unexpected exception {error} raised.") from error
 
 
 class TestDownloader:
@@ -556,7 +556,7 @@ class TestDownloader:
 
     def test_get_tabular_rows_as_list(self, fixtureprocessurl):
         with Download() as downloader:
-            headers, rows = downloader.get_tabular_rows_as_list(fixtureprocessurl)
+            _headers, rows = downloader.get_tabular_rows_as_list(fixtureprocessurl)
             rows = list(rows)
             assert rows == [
                 ["la1", "ha1", "ba1", "ma1"],
@@ -567,7 +567,7 @@ class TestDownloader:
 
     def test_get_tabular_rows_as_dict(self, fixtureprocessurl):
         with Download() as downloader:
-            headers, rows = downloader.get_tabular_rows_as_dict(fixtureprocessurl)
+            _headers, rows = downloader.get_tabular_rows_as_dict(fixtureprocessurl)
             rows = list(rows)
             assert rows == [
                 {
@@ -1049,8 +1049,10 @@ class TestDownloader:
                 "2004",
                 2004,
                 "NNS",
-                "Summary report of the national nutrition survey, 2004. Kabul, Islamic "
-                "Republic of Afghanistan: Ministry of Public Health and UNICEF, 2005.",
+                (
+                    "Summary report of the national nutrition survey, 2004. Kabul, Islamic "
+                    "Republic of Afghanistan: Ministry of Public Health and UNICEF, 2005."
+                ),
                 "Historical Trend",
                 "External Reanalysis",
                 3.5,
@@ -1068,8 +1070,10 @@ class TestDownloader:
                 "2014",
                 2014,
                 "MICS",
-                "Palestinian Multiple Indicator Cluster Survey 2014,  Final Report, Ramallah, "
-                "Palestine",
+                (
+                    "Palestinian Multiple Indicator Cluster Survey 2014,  Final Report, Ramallah, "
+                    "Palestine"
+                ),
                 "Latest Source",
                 "Reanalyzed",
                 0.3240246,
@@ -1227,8 +1231,10 @@ class TestDownloader:
             "4.08282",
             "1",
             "Associated Press Online",
-            "A Berber student was shot while in police custody at a police station in "
-            "Beni Douala. He later died on Apr.21.",
+            (
+                "A Berber student was shot while in police custody at a police station in "
+                "Beni Douala. He later died on Apr.21."
+            ),
             "1",
         ]
 
@@ -1239,7 +1245,7 @@ class TestDownloader:
                 xlsx2csv=True,
             )
             assert headers == expected_headers
-            assert list(iterator)[0] == expected_row
+            assert next(iter(iterator)) == expected_row
 
             headers, iterator = downloader.get_tabular_rows(
                 fixtureurlexcel,
@@ -1248,7 +1254,7 @@ class TestDownloader:
                 sheet="test_data",
             )
             assert headers == expected_headers
-            assert list(iterator)[0] == expected_row
+            assert next(iter(iterator)) == expected_row
 
     def test_get_tabular_rows_json(self, fixturejsonurl):
         with Download() as downloader:
@@ -1451,7 +1457,7 @@ class TestResumableDownload:
             def iter_content_side_effect(chunk_size=1):
                 for i, chunk in enumerate(chunks):
                     if i == fail_after:
-                        raise Exception("connection reset")
+                        raise ConnectionError("connection reset")
                     yield chunk
 
             resp.iter_content.side_effect = iter_content_side_effect

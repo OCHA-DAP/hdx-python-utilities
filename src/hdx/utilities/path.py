@@ -184,10 +184,10 @@ def temp_dir_batch(
         delete_on_success,
         delete_on_failure,
         tempdir=tempdir,
-    ) as tempdir:
+    ) as folder_path:
         yield {
-            "folder": tempdir,
-            "batch": read_or_create_batch(tempdir, batch),
+            "folder": folder_path,
+            "batch": read_or_create_batch(folder_path, batch),
         }
 
 
@@ -294,10 +294,9 @@ def wheretostart_tempdir_batch(
     """
     delete_if_exists = False
     wheretostart = getenv("WHERETOSTART")
-    if wheretostart:
-        if wheretostart.upper() == "RESET":
-            delete_if_exists = True
-            logger.info("Removing progress file and will start from beginning!")
+    if wheretostart and wheretostart.upper() == "RESET":
+        delete_if_exists = True
+        logger.info("Removing progress file and will start from beginning!")
     with temp_dir_batch(
         folder,
         delete_if_exists,
@@ -372,10 +371,9 @@ def multiple_progress_storing_tempdir(
     """
     delete_if_exists = False
     wheretostartenv = getenv("WHERETOSTART")
-    if wheretostartenv:
-        if wheretostartenv.upper() == "RESET":
-            delete_if_exists = True
-            logger.info("Removing progress file and will start from beginning!")
+    if wheretostartenv and wheretostartenv.upper() == "RESET":
+        delete_if_exists = True
+        logger.info("Removing progress file and will start from beginning!")
     with temp_dir_batch(
         folder,
         delete_if_exists,
@@ -404,9 +402,9 @@ def multiple_progress_storing_tempdir(
                 delete_on_failure=False,
                 batch=batch,
                 tempdir=tempdir,
-            ) as info:
+            ) as batch_info:
                 for info, nextdict in progress_storing_folder(
-                    info, iterators[i], key, wheretostart
+                    batch_info, iterators[i], key, wheretostart
                 ):
                     save_text(info["progress"], progress_file)
                     yield i, info, nextdict

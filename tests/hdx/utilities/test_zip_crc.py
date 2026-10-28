@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 import pytest
 
 from hdx.utilities.zip_crc import (
@@ -12,7 +14,7 @@ from hdx.utilities.zip_crc import (
 
 
 class TestZipCRC:
-    expected_crcs = {
+    expected_crcs: ClassVar[dict[str, int]] = {
         "GHSL2_0_MWD_L1_tile_schema_land.cpg": 243350608,
         "GHSL2_0_MWD_L1_tile_schema_land.dbf": 3146933286,
         "GHSL2_0_MWD_L1_tile_schema_land.prj": 3172151860,
@@ -73,6 +75,6 @@ class TestZipCRC:
     def test_parse_central_directory(self, shpfile):
         with open(shpfile, "rb") as fp:
             data = fp.read()
-            total_records, cd_offset, cd_end = find_eocd_signature(data)
+            total_records, _cd_offset, _cd_end = find_eocd_signature(data)
             assert parse_central_directory(data, total_records + 1) == {}
         assert parse_central_directory(b"", 1) == {}

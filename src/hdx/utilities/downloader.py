@@ -3,10 +3,12 @@
 import hashlib
 import logging
 from collections.abc import Callable, Iterator, Sequence
+from contextlib import suppress
 from copy import deepcopy
 from os.path import exists, isfile
 from pathlib import Path
-from typing import Any
+from types import TracebackType
+from typing import Any, ClassVar
 from urllib.parse import urlsplit, urlunsplit
 
 import requests
@@ -59,7 +61,7 @@ class Download(BaseDownload):
         allowed_methods (iterable): HTTP methods for which to force retry. Defaults t0 frozenset(['GET']).
     """
 
-    downloaders = {}
+    downloaders: ClassVar[dict[str, "Download"]] = {}
 
     def __init__(
         self,
@@ -102,10 +104,8 @@ class Download(BaseDownload):
             None
         """
         if self.response:
-            try:
+            with suppress(Exception):
                 self.response.close()
-            except Exception:
-                pass
 
     def close(self) -> None:
         """Close response and session.
@@ -116,7 +116,12 @@ class Download(BaseDownload):
         self.close_response()
         self.session.close()
 
-    def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: TracebackType | None,
+    ) -> None:
         """Allow usage of with.
 
         Args:
@@ -245,10 +250,10 @@ class Download(BaseDownload):
                 if chunk:  # filter out keep-alive new chunks
                     md5hash.update(chunk)
             return md5hash.hexdigest()
-        except Exception:
+        except Exception as e:
             raise DownloadError(
-                f"Download of {url} failed in retrieval of stream!" % url
-            )
+                f"Download of {url} failed in retrieval of stream!"
+            ) from e
 
     def stream_path(
         self, path: Path | str, errormsg: str, append: bool = False
@@ -1257,9 +1262,9 @@ class Download(BaseDownload):
         kwargs["rate_limit"] = rate_limit
 
         cls.downloaders = {"default": cls(**kwargs)}
-        for name in custom_configs:
+        for name, custom_config in custom_configs.items():
             args_copy = deepcopy(kwargs)
-            args_copy.update(custom_configs[name])
+            args_copy.update(custom_config)
             cls.downloaders[name] = cls(**args_copy)
 
     @classmethod

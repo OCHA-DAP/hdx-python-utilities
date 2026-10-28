@@ -43,7 +43,7 @@ def hash_excel_buffer(buffer: bytes) -> str:
             f"Error hashing xlsx: The Excel file is corrupted or unreadable: {e}"
         )
         return ""
-    except Exception as e:
+    except Exception as e:  # noqa: BLE001
         logger.error(f"Unexpected error hashing xlsx: {e}")
         return ""
     finally:

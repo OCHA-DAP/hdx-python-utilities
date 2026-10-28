@@ -4,7 +4,7 @@ from copy import deepcopy
 from os import mkdir
 from pathlib import Path
 from shutil import rmtree
-from typing import Any
+from typing import Any, ClassVar
 
 from slugify import slugify
 
@@ -34,7 +34,7 @@ class Retrieve(BaseDownload):
         log_level: Level at which to log messages. Defaults to logging.INFO.
     """
 
-    retrievers = {}
+    retrievers: ClassVar[dict[str, "Retrieve"]] = {}
 
     def __init__(
         self,
@@ -122,7 +122,7 @@ class Retrieve(BaseDownload):
         self,
         url: Path | str,
         filename: str | None = None,
-        possible_extensions: tuple[str, ...] = tuple(),
+        possible_extensions: tuple[str, ...] = (),
         **kwargs: Any,
     ) -> tuple[str, Any]:
         """Get filename from url and given parameters.
@@ -186,7 +186,7 @@ class Retrieve(BaseDownload):
         fallback: bool = False,
         resume: bool = False,
         retries: int = 0,
-        log_level: int = None,
+        log_level: int | None = None,
         **kwargs: Any,
     ) -> Path:
         """Retrieve file.
@@ -241,7 +241,7 @@ class Retrieve(BaseDownload):
         filename: str | None = None,
         logstr: str | None = None,
         fallback: bool = False,
-        log_level: int = None,
+        log_level: int | None = None,
         **kwargs: Any,
     ) -> str:
         """Download text.
@@ -292,7 +292,7 @@ class Retrieve(BaseDownload):
         filename: str | None = None,
         logstr: str | None = None,
         fallback: bool = False,
-        log_level: int = None,
+        log_level: int | None = None,
         **kwargs: Any,
     ) -> Any:
         """Retrieve YAML.
@@ -343,7 +343,7 @@ class Retrieve(BaseDownload):
         filename: str | None = None,
         logstr: str | None = None,
         fallback: bool = False,
-        log_level: int = None,
+        log_level: int | None = None,
         **kwargs: Any,
     ) -> Any:
         """Retrieve JSON.
@@ -446,7 +446,7 @@ class Retrieve(BaseDownload):
         temp_dir: Path | str,
         save: bool = False,
         use_saved: bool = False,
-        ignore: Sequence[str] = tuple(),
+        ignore: Sequence[str] = (),
         delete: bool = True,
         **kwargs: Any,
     ) -> None:

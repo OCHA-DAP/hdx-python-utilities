@@ -3,7 +3,8 @@
 import logging
 from collections.abc import Callable
 from pathlib import Path
-from typing import Any
+from types import TracebackType
+from typing import Any, Self
 
 from hdx.utilities.dateparse import iso_string_from_datetime, parse_date
 from hdx.utilities.loader import load_text
@@ -37,7 +38,7 @@ class State:
         self.write_fn = write_fn
         self.state = self.read()
 
-    def __enter__(self) -> "State":
+    def __enter__(self) -> Self:
         """Allow usage of with.
 
         Returns:
@@ -45,7 +46,12 @@ class State:
         """
         return self
 
-    def __exit__(self, exc_type: Any, exc_value: Any, traceback: Any) -> None:
+    def __exit__(
+        self,
+        exc_type: type[BaseException] | None,
+        exc_value: BaseException | None,
+        traceback: TracebackType | None,
+    ) -> None:
         """Allow usage of with.
 
         Args:

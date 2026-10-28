@@ -1,3 +1,5 @@
+from typing import ClassVar
+
 """Loader Tests"""
 
 from collections import OrderedDict
@@ -19,7 +21,7 @@ from hdx.utilities.saver import save_text
 
 
 class TestLoader:
-    expected_yaml = OrderedDict(
+    expected_yaml: ClassVar[OrderedDict] = OrderedDict(
         [
             (
                 "hdx_prod_site",
@@ -64,7 +66,7 @@ class TestLoader:
         ]
     )
 
-    expected_json = OrderedDict(
+    expected_json: ClassVar[OrderedDict] = OrderedDict(
         [
             (
                 "hdx_prod_site",
@@ -104,7 +106,7 @@ is
 a
 test  
 
-"""  # noqa: W291
+"""
     expected_text_strip = """hello
 this
 is
@@ -131,13 +133,13 @@ test"""
     def test_load_empty(self, empty_yaml, empty_json, empty_list):
         with pytest.raises(LoadError):
             load_text(empty_yaml)
-        load_text(empty_yaml, loaderror_if_empty=False) == ""
+        assert load_text(empty_yaml, loaderror_if_empty=False) == ""
         with pytest.raises(LoadError):
             load_yaml(empty_yaml)
-        load_yaml(empty_yaml, loaderror_if_empty=False) is None
+        assert load_yaml(empty_yaml, loaderror_if_empty=False) is None
         with pytest.raises(LoadError):
             load_json(empty_json)
-        load_json(empty_json, loaderror_if_empty=False) is None
+        assert load_json(empty_json, loaderror_if_empty=False) is None
         load_json(empty_list)
 
     def test_load_and_merge_yaml(self, configfolder):

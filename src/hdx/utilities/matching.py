@@ -301,7 +301,7 @@ def get_code_from_name(
     if not fuzzy_match or is_list:
         unmatched.append(name)
         return None
-    names = [x for x in code_lookup.keys() if len(x) > match_threshold]
+    names = [x for x in code_lookup if len(x) > match_threshold]
     name_index = RapidFuzzMatcher().match(
         possible_names=names,
         name=name,
@@ -373,7 +373,7 @@ def earliest_index(string_to_search: str, strings_to_try: Sequence[str]) -> int 
             indices.append(index)
         except ValueError:
             indices.append(after_string)
-    earliest_index = sorted(indices)[0]
+    earliest_index = min(indices)
     if earliest_index == after_string:
         return None
     else:

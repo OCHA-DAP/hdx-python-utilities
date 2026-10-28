@@ -143,7 +143,7 @@ class TestDateParse:
         with pytest.raises(ParserError):
             parse_date_range("lalala", "%d/%m/%Y")
         with pytest.raises(ParserError):
-            parse_date_range("State_Village_Tract_Boundaries", fuzzy=dict())
+            parse_date_range("State_Village_Tract_Boundaries", fuzzy={})
         with pytest.raises(ParserError):
             fuzzy = {}
             parse_date_range("Mon_State_Village_Tract_Boundaries", fuzzy=fuzzy)

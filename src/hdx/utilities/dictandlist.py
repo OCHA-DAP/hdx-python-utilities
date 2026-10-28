@@ -220,7 +220,7 @@ def list_distribute_contents(
     def riffle_shuffle(piles_list):
         def grouper(n, iterable, fillvalue=None):
             args = [iter(iterable)] * n
-            return itertools.zip_longest(fillvalue=fillvalue, *args)
+            return itertools.zip_longest(*args, fillvalue=fillvalue)
 
         if not piles_list:
             return []

@@ -124,7 +124,7 @@ class TestPath:
             {"iso3": "ZAM", "name": "Zambia"},
         ]
         expected_batch_file = expected_dir / "batch.txt"
-        result = list()
+        result = []
         for info, nextdict in progress_storing_tempdir(tempfolder, iterator, "iso3"):
             assert info["folder"] == expected_dir
             expected_batch = load_text(expected_batch_file, strip=True)
@@ -134,7 +134,7 @@ class TestPath:
         assert exists(expected_dir) is False
 
         monkeypatch.setenv("WHERETOSTART", "iso3=SDN")
-        result = list()
+        result = []
         for info, nextdict in progress_storing_tempdir(tempfolder, iterator, "iso3"):
             assert exists(info["folder"]) is True
             assert info["folder"] == expected_dir
@@ -155,7 +155,7 @@ class TestPath:
         except ValueError:
             pass
         assert exists(expected_dir) is True
-        result = list()
+        result = []
         for info, nextdict in progress_storing_tempdir(tempfolder, iterator, "iso3"):
             assert exists(info["folder"]) is True
             assert info["folder"] == expected_dir
@@ -175,7 +175,7 @@ class TestPath:
             pass
         assert exists(expected_dir) is True
         monkeypatch.setenv("WHERETOSTART", "RESET")
-        result = list()
+        result = []
         for info, nextdict in progress_storing_tempdir(tempfolder, iterator, "iso3"):
             assert exists(info["folder"]) is True
             assert info["folder"] == expected_dir
@@ -196,7 +196,7 @@ class TestPath:
             pass
         assert exists(expected_dir) is True
         monkeypatch.setenv("WHERETOSTART", "iso3=SDN")
-        result = list()
+        result = []
         for info, nextdict in progress_storing_tempdir(tempfolder, iterator, "iso3"):
             assert exists(info["folder"]) is True
             assert info["folder"] == expected_dir
@@ -250,7 +250,7 @@ class TestPath:
         ]
         iterators = [iterator1, iterator2]
         keys = ["emergency_id", "iso3"]
-        results = list()
+        results = []
         for result in multiple_progress_storing_tempdir(
             tempfolder, iterators, keys, "1234"
         ):
@@ -304,13 +304,13 @@ class TestPath:
         ]
         assert results == expected_results
         assert exists(expected_dir) is False
-        results = list()
+        results = []
         try:
             for result in multiple_progress_storing_tempdir(
                 tempfolder, iterators, keys
             ):
                 results.append(copy.deepcopy(result))
-                i, info, nextdict = result
+                _i, info, nextdict = result
                 if "iso3" in nextdict and nextdict["iso3"] == "YEM":
                     start_batch = info["batch"]
                     raise ValueError("Problem!")
@@ -320,7 +320,7 @@ class TestPath:
             result[1]["batch"] = start_batch
         assert results == expected_results[:4]
         assert exists(expected_dir) is True
-        result = list()
+        result = []
         for _, info, nextdict in multiple_progress_storing_tempdir(
             tempfolder, iterators, keys
         ):
@@ -344,7 +344,7 @@ class TestPath:
             result[1]["batch"] = start_batch
         assert exists(expected_dir) is True
         monkeypatch.setenv("WHERETOSTART", "RESET")
-        results = list()
+        results = []
         for result in multiple_progress_storing_tempdir(
             tempfolder, iterators, keys, "1234"
         ):
@@ -368,7 +368,7 @@ class TestPath:
             result[1]["batch"] = start_batch
         assert exists(expected_dir) is True
         monkeypatch.setenv("WHERETOSTART", "iso3=SDN")
-        result = list()
+        result = []
         for _, info, nextdict in multiple_progress_storing_tempdir(
             tempfolder, iterators, keys
         ):

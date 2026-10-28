@@ -70,7 +70,7 @@ dev = [
     "pytest-loguru",
     "pytest-mock",
     "pre-commit",
-    "ruff==0.14.13",
+    "ruff==0.17.3",
 ]
 
 [project.urls]
@@ -106,7 +106,7 @@ src = ["src"]
 exclude = ["_version.py"]
 
 [tool.ruff.lint]
-# Defaults are E (pycodestyle) and F (pyflakes). We extend them:
+# Ruff's defaults plus isort and pyupgrade
 extend-select = [
   "I",   # isort
   "UP",  # pyupgrade

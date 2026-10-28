@@ -7,7 +7,7 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from os.path import expanduser
 from pathlib import Path
-from typing import Any
+from typing import Any, Self
 
 from hdx.utilities.loader import load_json, load_yaml
 
@@ -91,7 +91,7 @@ class Email:
         self.sender = email_config_dict.get("sender", self.username)
         self.server = None
 
-    def __enter__(self) -> "Email":
+    def __enter__(self) -> Self:
         """Return Email object for with statement.
 
         Returns:
@@ -99,7 +99,7 @@ class Email:
         """
         return self
 
-    def __exit__(self, *args: Any) -> None:
+    def __exit__(self, *args: object) -> None:
         """Close Email object for end of with statement.
 
         Args:
