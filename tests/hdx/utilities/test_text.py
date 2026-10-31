@@ -40,6 +40,8 @@ class TestText:
 
     def test_remove_end_characters(self):
         assert remove_end_characters('lalala,.,"') == "lalala"
+        assert remove_end_characters("") == ""
+        assert remove_end_characters("", ".") == ""
         assert (
             remove_end_characters('lalala, .\t/,"', f"{punctuation}{whitespace}")
             == "lalala"

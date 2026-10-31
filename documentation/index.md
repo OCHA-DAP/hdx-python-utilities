@@ -855,6 +855,7 @@ Examples:
 
     # Remove whitespace and punctuation from end of string
     assert remove_end_characters('lalala,.,"') == "lalala"
+    assert remove_end_characters("") == ""
     assert remove_end_characters('lalala, .\t/,"', f"{punctuation}{whitespace}" == "lalala"
 
     # Remove list of items from end of string, stripping any whitespace
