@@ -60,7 +60,7 @@ def remove_end_characters(string: str, characters_to_remove: str = punctuation) 
     Returns:
         String with any characters at end of string that are in characters_to_remove removed
     """
-    while string[-1] in characters_to_remove:
+    while string and string[-1] in characters_to_remove:
         string = string[:-1]
     return string
 
