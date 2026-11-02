@@ -14,6 +14,17 @@ from frictionless import (
 from frictionless.errors import ResourceError
 from frictionless.formats import CsvControl, ExcelControl, JsonControl
 from frictionless.resources import TableResource
+from frictionless.types import ISample
+
+
+class NormalisedHeaderDialect(Dialect):
+    """Dialect that converts newlines in headers to spaces and strips them, as
+    frictionless did before 5.20."""
+
+    def read_labels(self, sample: ISample) -> list[str]:
+        return [
+            label.replace("\n", " ").strip() for label in super().read_labels(sample)
+        ]
 
 
 def get_frictionless_control(**kwargs: Any) -> tuple[Control, Any]:
@@ -106,12 +117,18 @@ def get_frictionless_dialect(
         ignore_blank_rows: Whether to ignore blank rows. Defaults to True.
         **kwargs: See below
         columns (Sequence[int] | Sequence[str] | None): Columns to pick. Defaults to all.
+        normalise_headers (bool): Convert newlines in headers to spaces and strip them. Ignored if dialect supplied. Defaults to True.
         dialect (Dialect): This can be set to override the above. See Frictionless docs.
 
     Returns:
         (frictionless Dialect object, Any)
     """
-    dialect = kwargs.get("dialect", Dialect())
+    normalise_headers = kwargs.pop("normalise_headers", True)
+    if normalise_headers:
+        default_dialect = NormalisedHeaderDialect()
+    else:
+        default_dialect = Dialect()
+    dialect = kwargs.get("dialect", default_dialect)
     columns = kwargs.pop("columns", None)
     if columns:
         dialect.pick_fields = columns
@@ -156,6 +173,7 @@ def get_frictionless_tableresource(
         null_values (list[Any]): Values that will return None. Defaults to [""].
         control (Control): This can be set to override the above. See Frictionless docs.
         detector (Detector): This can be set to override the above. See Frictionless docs.
+        normalise_headers (bool): Convert newlines in headers to spaces and strip them. Ignored if dialect supplied. Defaults to True.
         dialect (Dialect): This can be set to override the above. See Frictionless docs.
         schema (Schema): This can be set to override the above. See Frictionless docs.
 

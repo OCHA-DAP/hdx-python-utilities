@@ -592,6 +592,7 @@ class Download(BaseDownload):
             default_type (str | None): Default field type if infer_types False. Defaults to string.
             float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
             null_values (list[Any]): Values that will return None. Defaults to [""].
+            normalise_headers (bool): Convert newlines in headers to spaces and strip them. Ignored if dialect supplied. Defaults to True.
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
             detector (Detector): This can be set to override the above. See Frictionless docs.
             layout (Layout): This can be set to override the above. See Frictionless docs.
@@ -660,6 +661,7 @@ class Download(BaseDownload):
             default_type (str | None): Default field type if infer_types False. Defaults to string.
             float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
             null_values (list[Any]): Values that will return None. Defaults to [""].
+            normalise_headers (bool): Convert newlines in headers to spaces and strip them. Ignored if dialect supplied. Defaults to True.
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
             detector (Detector): This can be set to override the above. See Frictionless docs.
             layout (Layout): This can be set to override the above. See Frictionless docs.
@@ -771,6 +773,7 @@ class Download(BaseDownload):
             default_type (str | None): Default field type if infer_types False. Defaults to string.
             float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
             null_values (list[Any]): Values that will return None. Defaults to [""].
+            normalise_headers (bool): Convert newlines in headers to spaces and strip them. Ignored if dialect supplied. Defaults to True.
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
             detector (Detector): This can be set to override the above. See Frictionless docs.
             layout (Layout): This can be set to override the above. See Frictionless docs.
@@ -868,6 +871,7 @@ class Download(BaseDownload):
             default_type (str | None): Default field type if infer_types False. Defaults to string.
             float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
             null_values (list[Any]): Values that will return None. Defaults to [""].
+            normalise_headers (bool): Convert newlines in headers to spaces and strip them. Ignored if dialect supplied. Defaults to True.
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
             detector (Detector): This can be set to override the above. See Frictionless docs.
             layout (Layout): This can be set to override the above. See Frictionless docs.
@@ -937,6 +941,7 @@ class Download(BaseDownload):
             default_type (str | None): Default field type if infer_types False. Defaults to string.
             float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
             null_values (list[Any]): Values that will return None. Defaults to [""].
+            normalise_headers (bool): Convert newlines in headers to spaces and strip them. Ignored if dialect supplied. Defaults to True.
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
             detector (Detector): This can be set to override the above. See Frictionless docs.
             layout (Layout): This can be set to override the above. See Frictionless docs.
@@ -1008,6 +1013,7 @@ class Download(BaseDownload):
             default_type (str | None): Default field type if infer_types False. Defaults to string.
             float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
             null_values (list[Any]): Values that will return None. Defaults to [""].
+            normalise_headers (bool): Convert newlines in headers to spaces and strip them. Ignored if dialect supplied. Defaults to True.
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
             detector (Detector): This can be set to override the above. See Frictionless docs.
             layout (Layout): This can be set to override the above. See Frictionless docs.
@@ -1083,6 +1089,7 @@ class Download(BaseDownload):
             default_type (str | None): Default field type if infer_types False. Defaults to string.
             float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
             null_values (list[Any]): Values that will return None. Defaults to [""].
+            normalise_headers (bool): Convert newlines in headers to spaces and strip them. Ignored if dialect supplied. Defaults to True.
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
             detector (Detector): This can be set to override the above. See Frictionless docs.
             layout (Layout): This can be set to override the above. See Frictionless docs.
@@ -1162,6 +1169,7 @@ class Download(BaseDownload):
             default_type (str | None): Default field type if infer_types False. Defaults to string.
             float_numbers (bool): Use float not Decimal if infer_types True. Defaults to True.
             null_values (list[Any]): Values that will return None. Defaults to [""].
+            normalise_headers (bool): Convert newlines in headers to spaces and strip them. Ignored if dialect supplied. Defaults to True.
             dialect (Dialect): This can be set to override the above. See Frictionless docs.
             detector (Detector): This can be set to override the above. See Frictionless docs.
             layout (Layout): This can be set to override the above. See Frictionless docs.
