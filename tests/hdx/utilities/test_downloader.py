@@ -46,6 +46,10 @@ class TestDownloader:
         return downloaderfolder / "test_csv_processing.csv"
 
     @pytest.fixture(scope="class")
+    def fixturepathnewlines(self, downloaderfolder):
+        return downloaderfolder / "test_csv_processing_newlines.csv"
+
+    @pytest.fixture(scope="class")
     def fixtureurlexcel(self):
         return "https://raw.githubusercontent.com/OCHA-DAP/hdx-python-utilities/main/tests/fixtures/downloader/test_data.xlsx"
 
@@ -808,6 +812,33 @@ class TestDownloader:
                 "SP.POP.TOTL",
                 2019,
                 14645468,
+            ]
+
+    def test_get_tabular_rows_normalise_headers(self, fixturepathnewlines):
+        with Download() as downloader:
+            headers, iterator = downloader.get_tabular_rows(fixturepathnewlines)
+            assert headers == ["ISO country code", "Name", "field3"]
+            assert list(iterator) == [[None, "first", "Value"], ["AFG", "a", "1"]]
+            headers, iterator = downloader.get_tabular_rows(
+                fixturepathnewlines, normalise_headers=False
+            )
+            assert headers == ["ISO\ncountry code", "Name", "field3"]
+            headers, iterator = downloader.get_tabular_rows(
+                fixturepathnewlines, headers=[1, 2], dict_form=True
+            )
+            assert headers == ["ISO country code", "Name first", "Value"]
+            assert list(iterator) == [
+                {"ISO country code": "AFG", "Name first": "a", "Value": "1"}
+            ]
+            headers, iterator = downloader.get_tabular_rows(
+                fixturepathnewlines,
+                headers=[1, 2],
+                dict_form=True,
+                normalise_headers=False,
+            )
+            assert headers == ["ISO\ncountry code ", "Name first", " Value"]
+            assert list(iterator) == [
+                {"ISO\ncountry code ": "AFG", "Name first": "a", " Value": "1"}
             ]
 
     def test_get_tabular_rows_xlsx(self, fixturexlsxurl):
