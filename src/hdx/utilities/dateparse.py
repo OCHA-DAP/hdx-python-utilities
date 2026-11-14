@@ -961,6 +961,9 @@ def parse_date_range(
     if timezone_handling == 0:
         startdate = startdate.replace(tzinfo=UTC)
         enddate = enddate.replace(tzinfo=UTC)
+    elif timezone_handling == 1:
+        startdate = startdate.replace(tzinfo=None)
+        enddate = enddate.replace(tzinfo=None)
     elif timezone_handling == 3:
         if startdate.tzinfo is None:
             startdate = startdate.replace(tzinfo=UTC)
