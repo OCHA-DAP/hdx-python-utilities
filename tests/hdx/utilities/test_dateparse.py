@@ -286,6 +286,25 @@ class TestDateParse:
         with pytest.raises(ParserError):
             parse_date("02/2013", "%m/%Y")
 
+    @pytest.mark.parametrize("date_format", [None, "%Y-%m-%d %H:%M:%S %z"])
+    def test_parse_date_ignore_numeric_timezone(self, date_format: str | None) -> None:
+        assert parse_date(
+            "2013-02-20 01:30:20 +0530",
+            date_format=date_format,
+            timezone_handling=1,
+        ) == datetime(2013, 2, 20, 1, 30, 20)
+
+    @pytest.mark.parametrize("date_format", [None, "%Y-%m-%d %H:%M:%S %z"])
+    def test_parse_date_range_ignore_numeric_timezone(
+        self, date_format: str | None
+    ) -> None:
+        expected = datetime(2013, 2, 20, 1, 30, 20)
+        assert parse_date_range(
+            "2013-02-20 01:30:20 +0530",
+            date_format=date_format,
+            timezone_handling=1,
+        ) == (expected, expected)
+
     def test_get_datetime_from_timestamp(self):
         expected_timestamp = 1596180834.0
         expected_date = datetime(2020, 7, 31, 7, 33, 54, tzinfo=UTC)
